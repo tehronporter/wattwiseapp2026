@@ -1,32 +1,90 @@
-//
-//  wattwiseApp.swift
-//  wattwise
-//
-//  Created by User on 3/30/26.
-//
-
 import SwiftUI
-import SwiftData
 
 @main
-struct wattwiseApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+struct WattWiseApp: App {
+    @State private var services = ServiceContainer()
+    @State private var appVM = AppViewModel()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppRootView()
+                .environment(services)
+                .environment(appVM)
+                .task { await appVM.restoreSession(services: services) }
         }
-        .modelContainer(sharedModelContainer)
+    }
+}
+
+// MARK: - Root Router
+
+struct AppRootView: View {
+    @Environment(AppViewModel.self) private var appVM
+
+    var body: some View {
+        Group {
+            switch appVM.authState {
+            case .loading:
+                SplashView()
+
+            case .unauthenticated:
+                WelcomeView()
+                    .transition(.opacity)
+
+            case .onboarding(let user):
+                // Show onboarding flow for incomplete profiles
+                let _ = user
+                OnboardingFlowRoot()
+                    .transition(.opacity)
+
+            case .authenticated:
+                RootTabView()
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.3), value: appVM.isAuthenticated)
+    }
+}
+
+// MARK: - Splash Screen
+
+struct SplashView: View {
+    var body: some View {
+        ZStack {
+            Color.wwBackground.ignoresSafeArea()
+            VStack(spacing: WWSpacing.m) {
+                ZStack {
+                    Circle()
+                        .fill(Color.wwBlueDim)
+                        .frame(width: 80, height: 80)
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 34, weight: .semibold))
+                        .foregroundColor(.wwBlue)
+                }
+                Text("WattWise")
+                    .wwDisplay()
+            }
+        }
+    }
+}
+
+// MARK: - Onboarding Flow Root (for incomplete profiles)
+
+struct OnboardingFlowRoot: View {
+    @State private var vm = OnboardingViewModel()
+    @Environment(ServiceContainer.self) private var services
+    @Environment(AppViewModel.self) private var appVM
+
+    var body: some View {
+        VStack {
+            OnboardingView(vm: vm)
+        }
+        .onAppear {
+            vm.step = 1
+            if let user = appVM.currentUser {
+                vm.email = user.email
+                vm.selectedExamType = user.examType
+                vm.selectedState = user.state
+            }
+        }
     }
 }

@@ -1,0 +1,29 @@
+# Secrets — never commit
+.env.local
+.env
+*.env
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+
+# Xcode
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+DerivedData/
+.build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# CocoaPods / SPM
+Pods/
+.swiftpm/
+
+# Archives
+build/

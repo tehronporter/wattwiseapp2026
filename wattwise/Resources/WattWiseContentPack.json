@@ -1,0 +1,1080 @@
+{
+  "metadata": {
+    "title": "WattWise 2026 NEC Research-Backed Content Foundation",
+    "version": "0.1.0",
+    "createdOn": "2026-03-30",
+    "contentStatus": "foundation_seed",
+    "validationStatus": "Verified against publicly accessible official NFPA, licensing-board, exam-vendor, NCCER, and Apprenticeship.gov sources available on 2026-03-30. Final article-by-article validation against the full paid 2026 NEC text is still required before production claims of complete coverage.",
+    "limitations": [
+      "This pack intentionally avoids invented 50-state exam claims where no official source was verified during this turn.",
+      "The practice bank is a vetted starter bank, not the final 500-1000+ item production bank requested.",
+      "Jurisdiction requirements remain dynamic and should be re-checked before release in each target state."
+    ]
+  },
+  "executiveSummary": {
+    "overview": "WattWise should use a national-core curriculum anchored to the 2026 NEC, with jurisdiction overlays for exam approval rules, question counts, open-book policies, required references, and renewal or continuing-education differences. Publicly accessible official NFPA development documents for the 2026 NEC show a major usability and content shift around over-1000-volt and 1500 Vdc systems, EV power transfer, microgrids and hybrid power terminology, and Article 680 errata, all of which affect exam navigation and code-lookup training.",
+    "examPrepImpact": [
+      "Candidates need stronger code-navigation training because 2026 development materials show major renumbering and reorganization in medium-voltage and overcurrent/grounding content.",
+      "Journeyman coverage must be first-class in the product. Official Texas and Maine sources confirm journeyman exams remain central and materially different from apprentice or master expectations.",
+      "A national simulator should be labeled as a national-core exam, while jurisdiction overlays control question counts, timing, pass thresholds, and approved references."
+    ],
+    "instructionalUseNotes": [
+      "Use lessons to teach code path and reasoning first, then use practice to reinforce section lookup speed.",
+      "Keep every lesson tied to NEC article references, but summarize rather than quote copyrighted code text.",
+      "Mark jurisdictional data with the exact source date and remind users that local amendments may apply."
+    ]
+  },
+  "nec2026Changes": [
+    {
+      "id": "nec-change-001",
+      "title": "High-voltage reorganization around over-1000 Vac and 1500 Vdc systems",
+      "summary": "Official NFPA development materials for the 2026 NEC show a coordinated usability reorganization for medium and high-voltage requirements, using over 1000 Vac and 1500 Vdc as a recurring threshold and moving related material into dedicated articles instead of scattered parts.",
+      "examImpact": "Master and advanced journeyman candidates should expect more article-navigation work involving reorganized high-voltage, grounding, and protective-device rules.",
+      "sources": ["src-nfpa-245", "src-nfpa-270"]
+    },
+    {
+      "id": "nec-change-002",
+      "title": "New Article 270 for grounding and bonding of systems over 1000 Vac, 1500 Vdc nominal",
+      "summary": "NFPA working-draft material for the 2026 cycle shows Article 270 created as a dedicated location for grounding and bonding requirements for systems over 1000 Vac and 1500 Vdc nominal.",
+      "examImpact": "Users will need updated map skills for grounding and bonding questions that were previously distributed differently across the code.",
+      "sources": ["src-nfpa-270"]
+    },
+    {
+      "id": "nec-change-003",
+      "title": "Overcurrent and overvoltage content moved into Article 245",
+      "summary": "NFPA correlating-committee public-input documentation describes relocating over-1000-volt overcurrent and overvoltage material into a new Article 245 and renumbering related equipment content.",
+      "examImpact": "Advanced calculations and protection-coordination drills should use updated article paths so candidates do not waste time searching outdated locations.",
+      "sources": ["src-nfpa-245"]
+    },
+    {
+      "id": "nec-change-004",
+      "title": "EV and bidirectional power-transfer vocabulary expanded",
+      "summary": "NFPA 2026 public-input material for CMP-12 expands EVSE context and references bidirectional EVSE or wireless power transfer equipment, reflecting broader charging and power-export use cases.",
+      "examImpact": "WattWise should add EVSE, power-export, and terminology flashcards and keep Article 625 navigation current.",
+      "sources": ["src-nfpa-625", "src-nfpa-627"]
+    },
+    {
+      "id": "nec-change-005",
+      "title": "New Article 627 proposal for electric self-propelled vehicle power transfer systems",
+      "summary": "NFPA development records for the 2026 cycle include a new Article 627 proposal to cover battery-powered self-propelled vehicles beyond on-road electric vehicles, such as forklifts and similar equipment.",
+      "examImpact": "Special-equipment and emerging-technology practice content should separate Article 625 roadway EV scenarios from broader vehicle power-transfer systems when final text is confirmed.",
+      "sources": ["src-nfpa-627"]
+    },
+    {
+      "id": "nec-change-006",
+      "title": "Microgrid and hybrid-power definitions refined",
+      "summary": "Official NFPA public-input records show notable definitional work around microgrids, hybrid power systems, and related control and interconnect devices.",
+      "examImpact": "Master-level design lessons should include updated terminology and question stems that distinguish traditional standby systems from microgrid and hybrid architectures.",
+      "sources": ["src-nfpa-microgrid"]
+    },
+    {
+      "id": "nec-change-007",
+      "title": "2026 errata already affects Article 680 pool content",
+      "summary": "NFPA has already issued 2026 errata affecting 680.24 and 680.26 references and wording, confirming that training content must track errata and not rely only on first-print text.",
+      "examImpact": "Pool and spa bonding content must note that errata can change citation details and should be reviewed during code updates.",
+      "sources": ["src-nfpa-errata-680"]
+    }
+  ],
+  "curriculumFramework": [
+    {
+      "id": "course-apprentice",
+      "courseTitle": "Apprentice Electrician Course",
+      "certificationLevel": "Apprentice",
+      "courseDescription": "Foundational electrical theory, safety, tools, code literacy, and beginner calculations aligned to entry-level trade preparation.",
+      "modules": [
+        {
+          "id": "ap-mod-001",
+          "moduleName": "Electrical Theory Fundamentals",
+          "learningObjectives": [
+            "Explain voltage, current, resistance, power, and energy using trade language.",
+            "Apply Ohm's Law and Watt's Law to simple series and parallel circuits.",
+            "Recognize the difference between theory concepts and NEC installation rules."
+          ],
+          "lessons": [
+            { "id": "ap-les-001", "lessonTitle": "Voltage, Current, Resistance, and Ohm's Law", "necReferences": ["Article 100"], "estimatedMinutes": 20 },
+            { "id": "ap-les-002", "lessonTitle": "Power, Energy, and Basic Circuit Relationships", "necReferences": ["Article 100"], "estimatedMinutes": 20 }
+          ]
+        },
+        {
+          "id": "ap-mod-002",
+          "moduleName": "Basic Safety (OSHA and NFPA 70E)",
+          "learningObjectives": [
+            "Identify electrical shock, arc-flash, and arc-blast hazards.",
+            "Connect OSHA work-practice expectations with jobsite behavior.",
+            "Explain why de-energization and verification matter before beginning work."
+          ],
+          "lessons": [
+            { "id": "ap-les-003", "lessonTitle": "Electrical Hazard Recognition and Safe Work Basics", "necReferences": ["110.3(B)", "110.26"], "estimatedMinutes": 25 },
+            { "id": "ap-les-004", "lessonTitle": "Shock Paths, PPE, and Lockout Mindset", "necReferences": ["110.4", "110.27"], "estimatedMinutes": 25 }
+          ]
+        },
+        {
+          "id": "ap-mod-003",
+          "moduleName": "Introduction to the NEC",
+          "learningObjectives": [
+            "Navigate articles, parts, sections, tables, and informational notes.",
+            "Differentiate enforceable rules from explanatory material.",
+            "Find foundational definitions and general installation rules quickly."
+          ],
+          "lessons": [
+            { "id": "ap-les-005", "lessonTitle": "How the NEC Is Organized", "necReferences": ["90.1", "90.3", "Article 100"], "estimatedMinutes": 20 },
+            { "id": "ap-les-006", "lessonTitle": "Code Lookup Drill: Article 100 and Article 110", "necReferences": ["Article 100", "110.1"], "estimatedMinutes": 20 }
+          ]
+        },
+        {
+          "id": "ap-mod-004",
+          "moduleName": "Wiring Methods and Materials",
+          "learningObjectives": [
+            "Recognize common raceways, cable assemblies, and conductor types.",
+            "Use Chapter 3 articles to identify permitted uses and support rules.",
+            "Connect conductor sizing to insulation, ampacity, and environment."
+          ],
+          "lessons": [
+            { "id": "ap-les-007", "lessonTitle": "Raceways, Cables, and Boxes", "necReferences": ["300.11", "314.16"], "estimatedMinutes": 25 },
+            { "id": "ap-les-008", "lessonTitle": "Conductor Sizing and Table Navigation", "necReferences": ["310.14", "310.16"], "estimatedMinutes": 25 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "course-journeyman",
+      "courseTitle": "Journeyman Electrician Course",
+      "certificationLevel": "Journeyman",
+      "courseDescription": "Applied NEC navigation, installation requirements, calculations, motors, transformers, and troubleshooting for working electricians preparing for licensure.",
+      "modules": [
+        {
+          "id": "jr-mod-001",
+          "moduleName": "Advanced NEC Navigation",
+          "learningObjectives": [
+            "Move between Chapters 1 through 4 and special rules in Chapters 5 through 7 efficiently.",
+            "Use article structure to solve open-book exam questions faster.",
+            "Spot when a general rule is modified by a special occupancy or equipment article."
+          ],
+          "lessons": [
+            { "id": "jr-les-001", "lessonTitle": "General Rules vs Special Rules", "necReferences": ["90.3", "110.2"], "estimatedMinutes": 25 },
+            { "id": "jr-les-002", "lessonTitle": "Timed Code Lookup Strategies", "necReferences": ["Article 100", "Annex D"], "estimatedMinutes": 20 }
+          ]
+        },
+        {
+          "id": "jr-mod-002",
+          "moduleName": "Branch Circuits and Feeders",
+          "learningObjectives": [
+            "Apply branch-circuit, feeder, and continuous-load sizing rules.",
+            "Use Article 210, 215, and 220 together during load questions.",
+            "Evaluate receptacle, small-appliance, and dwelling-unit circuit requirements."
+          ],
+          "lessons": [
+            { "id": "jr-les-003", "lessonTitle": "Continuous Loads and Overcurrent Device Sizing", "necReferences": ["210.20(A)", "215.3"], "estimatedMinutes": 25 },
+            { "id": "jr-les-004", "lessonTitle": "Dwelling Receptacles and Small-Appliance Circuits", "necReferences": ["210.11", "210.52"], "estimatedMinutes": 25 }
+          ]
+        },
+        {
+          "id": "jr-mod-003",
+          "moduleName": "Grounding and Bonding",
+          "learningObjectives": [
+            "Separate grounding functions from bonding functions.",
+            "Identify service bonding jumper, equipment grounding conductor, and grounding electrode conductor paths.",
+            "Use Article 250 tables and definitions correctly."
+          ],
+          "lessons": [
+            { "id": "jr-les-005", "lessonTitle": "Grounding vs Bonding at Services and Feeders", "necReferences": ["250.24", "250.32"], "estimatedMinutes": 30 },
+            { "id": "jr-les-006", "lessonTitle": "Grounding Electrodes and Electrode Conductors", "necReferences": ["250.50", "250.66"], "estimatedMinutes": 30 }
+          ]
+        },
+        {
+          "id": "jr-mod-004",
+          "moduleName": "Motors and Controls",
+          "learningObjectives": [
+            "Locate full-load current, conductor sizing, overload, and short-circuit rules.",
+            "Use motor tables instead of nameplate current where required by the NEC.",
+            "Explain the difference between overload protection and short-circuit protection."
+          ],
+          "lessons": [
+            { "id": "jr-les-007", "lessonTitle": "Motor Circuit Conductors and Overload Protection", "necReferences": ["430.22", "430.32"], "estimatedMinutes": 30 },
+            { "id": "jr-les-008", "lessonTitle": "Motor Branch-Circuit Short-Circuit and Ground-Fault Protection", "necReferences": ["430.52"], "estimatedMinutes": 30 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "course-master",
+      "courseTitle": "Master Electrician Course",
+      "certificationLevel": "Master",
+      "courseDescription": "Advanced code interpretation, system design, complex calculations, special occupancies, overcurrent coordination, and business-facing responsibilities.",
+      "modules": [
+        {
+          "id": "ms-mod-001",
+          "moduleName": "Advanced System Design",
+          "learningObjectives": [
+            "Evaluate service, feeder, and distribution concepts at a system level.",
+            "Apply demand and diversity concepts across dwelling and commercial scenarios.",
+            "Integrate emerging 2026 organization changes into code-navigation habits."
+          ],
+          "lessons": [
+            { "id": "ms-les-001", "lessonTitle": "Service and Feeder Design Workflow", "necReferences": ["220.40", "230.42"], "estimatedMinutes": 35 },
+            { "id": "ms-les-002", "lessonTitle": "Using Tables, Notes, and Exceptions Efficiently", "necReferences": ["220.42", "310.16"], "estimatedMinutes": 25 }
+          ]
+        },
+        {
+          "id": "ms-mod-002",
+          "moduleName": "Complex Load Calculations",
+          "learningObjectives": [
+            "Perform multifamily, commercial, and mixed-use load calculations.",
+            "Differentiate standard, optional, and equipment-specific methods.",
+            "Translate load calculations into service and feeder conductor sizing."
+          ],
+          "lessons": [
+            { "id": "ms-les-003", "lessonTitle": "Dwelling Optional Calculation Workflow", "necReferences": ["220.82"], "estimatedMinutes": 35 },
+            { "id": "ms-les-004", "lessonTitle": "Commercial Demand and Feeder Sizing", "necReferences": ["220.44", "220.50", "215.2"], "estimatedMinutes": 35 }
+          ]
+        },
+        {
+          "id": "ms-mod-003",
+          "moduleName": "Hazardous Locations",
+          "learningObjectives": [
+            "Identify Class, Division, and Zone concepts at a code-navigation level.",
+            "Use Articles 500 through 516 to find occupancy-specific rules.",
+            "Avoid common exam mistakes involving sealing fittings, temperature limits, and equipment suitability."
+          ],
+          "lessons": [
+            { "id": "ms-les-005", "lessonTitle": "Hazardous Location Classification Fundamentals", "necReferences": ["500.5", "500.7"], "estimatedMinutes": 35 },
+            { "id": "ms-les-006", "lessonTitle": "Motors, Seals, and Equipment Selection in Classified Areas", "necReferences": ["501.15", "501.125"], "estimatedMinutes": 35 }
+          ]
+        },
+        {
+          "id": "ms-mod-004",
+          "moduleName": "Code Interpretation and Compliance",
+          "learningObjectives": [
+            "Use scope, purpose, and hierarchy rules to resolve code questions.",
+            "Recognize when jurisdictional policy or adopted amendments change the answer path.",
+            "Tie technical compliance decisions to plan review, inspection, and business risk."
+          ],
+          "lessons": [
+            { "id": "ms-les-007", "lessonTitle": "Reading 90.1, 90.3, and Article 100 Like a Master", "necReferences": ["90.1", "90.3", "Article 100"], "estimatedMinutes": 25 },
+            { "id": "ms-les-008", "lessonTitle": "When the NEC Is Not the Whole Answer", "necReferences": ["90.4", "110.2"], "estimatedMinutes": 25 }
+          ]
+        }
+      ]
+    }
+  ],
+  "fullLessonContent": [
+    {
+      "id": "lesson-record-001",
+      "courseTitle": "Apprentice Electrician Course",
+      "moduleName": "Introduction to the NEC",
+      "lessonTitle": "Code Lookup Drill: Article 100 and Article 110",
+      "certificationLevel": "Apprentice",
+      "learningObjectives": [
+        "Locate definitions before interpreting an installation rule.",
+        "Use Article 110 as the starting point for many general-requirement questions.",
+        "Explain why exam candidates should not answer from memory when the code book is available."
+      ],
+      "lessonContent": [
+        {
+          "id": "lesson-record-001-sec-001",
+          "heading": "Why this lesson matters",
+          "body": "Many apprentice candidates lose points because they search randomly. The faster path is often Article 100 for definitions, then the relevant installation article, then Article 110 when the question asks for general requirements such as working space, equipment installation, or listing and labeling.",
+          "necReferences": ["Article 100", "110.3(B)", "110.26"]
+        },
+        {
+          "id": "lesson-record-001-sec-002",
+          "heading": "Step 1: Find the defined term",
+          "body": "If a question uses words like outlet, receptacle, disconnecting means, readily accessible, or continuous load, start in Article 100. On open-book exams, accurate definitions prevent you from chasing the wrong article.",
+          "necReferences": ["Article 100"]
+        },
+        {
+          "id": "lesson-record-001-sec-003",
+          "heading": "Step 2: Move to the rule article",
+          "body": "After confirming the term, move to the article that governs the installation. For a branch-circuit receptacle question, that may be Article 210. For conductor sizing, you may move to Article 310. For boxes, Article 314 is often involved. Article 110 frequently supports or modifies the answer with general installation requirements.",
+          "necReferences": ["90.3", "110.1", "210.52", "310.16", "314.16"]
+        },
+        {
+          "id": "lesson-record-001-sec-004",
+          "heading": "Real-world application",
+          "body": "An apprentice asked to install new equipment should verify listing instructions, space, access, and workmanship before pulling conductors. The exam mirrors that workflow by expecting you to combine specific articles with Article 110.",
+          "necReferences": ["110.3(B)", "110.12", "110.26"]
+        }
+      ],
+      "keyTakeaways": [
+        "Definitions first, installation rule second, general rules third.",
+        "Article 110 is one of the fastest score boosters on code-lookup exams.",
+        "Open-book speed comes from article pattern recognition, not from guessing."
+      ],
+      "practiceQuestions": [
+        "Which article should you check first if a question depends on the meaning of readily accessible?",
+        "What general-requirement article often pairs with installation-specific articles on exams?"
+      ],
+      "references": ["90.3", "Article 100", "110.1", "110.3(B)", "110.26"]
+    },
+    {
+      "id": "lesson-record-002",
+      "courseTitle": "Apprentice Electrician Course",
+      "moduleName": "Basic Safety (OSHA and NFPA 70E)",
+      "lessonTitle": "Electrical Hazard Recognition and Safe Work Basics",
+      "certificationLevel": "Apprentice",
+      "learningObjectives": [
+        "Identify common shock and arc hazards before beginning work.",
+        "Explain the difference between de-energized work and presumed-safe work.",
+        "Connect code compliance with safer installations and safer maintenance conditions."
+      ],
+      "lessonContent": [
+        {
+          "id": "lesson-record-002-sec-001",
+          "heading": "Hazard recognition comes before tools",
+          "body": "The first safety decision is not what tool to grab but whether the circuit is energized, whether the enclosure is suitable, and whether enough working space exists to inspect, test, or maintain equipment without creating a new hazard.",
+          "necReferences": ["110.26", "110.27"]
+        },
+        {
+          "id": "lesson-record-002-sec-002",
+          "heading": "Listing and labeling are safety topics",
+          "body": "Candidates often treat listing and labeling as paperwork. In reality, equipment used outside its listing or outside manufacturer instructions can create shock, overheating, and failure hazards. That is why the NEC repeatedly directs installers back to listed equipment and installation instructions.",
+          "necReferences": ["110.3(B)"]
+        },
+        {
+          "id": "lesson-record-002-sec-003",
+          "heading": "Exam habit",
+          "body": "When a question asks what is safest or most compliant, look for the answer that removes exposure first, then the one that follows equipment instructions, and then the one that preserves access and working space.",
+          "necReferences": ["110.3(B)", "110.26", "110.27"]
+        }
+      ],
+      "keyTakeaways": [
+        "Safe work starts with condition assessment, not speed.",
+        "Manufacturer instructions are enforceable when the code says listed equipment must be installed that way.",
+        "Working-space questions are both code and safety questions."
+      ],
+      "practiceQuestions": [
+        "Why can a listing-and-labeling question also be a safety question?",
+        "What article should you check when clearance and access are involved?"
+      ],
+      "references": ["110.3(B)", "110.26", "110.27"]
+    },
+    {
+      "id": "lesson-record-003",
+      "courseTitle": "Journeyman Electrician Course",
+      "moduleName": "Branch Circuits and Feeders",
+      "lessonTitle": "Continuous Loads and Overcurrent Device Sizing",
+      "certificationLevel": "Journeyman",
+      "learningObjectives": [
+        "Define continuous load correctly.",
+        "Apply the 125 percent sizing concept to branch-circuit and feeder overcurrent devices where required.",
+        "Avoid mixing conductor ampacity rules with overcurrent sizing rules."
+      ],
+      "lessonContent": [
+        {
+          "id": "lesson-record-003-sec-001",
+          "heading": "Definition first",
+          "body": "A continuous load is one where the maximum current is expected to continue for 3 hours or more. This definition drives several sizing decisions and appears often in both residential and commercial exam problems.",
+          "necReferences": ["Article 100"]
+        },
+        {
+          "id": "lesson-record-003-sec-002",
+          "heading": "Branch-circuit overcurrent sizing",
+          "body": "For branch circuits, the rating of the overcurrent device must be sufficient for the noncontinuous load plus 125 percent of the continuous load when the applicable rule requires it. Candidates should read the question closely and determine whether it is asking about the overcurrent device, the conductor, or both.",
+          "necReferences": ["210.20(A)", "210.19(A)(1)"]
+        },
+        {
+          "id": "lesson-record-003-sec-003",
+          "heading": "Feeder follow-through",
+          "body": "The same logic continues into feeder problems. Journeyman candidates should practice moving from Article 220 load calculations to Article 215 sizing rules without losing track of whether the problem is asking for minimum ampacity, minimum overcurrent device rating, or both.",
+          "necReferences": ["215.2", "215.3", "220.40"]
+        },
+        {
+          "id": "lesson-record-003-sec-004",
+          "heading": "Worked example",
+          "body": "If the calculated continuous load is 48 amperes and there is no noncontinuous load, 48 x 1.25 = 60 amperes. The candidate then checks the applicable article for the conductor and overcurrent device path instead of stopping at the arithmetic.",
+          "necReferences": ["210.20(A)", "215.3"]
+        }
+      ],
+      "keyTakeaways": [
+        "Always identify whether a load is continuous before sizing.",
+        "125 percent shows up in multiple places, but you still need the correct article.",
+        "Calculation questions are often won or lost in the code path after the math."
+      ],
+      "practiceQuestions": [
+        "A continuous load of 32 A is supplied by a branch circuit. What minimum overcurrent device rating should you consider first under the continuous-load rule?",
+        "Which article should you pair with Article 220 when the problem becomes a feeder-sizing question?"
+      ],
+      "references": ["Article 100", "210.19(A)(1)", "210.20(A)", "215.2", "215.3", "220.40"]
+    },
+    {
+      "id": "lesson-record-004",
+      "courseTitle": "Journeyman Electrician Course",
+      "moduleName": "Grounding and Bonding",
+      "lessonTitle": "Grounding vs Bonding at Services and Feeders",
+      "certificationLevel": "Journeyman",
+      "learningObjectives": [
+        "Differentiate grounding from bonding using NEC terminology.",
+        "Identify the service bonding jumper and grounding electrode conductor roles.",
+        "Recognize why separately derived systems and feeders create common exam traps."
+      ],
+      "lessonContent": [
+        {
+          "id": "lesson-record-004-sec-001",
+          "heading": "The distinction the exam tests repeatedly",
+          "body": "Grounding ties an electrical system to earth for stabilization and voltage limitation. Bonding joins conductive parts together to create an effective fault-current path. Candidates who use the words as if they mean the same thing routinely miss service and feeder questions.",
+          "necReferences": ["250.4", "250.24"]
+        },
+        {
+          "id": "lesson-record-004-sec-002",
+          "heading": "Service equipment focus",
+          "body": "At service equipment, the grounded conductor, service disconnecting means, and grounding electrode system relationship must be understood as a system, not as isolated parts. Read the question closely to see whether it is asking about the neutral-to-case bonding location, the electrode path, or equipment grounding conductors on the load side.",
+          "necReferences": ["250.24", "250.50"]
+        },
+        {
+          "id": "lesson-record-004-sec-003",
+          "heading": "Feeder and building questions",
+          "body": "When a feeder supplies another building or structure, candidates must slow down and follow the specific building or structure feeder rule instead of assuming the service rule applies unchanged. That is why Article 250 question stems often test whether you know when to leave the service article and move deeper into the article.",
+          "necReferences": ["250.32"]
+        }
+      ],
+      "keyTakeaways": [
+        "Grounding and bonding are related but not interchangeable terms.",
+        "Service questions often require more than one section of Article 250.",
+        "Feeder-to-building questions are common traps because they look like service questions."
+      ],
+      "practiceQuestions": [
+        "What is the exam-safe definition difference between grounding and bonding?",
+        "Which section should you check for feeders to separate buildings or structures?"
+      ],
+      "references": ["250.4", "250.24", "250.32", "250.50"]
+    },
+    {
+      "id": "lesson-record-005",
+      "courseTitle": "Master Electrician Course",
+      "moduleName": "Complex Load Calculations",
+      "lessonTitle": "Dwelling Optional Calculation Workflow",
+      "certificationLevel": "Master",
+      "learningObjectives": [
+        "Use a repeatable workflow for optional dwelling calculations.",
+        "Separate general load, small-appliance, laundry, appliances, dryers, ranges, and HVAC adjustments.",
+        "Translate the final load into service or feeder ampacity."
+      ],
+      "lessonContent": [
+        {
+          "id": "lesson-record-005-sec-001",
+          "heading": "Why workflow matters",
+          "body": "Master exam problems are rarely failed because of simple multiplication. They are failed because the candidate uses the wrong calculation method, misses a category, or applies a demand factor to the wrong subtotal.",
+          "necReferences": ["220.82"]
+        },
+        {
+          "id": "lesson-record-005-sec-002",
+          "heading": "Recommended sequence",
+          "body": "Start with the applicable optional-method rule, identify whether the occupancy qualifies, total the general and required loads, process appliances and fixed equipment correctly, then compare heating and cooling under the applicable method. Only after the load is complete should you move to conductor and overcurrent device sizing.",
+          "necReferences": ["220.82", "230.42", "310.16"]
+        },
+        {
+          "id": "lesson-record-005-sec-003",
+          "heading": "Exam discipline",
+          "body": "Master-level candidates should write the categories in order before solving. That keeps you from skipping a laundry circuit, double-counting a fastened-in-place appliance, or confusing the calculation article with the conductor article.",
+          "necReferences": ["220.82", "220.53", "220.54", "220.60"]
+        }
+      ],
+      "keyTakeaways": [
+        "Pick the right method before doing math.",
+        "Keep calculation articles separate from conductor-sizing articles until the load is complete.",
+        "Write the category list before solving."
+      ],
+      "practiceQuestions": [
+        "What common error occurs when a candidate moves to conductor sizing before the optional calculation is complete?",
+        "Which article governs the optional calculation itself?"
+      ],
+      "references": ["220.53", "220.54", "220.60", "220.82", "230.42", "310.16"]
+    },
+    {
+      "id": "lesson-record-006",
+      "courseTitle": "Master Electrician Course",
+      "moduleName": "Hazardous Locations",
+      "lessonTitle": "Hazardous Location Classification Fundamentals",
+      "certificationLevel": "Master",
+      "learningObjectives": [
+        "Distinguish class, division, and zone concepts at a test-taking level.",
+        "Use Article 500 as the common starting point before moving to occupancy-specific articles.",
+        "Recognize when the question is about classification and when it is about equipment selection."
+      ],
+      "lessonContent": [
+        {
+          "id": "lesson-record-006-sec-001",
+          "heading": "Classification before equipment",
+          "body": "If you do not know whether the location is Class I, II, or III, and Division 1 or 2, equipment-selection rules will not help you. Start with the classification concept, then move to the article and section that addresses permitted equipment or sealing requirements.",
+          "necReferences": ["500.5", "500.7"]
+        },
+        {
+          "id": "lesson-record-006-sec-002",
+          "heading": "How the code path usually works",
+          "body": "Article 500 gives the general framework and references the occupancy-specific articles. From there, the question may drive you to 501, 502, 503, 505, or 506 depending on the hazard and the classification method used by the jurisdiction or problem statement.",
+          "necReferences": ["500.5", "501.10", "502.10", "505.9"]
+        },
+        {
+          "id": "lesson-record-006-sec-003",
+          "heading": "Real-world application",
+          "body": "A designer or master electrician working with a classified location does not guess. They confirm the process hazard, verify the classified area, and then choose wiring methods, seals, fittings, motors, and luminaires appropriate to that classification.",
+          "necReferences": ["500.7", "501.15", "501.125"]
+        }
+      ],
+      "keyTakeaways": [
+        "Classification comes before equipment selection.",
+        "Article 500 is the map; the later articles are the destination.",
+        "Hazardous-location questions often hide the real task in the wording."
+      ],
+      "practiceQuestions": [
+        "What should you determine before selecting equipment for a classified location?",
+        "Which article should usually be your starting map for classified-location questions?"
+      ],
+      "references": ["500.5", "500.7", "501.10", "501.15", "501.125", "502.10", "505.9"]
+    }
+  ],
+  "questionBank": [
+    {
+      "id": "A-001",
+      "certificationLevel": "Apprentice",
+      "topicCategory": "NEC Navigation",
+      "questionText": "A question depends on the NEC meaning of the term 'readily accessible.' Which location should you check first?",
+      "answerChoices": { "A": "Article 100", "B": "Article 110", "C": "Article 210", "D": "Annex D" },
+      "correctAnswer": "A",
+      "explanation": "Defined terms should be checked in Article 100 before you interpret the installation rule. That prevents using an everyday meaning when the NEC has a technical one.",
+      "necReference": "Article 100",
+      "difficultyLevel": "Easy"
+    },
+    {
+      "id": "A-002",
+      "certificationLevel": "Apprentice",
+      "topicCategory": "Safety",
+      "questionText": "Which NEC section is commonly used for questions about required working space around electrical equipment?",
+      "answerChoices": { "A": "110.12", "B": "110.14", "C": "110.26", "D": "300.4" },
+      "correctAnswer": "C",
+      "explanation": "Section 110.26 addresses access and working space around electrical equipment. It is one of the most common general-requirement lookup points on electrician exams.",
+      "necReference": "110.26",
+      "difficultyLevel": "Easy"
+    },
+    {
+      "id": "A-003",
+      "certificationLevel": "Apprentice",
+      "topicCategory": "Branch Circuits",
+      "questionText": "In dwelling-unit habitable rooms, receptacle placement rules are found primarily in which section?",
+      "answerChoices": { "A": "210.52(A)", "B": "220.12", "C": "250.24", "D": "314.16" },
+      "correctAnswer": "A",
+      "explanation": "Section 210.52(A) addresses dwelling-unit receptacle spacing requirements for wall spaces in habitable rooms.",
+      "necReference": "210.52(A)",
+      "difficultyLevel": "Easy"
+    },
+    {
+      "id": "A-004",
+      "certificationLevel": "Apprentice",
+      "topicCategory": "Boxes and Fittings",
+      "questionText": "Box-fill calculations for conductor volume are found in which NEC section?",
+      "answerChoices": { "A": "300.11", "B": "310.16", "C": "314.16", "D": "430.52" },
+      "correctAnswer": "C",
+      "explanation": "Section 314.16 covers box volume and conductor-fill requirements. This is a core apprentice code-lookup topic.",
+      "necReference": "314.16",
+      "difficultyLevel": "Easy"
+    },
+    {
+      "id": "A-005",
+      "certificationLevel": "Apprentice",
+      "topicCategory": "Conductors",
+      "questionText": "Which NEC table is commonly used to look up general conductor ampacity values before applying adjustment or correction factors?",
+      "answerChoices": { "A": "250.66", "B": "310.16", "C": "430.250", "D": "Table 8, Chapter 9" },
+      "correctAnswer": "B",
+      "explanation": "Table 310.16 is the common starting point for general conductor ampacity lookup. The user must still read the surrounding sections and applicable conditions.",
+      "necReference": "310.16",
+      "difficultyLevel": "Easy"
+    },
+    {
+      "id": "J-001",
+      "certificationLevel": "Journeyman",
+      "topicCategory": "Continuous Load",
+      "questionText": "Under the NEC, a continuous load is one where the maximum current is expected to continue for how long?",
+      "answerChoices": { "A": "30 minutes or more", "B": "1 hour or more", "C": "2 hours or more", "D": "3 hours or more" },
+      "correctAnswer": "D",
+      "explanation": "Article 100 defines a continuous load as one where the maximum current is expected to continue for 3 hours or more.",
+      "necReference": "Article 100",
+      "difficultyLevel": "Easy"
+    },
+    {
+      "id": "J-002",
+      "certificationLevel": "Journeyman",
+      "topicCategory": "Branch Circuits and Feeders",
+      "questionText": "A branch circuit supplies a 40-ampere continuous load and no noncontinuous load. Ignoring conductor-terminal limitations and using the NEC continuous-load rule, what is the minimum overcurrent device rating to consider first?",
+      "answerChoices": { "A": "40 A", "B": "45 A", "C": "50 A", "D": "60 A" },
+      "correctAnswer": "C",
+      "explanation": "For a continuous load, start with 125 percent: 40 x 1.25 = 50 A. The code path then continues through the applicable overcurrent and conductor rules.",
+      "necReference": "210.20(A)",
+      "difficultyLevel": "Medium"
+    },
+    {
+      "id": "J-003",
+      "certificationLevel": "Journeyman",
+      "topicCategory": "Grounding and Bonding",
+      "questionText": "Which NEC section should you check when a feeder supplies a separate building or structure?",
+      "answerChoices": { "A": "250.24", "B": "250.32", "C": "250.50", "D": "300.3" },
+      "correctAnswer": "B",
+      "explanation": "Section 250.32 addresses buildings or structures supplied by feeder or branch circuit. Candidates often miss this by staying in the service-equipment section.",
+      "necReference": "250.32",
+      "difficultyLevel": "Medium"
+    },
+    {
+      "id": "J-004",
+      "certificationLevel": "Journeyman",
+      "topicCategory": "Motors",
+      "questionText": "When sizing motor branch-circuit conductors, electricians are often directed to use what value rather than only the nameplate current?",
+      "answerChoices": { "A": "Service demand load", "B": "Full-load current from the applicable NEC table", "C": "Largest branch-circuit overcurrent device", "D": "Equipment grounding conductor ampacity" },
+      "correctAnswer": "B",
+      "explanation": "Motor conductor and protection rules often rely on the applicable NEC full-load current tables rather than only the nameplate current. Journeyman candidates should know where to find those motor tables and rules.",
+      "necReference": "430.22",
+      "difficultyLevel": "Medium"
+    },
+    {
+      "id": "J-005",
+      "certificationLevel": "Journeyman",
+      "topicCategory": "Load Calculations",
+      "questionText": "Which article is the main starting point for feeder and service load calculations?",
+      "answerChoices": { "A": "Article 220", "B": "Article 250", "C": "Article 300", "D": "Article 430" },
+      "correctAnswer": "A",
+      "explanation": "Article 220 contains the load-calculation rules used before moving to conductor and overcurrent sizing articles.",
+      "necReference": "Article 220",
+      "difficultyLevel": "Easy"
+    },
+    {
+      "id": "M-001",
+      "certificationLevel": "Master",
+      "topicCategory": "Load Calculations",
+      "questionText": "Before starting a dwelling optional calculation problem, what should a master candidate determine first?",
+      "answerChoices": { "A": "The conductor insulation rating", "B": "Whether the occupancy qualifies for the optional method being used", "C": "The grounding electrode type", "D": "The available fault current" },
+      "correctAnswer": "B",
+      "explanation": "The first step is determining that the optional method applies. If the wrong method is chosen, the rest of the calculation can be invalid even if the arithmetic is correct.",
+      "necReference": "220.82",
+      "difficultyLevel": "Medium"
+    },
+    {
+      "id": "M-002",
+      "certificationLevel": "Master",
+      "topicCategory": "Hazardous Locations",
+      "questionText": "In a hazardous-location problem, what should generally be established before selecting equipment or fittings?",
+      "answerChoices": { "A": "The box-fill volume", "B": "The service conductor size", "C": "The classification of the location", "D": "The panelboard directory format" },
+      "correctAnswer": "C",
+      "explanation": "Classification comes first. Once the Class, Division, or Zone is known, the candidate can move to the appropriate equipment and wiring-method rules.",
+      "necReference": "500.5",
+      "difficultyLevel": "Medium"
+    },
+    {
+      "id": "M-003",
+      "certificationLevel": "Master",
+      "topicCategory": "Code Interpretation",
+      "questionText": "Which NEC section is commonly used to explain the hierarchy between general rules and rules for special occupancies, equipment, or conditions?",
+      "answerChoices": { "A": "90.3", "B": "110.14", "C": "220.40", "D": "250.66" },
+      "correctAnswer": "A",
+      "explanation": "Section 90.3 explains the arrangement of the Code and the relationship between Chapters 1 through 4 and the special rules in Chapters 5 through 7.",
+      "necReference": "90.3",
+      "difficultyLevel": "Easy"
+    },
+    {
+      "id": "M-004",
+      "certificationLevel": "Master",
+      "topicCategory": "2026 NEC Changes",
+      "questionText": "According to official NFPA development material for the 2026 NEC, which new article was created to address grounding and bonding of systems over 1000 Vac and 1500 Vdc nominal?",
+      "answerChoices": { "A": "Article 245", "B": "Article 270", "C": "Article 495", "D": "Article 627" },
+      "correctAnswer": "B",
+      "explanation": "NFPA working-draft material for the 2026 cycle shows the creation of Article 270 for grounding and bonding of systems over 1000 Vac and 1500 Vdc nominal.",
+      "necReference": "2026 NFPA development material for Article 270",
+      "difficultyLevel": "Hard"
+    },
+    {
+      "id": "M-005",
+      "certificationLevel": "Master",
+      "topicCategory": "Special Equipment",
+      "questionText": "Official NFPA public-input material for the 2026 cycle proposed a new Article 627 primarily to address power transfer for what broad category?",
+      "answerChoices": { "A": "Swimming pools and spas", "B": "Electric self-propelled vehicles beyond standard on-road EV coverage", "C": "Hospitals only", "D": "Temporary wiring on construction sites" },
+      "correctAnswer": "B",
+      "explanation": "NFPA 2026 public-input records describe Article 627 as addressing electric self-propelled vehicle power transfer systems, expanding beyond only on-road electric vehicles.",
+      "necReference": "2026 NFPA public input for Article 627",
+      "difficultyLevel": "Hard"
+    }
+  ],
+  "practiceExams": [
+    {
+      "id": "exam-apprentice-core-001",
+      "title": "Apprentice National Core Practice Exam",
+      "certificationLevel": "Apprentice",
+      "structureNotes": "Starter national-core simulation focused on code navigation, safety, branch circuits, boxes, and conductors. Not a jurisdiction-specific official exam form.",
+      "timingMinutes": 25,
+      "questionIds": ["A-001", "A-002", "A-003", "A-004", "A-005"],
+      "answerKey": { "A-001": "A", "A-002": "C", "A-003": "A", "A-004": "C", "A-005": "B" }
+    },
+    {
+      "id": "exam-journeyman-core-001",
+      "title": "Journeyman National Core Practice Exam",
+      "certificationLevel": "Journeyman",
+      "structureNotes": "Starter national-core simulation emphasizing continuous loads, feeder questions, grounding, motors, and load calculations. Texas should receive a separate knowledge-versus-calculation overlay because TDLR changed the journeyman exam to two parts effective March 11, 2025.",
+      "timingMinutes": 35,
+      "questionIds": ["J-001", "J-002", "J-003", "J-004", "J-005"],
+      "answerKey": { "J-001": "D", "J-002": "C", "J-003": "B", "J-004": "B", "J-005": "A" }
+    },
+    {
+      "id": "exam-master-core-001",
+      "title": "Master National Core Practice Exam",
+      "certificationLevel": "Master",
+      "structureNotes": "Starter national-core simulation emphasizing calculation method choice, hazardous locations, code hierarchy, and 2026-cycle change awareness. Maine official materials show 100-question master exams with a 70 percent passing score, while ICC notes many contractor/trades exams require 70 percent and some master electrician exams require 75 percent depending on the bulletin.",
+      "timingMinutes": 40,
+      "questionIds": ["M-001", "M-002", "M-003", "M-004", "M-005"],
+      "answerKey": { "M-001": "B", "M-002": "C", "M-003": "A", "M-004": "B", "M-005": "B" }
+    }
+  ],
+  "flashcards": [
+    { "id": "fc-001", "front": "Continuous load", "back": "A load where the maximum current is expected to continue for 3 hours or more. This definition drives several sizing rules.", "necReference": "Article 100", "certificationLevel": "Journeyman" },
+    { "id": "fc-002", "front": "Readily accessible", "back": "A defined NEC term that should be checked in Article 100 before answering access questions.", "necReference": "Article 100", "certificationLevel": "Apprentice" },
+    { "id": "fc-003", "front": "Working space", "back": "General rules for access and working space around electrical equipment are commonly found in 110.26.", "necReference": "110.26", "certificationLevel": "Apprentice" },
+    { "id": "fc-004", "front": "Grounding vs bonding", "back": "Grounding connects to earth for stabilization and voltage limitation. Bonding joins conductive parts to establish an effective fault-current path.", "necReference": "250.4", "certificationLevel": "Journeyman" },
+    { "id": "fc-005", "front": "Optional dwelling calculation", "back": "A master-level load-calculation path that must only be used when the occupancy and problem conditions qualify.", "necReference": "220.82", "certificationLevel": "Master" },
+    { "id": "fc-006", "front": "Code hierarchy", "back": "Section 90.3 explains how Chapters 1 through 4 interact with special rules in Chapters 5 through 7.", "necReference": "90.3", "certificationLevel": "Master" },
+    { "id": "fc-007", "front": "Table 310.16", "back": "Common starting point for general conductor ampacity lookup before applying other applicable rules.", "necReference": "310.16", "certificationLevel": "Apprentice" },
+    { "id": "fc-008", "front": "Article 270", "back": "2026-cycle NFPA development material shows Article 270 created for grounding and bonding of systems over 1000 Vac and 1500 Vdc nominal.", "necReference": "2026 NFPA Article 270 development material", "certificationLevel": "Master" },
+    { "id": "fc-009", "front": "Article 627", "back": "2026-cycle NFPA public-input material proposed Article 627 for electric self-propelled vehicle power transfer systems.", "necReference": "2026 NFPA Article 627 public input", "certificationLevel": "Master" }
+  ],
+  "quickReferenceGuides": [
+    {
+      "id": "qrg-001",
+      "title": "Code Lookup Starting Points",
+      "certificationLevel": "All",
+      "bullets": [
+        "Definitions: Article 100",
+        "General installation requirements: Article 110",
+        "Branch circuits: Article 210",
+        "Load calculations: Article 220",
+        "Grounding and bonding: Article 250",
+        "Conductors and ampacity: Article 310",
+        "Boxes and conduit bodies: Article 314",
+        "Motors: Article 430"
+      ],
+      "references": ["Article 100", "Article 110", "Article 210", "Article 220", "Article 250", "Article 310", "Article 314", "Article 430"]
+    },
+    {
+      "id": "qrg-002",
+      "title": "Continuous-Load Workflow",
+      "certificationLevel": "Journeyman",
+      "bullets": [
+        "Step 1: Confirm the load is continuous under Article 100.",
+        "Step 2: Identify whether the question asks for load, conductor, overcurrent device, or all three.",
+        "Step 3: Apply the relevant 125 percent rule where required.",
+        "Step 4: Finish the code path in conductor and overcurrent articles."
+      ],
+      "references": ["Article 100", "210.19(A)(1)", "210.20(A)", "215.2", "215.3"]
+    },
+    {
+      "id": "qrg-003",
+      "title": "Grounding and Bonding Map",
+      "certificationLevel": "Journeyman",
+      "bullets": [
+        "250.4: Performance concepts",
+        "250.24: Services",
+        "250.32: Buildings or structures supplied by feeder or branch circuit",
+        "250.50: Grounding electrode system",
+        "250.66: Grounding electrode conductor sizing"
+      ],
+      "references": ["250.4", "250.24", "250.32", "250.50", "250.66"]
+    },
+    {
+      "id": "qrg-004",
+      "title": "2026 NEC Change Watchlist",
+      "certificationLevel": "Master",
+      "bullets": [
+        "High-voltage and medium-voltage content reorganization",
+        "Article 270 grounding and bonding development",
+        "Article 245 protective-device reorganization",
+        "Article 625 bidirectional EV context",
+        "Article 627 self-propelled vehicle power-transfer proposal",
+        "Article 680 errata tracking"
+      ],
+      "references": ["2026 NFPA development material", "Errata 70-26-2"]
+    },
+    {
+      "id": "qrg-005",
+      "title": "Motor Question Workflow",
+      "certificationLevel": "Journeyman",
+      "bullets": [
+        "Identify whether the question asks about conductors, overloads, or short-circuit and ground-fault protection.",
+        "Use the applicable motor table or section specified by the NEC.",
+        "Do not assume nameplate current is always the controlling value."
+      ],
+      "references": ["430.22", "430.32", "430.52"]
+    }
+  ],
+  "studyPlans": [
+    { "id": "plan-a-4", "title": "4-Week Apprentice Sprint", "certificationLevel": "Apprentice", "durationWeeks": 4, "weeklyFocus": ["Week 1: Theory and safety", "Week 2: NEC organization and Article 110", "Week 3: Branch circuits, boxes, and conductors", "Week 4: Mixed review and timed lookup drills"] },
+    { "id": "plan-a-8", "title": "8-Week Apprentice Plan", "certificationLevel": "Apprentice", "durationWeeks": 8, "weeklyFocus": ["Weeks 1-2: Theory and safety", "Weeks 3-4: NEC navigation and general requirements", "Weeks 5-6: Wiring methods, boxes, and conductor basics", "Weeks 7-8: Review, flashcards, and speed drills"] },
+    { "id": "plan-a-12", "title": "12-Week Apprentice Plan", "certificationLevel": "Apprentice", "durationWeeks": 12, "weeklyFocus": ["Weeks 1-3: Electrical theory", "Weeks 4-5: Safety and work practices", "Weeks 6-8: NEC navigation and Chapter 1 rules", "Weeks 9-10: Branch circuits and wiring methods", "Weeks 11-12: Mixed quizzes and code drills"] },
+    { "id": "plan-j-4", "title": "4-Week Journeyman Sprint", "certificationLevel": "Journeyman", "durationWeeks": 4, "weeklyFocus": ["Week 1: NEC navigation and branch circuits", "Week 2: Grounding and bonding", "Week 3: Load calculations and motors", "Week 4: Timed mixed exams and error review"] },
+    { "id": "plan-j-8", "title": "8-Week Journeyman Plan", "certificationLevel": "Journeyman", "durationWeeks": 8, "weeklyFocus": ["Weeks 1-2: NEC structure and Articles 90, 100, 110", "Weeks 3-4: Branch circuits, feeders, and dwelling rules", "Weeks 5-6: Grounding, bonding, and motors", "Weeks 7-8: Transformers, special occupancies, and practice exams"] },
+    { "id": "plan-j-12", "title": "12-Week Journeyman Plan", "certificationLevel": "Journeyman", "durationWeeks": 12, "weeklyFocus": ["Weeks 1-3: Navigation and general requirements", "Weeks 4-5: Branch circuits and feeders", "Weeks 6-7: Grounding and bonding", "Weeks 8-9: Motors and transformers", "Weeks 10-11: Special occupancies and troubleshooting", "Week 12: Full review and timed exams"] },
+    { "id": "plan-m-4", "title": "4-Week Master Sprint", "certificationLevel": "Master", "durationWeeks": 4, "weeklyFocus": ["Week 1: Code hierarchy and advanced navigation", "Week 2: Service and feeder calculations", "Week 3: Hazardous locations and special systems", "Week 4: Mixed timed exams and jurisdiction review"] },
+    { "id": "plan-m-8", "title": "8-Week Master Plan", "certificationLevel": "Master", "durationWeeks": 8, "weeklyFocus": ["Weeks 1-2: Advanced code hierarchy and interpretation", "Weeks 3-4: Complex load calculations", "Weeks 5-6: Service design, overcurrent, and coordination", "Weeks 7-8: Hazardous locations, business rules, and full exams"] },
+    { "id": "plan-m-12", "title": "12-Week Master Plan", "certificationLevel": "Master", "durationWeeks": 12, "weeklyFocus": ["Weeks 1-2: NEC structure and interpretation", "Weeks 3-5: Dwelling and commercial calculations", "Weeks 6-7: Service and distribution design", "Weeks 8-9: Grounding, bonding, and overcurrent coordination", "Weeks 10-11: Hazardous locations and special systems", "Week 12: Timed final simulations and jurisdiction overlays"] }
+  ],
+  "glossary": [
+    { "id": "gl-001", "term": "Continuous Load", "definition": "A load where the maximum current is expected to continue for 3 hours or more.", "necReference": "Article 100", "certificationLevel": "Journeyman" },
+    { "id": "gl-002", "term": "Readily Accessible", "definition": "A defined NEC access term that should be checked in Article 100 whenever availability or access affects the answer.", "necReference": "Article 100", "certificationLevel": "Apprentice" },
+    { "id": "gl-003", "term": "Grounding", "definition": "Connecting to ground or to a conductive body that serves in place of ground for system stabilization and voltage limitation purposes.", "necReference": "250.4", "certificationLevel": "Journeyman" },
+    { "id": "gl-004", "term": "Bonding", "definition": "Permanent joining of metallic parts to form an electrically conductive path that helps ensure electrical continuity and fault-current capability.", "necReference": "250.4", "certificationLevel": "Journeyman" },
+    { "id": "gl-005", "term": "Grounding Electrode System", "definition": "The grounding electrodes present at a building or structure that are bonded together as required by the NEC.", "necReference": "250.50", "certificationLevel": "Journeyman" },
+    { "id": "gl-006", "term": "Optional Method", "definition": "A calculation method permitted by the NEC for certain occupancies and conditions as an alternative to the standard method.", "necReference": "220.82", "certificationLevel": "Master" },
+    { "id": "gl-007", "term": "Classified Location", "definition": "A location where fire or explosion hazards may exist because of flammable gases, vapors, liquids, dusts, or fibers.", "necReference": "500.5", "certificationLevel": "Master" },
+    { "id": "gl-008", "term": "EVSE", "definition": "Equipment installed for transferring energy between premises wiring and an electric vehicle.", "necReference": "Article 625", "certificationLevel": "Master" },
+    { "id": "gl-009", "term": "Microgrid", "definition": "A term undergoing notable 2026-cycle refinement in official NFPA development records; WattWise should treat wording carefully until final text is licensed and verified.", "necReference": "2026 NFPA public-input material", "certificationLevel": "Master" },
+    { "id": "gl-010", "term": "Service Disconnecting Means", "definition": "The disconnecting means for service conductors, central to service-equipment and bonding questions.", "necReference": "230.70", "certificationLevel": "Journeyman" }
+  ],
+  "jurisdictionResearchNotes": [
+    {
+      "id": "juris-001",
+      "jurisdiction": "National Core",
+      "summary": "There is no single national electrician license exam. WattWise should ship a national NEC core plus jurisdiction overlays for approval rules, vendor, question counts, pass thresholds, and local amendments.",
+      "officialSource": "Use the official licensing board and vendor bulletin for each jurisdiction before publishing production exam claims."
+    },
+    {
+      "id": "juris-002",
+      "jurisdiction": "California",
+      "summary": "California DLSE states applicants are approved through the Electrician Certification Unit and then schedule with PSI. The PSI Candidate Information Bulletin is part of the official process after approval.",
+      "officialSource": "https://dir.ca.gov/dlse/ECU/ECUCertforms.htm"
+    },
+    {
+      "id": "juris-003",
+      "jurisdiction": "Texas",
+      "summary": "TDLR states that, starting March 11, 2025, the Journeyman Electrician exam changed to 2 separate parts: a knowledge portion and a calculations portion. Texas therefore needs a distinct journeyman exam experience in WattWise.",
+      "officialSource": "https://www.tdlr.texas.gov/electricians/elecexam.htm"
+    },
+    {
+      "id": "juris-004",
+      "jurisdiction": "Virginia",
+      "summary": "Virginia DPOR requires board pre-approval before the exam, uses PSI for Tradesmen exams, lists separate journeyman and master exam fees, and links candidates to a Candidate Information Bulletin PDF.",
+      "officialSource": "https://www.dpor.virginia.gov/Boards/Tradesmen"
+    },
+    {
+      "id": "juris-005",
+      "jurisdiction": "Maine",
+      "summary": "Maine uses Prov for its examination program. Official board pages state that the journeyman exam is 80 questions with 70 percent required to pass, the master exam is 100 questions with 70 percent required to pass, and 15 hours of current NEC update training are required before renewal for journeyman and master licensees.",
+      "officialSource": "https://www1.maine.gov/pfr/professionallicensing/professions/electricians/faq"
+    },
+    {
+      "id": "juris-006",
+      "jurisdiction": "ICC Jurisdictions",
+      "summary": "ICC states that many contractor/trades exams are open book and that the exam catalog contains the current bulletin, outline, references, and administration details. ICC support guidance notes that most contractor/trades exams require 70 percent and that the Master Electrician exam requires 75 percent where applicable.",
+      "officialSource": "https://www.iccsafe.org/jurisdiction-specific-contractor-trades-exams/"
+    },
+    {
+      "id": "juris-007",
+      "jurisdiction": "Washington",
+      "summary": "Washington L&I publishes electrician exam pathways based on specialty and journey level. The official exam page lists classroom-hour and experience-hour thresholds before candidates apply, making Washington a strong example of a state where apprenticeship records and exam eligibility are tightly linked.",
+      "officialSource": "https://lni.wa.gov/licensing-permits/electrical/electrical-licensing-exams-education/electrician"
+    },
+    {
+      "id": "juris-008",
+      "jurisdiction": "Oregon",
+      "summary": "Oregon BCD treats electrical individual and contractor licensing as part of a broader licensing system with exam locations, reciprocal-license guidance, continuing education, and distinct individual-license pathways. Oregon therefore needs both exam prep and licensing-process support content.",
+      "officialSource": "https://www.oregon.gov/bcd/licensing"
+    },
+    {
+      "id": "juris-009",
+      "jurisdiction": "Florida",
+      "summary": "Florida DBPR examination information states approved candidates schedule computer-based construction exams through Pearson VUE. Florida is a reminder that some states emphasize contractor examination and business/regulatory pathways rather than a statewide journeyman license model.",
+      "officialSource": "https://www2.myfloridalicense.com/examination-information/"
+    }
+  ],
+  "sourceList": [
+    {
+      "id": "src-nfpa-errata-680",
+      "title": "Errata 70-26-2, NFPA 70 National Electrical Code 2026 Edition",
+      "publisher": "NFPA",
+      "url": "https://docinfofiles.nfpa.org/files/AboutTheCodes/70/Errata_70_26_2.pdf",
+      "sourceType": "Official NFPA errata",
+      "accessedOn": "2026-03-30",
+      "notes": "Confirms published 2026 errata already affecting Article 680 content."
+    },
+    {
+      "id": "src-nfpa-270",
+      "title": "NFPA 70 NEC Working Draft, Second Revision No. 8314 on Article 270",
+      "publisher": "NFPA",
+      "url": "https://docinfofiles.nfpa.org/files/AboutTheCodes/70/70_A2025_NEC_P05_SD_PrelimSR.pdf",
+      "sourceType": "Official NFPA development document",
+      "accessedOn": "2026-03-30",
+      "notes": "Shows Article 270 structure for grounding and bonding of systems over 1000 Vac and 1500 Vdc nominal."
+    },
+    {
+      "id": "src-nfpa-245",
+      "title": "NFPA 70 Public Input Responses describing Article 245 reorganization",
+      "publisher": "NFPA",
+      "url": "https://docinfofiles.nfpa.org/files/AboutTheCodes/70/70_A2022_NEC_P09_FD_PIResponses.pdf",
+      "sourceType": "Official NFPA development document",
+      "accessedOn": "2026-03-30",
+      "notes": "Describes relocation of overcurrent and overvoltage content into new Article 245 and related renumbering."
+    },
+    {
+      "id": "src-nfpa-625",
+      "title": "NFPA 70 Public Input Responses with Article 625 EVSE terminology",
+      "publisher": "NFPA",
+      "url": "https://docinfofiles.nfpa.org/files/AboutTheCodes/70/70_A2025_NEC_P07_FD_PIResponses.pdf",
+      "sourceType": "Official NFPA development document",
+      "accessedOn": "2026-03-30",
+      "notes": "Shows EVSE and bidirectional WPTE context in 2026-cycle material."
+    },
+    {
+      "id": "src-nfpa-627",
+      "title": "NFPA 70 Public Input Responses with proposed new Article 627",
+      "publisher": "NFPA",
+      "url": "https://docinfofiles.nfpa.org/files/AboutTheCodes/70/70_A2025_NEC_P12_FD_PIResponses.pdf",
+      "sourceType": "Official NFPA development document",
+      "accessedOn": "2026-03-30",
+      "notes": "Contains proposed new Article 627 for electric self-propelled vehicle power transfer systems."
+    },
+    {
+      "id": "src-nfpa-microgrid",
+      "title": "NFPA 70 Public Input Responses with microgrid and hybrid power definitions",
+      "publisher": "NFPA",
+      "url": "https://docinfofiles.nfpa.org/files/AboutTheCodes/70/70_A2025_NEC_P04_FD_PIResponses.pdf",
+      "sourceType": "Official NFPA development document",
+      "accessedOn": "2026-03-30",
+      "notes": "Shows 2026-cycle definitional work for microgrid and hybrid power systems."
+    },
+    {
+      "id": "src-ca-dlse",
+      "title": "Electrician Certification Forms and Scheduling Information",
+      "publisher": "California Department of Industrial Relations, DLSE",
+      "url": "https://dir.ca.gov/dlse/ECU/ECUCertforms.htm",
+      "sourceType": "Official state licensing board page",
+      "accessedOn": "2026-03-30",
+      "notes": "Confirms PSI scheduling flow after ECU approval."
+    },
+    {
+      "id": "src-tx-tdlr",
+      "title": "Electrician Exam Information",
+      "publisher": "Texas Department of Licensing and Regulation",
+      "url": "https://www.tdlr.texas.gov/electricians/elecexam.htm",
+      "sourceType": "Official state licensing board page",
+      "accessedOn": "2026-03-30",
+      "notes": "Confirms March 11, 2025 split of the Texas journeyman exam into knowledge and calculations portions."
+    },
+    {
+      "id": "src-va-dpor",
+      "title": "Tradesmen Program",
+      "publisher": "Virginia Department of Professional and Occupational Regulation",
+      "url": "https://www.dpor.virginia.gov/Boards/Tradesmen",
+      "sourceType": "Official state licensing board page",
+      "accessedOn": "2026-03-30",
+      "notes": "Confirms board pre-approval, PSI administration, and posted exam fees for journeyman and master tradesmen."
+    },
+    {
+      "id": "src-me-exams",
+      "title": "Electricians' Examining Board - Examinations",
+      "publisher": "Maine Office of Professional and Occupational Regulation",
+      "url": "https://www1.maine.gov/pfr/professionallicensing/professions/electricians/examinations",
+      "sourceType": "Official state licensing board page",
+      "accessedOn": "2026-03-30",
+      "notes": "Confirms Prov as the exam administrator."
+    },
+    {
+      "id": "src-me-faq",
+      "title": "Electricians' Examining Board - Frequently Asked Questions",
+      "publisher": "Maine Office of Professional and Occupational Regulation",
+      "url": "https://www1.maine.gov/pfr/professionallicensing/professions/electricians/faq",
+      "sourceType": "Official state licensing board page",
+      "accessedOn": "2026-03-30",
+      "notes": "Confirms journeyman and master question counts, pass score, and current NEC update training requirement."
+    },
+    {
+      "id": "src-icc-trades",
+      "title": "ICC Jurisdiction-Specific Contractor/Trades Exams",
+      "publisher": "International Code Council",
+      "url": "https://www.iccsafe.org/jurisdiction-specific-contractor-trades-exams/",
+      "sourceType": "Official exam provider page",
+      "accessedOn": "2026-03-30",
+      "notes": "Explains bulletin-driven contractor/trades exam delivery and jurisdiction-specific information."
+    },
+    {
+      "id": "src-icc-openbook",
+      "title": "Are the exams open-book?",
+      "publisher": "ICC Support Portal",
+      "url": "https://support.iccsafe.org/ht_kb/icc-credentialing/are-the-exams-open-book/",
+      "sourceType": "Official exam provider support article",
+      "accessedOn": "2026-03-30",
+      "notes": "States that most ICC exams are open book and candidates must use the exam catalog bulletin."
+    },
+    {
+      "id": "src-icc-passscore",
+      "title": "What score do I need to pass?",
+      "publisher": "ICC Support Portal",
+      "url": "https://support.iccsafe.org/ht_kb/assessment-center/what-is-a-passing-score/",
+      "sourceType": "Official exam provider support article",
+      "accessedOn": "2026-03-30",
+      "notes": "States most contractor/trades exams require 70 percent and master electrician requires 75 percent where applicable."
+    },
+    {
+      "id": "src-nccer",
+      "title": "Accreditation Standards and Test Specifications",
+      "publisher": "NCCER",
+      "url": "https://www.nccer.org/accreditation-standards-and-test-specifications/",
+      "sourceType": "Official curriculum framework page",
+      "accessedOn": "2026-03-30",
+      "notes": "Provides current Electrical 11E level test specification access points."
+    },
+    {
+      "id": "src-wa-lni",
+      "title": "Electrician licensing exams and education",
+      "publisher": "Washington State Department of Labor and Industries",
+      "url": "https://lni.wa.gov/licensing-permits/electrical/electrical-licensing-exams-education/electrician",
+      "sourceType": "Official state licensing board page",
+      "accessedOn": "2026-03-30",
+      "notes": "Shows journey-level and specialty exam eligibility hours and education requirements."
+    },
+    {
+      "id": "src-or-bcd",
+      "title": "Individual and contractor licenses",
+      "publisher": "Oregon Building Codes Division",
+      "url": "https://www.oregon.gov/bcd/licensing",
+      "sourceType": "Official state licensing board page",
+      "accessedOn": "2026-03-30",
+      "notes": "Provides Oregon electrical licensing, exam-location, reciprocal-license, and continuing-education entry points."
+    },
+    {
+      "id": "src-fl-dbpr",
+      "title": "Examination Information",
+      "publisher": "Florida Department of Business and Professional Regulation",
+      "url": "https://www2.myfloridalicense.com/examination-information/",
+      "sourceType": "Official state licensing board page",
+      "accessedOn": "2026-03-30",
+      "notes": "Confirms Pearson VUE scheduling for approved computer-based construction examinations."
+    },
+    {
+      "id": "src-osha-1910-s",
+      "title": "29 CFR 1910 Subpart S - Electrical",
+      "publisher": "Occupational Safety and Health Administration",
+      "url": "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910SubpartS",
+      "sourceType": "Official federal safety regulation",
+      "accessedOn": "2026-03-30",
+      "notes": "Primary OSHA reference for general industry electrical safety requirements."
+    },
+    {
+      "id": "src-osha-1926-k",
+      "title": "29 CFR 1926 Subpart K - Electrical",
+      "publisher": "Occupational Safety and Health Administration",
+      "url": "https://www.osha.gov/laws-regs/regulations/standardnumber/1926/1926SubpartK",
+      "sourceType": "Official federal safety regulation",
+      "accessedOn": "2026-03-30",
+      "notes": "Primary OSHA reference for construction electrical safety requirements."
+    },
+    {
+      "id": "src-nfpa-70e-factsheet",
+      "title": "NFPA 70E Electrical Safety in the Workplace Fact Sheet",
+      "publisher": "NFPA",
+      "url": "https://content.nfpa.org/-/media/Project/Storefront/Catalog/Files/Code-or-topic-fact-sheets/70E2021FactSheet.pdf?rev=7953f4b4bd7e4e2eba163808ecdf0804",
+      "sourceType": "Official NFPA fact sheet",
+      "accessedOn": "2026-03-30",
+      "notes": "Confirms the current edition is 2024 and explains the OSHA-NFPA 70E relationship."
+    },
+    {
+      "id": "src-apprenticeship-gov",
+      "title": "Legislation, Regulations, and Guidance",
+      "publisher": "Apprenticeship.gov",
+      "url": "https://www.apprenticeship.gov/about-us/legislation-regulations-guidance",
+      "sourceType": "Official federal apprenticeship guidance page",
+      "accessedOn": "2026-03-30",
+      "notes": "Useful for registered apprenticeship framework alignment."
+    }
+  ]
+}
