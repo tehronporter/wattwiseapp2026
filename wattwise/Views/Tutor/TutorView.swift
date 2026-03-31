@@ -9,77 +9,9 @@ struct TutorView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Messages
-            if vm.messages.isEmpty {
-                TutorEmptyState(subscription: appVM.subscriptionState) { suggestion in
-                    vm.inputText = suggestion
-                    Task { await vm.send(services: services, subscription: appVM.subscriptionState) }
-                }
-            } else {
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        LazyVStack(spacing: WWSpacing.m) {
-                            ForEach(vm.messages) { message in
-                                MessageBubble(message: message) { followUp in
-                                    vm.sendFollowUp(followUp, services: services, subscription: appVM.subscriptionState)
-                                }
-                                .id(message.id)
-                            }
-
-                            if vm.isSending {
-                                TypingIndicator()
-                                    .id("typing")
-                            }
-
-                            if let error = vm.errorMessage {
-                                Text(error)
-                                    .font(WWFont.caption())
-                                    .foregroundColor(.wwError)
-                                    .padding(WWSpacing.s)
-                            }
-                        }
-                        .wwScreenPadding()
-                        .padding(.vertical, WWSpacing.m)
-                    }
-                    .onChange(of: vm.messages.count) { _, _ in
-                        withAnimation {
-                            proxy.scrollTo(vm.isSending ? "typing" : vm.messages.last?.id, anchor: .bottom)
-                        }
-                    }
-                    .onChange(of: vm.isSending) { _, _ in
-                        withAnimation {
-                            proxy.scrollTo("typing", anchor: .bottom)
-                        }
-                    }
-                }
-            }
-
-            // Usage limit indicator (free tier)
-            if !appVM.subscriptionState.isPro {
-                let remaining = appVM.subscriptionState.tutorMessagesRemaining
-                if remaining <= 2 {
-                    HStack {
-                        Image(systemName: "info.circle")
-                            .font(.system(size: 12))
-                        Text(remaining == 0 ? "Daily limit reached. Upgrade to Pro." : "\(remaining) message\(remaining == 1 ? "" : "s") remaining today.")
-                        Spacer()
-                        if remaining == 0 {
-                            Button("Upgrade") { vm.showPaywall = true }
-                                .font(WWFont.caption(.semibold))
-                                .foregroundColor(.wwBlue)
-                        }
-                    }
-                    .font(WWFont.caption())
-                    .foregroundColor(.wwTextSecondary)
-                    .padding(.horizontal, WWSpacing.m)
-                    .padding(.vertical, WWSpacing.s)
-                    .background(Color.wwSurface)
-                }
-            }
-
+            messagesSection
+            usageLimitBanner
             WWDivider()
-
-            // Input bar
             TutorInputBar(
                 text: $vm.inputText,
                 isSending: vm.isSending,
@@ -120,6 +52,88 @@ struct TutorView: View {
                 vm.context = ctx
             }
         }
+    }
+
+    @ViewBuilder
+    private var messagesSection: some View {
+        if vm.messages.isEmpty {
+            TutorEmptyState(subscription: appVM.subscriptionState) { suggestion in
+                vm.inputText = suggestion
+                Task { await vm.send(services: services, subscription: appVM.subscriptionState) }
+            }
+        } else {
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack(spacing: WWSpacing.m) {
+                        ForEach(vm.messages) { message in
+                            MessageBubble(message: message) { followUp in
+                                vm.sendFollowUp(followUp, services: services, subscription: appVM.subscriptionState)
+                            }
+                            .id(message.id)
+                        }
+                        if vm.isSending {
+                            TypingIndicator().id("typing")
+                        }
+                        if let error = vm.errorMessage {
+                            Text(error)
+                                .font(WWFont.caption())
+                                .foregroundColor(.wwError)
+                                .padding(WWSpacing.s)
+                        }
+                    }
+                    .wwScreenPadding()
+                    .padding(.vertical, WWSpacing.m)
+                }
+                .onChange(of: vm.messages.count) { _, _ in
+                    withAnimation {
+                        proxy.scrollTo(vm.isSending ? "typing" : vm.messages.last?.id, anchor: .bottom)
+                    }
+                }
+                .onChange(of: vm.isSending) { _, _ in
+                    withAnimation { proxy.scrollTo("typing", anchor: .bottom) }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var usageLimitBanner: some View {
+        if !appVM.subscriptionState.isPro {
+            let remaining = appVM.subscriptionState.tutorMessagesRemaining
+            if remaining <= 2 {
+                UsageLimitBanner(remaining: remaining, onUpgrade: { vm.showPaywall = true })
+            }
+        }
+    }
+}
+
+// MARK: - Usage Limit Banner
+
+private struct UsageLimitBanner: View {
+    let remaining: Int
+    let onUpgrade: () -> Void
+
+    var body: some View {
+        HStack {
+            Image(systemName: "info.circle")
+                .font(.system(size: 12))
+            if remaining == 0 {
+                Text("Daily limit reached. Upgrade to Pro.")
+            } else {
+                Text("\(remaining) message\(remaining == 1 ? "" : "s") remaining today.")
+            }
+            Spacer()
+            if remaining == 0 {
+                Button("Upgrade", action: onUpgrade)
+                    .font(WWFont.caption(.semibold))
+                    .foregroundColor(.wwBlue)
+            }
+        }
+        .font(WWFont.caption())
+        .foregroundColor(.wwTextSecondary)
+        .padding(.horizontal, WWSpacing.m)
+        .padding(.vertical, WWSpacing.s)
+        .background(Color.wwSurface)
     }
 }
 

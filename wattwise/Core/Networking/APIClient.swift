@@ -25,7 +25,7 @@ actor APIClient {
 
     // MARK: - Core request method
 
-    func post<Request: Encodable, Response: Decodable>(
+    func post<Request: Encodable & Sendable, Response: Decodable & Sendable>(
         endpoint: String,
         body: Request,
         responseType: Response.Type
@@ -78,7 +78,7 @@ actor APIClient {
     }
 
     // Convenience overload for empty body
-    func post<Response: Decodable>(
+    func post<Response: Decodable & Sendable>(
         endpoint: String,
         responseType: Response.Type
     ) async throws -> Response {
@@ -88,18 +88,37 @@ actor APIClient {
 
 // MARK: - Response Wrapper
 
-private struct SupabaseResponse<T: Decodable>: Decodable {
+private struct SupabaseResponse<T: Decodable & Sendable>: Decodable, Sendable {
     let success: Bool?
     let data: T?
     let error: SupabaseErrorBody?
+
+    private enum CodingKeys: String, CodingKey { case success, data, error }
+
+    nonisolated init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        success = try c.decodeIfPresent(Bool.self, forKey: .success)
+        data    = try c.decodeIfPresent(T.self,    forKey: .data)
+        error   = try c.decodeIfPresent(SupabaseErrorBody.self, forKey: .error)
+    }
 }
 
-private struct SupabaseErrorBody: Decodable {
+private struct SupabaseErrorBody: Decodable, Sendable {
     let code: String?
     let message: String?
+
+    private enum CodingKeys: String, CodingKey { case code, message }
+
+    nonisolated init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        code    = try c.decodeIfPresent(String.self, forKey: .code)
+        message = try c.decodeIfPresent(String.self, forKey: .message)
+    }
 }
 
-private struct EmptyBody: Encodable {}
+private struct EmptyBody: Encodable, Sendable {
+    nonisolated func encode(to encoder: any Encoder) throws {}
+}
 
 // MARK: - API Error
 

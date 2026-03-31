@@ -75,7 +75,7 @@ actor SupabaseAuthClient {
     }
 
     func restoreSession() async -> AuthSession? {
-        guard let access = UserDefaults.standard.string(forKey: tokenKey),
+        guard UserDefaults.standard.string(forKey: tokenKey) != nil,
               let refresh = UserDefaults.standard.string(forKey: refreshKey) else { return nil }
 
         // Try to refresh the token
@@ -124,36 +124,89 @@ actor SupabaseAuthClient {
 
 // MARK: - Models
 
-struct AuthSession: Decodable {
+struct AuthSession: Decodable, Sendable {
     let accessToken: String
     let tokenType: String
     let expiresIn: Int?
     let refreshToken: String
     let user: SupabaseUser
+
+    private enum CodingKeys: String, CodingKey {
+        case accessToken, tokenType, expiresIn, refreshToken, user
+    }
+
+    nonisolated init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        accessToken  = try c.decode(String.self,       forKey: .accessToken)
+        tokenType    = try c.decode(String.self,       forKey: .tokenType)
+        expiresIn    = try c.decodeIfPresent(Int.self,  forKey: .expiresIn)
+        refreshToken = try c.decode(String.self,       forKey: .refreshToken)
+        user         = try c.decode(SupabaseUser.self, forKey: .user)
+    }
 }
 
-struct SupabaseUser: Decodable {
+struct SupabaseUser: Decodable, Sendable {
     let id: String
     let email: String?
     let userMetadata: UserMetadata?
     let appMetadata: AppMetadata?
 
-    struct UserMetadata: Decodable {
+    struct UserMetadata: Decodable, Sendable {
         let displayName: String?
         let examType: String?
         let state: String?
         let studyGoal: String?
+
+        private enum CodingKeys: String, CodingKey {
+            case displayName, examType, state, studyGoal
+        }
+
+        nonisolated init(from decoder: any Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            displayName = try c.decodeIfPresent(String.self, forKey: .displayName)
+            examType    = try c.decodeIfPresent(String.self, forKey: .examType)
+            state       = try c.decodeIfPresent(String.self, forKey: .state)
+            studyGoal   = try c.decodeIfPresent(String.self, forKey: .studyGoal)
+        }
     }
 
-    struct AppMetadata: Decodable {
+    struct AppMetadata: Decodable, Sendable {
         let provider: String?
+
+        private enum CodingKeys: String, CodingKey { case provider }
+
+        nonisolated init(from decoder: any Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            provider = try c.decodeIfPresent(String.self, forKey: .provider)
+        }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, email, userMetadata, appMetadata
+    }
+
+    nonisolated init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id           = try c.decode(String.self,              forKey: .id)
+        email        = try c.decodeIfPresent(String.self,     forKey: .email)
+        userMetadata = try c.decodeIfPresent(UserMetadata.self, forKey: .userMetadata)
+        appMetadata  = try c.decodeIfPresent(AppMetadata.self,  forKey: .appMetadata)
     }
 }
 
-private struct AuthErrorBody: Decodable {
+private struct AuthErrorBody: Decodable, Sendable {
     let error: String?
     let error_description: String?
     let msg: String?
+
+    private enum CodingKeys: String, CodingKey { case error, error_description, msg }
+
+    nonisolated init(from decoder: any Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        error             = try c.decodeIfPresent(String.self, forKey: .error)
+        error_description = try c.decodeIfPresent(String.self, forKey: .error_description)
+        msg               = try c.decodeIfPresent(String.self, forKey: .msg)
+    }
 }
 
 enum AuthError: LocalizedError {

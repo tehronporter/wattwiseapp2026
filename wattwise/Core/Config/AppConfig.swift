@@ -10,17 +10,13 @@ import Foundation
 
 enum AppConfig {
     // MARK: - Supabase
-    nonisolated(unsafe) static let supabaseURL     = "https://lxjjwodpiaivtkbjrodu.supabase.co"
-    nonisolated(unsafe) static let supabaseAnonKey = "sb_publishable_-YEsxkbJAXMt1s9n1ie5LQ_zIFrm9Jx"
+    static let supabaseURL     = "https://lxjjwodpiaivtkbjrodu.supabase.co"
+    static let supabaseAnonKey = "sb_publishable_-YEsxkbJAXMt1s9n1ie5LQ_zIFrm9Jx"
 
     // MARK: - Derived
-    nonisolated(unsafe) static var supabaseBaseURL: URL {
-        URL(string: supabaseURL)!
-    }
-    nonisolated(unsafe) static var edgeFunctionURL: URL {
-        URL(string: "\(supabaseURL)/functions/v1")!
-    }
+    static let supabaseBaseURL = URL(string: "https://lxjjwodpiaivtkbjrodu.supabase.co")!
+    static let edgeFunctionURL = URL(string: "https://lxjjwodpiaivtkbjrodu.supabase.co/functions/v1")!
 
     // MARK: - Feature flags
-    nonisolated(unsafe) static let useMockServices = false   // flip to true to run without backend
+    static let useMockServices = false   // flip to true to run without backend
 }
