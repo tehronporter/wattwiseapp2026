@@ -86,7 +86,11 @@ struct TutorView: View {
                 }
                 .onChange(of: vm.messages.count) { _, _ in
                     withAnimation {
-                        proxy.scrollTo(vm.isSending ? "typing" : vm.messages.last?.id, anchor: .bottom)
+                        if vm.isSending {
+                            proxy.scrollTo("typing", anchor: .bottom)
+                        } else if let lastId = vm.messages.last?.id {
+                            proxy.scrollTo(lastId, anchor: .bottom)
+                        }
                     }
                 }
                 .onChange(of: vm.isSending) { _, _ in

@@ -92,33 +92,14 @@ private struct SupabaseResponse<T: Decodable>: Decodable {
     let success: Bool?
     let data: T?
     let error: SupabaseErrorBody?
-
-    private enum CodingKeys: String, CodingKey { case success, data, error }
-
-    nonisolated init(from decoder: any Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        success = try c.decodeIfPresent(Bool.self, forKey: .success)
-        data    = try c.decodeIfPresent(T.self,    forKey: .data)
-        error   = try c.decodeIfPresent(SupabaseErrorBody.self, forKey: .error)
-    }
 }
 
 private struct SupabaseErrorBody: Decodable {
     let code: String?
     let message: String?
-
-    private enum CodingKeys: String, CodingKey { case code, message }
-
-    nonisolated init(from decoder: any Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        code    = try c.decodeIfPresent(String.self, forKey: .code)
-        message = try c.decodeIfPresent(String.self, forKey: .message)
-    }
 }
 
-private struct EmptyBody: Encodable {
-    nonisolated func encode(to encoder: any Encoder) throws {}
-}
+private struct EmptyBody: Encodable {}
 
 // MARK: - API Error
 
