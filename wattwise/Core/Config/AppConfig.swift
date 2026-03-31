@@ -18,5 +18,7 @@ enum AppConfig {
     nonisolated(unsafe) static let edgeFunctionURL = URL(string: "https://lxjjwodpiaivtkbjrodu.supabase.co/functions/v1")!
 
     // MARK: - Feature flags
-    nonisolated(unsafe) static let useMockServices = false   // flip to true to run without backend
+    // true  = mock services (works offline, no backend required) — use for TestFlight until Edge Functions are deployed
+    // false = real Supabase backend (requires Edge Functions deployed at /functions/v1/*)
+    nonisolated(unsafe) static let useMockServices = true
 }

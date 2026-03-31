@@ -112,7 +112,10 @@ actor SupabaseAuthClient {
     }
 
     private func makeRequest(path: String, accessToken: String?) -> URLRequest {
-        var req = URLRequest(url: baseURL.appendingPathComponent(path))
+        // Use string concatenation to preserve query params (e.g. /token?grant_type=password).
+        // appendingPathComponent() percent-encodes '?' which breaks Supabase auth endpoints.
+        let url = URL(string: baseURL.absoluteString + path)!
+        var req = URLRequest(url: url)
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
         if let token = accessToken {

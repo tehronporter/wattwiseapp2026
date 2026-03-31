@@ -43,6 +43,15 @@ struct NECView: View {
                 Spacer()
                 ProgressView()
                 Spacer()
+            } else if let error = vm.searchError {
+                WWEmptyState(
+                    icon: "wifi.slash",
+                    title: "Search unavailable",
+                    message: error,
+                    actionTitle: "Retry"
+                ) {
+                    vm.search(services: services)
+                }
             } else if vm.results.isEmpty && !vm.searchQuery.isEmpty {
                 WWEmptyState(
                     icon: "doc.text.magnifyingglass",
@@ -138,6 +147,16 @@ struct NECDetailView: View {
             VStack(alignment: .leading, spacing: WWSpacing.l) {
                 if vm.isLoadingDetail {
                     ProgressView().frame(maxWidth: .infinity).padding(.top, WWSpacing.xl)
+                } else if let error = vm.detailError {
+                    WWEmptyState(
+                        icon: "exclamationmark.triangle",
+                        title: "Couldn't load article",
+                        message: error,
+                        actionTitle: "Retry"
+                    ) {
+                        Task { await vm.loadDetail(id: necId, services: services) }
+                    }
+                    .padding(.top, WWSpacing.xl)
                 } else if let detail = vm.selectedDetail {
                     // Header
                     VStack(alignment: .leading, spacing: WWSpacing.s) {

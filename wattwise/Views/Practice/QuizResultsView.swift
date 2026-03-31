@@ -19,12 +19,6 @@ struct QuizResultsView: View {
                 VStack(spacing: WWSpacing.m) {
                     WWPrimaryButton(title: "Retry Quiz", action: onRetry)
 
-                    if !result.weakTopics.isEmpty {
-                        WWSecondaryButton(title: "Study Weak Topics") {
-                            // Navigate to learn with weak topics
-                        }
-                    }
-
                     WWGhostButton(title: "Ask Tutor About Results") {
                         tutorContext = TutorContext(type: .quizReview, id: result.id)
                         showTutor = true

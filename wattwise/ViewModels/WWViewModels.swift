@@ -405,8 +405,10 @@ final class NECViewModel {
     var searchQuery: String = ""
     var results: [NECSearchResult] = []
     var isSearching: Bool = false
+    var searchError: String? = nil
     var selectedDetail: NECReference? = nil
     var isLoadingDetail: Bool = false
+    var detailError: String? = nil
     var isExplaining: Bool = false
     var expandedText: String? = nil
     var showPaywall: Bool = false
@@ -417,27 +419,36 @@ final class NECViewModel {
         searchTask?.cancel()
         searchTask = Task {
             isSearching = true
+            searchError = nil
             defer { isSearching = false }
             guard !Task.isCancelled else { return }
             do {
                 try await Task.sleep(for: .milliseconds(300))  // debounce
                 guard !Task.isCancelled else { return }
                 results = try await services.nec.search(query: searchQuery)
-            } catch {}
+            } catch is CancellationError {
+                // A new search superseded this one — do not surface as error
+            } catch {
+                results = []
+                searchError = "Search failed. Please try again."
+            }
         }
     }
 
     func loadDetail(id: UUID, services: ServiceContainer) async {
         isLoadingDetail = true
         expandedText = nil
+        detailError = nil
         defer { isLoadingDetail = false }
         do {
             selectedDetail = try await services.nec.detail(id: id)
-        } catch {}
+        } catch {
+            detailError = error.localizedDescription
+        }
     }
 
     func explain(id: UUID, services: ServiceContainer, subscription: SubscriptionState) async {
-        guard subscription.isPro || subscription.dailyTutorMessagesUsed < 2 else {
+        guard subscription.isPro || !subscription.tutorLimitReached else {
             showPaywall = true
             return
         }
@@ -445,7 +456,9 @@ final class NECViewModel {
         defer { isExplaining = false }
         do {
             expandedText = try await services.nec.explain(id: id)
-        } catch {}
+        } catch {
+            // Silent failure — user can retry by tapping "Explain with AI" again
+        }
     }
 }
 

@@ -15,7 +15,14 @@ struct LessonView: View {
             } else if let lesson = vm.lesson {
                 LessonContentView(lesson: lesson, vm: vm)
             } else if let error = vm.errorMessage {
-                WWEmptyState(icon: "exclamationmark.triangle", title: "Error", message: error)
+                WWEmptyState(
+                    icon: "exclamationmark.triangle",
+                    title: "Couldn't load lesson",
+                    message: error,
+                    actionTitle: "Retry"
+                ) {
+                    Task { await vm.load(lessonId: lessonId, services: services) }
+                }
             }
         }
         .background(Color.wwBackground)

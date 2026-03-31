@@ -321,6 +321,118 @@ enum MockData {
             correctChoice: "A",
             explanation: "V = I × R = 6A × 20Ω = 120V. This is a direct application of Ohm's Law (V = IR).",
             topics: ["fundamentals", "ohms-law"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "A 240V load consumes 12,000 watts. What is the current draw?",
+            choices: ["A": "25A", "B": "50A", "C": "100A", "D": "40A"],
+            correctChoice: "B",
+            explanation: "I = P ÷ V = 12,000W ÷ 240V = 50A. This is the direct application of the power formula P = V × I rearranged to I = P/V.",
+            topics: ["fundamentals"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Per NEC 110.26(A)(1) Condition 1, what is the minimum working clearance in front of a 120V panelboard when grounded parts are present on the opposite side?",
+            choices: ["A": "2 feet", "B": "2.5 feet", "C": "3 feet", "D": "4 feet"],
+            correctChoice: "C",
+            explanation: "NEC 110.26(A)(1) requires a minimum of 3 feet (900mm) of working clearance for voltages from 0–150V under Condition 1 (exposed live parts on one side, grounded or no parts on the other).",
+            topics: ["nec", "working-clearance"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Under NEC 240.4(D), what is the maximum overcurrent protection allowed for a 14 AWG copper conductor?",
+            choices: ["A": "10A", "B": "15A", "C": "20A", "D": "25A"],
+            correctChoice: "B",
+            explanation: "NEC 240.4(D) limits 14 AWG copper conductors to a maximum of 15A overcurrent protection. This protects the conductor from overheating; 12 AWG is limited to 20A.",
+            topics: ["nec", "conductors", "wiring-methods"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Per NEC Table 310.15(C)(1), what derating factor applies when 7–9 current-carrying conductors are installed in a single raceway?",
+            choices: ["A": "50%", "B": "60%", "C": "70%", "D": "80%"],
+            correctChoice: "C",
+            explanation: "When 7–9 current-carrying conductors are in the same raceway, the ampacity must be derated to 70% of the tabulated value. Four to six conductors = 80%; ten to twenty = 50%.",
+            topics: ["wiring-methods", "ampacity", "conduit"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "What is the ampacity of a 6 AWG copper conductor in a conduit at 60°C, per NEC Table 310.16?",
+            choices: ["A": "40A", "B": "55A", "C": "65A", "D": "75A"],
+            correctChoice: "B",
+            explanation: "Per NEC Table 310.16, 6 AWG copper at 60°C has an ampacity of 55A. At 75°C it is 65A and at 90°C it is 75A. Terminal ratings typically limit you to the 60°C column.",
+            topics: ["wiring-methods", "ampacity"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Per NEC Table 250.122, what is the minimum copper equipment grounding conductor (EGC) size for a circuit protected by a 20A overcurrent device?",
+            choices: ["A": "14 AWG", "B": "12 AWG", "C": "10 AWG", "D": "8 AWG"],
+            correctChoice: "B",
+            explanation: "NEC Table 250.122 requires a minimum 12 AWG copper EGC for circuits protected by overcurrent devices rated up to 20A. For 15A protection, 14 AWG copper is permitted.",
+            topics: ["grounding", "bonding"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Per NEC Table 430.52, what is the maximum rating of an inverse time circuit breaker for branch circuit short-circuit and ground-fault protection of a Design B squirrel-cage induction motor?",
+            choices: ["A": "125%", "B": "175%", "C": "250%", "D": "400%"],
+            correctChoice: "C",
+            explanation: "NEC Table 430.52 permits inverse time circuit breakers up to 250% of the motor's full-load current for Design B squirrel-cage motors. For Design E motors, this may be up to 400% if needed.",
+            topics: ["nec", "motors"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Under NEC 334.10, non-metallic sheathed cable (NM cable / Romex) is NOT permitted to be installed in which of the following?",
+            choices: ["A": "One-family dwellings", "B": "Concrete block construction", "C": "Multi-family dwellings up to 3 floors", "D": "Buildings over 3 stories in height above grade"],
+            correctChoice: "D",
+            explanation: "NEC 334.10 permits NM cable in one- and two-family dwellings, multi-family dwellings not exceeding 3 floors above grade, and other structures per NEC 334.10(B). Buildings over 3 stories require other wiring methods.",
+            topics: ["wiring-methods", "nec"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Per NEC 408.4(A), what information MUST be legibly marked on a circuit directory in a panelboard?",
+            choices: ["A": "Wire size and circuit breaker brand", "B": "Date of installation and installer name", "C": "Clear, evident, and specific purpose or use of each circuit", "D": "Voltage rating and maximum load in watts"],
+            correctChoice: "C",
+            explanation: "NEC 408.4(A) requires that all circuits and modifications be legibly identified as to their clear, evident, and specific purpose or use. A vague description like 'lights' does not satisfy this requirement.",
+            topics: ["nec", "panelboards"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Per NEC 210.52(C)(1), no point along a kitchen countertop wall space shall be more than how many inches from a receptacle outlet?",
+            choices: ["A": "12 inches", "B": "18 inches", "C": "24 inches", "D": "36 inches"],
+            correctChoice: "C",
+            explanation: "NEC 210.52(C)(1) requires receptacles to be positioned so no point along the wall at counter level is more than 24 inches from a receptacle. This is stricter than the 6-foot (72-inch) rule for general wall space.",
+            topics: ["nec", "branch-circuits", "receptacles"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "For a 200A residential service using 3/0 AWG copper service-entrance conductors, what is the minimum copper grounding electrode conductor (GEC) size per NEC Table 250.66?",
+            choices: ["A": "6 AWG", "B": "4 AWG", "C": "2 AWG", "D": "1/0 AWG"],
+            correctChoice: "B",
+            explanation: "Per NEC Table 250.66, service-entrance conductors of 1/0 through 3/0 AWG copper require a minimum 4 AWG copper GEC. For conductors larger than 3/0 AWG up to 350 kcmil, 2 AWG is required.",
+            topics: ["grounding", "bonding", "nec"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "What minimum burial depth is required for a residential branch circuit wiring method using rigid metal conduit (RMC), per NEC Table 300.5?",
+            choices: ["A": "6 inches", "B": "12 inches", "C": "18 inches", "D": "24 inches"],
+            correctChoice: "A",
+            explanation: "NEC Table 300.5 requires a minimum cover of 6 inches for rigid metal conduit (RMC) and intermediate metal conduit (IMC) in residential applications. Direct-buried conductors without conduit require 24 inches.",
+            topics: ["wiring-methods", "nec"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Under NEC 210.19(A)(1), conductors supplying a continuous load must have an ampacity not less than what percentage of the continuous load?",
+            choices: ["A": "100%", "B": "110%", "C": "115%", "D": "125%"],
+            correctChoice: "D",
+            explanation: "NEC 210.19(A)(1) requires that branch circuit conductors have an ampacity not less than 125% of the continuous load plus 100% of the non-continuous load. Continuous loads are those expected to continue for 3 hours or more.",
+            topics: ["nec", "branch-circuits", "conductors"]
+        ),
+        QuizQuestion(
+            id: UUID(),
+            question: "Per NEC 230.24(B)(1), what is the minimum clearance required for service drop conductors over a public road or alley subject to truck traffic?",
+            choices: ["A": "12 feet", "B": "15 feet", "C": "18 feet", "D": "20 feet"],
+            correctChoice: "C",
+            explanation: "NEC 230.24(B)(1) requires service drop conductors to have a minimum clearance of 18 feet above public roads, alleys, and driveways subject to truck traffic. Residential driveways require only 12 feet.",
+            topics: ["nec", "service-entrance"]
         )
     ]
 
