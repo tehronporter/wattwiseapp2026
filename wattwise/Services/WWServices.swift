@@ -242,12 +242,15 @@ final class MockNECService: NECServiceProtocol {
 
     func detail(id: UUID) async throws -> NECReference {
         try await Task.sleep(for: .milliseconds(300))
+        guard let match = MockData.necReferences.first(where: { $0.id == id }) else {
+            throw AppError.notFound("NEC reference not found.")
+        }
         return NECReference(
-            id: id,
-            code: "210.8",
-            title: "GFCI Protection for Personnel",
-            summary: "Ground-fault circuit-interrupter protection required for personnel in specified locations.",
-            expanded: "NEC 210.8 requires GFCI protection in all 125-volt, single-phase, 15- and 20-ampere receptacles installed in bathrooms, garages, outdoors, crawl spaces, unfinished basements, kitchen countertop surfaces, boat houses, and other wet/damp locations. The intent is to protect persons from ground fault shock hazards where water contact is likely. GFCI devices trip when they detect a ground fault current of 4–6 milliamperes, which is below the ventricular fibrillation threshold."
+            id: match.id,
+            code: match.code,
+            title: match.title,
+            summary: match.summary,
+            expanded: MockData.necExpandedText[match.code]
         )
     }
 

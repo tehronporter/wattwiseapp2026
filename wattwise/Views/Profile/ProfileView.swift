@@ -46,7 +46,9 @@ struct ProfileView: View {
             Text("You'll need to sign in again to access your progress.")
         }
         .alert("Reset Progress?", isPresented: $vm.showResetAlert) {
-            Button("Reset Everything", role: .destructive) {}
+            Button("Reset Everything", role: .destructive) {
+                vm.resetProgress(services: services, appVM: appVM)
+            }
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("This will permanently delete all your progress, quiz history, and study data. This cannot be undone.")
@@ -180,6 +182,11 @@ private struct ProfileRow: View {
 
 private struct SettingsSection: View {
     @Bindable var vm: ProfileViewModel
+    @Environment(ServiceContainer.self) private var services
+    @Environment(AppViewModel.self) private var appVM
+    @Environment(\.openURL) private var openURL
+    @State private var restoreMessage: String?
+    @State private var showRestoreAlert = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: WWSpacing.m) {
@@ -187,14 +194,34 @@ private struct SettingsSection: View {
             WWCard(padding: 0) {
                 VStack(spacing: 0) {
                     SettingsRow(icon: "arrow.clockwise", label: "Restore Purchases") {
-                        // StoreKit restore
+                        Task {
+                            do {
+                                let state = try await services.subscription.restorePurchases()
+                                appVM.subscriptionState = state
+                                restoreMessage = state.isPro
+                                    ? "Your Pro subscription has been restored."
+                                    : "No active subscription found."
+                            } catch {
+                                restoreMessage = error.localizedDescription
+                            }
+                            showRestoreAlert = true
+                        }
                     }
                     WWDivider()
-                    SettingsRow(icon: "questionmark.circle", label: "Help & Support") {}
+                    SettingsRow(icon: "questionmark.circle", label: "Help & Support") {
+                        openURL(URL(string: "mailto:support@wattwiseapp.com")!)
+                    }
                     WWDivider()
-                    SettingsRow(icon: "shield", label: "Privacy Policy") {}
+                    SettingsRow(icon: "shield", label: "Privacy Policy") {
+                        openURL(URL(string: "https://wattwiseapp.com/privacy")!)
+                    }
                 }
             }
+        }
+        .alert("Restore Purchases", isPresented: $showRestoreAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(restoreMessage ?? "")
         }
     }
 }

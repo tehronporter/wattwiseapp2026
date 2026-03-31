@@ -463,6 +463,14 @@ final class ProfileViewModel {
         appVM.signOut(services: services)
         isSigningOut = false
     }
+
+    func resetProgress(services: ServiceContainer, appVM: AppViewModel) {
+        // Clear all locally cached profile and progress data
+        let keys = ["ww_user", "ww_profile", "ww_access_token", "ww_refresh_token"]
+        keys.forEach { UserDefaults.standard.removeObject(forKey: $0) }
+        // Sign out so the user starts fresh on next launch
+        appVM.signOut(services: services)
+    }
 }
 
 // MARK: - Paywall ViewModel
