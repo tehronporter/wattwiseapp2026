@@ -124,7 +124,7 @@ actor SupabaseAuthClient {
 
 // MARK: - Models
 
-struct AuthSession: Decodable, Sendable {
+struct AuthSession: Decodable {
     let accessToken: String
     let tokenType: String
     let expiresIn: Int?
@@ -145,13 +145,13 @@ struct AuthSession: Decodable, Sendable {
     }
 }
 
-struct SupabaseUser: Decodable, Sendable {
+struct SupabaseUser: Decodable {
     let id: String
     let email: String?
     let userMetadata: UserMetadata?
     let appMetadata: AppMetadata?
 
-    struct UserMetadata: Decodable, Sendable {
+    struct UserMetadata: Decodable {
         let displayName: String?
         let examType: String?
         let state: String?
@@ -170,7 +170,7 @@ struct SupabaseUser: Decodable, Sendable {
         }
     }
 
-    struct AppMetadata: Decodable, Sendable {
+    struct AppMetadata: Decodable {
         let provider: String?
 
         private enum CodingKeys: String, CodingKey { case provider }
@@ -194,7 +194,7 @@ struct SupabaseUser: Decodable, Sendable {
     }
 }
 
-private struct AuthErrorBody: Decodable, Sendable {
+private struct AuthErrorBody: Decodable {
     let error: String?
     let error_description: String?
     let msg: String?

@@ -25,7 +25,7 @@ actor APIClient {
 
     // MARK: - Core request method
 
-    func post<Request: Encodable & Sendable, Response: Decodable & Sendable>(
+    func post<Request: Encodable, Response: Decodable>(
         endpoint: String,
         body: Request,
         responseType: Response.Type
@@ -78,7 +78,7 @@ actor APIClient {
     }
 
     // Convenience overload for empty body
-    func post<Response: Decodable & Sendable>(
+    func post<Response: Decodable>(
         endpoint: String,
         responseType: Response.Type
     ) async throws -> Response {
@@ -88,7 +88,7 @@ actor APIClient {
 
 // MARK: - Response Wrapper
 
-private struct SupabaseResponse<T: Decodable & Sendable>: Decodable, Sendable {
+private struct SupabaseResponse<T: Decodable>: Decodable {
     let success: Bool?
     let data: T?
     let error: SupabaseErrorBody?
@@ -103,7 +103,7 @@ private struct SupabaseResponse<T: Decodable & Sendable>: Decodable, Sendable {
     }
 }
 
-private struct SupabaseErrorBody: Decodable, Sendable {
+private struct SupabaseErrorBody: Decodable {
     let code: String?
     let message: String?
 
@@ -116,7 +116,7 @@ private struct SupabaseErrorBody: Decodable, Sendable {
     }
 }
 
-private struct EmptyBody: Encodable, Sendable {
+private struct EmptyBody: Encodable {
     nonisolated func encode(to encoder: any Encoder) throws {}
 }
 
