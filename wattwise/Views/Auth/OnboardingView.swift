@@ -182,7 +182,7 @@ private struct StateSelectionStep: View {
                         ) {
                             vm.selectedState = state.abbreviation
                         }
-                        WWDivider().wwScreenPadding()
+                        WWDivider()
                     }
                 }
             }
@@ -217,6 +217,7 @@ private struct StateRow: View {
                 }
             }
             .padding(.vertical, WWSpacing.m)
+            .wwScreenPadding()
         }
         .buttonStyle(.plain)
     }

@@ -78,14 +78,19 @@ final class OnboardingViewModel {
     var isLoading: Bool = false
     var errorMessage: String? = nil
 
+    private var isEmailValid: Bool {
+        let pattern = #"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"#
+        return email.range(of: pattern, options: .regularExpression) != nil
+    }
+
     var canProceedFromStep: Bool {
         switch step {
         case 1: return true
         case 2: return !selectedState.isEmpty
         case 3: return true
         case 4: return isSignIn
-            ? (!email.isEmpty && !password.isEmpty)
-            : (!email.isEmpty && password.count >= 8 && password == confirmPassword)
+            ? (isEmailValid && !password.isEmpty)
+            : (isEmailValid && password.count >= 8 && password == confirmPassword)
         default: return true
         }
     }
@@ -111,18 +116,43 @@ final class OnboardingViewModel {
             var user: WWUser
             if isSignIn {
                 user = try await services.auth.signIn(email: email, password: password)
+                // Returning users keep their saved profile; don't overwrite with defaults
+                appVM.authState = .authenticated(user)
             } else {
                 user = try await services.auth.signUp(email: email, password: password)
+                user.examType = selectedExamType
+                user.state = selectedState
+                user.studyGoal = selectedGoal
+                user.isOnboardingComplete = true
+                try await services.auth.updateProfile(user)
+                appVM.authState = .authenticated(user)
             }
-            user.examType = selectedExamType
-            user.state = selectedState
-            user.studyGoal = selectedGoal
-            user.isOnboardingComplete = true
-            try await services.auth.updateProfile(user)
-            appVM.authState = .authenticated(user)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = mapAuthError(error)
         }
+    }
+
+    private func mapAuthError(_ error: Error) -> String {
+        let raw = error.localizedDescription
+        if raw.contains("security purposes") || raw.contains("rate limit") || raw.contains("after") {
+            return "Too many attempts. Please wait a moment and try again."
+        }
+        if raw.contains("already registered") || raw.contains("already been registered") || raw.contains("already exists") {
+            return "An account with this email already exists. Try signing in instead."
+        }
+        if raw.contains("Invalid login credentials") || raw.contains("invalid_credentials") {
+            return "Incorrect email or password. Please try again."
+        }
+        if raw.contains("Email not confirmed") || raw.contains("email_not_confirmed") {
+            return "Please check your email and confirm your account before signing in."
+        }
+        if raw.contains("Password should be") || raw.contains("weak_password") {
+            return "Password is too weak. Use at least 8 characters with a mix of letters and numbers."
+        }
+        if raw.contains("Unable to validate") || raw.contains("network") || raw.contains("URLSession") {
+            return "Network error. Please check your connection and try again."
+        }
+        return raw
     }
 }
 
