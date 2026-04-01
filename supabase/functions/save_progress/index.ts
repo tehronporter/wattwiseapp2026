@@ -53,7 +53,6 @@ Deno.serve(async (req: Request) => {
       {
         id: user.id,
         email: user.email ?? null,
-        onboarding_completed: true,
         last_active_at: now,
       },
       { onConflict: "id" }

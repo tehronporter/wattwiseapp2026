@@ -3,6 +3,8 @@ import SwiftUI
 struct HomeView: View {
     @State private var vm = HomeViewModel()
     @State private var route: HomeRoute?
+    @State private var showPaywall = false
+    @State private var paywallContext: PaywallContext = .general
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
 
@@ -28,8 +30,11 @@ struct HomeView: View {
                 case .idle, .loading:
                     HomeSkeletonView()
                 case .loaded(let summary):
-                    HomeContentView(summary: summary) { destination in
-                        route = destination
+                    HomeContentView(summary: summary, subscription: appVM.subscriptionState) { destination in
+                        handleRoute(destination)
+                    } onOpenPaywall: {
+                        paywallContext = .general
+                        showPaywall = true
                     }
                 case .failed(let msg):
                     WWEmptyState(
@@ -60,8 +65,26 @@ struct HomeView: View {
                 TutorView()
             }
         }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(context: paywallContext)
+                .environment(services)
+                .environment(appVM)
+        }
         .task { await vm.load(services: services) }
         .refreshable { await vm.refresh(services: services) }
+    }
+
+    private func handleRoute(_ destination: HomeRoute) {
+        switch destination {
+        case .quiz(.quickQuiz) where appVM.subscriptionState.previewQuickQuizLimitReached:
+            paywallContext = .quizLimit
+            showPaywall = true
+        case .tutor where appVM.subscriptionState.hasPaidAccess == false && appVM.subscriptionState.tutorLimitReached:
+            paywallContext = .tutorLimit
+            showPaywall = true
+        default:
+            route = destination
+        }
     }
 }
 
@@ -87,7 +110,9 @@ private enum HomeRoute: Hashable, Identifiable {
 
 private struct HomeContentView: View {
     let summary: ProgressSummary
+    let subscription: SubscriptionState
     let onRoute: (HomeRoute) -> Void
+    let onOpenPaywall: () -> Void
 
     private enum PresentationState {
         case newUser(ProgressSummary.ContinueLearning?)
@@ -106,6 +131,20 @@ private struct HomeContentView: View {
 
     var body: some View {
         VStack(spacing: WWSpacing.l) {
+            if subscription.hasPaidAccess == false {
+                WWCard {
+                    VStack(alignment: .leading, spacing: WWSpacing.s) {
+                        Text("Preview Access")
+                            .wwLabel()
+                            .textCase(.uppercase)
+                        Text(subscription.previewSummary)
+                            .wwBody(color: .wwTextSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                        WWGhostButton(title: "See Full Access Options", color: .wwBlue, action: onOpenPaywall)
+                    }
+                }
+            }
+
             switch state {
             case .newUser(let lesson):
                 if let lesson {
@@ -122,7 +161,22 @@ private struct HomeContentView: View {
                         onRoute(.learn)
                     }
                 }
+                TodaysFocusCard(
+                    title: "Today's Focus",
+                    message: lesson.map {
+                        "Start with \($0.lessonTitle) in \($0.moduleTitle) so your next step is clear from the first session."
+                    } ?? "Browse Learn and start with your first lesson.",
+                    actionTitle: lesson == nil ? "Browse Modules" : "Open Lesson",
+                    icon: "bolt"
+                ) {
+                    if let lesson {
+                        onRoute(.lesson(lesson.lessonId))
+                    } else {
+                        onRoute(.learn)
+                    }
+                }
                 DailyGoalCard(goal: summary.dailyGoal)
+                QuickActionsSection(onRoute: onRoute)
 
             case .active(let lesson):
                 if let lesson {
@@ -177,6 +231,7 @@ private struct HomeContentView: View {
                 }
 
                 DailyGoalCard(goal: summary.dailyGoal)
+                QuickActionsSection(onRoute: onRoute)
             }
         }
     }
@@ -343,6 +398,9 @@ private struct QuickActionsSection: View {
                 }
                 CompactActionCard(icon: "bubble.left", label: "Ask Tutor") {
                     onRoute(.tutor)
+                }
+                CompactActionCard(icon: "book", label: "Browse Modules") {
+                    onRoute(.learn)
                 }
             }
         }

@@ -6,8 +6,15 @@ struct QuizResultsView: View {
     let onRetry: () -> Void
     @State private var expandedQuestion: UUID? = nil
     @Environment(AppViewModel.self) private var appVM
+    @Environment(ServiceContainer.self) private var services
     @State private var showTutor = false
     @State private var tutorContext: TutorContext? = nil
+    @State private var showPaywall = false
+    @State private var paywallContext: PaywallContext = .previewQuizComplete
+
+    private var isPreviewResultsGate: Bool {
+        appVM.subscriptionState.hasPaidAccess == false && quizType == .quickQuiz
+    }
 
     var body: some View {
         ScrollView {
@@ -15,16 +22,49 @@ struct QuizResultsView: View {
                 // Score Hero
                 ScoreHeroView(result: result)
 
+                if isPreviewResultsGate {
+                    WWCard {
+                        VStack(alignment: .leading, spacing: WWSpacing.m) {
+                            Text("Your preview quiz is complete")
+                                .wwSectionTitle()
+                            Text("Keep the momentum going with full lesson access, more practice, NEC help, and tutor support when you get stuck.")
+                                .wwBody(color: .wwTextSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            WWPrimaryButton(title: "Start Full Prep") {
+                                paywallContext = .previewQuizComplete
+                                showPaywall = true
+                            }
+                        }
+                    }
+                }
+
                 // Action Buttons
                 VStack(spacing: WWSpacing.m) {
-                    WWPrimaryButton(title: "Retake Quiz", action: onRetry)
-
-                    NavigationLink {
-                        QuizContainerView(quizType: .weakAreaReview)
-                    } label: {
-                        ActionLinkLabel(title: "Review Weak Areas", style: .secondary)
+                    if isPreviewResultsGate {
+                        WWSecondaryButton(title: "See Access Options") {
+                            paywallContext = .previewQuizComplete
+                            showPaywall = true
+                        }
+                    } else {
+                        WWPrimaryButton(title: "Retake Quiz", action: onRetry)
                     }
-                    .buttonStyle(.plain)
+
+                    if result.weakTopicDetails.isEmpty == false && appVM.subscriptionState.hasPaidAccess {
+                        NavigationLink {
+                            QuizContainerView(quizType: .weakAreaReview)
+                        } label: {
+                            ActionLinkLabel(title: "Review Weak Areas", style: .secondary)
+                        }
+                        .buttonStyle(.plain)
+                    } else if result.weakTopicDetails.isEmpty == false {
+                        Button {
+                            paywallContext = .weakAreaLocked
+                            showPaywall = true
+                        } label: {
+                            ActionLinkLabel(title: "Review Weak Areas", style: .secondary)
+                        }
+                        .buttonStyle(.plain)
+                    }
 
                     NavigationLink {
                         LearnView()
@@ -34,7 +74,7 @@ struct QuizResultsView: View {
                     .buttonStyle(.plain)
 
                     WWGhostButton(title: "Ask Tutor About Results") {
-                        tutorContext = TutorContext(type: .quizReview, id: result.id)
+                        tutorContext = TutorContextBuilder.quizReview(result, user: appVM.currentUser)
                         showTutor = true
                     }
                 }
@@ -58,7 +98,11 @@ struct QuizResultsView: View {
                                 expandedQuestion = expandedQuestion == qResult.id ? nil : qResult.id
                             }
                         } onAskTutor: {
-                            tutorContext = TutorContext(type: .quizReview, id: result.id)
+                            tutorContext = TutorContextBuilder.quizReview(
+                                result,
+                                focusedQuestion: qResult,
+                                user: appVM.currentUser
+                            )
                             showTutor = true
                         }
                     }
@@ -70,6 +114,13 @@ struct QuizResultsView: View {
         .background(Color.wwBackground)
         .sheet(isPresented: $showTutor) {
             TutorSheet(context: tutorContext)
+                .environment(services)
+                .environment(appVM)
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(context: paywallContext)
+                .environment(services)
+                .environment(appVM)
         }
     }
 }

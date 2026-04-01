@@ -53,15 +53,23 @@ Deno.serve(async (req: Request) => {
       return json({ success: false, error: { message: "Unauthorized" } }, 401);
     }
 
+    const nowIso = new Date().toISOString();
     await supabase.from("profiles").upsert(
       {
         id: user.id,
         email: user.email ?? null,
-        onboarding_completed: true,
-        last_active_at: new Date().toISOString(),
+        last_active_at: nowIso,
       },
       { onConflict: "id" }
     );
+
+    const { data: profileRow, error: profileError } = await supabase
+      .from("profiles")
+      .select("last_active_at")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profileError) throw profileError;
 
     const { data: continueRows, error: continueError } = await supabase
       .from("lesson_progress")
@@ -98,30 +106,36 @@ Deno.serve(async (req: Request) => {
         : null;
 
     if (!continueLearning) {
-      const { data: firstLesson, error: firstLessonError } = await supabase
-        .from("lessons")
-        .select(`
-          id,
-          title,
-          modules (
-            title
-          )
-        `)
+      const { data: firstModule, error: firstModuleError } = await supabase
+        .from("modules")
+        .select("id, title")
         .eq("is_published", true)
         .order("sort_order", { ascending: true })
         .limit(1)
         .maybeSingle();
 
-      if (firstLessonError) throw firstLessonError;
+      if (firstModuleError) throw firstModuleError;
 
-      if (firstLesson) {
-        const moduleRecord = firstRelation(firstLesson.modules);
-        continueLearning = {
-          lesson_id: firstLesson.id,
-          title: firstLesson.title,
-          progress: 0,
-          module_title: moduleRecord?.title ?? "Module",
-        };
+      if (firstModule) {
+        const { data: firstLesson, error: firstLessonError } = await supabase
+          .from("lessons")
+          .select("id, title")
+          .eq("is_published", true)
+          .eq("module_id", firstModule.id)
+          .order("sort_order", { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+        if (firstLessonError) throw firstLessonError;
+
+        if (firstLesson) {
+          continueLearning = {
+            lesson_id: firstLesson.id,
+            title: firstLesson.title,
+            progress: 0,
+            module_title: firstModule.title ?? "Module",
+          };
+        }
       }
     }
 
@@ -150,6 +164,27 @@ Deno.serve(async (req: Request) => {
       today
     );
 
+    const { count: startedLessonCount, error: startedLessonError } = await supabase
+      .from("lesson_progress")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .gt("completion_percentage", 0);
+
+    if (startedLessonError) throw startedLessonError;
+
+    const { count: quizAttemptCount, error: quizAttemptError } = await supabase
+      .from("quiz_attempts")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id);
+
+    if (quizAttemptError) throw quizAttemptError;
+
+    const hasStartedContent =
+      (startedLessonCount ?? 0) > 0 ||
+      (quizAttemptCount ?? 0) > 0 ||
+      (dailyGoal?.minutes_completed ?? 0) > 0 ||
+      streakDays > 0;
+
     const recommendedAction = continueLearning
       ? continueLearning.progress > 0
         ? `Resume ${continueLearning.title}`
@@ -166,6 +201,8 @@ Deno.serve(async (req: Request) => {
         },
         streak_days: streakDays,
         recommended_action: recommendedAction,
+        has_started_content: hasStartedContent,
+        last_activity_at: profileRow?.last_active_at ?? nowIso,
       },
     });
   } catch (error) {

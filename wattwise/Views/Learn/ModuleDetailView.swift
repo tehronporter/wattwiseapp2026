@@ -2,6 +2,18 @@ import SwiftUI
 
 struct ModuleDetailView: View {
     let module: WWModule
+    @Environment(AppViewModel.self) private var appVM
+    @Environment(ServiceContainer.self) private var services
+    @State private var showPaywall = false
+
+    private var previewLessonID: UUID? {
+        try? WattWiseContentRuntimeAdapter.previewLessonID()
+    }
+
+    private func isLocked(_ lesson: WWLesson) -> Bool {
+        guard appVM.subscriptionState.hasPaidAccess == false else { return false }
+        return lesson.id != previewLessonID
+    }
 
     var body: some View {
         ScrollView {
@@ -46,17 +58,50 @@ struct ModuleDetailView: View {
                         .padding(.bottom, WWSpacing.s)
 
                     ForEach(Array(module.lessons.enumerated()), id: \.element.id) { index, lesson in
-                        NavigationLink {
-                            LessonView(lessonId: lesson.id)
-                        } label: {
-                            LessonRow(index: index + 1, lesson: lesson)
+                        if isLocked(lesson) {
+                            Button {
+                                showPaywall = true
+                            } label: {
+                                LessonRow(
+                                    index: index + 1,
+                                    lesson: lesson,
+                                    isLocked: true,
+                                    isPreviewLesson: false
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            NavigationLink {
+                                LessonView(lessonId: lesson.id)
+                            } label: {
+                                LessonRow(
+                                    index: index + 1,
+                                    lesson: lesson,
+                                    isLocked: false,
+                                    isPreviewLesson: appVM.subscriptionState.hasPaidAccess == false && lesson.id == previewLessonID
+                                )
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
 
                         if index < module.lessons.count - 1 {
                             WWDivider().padding(.leading, 56).wwScreenPadding()
                         }
                     }
+                }
+
+                if appVM.subscriptionState.hasPaidAccess == false {
+                    WWCard {
+                        VStack(alignment: .leading, spacing: WWSpacing.s) {
+                            Text("Preview limit")
+                                .wwLabel()
+                                .textCase(.uppercase)
+                            Text("Preview includes your first full lesson. Keep going with Fast Track or Full Prep to open the rest of the curriculum.")
+                                .wwBody(color: .wwTextSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                    .wwScreenPadding()
                 }
             }
             .padding(.vertical, WWSpacing.m)
@@ -64,6 +109,11 @@ struct ModuleDetailView: View {
         .background(Color.wwBackground)
         .navigationTitle(module.title)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(context: .lessonLocked)
+                .environment(services)
+                .environment(appVM)
+        }
     }
 }
 
@@ -72,6 +122,8 @@ struct ModuleDetailView: View {
 private struct LessonRow: View {
     let index: Int
     let lesson: WWLesson
+    let isLocked: Bool
+    let isPreviewLesson: Bool
 
     private var statusIcon: String {
         switch lesson.status {
@@ -98,9 +150,24 @@ private struct LessonRow: View {
                 .frame(width: 28)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(lesson.title)
-                    .font(WWFont.body(.medium))
-                    .foregroundColor(.wwTextPrimary)
+                HStack(spacing: WWSpacing.s) {
+                    Text(lesson.title)
+                        .font(WWFont.body(.medium))
+                        .foregroundColor(.wwTextPrimary)
+                    if isPreviewLesson {
+                        Text("Preview")
+                            .wwLabel(color: .wwBlue)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.wwBlueDim)
+                            .clipShape(Capsule())
+                    }
+                    if isLocked {
+                        Image(systemName: "lock")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(.wwTextMuted)
+                    }
+                }
                 HStack(spacing: WWSpacing.s) {
                     Text(lesson.topic)
                         .wwCaption()
@@ -108,6 +175,10 @@ private struct LessonRow: View {
                         .wwCaption()
                     Label("\(lesson.estimatedMinutes) min", systemImage: "clock")
                         .wwCaption()
+                }
+                if isLocked {
+                    Text("Locked in preview")
+                        .wwCaption(color: .wwTextMuted)
                 }
             }
 
@@ -119,7 +190,7 @@ private struct LessonRow: View {
                     .foregroundColor(.wwBlue)
             }
 
-            Image(systemName: "chevron.right")
+            Image(systemName: isLocked ? "lock" : "chevron.right")
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundColor(.wwTextMuted)
         }

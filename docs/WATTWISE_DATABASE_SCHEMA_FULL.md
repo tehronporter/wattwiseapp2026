@@ -128,11 +128,12 @@ Used across lessons, questions, explanations, and adaptive logic.
 
 ## 3.5 `subscription_tier`
 Allowed values:
-- `free`
-- `pro`
+- `preview`
+- `fast_track`
+- `full_prep`
 
 Purpose:
-Represents current user product tier at the application level.
+Represents current user access tier at the application level.
 
 ## 3.6 `tutor_context_type`
 Allowed values:
@@ -208,7 +209,7 @@ Stores WattWise-specific user profile data beyond raw auth identity.
   - references `jurisdictions(id)`
 - `daily_study_goal_minutes` INTEGER NOT NULL DEFAULT 30
 - `onboarding_completed` BOOLEAN NOT NULL DEFAULT false
-- `subscription_tier` subscription_tier NOT NULL DEFAULT 'free'
+- `subscription_tier` subscription_tier NOT NULL DEFAULT 'preview'
 - `created_at` TIMESTAMPTZ NOT NULL DEFAULT now()
 - `updated_at` TIMESTAMPTZ NOT NULL DEFAULT now()
 - `last_active_at` TIMESTAMPTZ NULL
@@ -942,7 +943,7 @@ If you want quick quota reads instead of scanning logs.
 ### Constraints
 - unique (`user_id`, `usage_date`, `request_type`)
 
-This can simplify free-tier quota enforcement.
+This can simplify preview quota enforcement.
 
 ---
 
@@ -951,17 +952,18 @@ This can simplify free-tier quota enforcement.
 ## 11.1 `subscription_statuses`
 
 ### Purpose
-Stores mirrored subscription state for backend awareness.
+Stores mirrored access state for backend awareness.
 
 ### Columns
 - `id` UUID PRIMARY KEY DEFAULT gen_random_uuid()
 - `user_id` UUID NOT NULL UNIQUE
   - references `profiles(id)` on delete cascade
-- `tier` subscription_tier NOT NULL DEFAULT 'free'
+- `tier` subscription_tier NOT NULL DEFAULT 'preview'
 - `store_product_id` TEXT NULL
+- `store_transaction_id` TEXT NULL
 - `store_original_transaction_id` TEXT NULL
 - `status` TEXT NOT NULL DEFAULT 'inactive'
-  - examples: `inactive`, `trialing`, `active`, `expired`, `grace_period`
+  - examples: `inactive`, `active`, `expired`
 - `current_period_start` TIMESTAMPTZ NULL
 - `current_period_end` TIMESTAMPTZ NULL
 - `last_verified_at` TIMESTAMPTZ NULL
@@ -969,7 +971,7 @@ Stores mirrored subscription state for backend awareness.
 - `updated_at` TIMESTAMPTZ NOT NULL DEFAULT now()
 
 ### Notes
-This is a mirror, not a replacement for on-device StoreKit truth.
+This is a mirror of preview, Fast Track, and Full Prep access, not a replacement for on-device StoreKit truth.
 
 ### Indexes
 - unique index on `user_id`

@@ -67,6 +67,9 @@ actor APIClient {
             }
         case 401:
             throw APIError.unauthorized
+        case 403:
+            let wrapper = try? JSONDecoder().decode(SupabaseResponse<EmptyDecodable>.self, from: data)
+            throw APIError.forbidden(wrapper?.error?.message ?? "Access unavailable.")
         case 429:
             throw APIError.rateLimited
         case 404:
@@ -100,6 +103,7 @@ private nonisolated struct SupabaseErrorBody: Decodable {
 }
 
 private nonisolated struct EmptyBody: Encodable {}
+private nonisolated struct EmptyDecodable: Decodable {}
 
 // MARK: - API Error
 
@@ -108,6 +112,7 @@ enum APIError: LocalizedError {
     case serverError(String)
     case decodingError(String)
     case unauthorized
+    case forbidden(String)
     case rateLimited
     case notFound
 
@@ -117,7 +122,8 @@ enum APIError: LocalizedError {
         case .serverError(let m):   return m
         case .decodingError(let m): return "Data error: \(m)"
         case .unauthorized:         return "Session expired. Please sign in again."
-        case .rateLimited:          return "Daily limit reached. Upgrade to Pro for unlimited access."
+        case .forbidden(let m):     return m
+        case .rateLimited:          return "You've reached the limit for preview access. Choose Fast Track or Full Prep to keep going."
         case .notFound:             return "Content not found."
         }
     }

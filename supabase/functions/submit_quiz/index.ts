@@ -21,6 +21,7 @@ type AssignmentRow = {
         choices: Record<string, string>;
         correct_choice: string;
         explanation: string;
+        nec_reference: string | null;
       }
     | {
         id: string;
@@ -30,6 +31,7 @@ type AssignmentRow = {
         choices: Record<string, string>;
         correct_choice: string;
         explanation: string;
+        nec_reference: string | null;
       }[];
 };
 
@@ -85,7 +87,8 @@ Deno.serve(async (req: Request) => {
           question_text,
           choices,
           correct_choice,
-          explanation
+          explanation,
+          nec_reference
         )
       `)
       .eq("quiz_id", quizId)
@@ -148,6 +151,9 @@ Deno.serve(async (req: Request) => {
         correct_answer: question.choices[question.correct_choice] ?? question.correct_choice,
         explanation: question.explanation,
         is_correct: isCorrect,
+        topics: [question.topic_slug],
+        topic_titles: [question.topic_title],
+        reference_code: question.nec_reference,
       };
     });
 
@@ -195,6 +201,7 @@ Deno.serve(async (req: Request) => {
     return json({
       success: true,
       data: {
+        quiz_attempt_id: attemptRow.id,
         score,
         correct_count: correctCount,
         total_count: totalCount,

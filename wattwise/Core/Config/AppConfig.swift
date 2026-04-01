@@ -18,7 +18,14 @@ enum AppConfig {
     nonisolated static let edgeFunctionURL = URL(string: "https://lxjjwodpiaivtkbjrodu.supabase.co/functions/v1")!
 
     // MARK: - Feature flags
-    // true  = mock services (works offline, no backend required) — use for TestFlight until Edge Functions are deployed
-    // false = real Supabase backend (requires Edge Functions deployed at /functions/v1/*)
-    nonisolated static let useMockServices = true
+    // Production should use the real backend.
+    // Mocks stay enabled for tests, previews, and explicit local override.
+    nonisolated static let useMockServices: Bool = {
+        let processInfo = ProcessInfo.processInfo
+        let isPreview = processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
+        let isUnitTest = processInfo.environment["XCTestConfigurationFilePath"] != nil
+        let isUITest = processInfo.arguments.contains("UITEST_MODE")
+        let forcedMock = processInfo.environment["WATTWISE_USE_MOCK_SERVICES"] == "1"
+        return isPreview || isUnitTest || isUITest || forcedMock
+    }()
 }

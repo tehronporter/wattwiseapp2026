@@ -7,7 +7,9 @@ import SwiftUI
 @MainActor
 final class AppViewModel {
     var authState: AuthState = .loading
-    var subscriptionState: SubscriptionState = .freeTier
+    var subscriptionState: SubscriptionState = .preview
+
+    private let tutorConversationStoragePrefix = "ww_tutor_conversation_v1_"
 
     enum AuthState {
         case loading
@@ -40,7 +42,7 @@ final class AppViewModel {
             } else {
                 authState = .onboarding(user)
             }
-            subscriptionState = (try? await services.subscription.fetchState()) ?? .freeTier
+            subscriptionState = (try? await services.subscription.fetchState()) ?? .preview
         } else {
             authState = .unauthenticated
         }
@@ -48,7 +50,22 @@ final class AppViewModel {
 
     func signOut(services: ServiceContainer) {
         try? services.auth.signOut()
+        clearLocalSessionArtifacts()
         authState = .unauthenticated
+        subscriptionState = .preview
+    }
+
+    func clearLocalSessionArtifacts() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: "ww_user")
+        defaults.removeObject(forKey: "ww_profile")
+        defaults.removeObject(forKey: "ww_access_token")
+        defaults.removeObject(forKey: "ww_refresh_token")
+        defaults.removeObject(forKey: "ww_user_data")
+
+        defaults.dictionaryRepresentation().keys
+            .filter { $0.hasPrefix(tutorConversationStoragePrefix) }
+            .forEach { defaults.removeObject(forKey: $0) }
     }
 }
 
@@ -116,8 +133,8 @@ final class OnboardingViewModel {
             var user: WWUser
             if isSignIn {
                 user = try await services.auth.signIn(email: email, password: password)
-                // Returning users keep their saved profile; don't overwrite with defaults
-                appVM.authState = .authenticated(user)
+                // Returning users keep their saved profile; route incomplete profiles back through onboarding.
+                appVM.authState = user.isOnboardingComplete ? .authenticated(user) : .onboarding(user)
             } else {
                 user = try await services.auth.signUp(email: email, password: password)
                 user.examType = selectedExamType
@@ -237,8 +254,16 @@ final class LessonViewModel {
     var errorMessage: String?
     var scrollProgress: Double = 0.0
     var selectedNEC: NECReference? = nil
-    var showNECSheet: Bool = false
     var showTutor: Bool = false
+
+    var shouldShowLoadingState: Bool {
+        isLoading || (lesson == nil && errorMessage == nil)
+    }
+
+    func loadIfNeeded(lessonId: UUID, services: ServiceContainer) async {
+        guard lesson == nil, errorMessage == nil, isLoading == false else { return }
+        await load(lessonId: lessonId, services: services)
+    }
 
     func load(lessonId: UUID, services: ServiceContainer) async {
         isLoading = true
@@ -248,16 +273,20 @@ final class LessonViewModel {
             let loadedLesson = try await services.content.fetchLesson(id: lessonId)
             lesson = loadedLesson
             scrollProgress = max(scrollProgress, loadedLesson.completionPercentage)
-            let modules = try await services.content.fetchModules()
-            if let module = modules.first(where: { $0.id == loadedLesson.moduleId }),
-               let lessonIndex = module.lessons.firstIndex(where: { $0.id == loadedLesson.id }) {
-                flowContext = LessonFlowContext(
-                    module: module,
-                    lessonIndex: lessonIndex,
-                    previousLessonId: lessonIndex > 0 ? module.lessons[lessonIndex - 1].id : nil,
-                    nextLessonId: lessonIndex < module.lessons.count - 1 ? module.lessons[lessonIndex + 1].id : nil
-                )
-            } else {
+            do {
+                let modules = try await services.content.fetchModules()
+                if let module = modules.first(where: { $0.id == loadedLesson.moduleId }),
+                   let lessonIndex = module.lessons.firstIndex(where: { $0.id == loadedLesson.id }) {
+                    flowContext = LessonFlowContext(
+                        module: module,
+                        lessonIndex: lessonIndex,
+                        previousLessonId: lessonIndex > 0 ? module.lessons[lessonIndex - 1].id : nil,
+                        nextLessonId: lessonIndex < module.lessons.count - 1 ? module.lessons[lessonIndex + 1].id : nil
+                    )
+                } else {
+                    flowContext = nil
+                }
+            } catch {
                 flowContext = nil
             }
         } catch {
@@ -277,26 +306,59 @@ final class LessonViewModel {
 
     func tapNEC(_ ref: NECReference) {
         selectedNEC = ref
-        showNECSheet = true
     }
 }
 
 // MARK: - Practice ViewModel
 
+enum PracticeStartResolution: Equatable {
+    case start(QuizType)
+    case paywall(PaywallContext)
+    case unavailable(title: String, message: String, suggestedQuiz: QuizType?)
+}
+
 @Observable
 @MainActor
 final class PracticeViewModel {
     var showPaywall: Bool = false
-    var selectedQuizType: QuizType? = nil
+    var paywallContext: PaywallContext = .general
     var dashboard: PracticeDashboardSnapshot = .empty
 
-    func startQuiz(_ type: QuizType, subscription: SubscriptionState) -> Bool {
-        if type == .fullPracticeExam && !subscription.isPro {
-            showPaywall = true
-            return false
+    func startQuiz(_ type: QuizType, subscription: SubscriptionState) -> PracticeStartResolution {
+        if subscription.hasPaidAccess == false {
+            switch type {
+            case .quickQuiz where subscription.previewQuickQuizLimitReached:
+                paywallContext = .quizLimit
+                showPaywall = true
+                return .paywall(.quizLimit)
+            case .fullPracticeExam:
+                paywallContext = .practiceExamLocked
+                showPaywall = true
+                return .paywall(.practiceExamLocked)
+            case .weakAreaReview where dashboard.canStartWeakAreaReview:
+                paywallContext = .weakAreaLocked
+                showPaywall = true
+                return .paywall(.weakAreaLocked)
+            default:
+                break
+            }
         }
-        selectedQuizType = type
-        return true
+
+        if type == .weakAreaReview && !dashboard.canStartWeakAreaReview {
+            let message: String
+            if dashboard.attemptCount == 0 {
+                message = "Take a scored quiz first so WattWise can identify what to review next."
+            } else {
+                message = "You don't have any active weak areas right now. A fresh quick quiz is the fastest way to find your next focus."
+            }
+            return .unavailable(
+                title: "Weak-area review isn't ready yet",
+                message: message,
+                suggestedQuiz: .quickQuiz
+            )
+        }
+
+        return .start(type)
     }
 
     func refreshDashboard() {
@@ -317,6 +379,16 @@ final class QuizViewModel {
     var isSubmitting: Bool = false
     var errorMessage: String?
     var showExitAlert: Bool = false
+    var accessRestriction: QuizAccessRestriction?
+
+    var shouldShowLoadingState: Bool {
+        isLoading || (quiz == nil && result == nil && errorMessage == nil)
+    }
+
+    func loadIfNeeded(type: QuizType, examType: ExamType?, services: ServiceContainer) async {
+        guard quiz == nil, result == nil, errorMessage == nil, accessRestriction == nil, isLoading == false else { return }
+        await load(type: type, examType: examType, services: services)
+    }
 
     var currentQuestion: QuizQuestion? {
         guard let quiz, currentIndex < quiz.questions.count else { return nil }
@@ -336,9 +408,24 @@ final class QuizViewModel {
     func load(type: QuizType, examType: ExamType?, services: ServiceContainer) async {
         isLoading = true
         errorMessage = nil
+        accessRestriction = nil
         defer { isLoading = false }
         do {
-            quiz = try await services.quiz.generateQuiz(type: type, topicTags: [], examType: examType)
+            let topicTags = type == .weakAreaReview
+                ? PracticeHistoryStore.shared.suggestedWeakTopicKeys()
+                : []
+            let generatedQuiz = try await services.quiz.generateQuiz(type: type, topicTags: topicTags, examType: examType)
+            guard generatedQuiz.questions.isEmpty == false else {
+                throw AppError.notFound("No quiz questions are available right now. Please try another quiz.")
+            }
+            quiz = generatedQuiz
+        } catch let apiError as APIError {
+            switch apiError {
+            case .forbidden(let message):
+                accessRestriction = QuizAccessRestriction(context: type.paywallContext, message: message)
+            default:
+                errorMessage = apiError.localizedDescription
+            }
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -359,7 +446,7 @@ final class QuizViewModel {
         currentIndex -= 1
     }
 
-    func submit(services: ServiceContainer) async {
+    func submit(services: ServiceContainer, appVM: AppViewModel) async {
         guard let quiz else { return }
         isSubmitting = true
         errorMessage = nil
@@ -372,6 +459,18 @@ final class QuizViewModel {
 
         do {
             result = try await services.quiz.submitQuiz(quizId: quiz.id, answers: answerList)
+            if let result, result.quizAttemptId != nil {
+                PracticeHistoryStore.shared.recordAttempt(
+                    quiz: quiz,
+                    results: result.results,
+                    score: result.score,
+                    correctCount: result.correctCount,
+                    totalCount: result.totalCount
+                )
+            }
+            if appVM.subscriptionState.hasPaidAccess == false {
+                appVM.subscriptionState.markPreviewQuizUsedIfNeeded()
+            }
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -383,7 +482,13 @@ final class QuizViewModel {
         answers = [:]
         result = nil
         errorMessage = nil
+        accessRestriction = nil
     }
+}
+
+struct QuizAccessRestriction: Equatable {
+    let context: PaywallContext
+    let message: String
 }
 
 // MARK: - Tutor ViewModel
@@ -395,42 +500,219 @@ final class TutorViewModel {
     var inputText: String = ""
     var isSending: Bool = false
     var showPaywall: Bool = false
-    var context: TutorContext? = nil
-    var errorMessage: String?
+    var context: TutorContext = TutorContextBuilder.general(for: nil)
+    var sessionID: UUID?
+    var errorState: TutorErrorState?
 
-    func send(services: ServiceContainer, subscription: SubscriptionState) async {
+    private var activeRequestTask: Task<Void, Never>?
+    private var lastFailedMessage: String?
+    private var configuredStorageKey: String?
+    private var lastSubmittedFingerprint: String?
+
+    var hasContextHeader: Bool { context.type != .general }
+
+    func configure(initialContext: TutorContext?, user: WWUser?) {
+        let nextContext = initialContext ?? TutorContextBuilder.general(for: user)
+        guard configuredStorageKey != nextContext.storageKey else {
+            if context.examType == nil || context.jurisdiction == nil {
+                context.examType = user?.examType.rawValue
+                context.jurisdiction = user?.state.uppercased()
+            }
+            return
+        }
+
+        activeRequestTask?.cancel()
+        context = nextContext
+        configuredStorageKey = nextContext.storageKey
+        restoreConversation()
+        if messages.isEmpty {
+            sessionID = nil
+        }
+        errorState = nil
+        lastFailedMessage = nil
+    }
+
+    func send(services: ServiceContainer, appVM: AppViewModel) {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, !isSending else { return }
 
-        if subscription.tutorLimitReached {
+        if appVM.subscriptionState.tutorLimitReached {
             showPaywall = true
+            errorState = .quotaReached
             return
         }
+
+        let fingerprint = "\(context.storageKey)|\(text.lowercased())"
+        guard fingerprint != lastSubmittedFingerprint else { return }
+        lastSubmittedFingerprint = fingerprint
 
         let userMsg = TutorMessage(id: UUID(), content: text, role: .user, timestamp: Date())
         messages.append(userMsg)
         inputText = ""
         isSending = true
-        errorMessage = nil
+        errorState = nil
+        lastFailedMessage = text
+        persistConversation()
 
-        do {
-            let response = try await services.tutor.sendMessage(text, context: context)
-            messages.append(response)
-        } catch {
-            errorMessage = error.localizedDescription
+        let requestHistory = messages
+        activeRequestTask?.cancel()
+        activeRequestTask = Task {
+            do {
+                let result = try await services.tutor.sendMessage(
+                    text,
+                    context: context,
+                    history: requestHistory,
+                    sessionID: sessionID
+                )
+                await MainActor.run {
+                    sessionID = result.sessionId ?? sessionID
+                    messages.append(result.message)
+                    if let usage = result.usage {
+                        appVM.subscriptionState.applyTutorUsage(usage)
+                    } else if appVM.subscriptionState.hasPaidAccess == false {
+                        appVM.subscriptionState.tutorMessagesUsed += 1
+                    }
+                    isSending = false
+                    errorState = nil
+                    lastSubmittedFingerprint = nil
+                    persistConversation()
+                }
+            } catch is CancellationError {
+                await MainActor.run {
+                    isSending = false
+                    lastSubmittedFingerprint = nil
+                }
+            } catch {
+                await MainActor.run {
+                    isSending = false
+                    errorState = makeErrorState(for: error)
+                    if errorState == .quotaReached {
+                        showPaywall = true
+                    }
+                    lastSubmittedFingerprint = nil
+                    persistConversation()
+                }
+            }
         }
-        isSending = false
     }
 
-    func sendFollowUp(_ text: String, services: ServiceContainer, subscription: SubscriptionState) {
+    func sendFollowUp(_ text: String, services: ServiceContainer, appVM: AppViewModel) {
         inputText = text
-        Task { await send(services: services, subscription: subscription) }
+        send(services: services, appVM: appVM)
+    }
+
+    func retry(services: ServiceContainer, appVM: AppViewModel) {
+        guard let lastFailedMessage else { return }
+        inputText = lastFailedMessage
+        send(services: services, appVM: appVM)
     }
 
     func clear() {
+        activeRequestTask?.cancel()
         messages = []
-        context = nil
+        sessionID = nil
+        errorState = nil
+        lastFailedMessage = nil
+        lastSubmittedFingerprint = nil
+        clearPersistedConversation()
     }
+
+    func cancelPendingRequest() {
+        activeRequestTask?.cancel()
+    }
+
+    private func makeErrorState(for error: Error) -> TutorErrorState {
+        if let apiError = error as? APIError {
+            switch apiError {
+            case .rateLimited:
+                return .quotaReached
+            case .unauthorized:
+                return .sessionExpired
+            case .forbidden(let message):
+                return .retryable(message: message)
+            case .networkError, .serverError, .decodingError, .notFound:
+                return .retryable(message: apiError.localizedDescription)
+            }
+        }
+        let message = error.localizedDescription.lowercased().contains("limit")
+            ? TutorErrorState.quotaReached.message
+            : error.localizedDescription
+        return message == TutorErrorState.quotaReached.message
+            ? .quotaReached
+            : .retryable(message: error.localizedDescription)
+    }
+
+    private func persistConversation() {
+        guard let key = configuredStorageKey else { return }
+        let snapshot = TutorConversationSnapshot(
+            context: context,
+            sessionID: sessionID,
+            messages: messages
+        )
+        if let data = try? JSONEncoder().encode(snapshot) {
+            UserDefaults.standard.set(data, forKey: Self.storagePrefix + key)
+        }
+    }
+
+    private func restoreConversation() {
+        guard let key = configuredStorageKey,
+              let data = UserDefaults.standard.data(forKey: Self.storagePrefix + key),
+              let snapshot = try? JSONDecoder().decode(TutorConversationSnapshot.self, from: data) else {
+            messages = []
+            sessionID = nil
+            return
+        }
+
+        context = snapshot.context
+        sessionID = snapshot.sessionID
+        messages = snapshot.messages
+    }
+
+    private func clearPersistedConversation() {
+        guard let key = configuredStorageKey else { return }
+        UserDefaults.standard.removeObject(forKey: Self.storagePrefix + key)
+    }
+
+    private static let storagePrefix = "ww_tutor_conversation_v1_"
+}
+
+struct TutorErrorState: Equatable {
+    var title: String
+    var message: String
+    var actionTitle: String
+    var isQuotaRelated: Bool = false
+
+    static let quotaReached = TutorErrorState(
+        title: "Preview tutor limit reached",
+        message: "You've used your preview tutor questions. Choose Fast Track or Full Prep for more guided help.",
+        actionTitle: "See Access Options",
+        isQuotaRelated: true
+    )
+
+    static let sessionExpired = TutorErrorState(
+        title: "Session expired",
+        message: "Sign in again so WattWise can keep your tutor context and progress in sync.",
+        actionTitle: "Try Again"
+    )
+
+    static func retryable(message: String) -> TutorErrorState {
+        TutorErrorState(
+            title: "Tutor unavailable",
+            message: message,
+            actionTitle: "Retry"
+        )
+    }
+}
+
+private struct TutorConversationSnapshot: Codable {
+    var context: TutorContext
+    var sessionID: UUID?
+    var messages: [TutorMessage]
+}
+
+extension TutorErrorState {
+    var showsRetryAction: Bool { isQuotaRelated == false }
+    var primaryActionTitle: String { actionTitle }
 }
 
 // MARK: - NEC ViewModel
@@ -447,6 +729,7 @@ final class NECViewModel {
     var detailError: String? = nil
     var isExplaining: Bool = false
     var expandedText: String? = nil
+    var explainError: String? = nil
     var showPaywall: Bool = false
 
     private var searchTask: Task<Void, Never>? = nil
@@ -483,6 +766,7 @@ final class NECViewModel {
         isLoadingDetail = true
         expandedText = nil
         detailError = nil
+        explainError = nil
         defer { isLoadingDetail = false }
         do {
             selectedDetail = try await services.nec.detail(id: id)
@@ -491,17 +775,34 @@ final class NECViewModel {
         }
     }
 
-    func explain(id: UUID, services: ServiceContainer, subscription: SubscriptionState) async {
-        guard subscription.isPro || !subscription.tutorLimitReached else {
+    func explain(id: UUID, services: ServiceContainer, appVM: AppViewModel) async {
+        guard appVM.subscriptionState.hasPaidAccess || !appVM.subscriptionState.necExplanationLimitReached else {
             showPaywall = true
             return
         }
         isExplaining = true
+        explainError = nil
         defer { isExplaining = false }
         do {
-            expandedText = try await services.nec.explain(id: id)
+            let result = try await services.nec.explain(id: id)
+            expandedText = result.expanded
+            if let usage = result.usage {
+                appVM.subscriptionState.applyNECUsage(usage)
+            } else if appVM.subscriptionState.hasPaidAccess == false {
+                appVM.subscriptionState.necExplanationsUsed += 1
+            }
+        } catch let apiError as APIError {
+            switch apiError {
+            case .rateLimited:
+                showPaywall = true
+            case .forbidden(let message):
+                explainError = message
+                showPaywall = true
+            default:
+                explainError = "Couldn't generate the explanation right now. Please try again."
+            }
         } catch {
-            // Silent failure — user can retry by tapping "Explain with AI" again
+            explainError = "Couldn't generate the explanation right now. Please try again."
         }
     }
 }
@@ -514,6 +815,8 @@ final class ProfileViewModel {
     var showSignOutAlert: Bool = false
     var showResetAlert: Bool = false
     var isSigningOut: Bool = false
+    var isUpdatingProfile: Bool = false
+    var profileUpdateErrorMessage: String?
 
     func signOut(services: ServiceContainer, appVM: AppViewModel) async {
         isSigningOut = true
@@ -521,10 +824,48 @@ final class ProfileViewModel {
         isSigningOut = false
     }
 
+    func updateProfileSettings(
+        for user: WWUser,
+        examType: ExamType,
+        state: String,
+        goal: StudyGoal,
+        services: ServiceContainer,
+        appVM: AppViewModel
+    ) async -> Bool {
+        isUpdatingProfile = true
+        profileUpdateErrorMessage = nil
+        defer { isUpdatingProfile = false }
+
+        do {
+            var updatedUser = user
+            updatedUser.examType = examType
+            updatedUser.state = state
+            updatedUser.studyGoal = goal
+            try await services.auth.updateProfile(updatedUser)
+            appVM.authState = .authenticated(updatedUser)
+            return true
+        } catch {
+            profileUpdateErrorMessage = error.localizedDescription
+            return false
+        }
+    }
+
     func resetProgress(services: ServiceContainer, appVM: AppViewModel) {
         // Clear all locally cached profile and progress data
-        let keys = ["ww_user", "ww_profile", "ww_access_token", "ww_refresh_token"]
+        let keys = [
+            "ww_user",
+            "ww_profile",
+            "ww_access_token",
+            "ww_refresh_token",
+            "ww_user_data",
+            "ww_content_progress_v2",
+            "ww_content_study_activity_v1",
+            "ww_practice_history_v1"
+        ]
         keys.forEach { UserDefaults.standard.removeObject(forKey: $0) }
+        UserDefaults.standard.dictionaryRepresentation().keys
+            .filter { $0.hasPrefix("ww_tutor_conversation_v1_") }
+            .forEach { UserDefaults.standard.removeObject(forKey: $0) }
         // Sign out so the user starts fresh on next launch
         appVM.signOut(services: services)
     }
@@ -535,26 +876,26 @@ final class ProfileViewModel {
 @Observable
 @MainActor
 final class PaywallViewModel {
-    enum Plan: String, CaseIterable { case monthly, yearly }
-    var selectedPlan: Plan = .yearly
-    var isPurchasing: Bool = false
+    let offers: [AccessOffer] = [.fastTrack, .fullPrep]
+    var activeProductID: String?
     var isRestoring: Bool = false
     var errorMessage: String?
+    var successMessage: String?
+    var restoreMessage: String?
 
-    var monthlyPrice: String { "$9.99/month" }
-    var yearlyPrice: String { "$59.99/year" }
-    var yearlySavings: String { "Save 50%" }
+    func isPurchasing(_ productID: String) -> Bool {
+        activeProductID == productID
+    }
 
-    func purchase(services: ServiceContainer, appVM: AppViewModel) async {
-        isPurchasing = true
+    func purchase(productID: String, services: ServiceContainer, appVM: AppViewModel) async {
+        activeProductID = productID
         errorMessage = nil
-        defer { isPurchasing = false }
+        successMessage = nil
+        defer { activeProductID = nil }
         do {
-            let productId = selectedPlan == .monthly
-                ? "wattwise.pro.monthly"
-                : "wattwise.pro.yearly"
-            let state = try await services.subscription.purchase(productId: productId)
+            let state = try await services.subscription.purchase(productId: productID)
             appVM.subscriptionState = state
+            successMessage = state.purchaseSuccessMessage
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -563,12 +904,14 @@ final class PaywallViewModel {
     func restore(services: ServiceContainer, appVM: AppViewModel) async {
         isRestoring = true
         errorMessage = nil
+        restoreMessage = nil
         defer { isRestoring = false }
         do {
             let state = try await services.subscription.restorePurchases()
             appVM.subscriptionState = state
+            restoreMessage = state.restoreSuccessMessage
         } catch {
-            errorMessage = error.localizedDescription
+            restoreMessage = error.localizedDescription
         }
     }
 }

@@ -8,16 +8,36 @@ struct LessonView: View {
     @State private var showTutorSheet = false
     @State private var nextLessonTarget: LessonNavigationTarget?
     @State private var showModuleDetail = false
+    @State private var showPaywall = false
+
+    private var previewLessonID: UUID? {
+        try? WattWiseContentRuntimeAdapter.previewLessonID()
+    }
+
+    private var isLockedForPreview: Bool {
+        guard appVM.subscriptionState.hasPaidAccess == false else { return false }
+        guard let previewLessonID else { return false }
+        return lessonId != previewLessonID
+    }
 
     var body: some View {
         Group {
-            if vm.isLoading {
+            if isLockedForPreview {
+                PreviewLessonLockView {
+                    showPaywall = true
+                } onOpenPreviewLesson: {
+                    if let previewLessonID {
+                        nextLessonTarget = LessonNavigationTarget(id: previewLessonID)
+                    }
+                }
+            } else if vm.shouldShowLoadingState {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let lesson = vm.lesson {
                 LessonContentView(
                     lesson: lesson,
                     vm: vm,
+                    isNextLessonLocked: appVM.subscriptionState.hasPaidAccess == false && vm.flowContext?.nextLessonId != nil,
                     onPreviousLesson: {
                         guard let previousLessonId = vm.flowContext?.previousLessonId else { return }
                         nextLessonTarget = LessonNavigationTarget(id: previousLessonId)
@@ -26,9 +46,13 @@ struct LessonView: View {
                         showModuleDetail = true
                     },
                     onNextLesson: {
-                        guard let nextLessonId = vm.flowContext?.nextLessonId else { return }
-                        vm.markComplete()
-                        nextLessonTarget = LessonNavigationTarget(id: nextLessonId)
+                        if appVM.subscriptionState.hasPaidAccess == false {
+                            showPaywall = true
+                        } else {
+                            guard let nextLessonId = vm.flowContext?.nextLessonId else { return }
+                            vm.markComplete()
+                            nextLessonTarget = LessonNavigationTarget(id: nextLessonId)
+                        }
                     }
                 )
             } else if let error = vm.errorMessage {
@@ -46,27 +70,30 @@ struct LessonView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(vm.lesson?.title ?? "")
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showTutorSheet = true
-                } label: {
-                    Label("Ask Tutor", systemImage: "bubble.left")
-                        .font(.system(size: 15))
-                        .foregroundColor(.wwBlue)
+            if isLockedForPreview == false {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showTutorSheet = true
+                    } label: {
+                        Label("Ask Tutor", systemImage: "bubble.left")
+                            .font(.system(size: 15))
+                            .foregroundColor(.wwBlue)
+                    }
                 }
             }
         }
         .sheet(isPresented: $showTutorSheet) {
-            TutorSheet(context: vm.lesson.map {
-                TutorContext(type: .lesson, id: $0.id, excerpt: $0.sections.first?.body)
-            })
+            TutorSheet(context: vm.lesson.map { TutorContextBuilder.lesson($0, user: appVM.currentUser) })
             .environment(services)
             .environment(appVM)
         }
-        .sheet(isPresented: $vm.showNECSheet) {
-            if let nec = vm.selectedNEC {
-                NECReferenceSheet(reference: nec)
-            }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(context: .lessonLocked)
+                .environment(services)
+                .environment(appVM)
+        }
+        .sheet(item: $vm.selectedNEC) { nec in
+            NECReferenceSheet(reference: nec)
         }
         .navigationDestination(item: $nextLessonTarget) { destination in
             LessonView(lessonId: destination.id)
@@ -74,9 +101,11 @@ struct LessonView: View {
         .navigationDestination(isPresented: $showModuleDetail) {
             if let module = vm.flowContext?.module {
                 ModuleDetailView(module: module)
+            } else {
+                LearnView()
             }
         }
-        .task { await vm.load(lessonId: lessonId, services: services) }
+        .task { await vm.loadIfNeeded(lessonId: lessonId, services: services) }
         .onDisappear { Task { await vm.saveProgress(services: services) } }
     }
 }
@@ -90,6 +119,7 @@ private struct LessonNavigationTarget: Identifiable, Hashable {
 private struct LessonContentView: View {
     let lesson: WWLesson
     @Bindable var vm: LessonViewModel
+    let isNextLessonLocked: Bool
     let onPreviousLesson: () -> Void
     let onBackToModule: () -> Void
     let onNextLesson: () -> Void
@@ -133,6 +163,7 @@ private struct LessonContentView: View {
                     LessonNextStepCard(
                         flowContext: vm.flowContext,
                         isComplete: effectiveProgress >= 1,
+                        isNextLessonLocked: isNextLessonLocked,
                         onPreviousLesson: onPreviousLesson,
                         onBackToModule: onBackToModule,
                         onNextLesson: onNextLesson
@@ -239,9 +270,17 @@ private struct LessonHeaderCard: View {
 private struct LessonNextStepCard: View {
     let flowContext: LessonFlowContext?
     let isComplete: Bool
+    let isNextLessonLocked: Bool
     let onPreviousLesson: () -> Void
     let onBackToModule: () -> Void
     let onNextLesson: () -> Void
+
+    private var primaryTitle: String {
+        if flowContext?.nextLessonId != nil {
+            return isNextLessonLocked ? "Continue With Full Access" : "Next Lesson"
+        }
+        return flowContext == nil ? "Open Learn" : "Back to Module"
+    }
 
     var body: some View {
         WWCard {
@@ -255,26 +294,50 @@ private struct LessonNextStepCard: View {
                 }
 
                 Text(isComplete
-                     ? "Keep moving while the material is fresh, or step back to the module and review your place."
-                     : "Finish this lesson when you're ready, then move straight into the next step without losing momentum.")
+                     ? (isNextLessonLocked
+                        ? "You've finished the preview lesson. Keep going with full access to open the next step in your study path."
+                        : "Keep moving while the material is fresh, or step back to the module and review your place.")
+                    : "Finish this lesson when you're ready, then move straight into the next step without losing momentum.")
                     .wwBody(color: .wwTextSecondary)
                     .fixedSize(horizontal: false, vertical: true)
 
                 if flowContext?.nextLessonId != nil {
-                    WWPrimaryButton(title: "Next Lesson", action: onNextLesson)
+                    WWPrimaryButton(title: primaryTitle, action: onNextLesson)
                 } else {
-                    WWPrimaryButton(title: "Back to Module", action: onBackToModule)
+                    WWPrimaryButton(title: primaryTitle, action: onBackToModule)
                 }
 
                 HStack(spacing: WWSpacing.m) {
                     if flowContext?.previousLessonId != nil {
                         WWSecondaryButton(title: "Previous Lesson", action: onPreviousLesson)
                     }
-                    if flowContext?.nextLessonId != nil {
+                    if flowContext?.nextLessonId != nil && flowContext != nil {
                         WWSecondaryButton(title: "Back to Module", action: onBackToModule)
                     }
                 }
             }
+        }
+    }
+}
+
+private struct PreviewLessonLockView: View {
+    let onOpenPaywall: () -> Void
+    let onOpenPreviewLesson: () -> Void
+
+    var body: some View {
+        WWEmptyState(
+            icon: "lock",
+            title: "This lesson is outside the preview",
+            message: "Preview includes your first full lesson so you can see how WattWise teaches. Full access opens the rest of the curriculum."
+        )
+        .overlay(alignment: .bottom) {
+            VStack(spacing: WWSpacing.m) {
+                WWPrimaryButton(title: "See Access Options", action: onOpenPaywall)
+                WWSecondaryButton(title: "Open Preview Lesson", action: onOpenPreviewLesson)
+            }
+            .wwScreenPadding()
+            .padding(.bottom, WWSpacing.l)
+            .background(Color.wwBackground)
         }
     }
 }

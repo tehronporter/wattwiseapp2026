@@ -18,7 +18,7 @@ struct TutorView: View {
                 isSending: vm.isSending,
                 isDisabled: appVM.subscriptionState.tutorLimitReached
             ) {
-                Task { await vm.send(services: services, subscription: appVM.subscriptionState) }
+                vm.send(services: services, appVM: appVM)
             }
         }
         .background(Color.wwBackground)
@@ -53,7 +53,7 @@ struct TutorView: View {
             Text("This will remove all messages in this session.")
         }
         .sheet(isPresented: $vm.showPaywall) {
-            PaywallView(reason: "Unlimited AI tutoring is a Pro feature.")
+            PaywallView(context: .tutorLimit)
                 .environment(services)
                 .environment(appVM)
         }
@@ -63,18 +63,17 @@ struct TutorView: View {
                 .environment(appVM)
         }
         .onAppear {
-            if let ctx = initialContext {
-                vm.context = ctx
-            }
+            vm.configure(initialContext: initialContext, user: appVM.currentUser)
         }
+        .onDisappear { vm.cancelPendingRequest() }
     }
 
     @ViewBuilder
     private var messagesSection: some View {
         if vm.messages.isEmpty {
-            TutorEmptyState(subscription: appVM.subscriptionState) { suggestion in
+            TutorEmptyState(context: vm.context, subscription: appVM.subscriptionState) { suggestion in
                 vm.inputText = suggestion
-                Task { await vm.send(services: services, subscription: appVM.subscriptionState) }
+                vm.send(services: services, appVM: appVM)
             } onOpenNEC: {
                 showNECLookup = true
             }
@@ -82,20 +81,29 @@ struct TutorView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(spacing: WWSpacing.m) {
+                        if vm.hasContextHeader {
+                            TutorContextHeader(context: vm.context)
+                        }
                         ForEach(vm.messages) { message in
                             MessageBubble(message: message) { followUp in
-                                vm.sendFollowUp(followUp, services: services, subscription: appVM.subscriptionState)
+                                vm.sendFollowUp(followUp, services: services, appVM: appVM)
                             }
                             .id(message.id)
                         }
                         if vm.isSending {
                             TypingIndicator().id("typing")
                         }
-                        if let error = vm.errorMessage {
-                            Text(error)
-                                .font(WWFont.caption())
-                                .foregroundColor(.wwError)
-                                .padding(WWSpacing.s)
+                        if let errorState = vm.errorState {
+                            TutorErrorCard(
+                                errorState: errorState,
+                                onPrimaryAction: {
+                                    if errorState.isQuotaRelated {
+                                        vm.showPaywall = true
+                                    } else {
+                                        vm.retry(services: services, appVM: appVM)
+                                    }
+                                }
+                            )
                         }
                     }
                     .wwScreenPadding()
@@ -119,7 +127,7 @@ struct TutorView: View {
 
     @ViewBuilder
     private var usageLimitBanner: some View {
-        if !appVM.subscriptionState.isPro {
+        if appVM.subscriptionState.hasPaidAccess == false {
             let remaining = appVM.subscriptionState.tutorMessagesRemaining
             if remaining <= 2 {
                 UsageLimitBanner(remaining: remaining, onUpgrade: { vm.showPaywall = true })
@@ -139,13 +147,13 @@ private struct UsageLimitBanner: View {
             Image(systemName: "info.circle")
                 .font(.system(size: 12))
             if remaining == 0 {
-                Text("Daily limit reached. Upgrade to Pro.")
+                Text("Preview tutor questions used. Choose full access for more help.")
             } else {
-                Text("\(remaining) message\(remaining == 1 ? "" : "s") remaining today.")
+                Text("\(remaining) tutor question\(remaining == 1 ? "" : "s") left in preview.")
             }
             Spacer()
             if remaining == 0 {
-                Button("Upgrade", action: onUpgrade)
+                Button("See Options", action: onUpgrade)
                     .font(WWFont.caption(.semibold))
                     .foregroundColor(.wwBlue)
             }
@@ -161,17 +169,10 @@ private struct UsageLimitBanner: View {
 // MARK: - Empty State / Suggestions
 
 private struct TutorEmptyState: View {
+    let context: TutorContext
     let subscription: SubscriptionState
     let onSuggestion: (String) -> Void
     let onOpenNEC: () -> Void
-
-    private let suggestions = [
-        "Explain Ohm's Law with an example",
-        "Where is GFCI protection required?",
-        "What's the difference between grounding and bonding?",
-        "How do I calculate wire size for a circuit?",
-        "Explain NEC Article 250 in simple terms"
-    ]
 
     var body: some View {
         ScrollView {
@@ -187,29 +188,35 @@ private struct TutorEmptyState: View {
                             .font(.system(size: 32, weight: .light))
                             .foregroundColor(.wwBlue)
                     }
-                    Text("AI Tutor")
+                    Text(context.sourceEyebrow ?? "AI Tutor")
+                        .wwLabel()
+                        .textCase(.uppercase)
+                    Text(context.sourceTitle ?? "AI Tutor")
                         .wwHeading()
-                    Text("Ask anything about electrical theory, the NEC, or exam topics. I'll explain it step by step.")
+                    Text(
+                        context.sourceSummary
+                        ?? "Ask anything about electrical theory, the NEC, or exam topics. I'll keep it structured, calm, and exam-focused."
+                    )
                         .wwBody(color: .wwTextSecondary)
                         .multilineTextAlignment(.center)
                 }
                 .wwScreenPadding()
 
-                if !subscription.isPro {
+                if subscription.hasPaidAccess == false {
                     HStack(spacing: 4) {
                         Image(systemName: "info.circle")
-                        Text("\(subscription.tutorMessagesRemaining) free messages remaining today")
+                        Text("\(subscription.tutorMessagesRemaining) tutor question\(subscription.tutorMessagesRemaining == 1 ? "" : "s") left in preview")
                     }
                     .font(WWFont.caption(.medium))
                     .foregroundColor(.wwTextMuted)
                 }
 
                 VStack(alignment: .leading, spacing: WWSpacing.s) {
-                    Text("Try asking:")
+                    Text(context.type == .general ? "Try asking:" : "Start with:")
                         .wwLabel()
                         .wwScreenPadding()
 
-                    ForEach(suggestions, id: \.self) { s in
+                    ForEach(context.starterPrompts, id: \.self) { s in
                         Button {
                             onSuggestion(s)
                         } label: {
@@ -254,6 +261,52 @@ private struct TutorEmptyState: View {
     }
 }
 
+private struct TutorContextHeader: View {
+    let context: TutorContext
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.s) {
+                if let eyebrow = context.sourceEyebrow {
+                    Text(eyebrow)
+                        .wwLabel(color: .wwBlue)
+                        .textCase(.uppercase)
+                }
+                if let title = context.sourceTitle {
+                    Text(title)
+                        .wwSectionTitle()
+                }
+                if let summary = context.sourceSummary {
+                    Text(summary)
+                        .wwBody(color: .wwTextSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+    }
+}
+
+private struct TutorErrorCard: View {
+    let errorState: TutorErrorState
+    let onPrimaryAction: () -> Void
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.s) {
+                Text(errorState.title)
+                    .font(WWFont.body(.semibold))
+                    .foregroundColor(.wwError)
+                Text(errorState.message)
+                    .wwBody(color: .wwTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button(errorState.primaryActionTitle, action: onPrimaryAction)
+                    .font(WWFont.caption(.semibold))
+                    .foregroundColor(.wwBlue)
+            }
+        }
+    }
+}
+
 // MARK: - Message Bubble
 
 private struct MessageBubble: View {
@@ -284,7 +337,6 @@ private struct MessageBubble: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .lineSpacing(3)
 
-                    // Steps (AI only)
                     if !isUser, let steps = message.steps, !steps.isEmpty {
                         VStack(alignment: .leading, spacing: WWSpacing.s) {
                             ForEach(Array(steps.enumerated()), id: \.offset) { i, step in
@@ -300,6 +352,43 @@ private struct MessageBubble: View {
                             }
                         }
                         .padding(.top, WWSpacing.xs)
+                    }
+
+                    if !isUser, let bullets = message.bullets, !bullets.isEmpty {
+                        VStack(alignment: .leading, spacing: WWSpacing.s) {
+                            ForEach(bullets, id: \.self) { bullet in
+                                HStack(alignment: .top, spacing: WWSpacing.s) {
+                                    Circle()
+                                        .fill(Color.wwBlue)
+                                        .frame(width: 5, height: 5)
+                                        .padding(.top, 8)
+                                    Text(bullet)
+                                        .wwBody()
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+                        }
+                    }
+
+                    if !isUser, let references = message.references, !references.isEmpty {
+                        VStack(alignment: .leading, spacing: WWSpacing.xs) {
+                            Text("References")
+                                .font(WWFont.caption(.semibold))
+                                .foregroundColor(.wwTextSecondary)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: WWSpacing.s) {
+                                    ForEach(references, id: \.self) { reference in
+                                        Text(reference)
+                                            .font(WWFont.caption(.medium))
+                                            .foregroundColor(.wwBlue)
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 6)
+                                            .background(Color.wwBlueDim)
+                                            .clipShape(Capsule())
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 .padding(.horizontal, WWSpacing.m)

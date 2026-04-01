@@ -199,6 +199,7 @@ POST /functions/v1/generate_quiz
 
 ### Response
 {
+  "success": true,
   "data": {
     "quiz_id": "uuid",
     "questions": [
@@ -210,7 +211,8 @@ POST /functions/v1/generate_quiz
           "B": "...",
           "C": "...",
           "D": "..."
-        }
+        },
+        "topics": ["grounding"]
       }
     ]
   }
@@ -235,15 +237,23 @@ POST /functions/v1/submit_quiz
 
 ### Response
 {
+  "success": true,
   "data": {
+    "quiz_attempt_id": "uuid",
     "score": 80,
     "correct_count": 4,
-    "total": 5,
+    "total_count": 5,
     "results": [
       {
         "question_id": "uuid",
-        "correct": true,
-        "explanation": "..."
+        "question": "string",
+        "user_answer": "A",
+        "correct_answer": "B",
+        "is_correct": true,
+        "explanation": "string",
+        "topics": ["grounding"],
+        "topic_titles": ["Grounding"],
+        "reference_code": "250.50"
       }
     ],
     "weak_topics": ["grounding"]
@@ -261,16 +271,37 @@ POST /functions/v1/tutor
   "message": "Explain grounding",
   "context": {
     "type": "lesson",
-    "lesson_id": "uuid"
-  }
+    "lesson": {
+      "lessonId": "uuid",
+      "title": "Grounding Basics",
+      "excerpt": "..."
+    },
+    "examType": "apprentice",
+    "jurisdiction": "TX"
+  },
+  "history": [
+    {
+      "role": "user",
+      "content": "..."
+    }
+  ],
+  "session_id": "uuid-or-null"
 }
 
 ### Response
 {
+  "success": true,
   "data": {
     "answer": "string",
     "steps": ["string"],
-    "follow_ups": ["string"]
+    "bullets": ["string"],
+    "references": ["250.50"],
+    "follow_ups": ["string"],
+    "session_id": "uuid",
+    "usage": {
+      "used": 2,
+      "limit": 4
+    }
   }
 }
 
@@ -287,14 +318,17 @@ POST /functions/v1/nec_search
 
 ### Response
 {
-  "data": [
-    {
-      "id": "uuid",
-      "code": "210.8",
-      "title": "GFCI Protection",
-      "summary": "..."
-    }
-  ]
+  "success": true,
+  "data": {
+    "results": [
+      {
+        "id": "uuid",
+        "code": "210.8",
+        "title": "GFCI Protection",
+        "summary": "..."
+      }
+    ]
+  }
 }
 
 ---
@@ -310,10 +344,15 @@ POST /functions/v1/nec_detail
 
 ### Response
 {
+  "success": true,
   "data": {
-    "code": "210.8",
-    "title": "string",
-    "summary": "string"
+    "detail": {
+      "id": "uuid",
+      "code": "210.8",
+      "title": "string",
+      "summary": "string",
+      "expanded": "string|null"
+    }
   }
 }
 
@@ -330,8 +369,13 @@ POST /functions/v1/nec_explain
 
 ### Response
 {
+  "success": true,
   "data": {
-    "expanded": "string"
+    "expanded": "string",
+    "usage": {
+      "used": 1,
+      "limit": 1
+    }
   }
 }
 
@@ -343,14 +387,28 @@ POST /functions/v1/sync_subscription
 
 ### Request
 {
-  "receipt": "string"
+  "product_id": "wattwise.fasttrack.3month|null",
+  "transaction_id": "string|null",
+  "original_transaction_id": "string|null",
+  "purchase_date": "2026-04-01T18:00:00Z|null",
+  "expires_at": "2026-07-01T18:00:00Z|null",
+  "receipt": "string|null"
 }
 
 ### Response
 {
+  "success": true,
   "data": {
-    "tier": "pro",
-    "status": "active"
+    "tier": "preview|fast_track|full_prep",
+    "status": "active",
+    "expires_at": "2026-05-01T00:00:00Z",
+    "store_product_id": "wattwise.fasttrack.3month",
+    "preview_quizzes_used": 1,
+    "preview_quizzes_limit": 1,
+    "tutor_messages_used": 0,
+    "tutor_messages_limit": 4,
+    "nec_explanations_used": 0,
+    "nec_explanations_limit": 1
   }
 }
 

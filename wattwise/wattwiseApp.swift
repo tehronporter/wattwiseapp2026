@@ -7,6 +7,7 @@ struct WattWiseApp: App {
 
     init() {
         WWFontRegistrar.registerIfNeeded()
+        UITestBootstrap.configureIfNeeded()
     }
 
     var body: some Scene {
@@ -74,7 +75,11 @@ struct SplashView: View {
 // MARK: - Onboarding Flow Root (for incomplete profiles)
 
 struct OnboardingFlowRoot: View {
-    @State private var vm = OnboardingViewModel()
+    @State private var vm: OnboardingViewModel = {
+        let viewModel = OnboardingViewModel()
+        viewModel.step = 1
+        return viewModel
+    }()
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
 
@@ -83,11 +88,45 @@ struct OnboardingFlowRoot: View {
             OnboardingView(vm: vm)
         }
         .onAppear {
-            vm.step = 1
             if let user = appVM.currentUser {
                 vm.email = user.email
                 vm.selectedExamType = user.examType
                 vm.selectedState = user.state
+            }
+        }
+    }
+}
+
+private enum UITestBootstrap {
+    static func configureIfNeeded() {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard arguments.contains("UITEST_MODE") else { return }
+
+        if arguments.contains("UITEST_RESET_STATE") {
+            [
+                "ww_user",
+                "ww_profile",
+                "ww_access_token",
+                "ww_refresh_token",
+                "ww_content_progress_v2",
+                "ww_content_study_activity_v1",
+                "ww_practice_history_v1"
+            ].forEach { UserDefaults.standard.removeObject(forKey: $0) }
+        }
+
+        if arguments.contains("UITEST_AUTHENTICATED") {
+            let user = WWUser(
+                id: UUID(uuidString: "11111111-1111-1111-1111-111111111111") ?? UUID(),
+                email: "uitest@wattwiseapp.com",
+                displayName: "UI Test",
+                examType: .apprentice,
+                state: "TX",
+                studyGoal: .moderate,
+                streakDays: 4,
+                isOnboardingComplete: true
+            )
+            if let data = try? JSONEncoder().encode(user) {
+                UserDefaults.standard.set(data, forKey: "ww_user")
             }
         }
     }

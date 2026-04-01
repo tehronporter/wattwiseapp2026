@@ -122,14 +122,19 @@ Critical before launch:
 - complete quiz
 
 ### 4.3 Free User Limits
-- hit tutor limit
-- hit quiz limit
+- complete preview lesson
+- complete preview quick quiz
+- hit tutor preview limit
+- hit quiz preview limit
 - verify paywall appears correctly
+- verify locked lesson states are clear
 
 ### 4.4 Pro User
-- purchase subscription
-- verify unlock
-- verify unlimited access
+- purchase Fast Track
+- verify full unlock
+- purchase Full Prep
+- verify full unlock
+- verify expiration handling for paid access
 
 ---
 
@@ -167,10 +172,12 @@ Critical before launch:
 - view detail
 - AI explain
 
-## 5.7 Subscription
-- purchase
-- restore
+## 5.7 Access / Purchase
+- purchase Fast Track
+- purchase Full Prep
+- restore access
 - entitlement update
+- preview fallback after expiration
 
 ---
 
@@ -223,7 +230,7 @@ Ensure:
 Before submission:
 - no crashes
 - all flows working
-- subscription working
+- access purchase and restore working
 - privacy + terms visible
 - test account ready
 

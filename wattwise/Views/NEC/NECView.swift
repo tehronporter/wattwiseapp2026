@@ -144,7 +144,7 @@ struct NECView: View {
         .navigationBarTitleDisplayMode(.large)
         .onAppear { vm.search(services: services) }
         .sheet(isPresented: $vm.showPaywall) {
-            PaywallView(reason: "AI-powered NEC explanations are a Pro feature.")
+            PaywallView(context: .necLimit)
                 .environment(services)
                 .environment(appVM)
         }
@@ -198,7 +198,7 @@ struct NECDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: WWSpacing.l) {
-                if vm.isLoadingDetail {
+                if vm.isLoadingDetail || (vm.selectedDetail == nil && vm.detailError == nil) {
                     ProgressView().frame(maxWidth: .infinity).padding(.top, WWSpacing.xl)
                 } else if let error = vm.detailError {
                     WWEmptyState(
@@ -246,17 +246,23 @@ struct NECDetailView: View {
                                         .wwBody(color: .wwTextSecondary)
                                 }
                             } else {
-                                WWSecondaryButton(title: "Explain with AI") {
+                                WWSecondaryButton(title: "Explain Further") {
                                     Task {
-                                        await vm.explain(id: detail.id, services: services, subscription: appVM.subscriptionState)
+                                        await vm.explain(id: detail.id, services: services, appVM: appVM)
                                     }
                                 }
+                            }
 
-                                if !appVM.subscriptionState.isPro {
-                                    Text("AI explanations use 1 daily credit")
-                                        .wwCaption()
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                }
+                            if appVM.subscriptionState.hasPaidAccess == false {
+                                Text("\(appVM.subscriptionState.necExplanationsRemaining) NEC explanation sample\(appVM.subscriptionState.necExplanationsRemaining == 1 ? "" : "s") left in preview")
+                                    .wwCaption()
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                            }
+
+                            if let explainError = vm.explainError {
+                                Text(explainError)
+                                    .font(WWFont.caption(.medium))
+                                    .foregroundColor(.wwError)
                             }
                         }
                     }
@@ -277,10 +283,10 @@ struct NECDetailView: View {
         .navigationTitle("NEC \(code)")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showTutor) {
-            TutorSheet(context: TutorContext(type: .necDetail, id: necId))
+            TutorSheet(context: vm.selectedDetail.map { TutorContextBuilder.necDetail($0, user: appVM.currentUser) })
         }
         .sheet(isPresented: $vm.showPaywall) {
-            PaywallView(reason: "AI-powered NEC explanations are a Pro feature.")
+            PaywallView(context: .necLimit)
                 .environment(services)
                 .environment(appVM)
         }

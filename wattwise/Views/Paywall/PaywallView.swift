@@ -1,107 +1,32 @@
 import SwiftUI
 
 struct PaywallView: View {
-    var reason: String = "Unlock unlimited access to all WattWise features."
+    var context: PaywallContext = .general
     @State private var vm = PaywallViewModel()
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
     @Environment(\.dismiss) private var dismiss
 
-    private let benefits: [(icon: String, title: String, description: String)] = [
-        ("infinity", "Unlimited AI Tutor", "Ask as many questions as you need, any time"),
-        ("doc.text", "Full Practice Exams", "Complete 25-question timed practice exams"),
-        ("chart.bar", "Weak Area Review", "AI-targeted quizzes on your problem topics"),
-        ("books.vertical", "Full Curriculum", "All modules and lessons unlocked"),
-        ("book.pages", "Deep NEC Explanations", "AI-powered explanations for any NEC article")
+    private let benefits: [(icon: String, text: String)] = [
+        ("books.vertical", "Full lesson access across your prep path"),
+        ("list.bullet.clipboard", "More practice quizzes, weak-area review, and exam sessions"),
+        ("bubble.left.and.exclamationmark.bubble.right", "Tutor help when you get stuck"),
+        ("book.pages", "NEC explanations made simpler"),
+        ("mappin.and.ellipse", "Study support shaped to your exam type and state")
     ]
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: WWSpacing.l) {
-                    // Header
-                    VStack(spacing: WWSpacing.m) {
-                        ZStack {
-                            Circle()
-                                .fill(Color.wwBlueDim)
-                                .frame(width: 72, height: 72)
-                            Image(systemName: "star")
-                                .font(.system(size: 30))
-                                .foregroundColor(.wwBlue)
-                        }
-
-                        Text("WattWise Pro")
-                            .wwDisplay()
-
-                        Text(reason)
-                            .wwBody(color: .wwTextSecondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .padding(.top, WWSpacing.m)
-
-                    // Benefits
-                    VStack(spacing: 0) {
-                        ForEach(benefits, id: \.title) { benefit in
-                            BenefitRow(icon: benefit.icon, title: benefit.title, description: benefit.description)
-                            if benefit.title != benefits.last?.title {
-                                WWDivider()
-                            }
-                        }
-                    }
-                    .background(Color.wwSurface)
-                    .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
-
-                    // Plan Selector
-                    VStack(spacing: WWSpacing.s) {
-                        Text("Choose a plan")
-                            .wwSectionTitle()
-
-                        HStack(spacing: WWSpacing.m) {
-                            ForEach(PaywallViewModel.Plan.allCases, id: \.self) { plan in
-                                PlanOption(
-                                    plan: plan,
-                                    isSelected: vm.selectedPlan == plan,
-                                    monthlyPrice: vm.monthlyPrice,
-                                    yearlyPrice: vm.yearlyPrice,
-                                    savings: vm.yearlySavings
-                                ) {
-                                    vm.selectedPlan = plan
-                                }
-                            }
-                        }
-                    }
-
-                    // Error message
-                    if let error = vm.errorMessage {
-                        Text(error)
-                            .font(WWFont.caption(.medium))
-                            .foregroundColor(.wwError)
-                            .multilineTextAlignment(.center)
-                    }
-
-                    // CTA
-                    VStack(spacing: WWSpacing.m) {
-                        WWPrimaryButton(
-                            title: "Start Free Trial",
-                            isLoading: vm.isPurchasing
-                        ) {
-                            Task { await vm.purchase(services: services, appVM: appVM) }
-                        }
-
-                        WWGhostButton(title: "Restore Purchases") {
-                            Task { await vm.restore(services: services, appVM: appVM) }
-                        }
-                    }
-
-                    // Fine print
-                    Text("Subscription auto-renews. Cancel anytime in Settings. No dark patterns, no tricks.")
-                        .font(WWFont.caption())
-                        .foregroundColor(.wwTextMuted)
-                        .multilineTextAlignment(.center)
-                        .padding(.bottom, WWSpacing.m)
+                VStack(alignment: .leading, spacing: WWSpacing.xl) {
+                    headerSection
+                    contextCard
+                    valueSection
+                    pricingSection
+                    footerSection
                 }
                 .wwScreenPadding()
-                .padding(.vertical, WWSpacing.m)
+                .padding(.vertical, WWSpacing.l)
             }
             .background(Color.wwBackground)
             .navigationBarTitleDisplayMode(.inline)
@@ -116,93 +41,194 @@ struct PaywallView: View {
                     }
                 }
             }
-            .onChange(of: appVM.subscriptionState.isPro) { _, isPro in
-                if isPro { dismiss() }
+            .alert(
+                "Access Ready",
+                isPresented: Binding(
+                    get: { vm.successMessage != nil },
+                    set: { if $0 == false { vm.successMessage = nil } }
+                )
+            ) {
+                Button("Continue") {
+                    vm.successMessage = nil
+                    dismiss()
+                }
+            } message: {
+                Text(vm.successMessage ?? "")
+            }
+            .alert(
+                "Restore Access",
+                isPresented: Binding(
+                    get: { vm.restoreMessage != nil },
+                    set: { if $0 == false { vm.restoreMessage = nil } }
+                )
+            ) {
+                Button("OK", role: .cancel) {
+                    vm.restoreMessage = nil
+                }
+            } message: {
+                Text(vm.restoreMessage ?? "")
             }
         }
     }
-}
 
-// MARK: - Benefit Row
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: WWSpacing.m) {
+            Text(context.eyebrow)
+                .wwLabel()
+                .textCase(.uppercase)
 
-private struct BenefitRow: View {
-    let icon: String
-    let title: String
-    let description: String
+            Text(context.headline)
+                .wwDisplay()
 
-    var body: some View {
-        HStack(spacing: WWSpacing.m) {
-            Image(systemName: icon)
-                .font(.system(size: 18, weight: .regular))
-                .foregroundColor(.wwBlue)
-                .frame(width: 28)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(WWFont.body(.semibold))
-                    .foregroundColor(.wwTextPrimary)
-                Text(description)
-                    .wwCaption()
-            }
-            Spacer()
-            Image(systemName: "checkmark")
-                .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(.wwSuccess)
+            Text(context.subheadline)
+                .wwBody(color: .wwTextSecondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(WWSpacing.m)
+    }
+
+    private var contextCard: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.s) {
+                Text("Why paid access matters")
+                    .wwLabel()
+                    .textCase(.uppercase)
+                Text(context.contextNote)
+                    .wwBody(color: .wwTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    private var valueSection: some View {
+        VStack(alignment: .leading, spacing: WWSpacing.m) {
+            Text("What you get")
+                .wwSectionTitle()
+
+            VStack(spacing: WWSpacing.s) {
+                ForEach(benefits, id: \.text) { benefit in
+                    HStack(alignment: .top, spacing: WWSpacing.m) {
+                        Image(systemName: benefit.icon)
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundColor(.wwBlue)
+                            .frame(width: 20)
+                        Text(benefit.text)
+                            .wwBody()
+                            .fixedSize(horizontal: false, vertical: true)
+                        Spacer()
+                    }
+                    .padding(WWSpacing.m)
+                    .background(Color.wwSurface)
+                    .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
+                }
+            }
+        }
+    }
+
+    private var pricingSection: some View {
+        VStack(alignment: .leading, spacing: WWSpacing.m) {
+            Text("Choose your access")
+                .wwSectionTitle()
+
+            VStack(spacing: WWSpacing.m) {
+                ForEach(vm.offers) { offer in
+                    AccessOfferCard(
+                        offer: offer,
+                        isPurchasing: vm.isPurchasing(offer.productID),
+                        action: {
+                            Task {
+                                await vm.purchase(
+                                    productID: offer.productID,
+                                    services: services,
+                                    appVM: appVM
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+
+            if let errorMessage = vm.errorMessage {
+                Text(errorMessage)
+                    .font(WWFont.caption(.medium))
+                    .foregroundColor(.wwError)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    private var footerSection: some View {
+        VStack(spacing: WWSpacing.m) {
+            WWGhostButton(title: vm.isRestoring ? "Restoring..." : "Restore Access") {
+                Task { await vm.restore(services: services, appVM: appVM) }
+            }
+            .disabled(vm.isRestoring)
+
+            Text(context.trustNote)
+                .wwCaption(color: .wwTextSecondary)
+                .multilineTextAlignment(.center)
+
+            Text("Built for serious electrician exam prep. Clear access options. No gimmicks.")
+                .wwCaption(color: .wwTextMuted)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
-// MARK: - Plan Option
-
-private struct PlanOption: View {
-    let plan: PaywallViewModel.Plan
-    let isSelected: Bool
-    let monthlyPrice: String
-    let yearlyPrice: String
-    let savings: String
+private struct AccessOfferCard: View {
+    let offer: AccessOffer
+    let isPurchasing: Bool
     let action: () -> Void
 
-    var price: String { plan == .monthly ? monthlyPrice : yearlyPrice }
-    var label: String { plan == .monthly ? "Monthly" : "Yearly" }
-
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: WWSpacing.s) {
-                if plan == .yearly {
-                    Text(savings)
-                        .wwLabel(color: .white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(Color.wwBlue)
-                        .clipShape(Capsule())
-                } else {
-                    Spacer().frame(height: 22)
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(offer.title)
+                            .wwSectionTitle()
+                        Text(offer.accessTerm)
+                            .wwBody(color: .wwTextSecondary)
+                    }
+
+                    Spacer()
+
+                    if offer.isRecommended {
+                        Text("Recommended")
+                            .wwLabel(color: .white)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(Color.wwBlue)
+                            .clipShape(Capsule())
+                    }
                 }
 
-                Text(label)
-                    .font(WWFont.body(.semibold))
+                Text(offer.price)
+                    .font(WWFont.display(.bold))
                     .foregroundColor(.wwTextPrimary)
 
-                Text(price)
-                    .font(WWFont.caption(.medium))
-                    .foregroundColor(.wwTextSecondary)
+                Text(offer.description)
+                    .wwBody(color: .wwTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if offer.isRecommended {
+                    WWPrimaryButton(title: offer.callToAction, isLoading: isPurchasing, action: action)
+                } else {
+                    WWSecondaryButton(title: offer.callToAction, isLoading: isPurchasing, action: action)
+                }
             }
-            .padding(WWSpacing.m)
-            .frame(maxWidth: .infinity)
-            .background(isSelected ? Color.wwBlueDim : Color.wwSurface)
-            .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous)
-                    .strokeBorder(isSelected ? Color.wwBlue : Color.clear, lineWidth: 1.5)
-            )
-            .animation(.easeInOut(duration: 0.15), value: isSelected)
         }
-        .buttonStyle(.plain)
+        .background(offer.isRecommended ? Color.wwBlueDim : Color.clear)
+        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous)
+                .strokeBorder(offer.isRecommended ? Color.wwBlue : Color.wwDivider, lineWidth: offer.isRecommended ? 1.5 : 1)
+        )
     }
 }
 
 #Preview {
-    PaywallView()
+    PaywallView(context: .previewQuizComplete)
         .environment(ServiceContainer())
         .environment(AppViewModel())
 }

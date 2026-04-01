@@ -2,8 +2,8 @@ import SwiftUI
 
 struct PracticeView: View {
     @State private var vm = PracticeViewModel()
-    @State private var navigateToQuiz = false
-    @State private var activeQuizType: QuizType?
+    @State private var route: QuizType?
+    @State private var unavailableState: PracticeUnavailableState?
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
 
@@ -13,6 +13,22 @@ struct PracticeView: View {
                 Text("Choose the kind of practice that fits your time and what you need right now.")
                     .wwBody(color: .wwTextSecondary)
 
+                if appVM.subscriptionState.hasPaidAccess == false {
+                    WWCard {
+                        VStack(alignment: .leading, spacing: WWSpacing.s) {
+                            Text("Preview Access")
+                                .wwLabel()
+                                .textCase(.uppercase)
+                            Text(
+                                appVM.subscriptionState.previewQuickQuizLimitReached
+                                ? "You've finished your preview quiz. Full access opens more practice, weak-area review, and full exam sessions."
+                                : "Preview includes one full quick quiz. Use it when you're ready for a meaningful score and review."
+                            )
+                            .wwBody(color: .wwTextSecondary)
+                        }
+                    }
+                }
+
                 if vm.dashboard.attemptCount > 0 {
                     PracticeSummaryCard(dashboard: vm.dashboard)
                 }
@@ -20,12 +36,21 @@ struct PracticeView: View {
                 ForEach(QuizType.allCases, id: \.self) { type in
                     QuizOptionCard(
                         type: type,
-                        isPro: appVM.subscriptionState.isPro,
+                        hasPaidAccess: appVM.subscriptionState.hasPaidAccess,
+                        previewQuizUsed: appVM.subscriptionState.previewQuickQuizLimitReached,
                         dashboard: vm.dashboard
                     ) {
-                        if vm.startQuiz(type, subscription: appVM.subscriptionState) {
-                            activeQuizType = type
-                            navigateToQuiz = true
+                        switch vm.startQuiz(type, subscription: appVM.subscriptionState) {
+                        case .start(let type):
+                            route = type
+                        case .paywall:
+                            break
+                        case .unavailable(let title, let message, let suggestedQuiz):
+                            unavailableState = PracticeUnavailableState(
+                                title: title,
+                                message: message,
+                                suggestedQuiz: suggestedQuiz
+                            )
                         }
                     }
                 }
@@ -36,18 +61,44 @@ struct PracticeView: View {
         .background(Color.wwBackground)
         .navigationTitle("Practice")
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(isPresented: $navigateToQuiz) {
-            if let type = activeQuizType {
-                QuizContainerView(quizType: type)
-            }
+        .navigationDestination(item: $route) { type in
+            QuizContainerView(quizType: type)
         }
         .sheet(isPresented: $vm.showPaywall) {
-            PaywallView(reason: "Full practice exams are a Pro feature.")
+            PaywallView(context: vm.paywallContext)
                 .environment(services)
                 .environment(appVM)
         }
+        .alert(item: $unavailableState) { state in
+            if let suggestedQuiz = state.suggestedQuiz {
+                Alert(
+                    title: Text(state.title),
+                    message: Text(state.message),
+                    primaryButton: .default(Text(suggestedQuiz.displayName)) {
+                        route = suggestedQuiz
+                    },
+                    secondaryButton: .cancel()
+                )
+            } else {
+                Alert(
+                    title: Text(state.title),
+                    message: Text(state.message),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+        }
         .task { vm.refreshDashboard() }
         .onAppear { vm.refreshDashboard() }
+    }
+}
+
+private struct PracticeUnavailableState: Identifiable {
+    let title: String
+    let message: String
+    let suggestedQuiz: QuizType?
+
+    var id: String {
+        [title, message, suggestedQuiz?.rawValue ?? "none"].joined(separator: "::")
     }
 }
 
@@ -55,20 +106,45 @@ struct PracticeView: View {
 
 private struct QuizOptionCard: View {
     let type: QuizType
-    let isPro: Bool
+    let hasPaidAccess: Bool
+    let previewQuizUsed: Bool
     let dashboard: PracticeDashboardSnapshot
     let action: () -> Void
 
     private var isLocked: Bool {
-        type == .fullPracticeExam && !isPro
+        if hasPaidAccess {
+            return false
+        }
+        switch type {
+        case .quickQuiz:
+            return previewQuizUsed
+        case .fullPracticeExam, .weakAreaReview:
+            return true
+        }
     }
 
     private var detailText: String {
+        if hasPaidAccess == false {
+            switch type {
+            case .quickQuiz where previewQuizUsed:
+                return "You've used the preview quiz. Full access keeps practice going."
+            case .fullPracticeExam:
+                return "Locked in preview. Built for serious exam-style practice."
+            case .weakAreaReview where dashboard.attemptCount > 0:
+                return "Locked in preview. Use full access for targeted follow-up."
+            default:
+                break
+            }
+        }
+
         if type == .weakAreaReview {
+            if dashboard.attemptCount == 0 {
+                return "Take a scored quiz first to unlock targeted follow-up."
+            }
             if let firstWeakTopic = dashboard.weakTopics.first?.title {
                 return "Based on recent misses in \(firstWeakTopic)."
             }
-            return "Unlocks focused follow-up after your first scored quiz."
+            return "No active weak areas right now. Run a fresh quiz to surface the next focus."
         }
 
         if type == .quickQuiz, let latestScorePercentage = dashboard.latestScorePercentage {

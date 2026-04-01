@@ -139,6 +139,10 @@ struct PracticeDashboardSnapshot {
     var weakTopics: [WeakTopicDetail]
     var latestCompletedAt: Date?
 
+    var canStartWeakAreaReview: Bool {
+        attemptCount > 0 && !weakTopics.isEmpty
+    }
+
     static let empty = PracticeDashboardSnapshot(
         attemptCount: 0,
         latestScorePercentage: nil,
@@ -760,39 +764,177 @@ final class MockQuizService: QuizServiceProtocol {
 // MARK: - Tutor Service
 
 protocol TutorServiceProtocol: AnyObject {
-    func sendMessage(_ text: String, context: TutorContext?) async throws -> TutorMessage
+    func sendMessage(
+        _ text: String,
+        context: TutorContext?,
+        history: [TutorMessage],
+        sessionID: UUID?
+    ) async throws -> TutorSendResult
+}
+
+enum TutorContextBuilder {
+    static func general(for user: WWUser?) -> TutorContext {
+        TutorContext(
+            type: .general,
+            id: nil,
+            excerpt: nil,
+            title: nil,
+            topicTags: [],
+            examType: user?.examType.rawValue,
+            jurisdiction: normalizedJurisdiction(for: user),
+            lesson: nil,
+            quizReview: nil,
+            necDetail: nil
+        )
+    }
+
+    static func lesson(_ lesson: WWLesson, user: WWUser?) -> TutorContext {
+        TutorContext(
+            type: .lesson,
+            id: lesson.id,
+            excerpt: lesson.sections.first(where: { !$0.body.isEmpty })?.body,
+            title: lesson.title,
+            topicTags: [lesson.topic],
+            examType: user?.examType.rawValue,
+            jurisdiction: normalizedJurisdiction(for: user),
+            lesson: .init(
+                lessonId: lesson.id,
+                title: lesson.title,
+                excerpt: lesson.sections.first(where: { !$0.body.isEmpty })?.body,
+                topic: lesson.topic,
+                necReferences: lesson.necReferences.map(\.code)
+            ),
+            quizReview: nil,
+            necDetail: nil
+        )
+    }
+
+    static func quizReview(
+        _ result: QuizResult,
+        focusedQuestion: QuestionResult? = nil,
+        user: WWUser?
+    ) -> TutorContext {
+        let topics = focusedQuestion?.topicTitles.isEmpty == false
+            ? focusedQuestion?.topicTitles ?? []
+            : focusedQuestion?.topics ?? result.weakTopics
+
+        return TutorContext(
+            type: .quizReview,
+            id: result.quizAttemptId ?? result.quizId,
+            excerpt: focusedQuestion?.explanation,
+            title: focusedQuestion?.question ?? "Quiz review",
+            topicTags: topics,
+            examType: user?.examType.rawValue,
+            jurisdiction: normalizedJurisdiction(for: user),
+            lesson: nil,
+            quizReview: .init(
+                quizId: result.quizId,
+                quizAttemptId: result.quizAttemptId,
+                score: result.score,
+                correctCount: result.correctCount,
+                totalCount: result.totalCount,
+                weakTopics: result.weakTopics,
+                focusedQuestion: focusedQuestion.map {
+                    .init(
+                        questionId: $0.questionId,
+                        question: $0.question,
+                        userAnswer: $0.userAnswer,
+                        correctAnswer: $0.correctAnswer,
+                        explanation: $0.explanation,
+                        topics: $0.topicTitles.isEmpty ? $0.topics : $0.topicTitles,
+                        referenceCode: $0.referenceCode
+                    )
+                }
+            ),
+            necDetail: nil
+        )
+    }
+
+    static func necDetail(_ reference: NECReference, user: WWUser?) -> TutorContext {
+        TutorContext(
+            type: .necDetail,
+            id: reference.id,
+            excerpt: reference.summary,
+            title: reference.title,
+            topicTags: ["NEC", reference.code],
+            examType: user?.examType.rawValue,
+            jurisdiction: normalizedJurisdiction(for: user),
+            lesson: nil,
+            quizReview: nil,
+            necDetail: .init(
+                necId: reference.id,
+                code: reference.code,
+                title: reference.title,
+                summary: reference.summary
+            )
+        )
+    }
+
+    private static func normalizedJurisdiction(for user: WWUser?) -> String? {
+        guard let state = user?.state.trimmingCharacters(in: .whitespacesAndNewlines),
+              !state.isEmpty else {
+            return nil
+        }
+        return state.uppercased()
+    }
 }
 
 final class MockTutorService: TutorServiceProtocol {
-    func sendMessage(_ text: String, context: TutorContext?) async throws -> TutorMessage {
+    func sendMessage(
+        _ text: String,
+        context: TutorContext?,
+        history _: [TutorMessage],
+        sessionID: UUID?
+    ) async throws -> TutorSendResult {
         try await Task.sleep(for: .milliseconds(1200))
 
-        let responses: [(String, [String], [String])] = [
+        let responses: [(String, [String], [String], [String])] = [
             (
                 "That's a great question! Ohm's Law (V = IR) is the foundation of all electrical calculations. Voltage equals current times resistance.",
                 ["Identify your known values (any two of V, I, R)", "Rearrange the formula: V=IR, I=V/R, R=V/I", "Calculate and verify units: volts, amps, ohms"],
+                ["Start with the two values you know before touching the formula.", "Write the unit beside the answer so you catch setup mistakes."],
                 ["How do I apply this to a 240V circuit?", "What's the power formula?", "Can you give me a practice problem?"]
             ),
             (
                 "GFCI protection is one of the most tested topics on the electrical exam. It's required wherever water and electricity might meet.",
                 ["NEC 210.8 is the starting point for required GFCI locations", "Bathrooms and garages are classic tested locations", "Outdoor receptacles are another frequent exam category", "On exam questions, verify the exact occupancy and code cycle before choosing the answer"],
+                ["Use the location first, then verify the occupancy and code cycle.", "Do not assume a state is already on the newest NEC edition."],
                 ["What about AFCI vs GFCI?", "Are there exceptions to GFCI requirements?", "What code cycle introduced new GFCI requirements?"]
             ),
             (
                 "Grounding and bonding serve different purposes, and this distinction is heavily tested. Don't mix them up!",
                 ["Grounding: connects to earth to establish a reference voltage", "Bonding: connects metal parts together to equalize potential", "Grounding protects against lightning; bonding protects against touch hazards"],
+                ["If the question is about fault-current path, think bonding first.", "If the question is about earth reference or electrode system, think grounding."],
                 ["What is a grounding electrode system?", "Where is bonding required?", "Explain NEC 250.50"]
             )
         ]
 
         let choice = responses.randomElement()!
-        return TutorMessage(
-            id: UUID(),
-            content: choice.0,
-            role: .assistant,
-            timestamp: Date(),
-            steps: choice.1,
-            followUps: choice.2
+        let references: [String]
+        switch context?.type {
+        case .lesson:
+            references = context?.lesson?.necReferences ?? []
+        case .quizReview:
+            references = context?.quizReview?.focusedQuestion?.referenceCode.map { [$0] } ?? []
+        case .necDetail:
+            references = context?.necDetail.map { [$0.code] } ?? []
+        default:
+            references = []
+        }
+
+        return TutorSendResult(
+            message: TutorMessage(
+                id: UUID(),
+                content: choice.0,
+                role: .assistant,
+                timestamp: Date(),
+                steps: choice.1,
+                bullets: choice.2,
+                references: references,
+                followUps: choice.3
+            ),
+            sessionId: sessionID ?? UUID(),
+            usage: nil
         )
     }
 }
@@ -802,7 +944,7 @@ final class MockTutorService: TutorServiceProtocol {
 protocol NECServiceProtocol: AnyObject {
     func search(query: String) async throws -> [NECSearchResult]
     func detail(id: UUID) async throws -> NECReference
-    func explain(id: UUID) async throws -> String
+    func explain(id: UUID) async throws -> NECExplanationResult
 }
 
 final class MockNECService: NECServiceProtocol {
@@ -816,13 +958,16 @@ final class MockNECService: NECServiceProtocol {
         return try WattWiseContentRuntimeAdapter.necReference(id: id)
     }
 
-    func explain(id: UUID) async throws -> String {
+    func explain(id: UUID) async throws -> NECExplanationResult {
         try await Task.sleep(for: .milliseconds(1000))
         let reference = try WattWiseContentRuntimeAdapter.necReference(id: id)
         if let expanded = reference.expanded, expanded.isEmpty == false {
-            return expanded
+            return NECExplanationResult(expanded: expanded, usage: nil)
         }
-        return "\(reference.title) matters because it shapes how electricians apply NEC \(reference.code) in the field and on open-book exams. Start with the simplified summary, then ask what hazard or design problem the rule is trying to control. For exam prep, the safest habit is to connect the article number to the installation decision it changes instead of memorizing the citation by itself."
+        return NECExplanationResult(
+            expanded: "\(reference.title) matters because it shapes how electricians apply NEC \(reference.code) in the field and on open-book exams. Start with the simplified summary, then ask what hazard or design problem the rule is trying to control. For exam prep, the safest habit is to connect the article number to the installation decision it changes instead of memorizing the citation by itself.",
+            usage: nil
+        )
     }
 }
 
@@ -850,7 +995,7 @@ protocol SubscriptionServiceProtocol: AnyObject {
 
 @MainActor
 final class MockSubscriptionService: SubscriptionServiceProtocol {
-    private(set) var state: SubscriptionState = .freeTier
+    private(set) var state: SubscriptionState = .preview
 
     func fetchState() async throws -> SubscriptionState {
         try await Task.sleep(for: .milliseconds(300))
@@ -859,7 +1004,11 @@ final class MockSubscriptionService: SubscriptionServiceProtocol {
 
     func purchase(productId: String) async throws -> SubscriptionState {
         try await Task.sleep(for: .milliseconds(1500))
-        state = .proTier
+        if productId == AccessProductID.fastTrack.rawValue {
+            state = .fastTrack
+        } else {
+            state = .fullPrep
+        }
         return state
     }
 
@@ -885,7 +1034,7 @@ enum AppError: LocalizedError {
         case .networkError(let msg): return msg
         case .notFound(let msg): return msg
         case .unauthorized: return "You need to sign in to continue."
-        case .rateLimited: return "You've reached today's limit. Upgrade to Pro for unlimited access."
+        case .rateLimited: return "You've reached the limit for preview access. Choose Fast Track or Full Prep to keep going."
         case .unknown: return "Something went wrong. Please try again."
         }
     }
@@ -904,23 +1053,45 @@ final class ServiceContainer {
     let progress: any ProgressServiceProtocol
     let subscription: any SubscriptionServiceProtocol
 
-    init() {
+    init(
+        auth: any AuthServiceProtocol,
+        content: any ContentServiceProtocol,
+        quiz: any QuizServiceProtocol,
+        tutor: any TutorServiceProtocol,
+        nec: any NECServiceProtocol,
+        progress: any ProgressServiceProtocol,
+        subscription: any SubscriptionServiceProtocol
+    ) {
+        self.auth = auth
+        self.content = content
+        self.quiz = quiz
+        self.tutor = tutor
+        self.nec = nec
+        self.progress = progress
+        self.subscription = subscription
+    }
+
+    convenience init() {
         if AppConfig.useMockServices {
-            self.auth         = MockAuthService()
-            self.content      = MockContentService()
-            self.quiz         = MockQuizService()
-            self.tutor        = MockTutorService()
-            self.nec          = MockNECService()
-            self.progress     = MockProgressService()
-            self.subscription = MockSubscriptionService()
+            self.init(
+                auth: MockAuthService(),
+                content: MockContentService(),
+                quiz: MockQuizService(),
+                tutor: MockTutorService(),
+                nec: MockNECService(),
+                progress: MockProgressService(),
+                subscription: MockSubscriptionService()
+            )
         } else {
-            self.auth         = SupabaseAuthService()
-            self.content      = SupabaseContentService()
-            self.quiz         = SupabaseQuizService()
-            self.tutor        = SupabaseTutorService()
-            self.nec          = SupabaseNECService()
-            self.progress     = SupabaseProgressService()
-            self.subscription = SupabaseSubscriptionService()
+            self.init(
+                auth: SupabaseAuthService(),
+                content: SupabaseContentService(),
+                quiz: SupabaseQuizService(),
+                tutor: SupabaseTutorService(),
+                nec: SupabaseNECService(),
+                progress: SupabaseProgressService(),
+                subscription: SupabaseSubscriptionService()
+            )
         }
     }
 }

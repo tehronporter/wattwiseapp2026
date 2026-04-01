@@ -1,4 +1,5 @@
 import Foundation
+import StoreKit
 
 // MARK: - Real Supabase Service Implementations
 //
@@ -89,7 +90,14 @@ final class SupabaseAuthService: AuthServiceProtocol {
         if let data = UserDefaults.standard.data(forKey: profileKey),
            let saved = try? JSONDecoder().decode(WWUser.self, from: data),
            saved.email == (session.user.email ?? "") {
+            let metadata = session.user.userMetadata
             return saved
+                .updating(
+                    displayName: metadata?.displayName,
+                    examType: ExamType(rawValue: metadata?.examType ?? "") ?? saved.examType,
+                    state: metadata?.state ?? saved.state,
+                    studyGoal: StudyGoal(rawValue: metadata?.studyGoal ?? "") ?? saved.studyGoal
+                )
         }
         return WWUser(
             id: UUID(uuidString: session.user.id) ?? UUID(),
@@ -193,6 +201,7 @@ final class SupabaseQuizService: QuizServiceProtocol {
             struct AnswerDTO: Encodable { let question_id: String; let selected: String }
         }
         struct Response: Decodable {
+            let quiz_attempt_id: String
             let score: Double
             let correct_count: Int
             let total_count: Int
@@ -205,6 +214,9 @@ final class SupabaseQuizService: QuizServiceProtocol {
                 let correct_answer: String
                 let explanation: String
                 let is_correct: Bool
+                let topics: [String]?
+                let topic_titles: [String]?
+                let reference_code: String?
             }
         }
 
@@ -225,13 +237,17 @@ final class SupabaseQuizService: QuizServiceProtocol {
                 userAnswer: d.user_answer,
                 correctAnswer: d.correct_answer,
                 explanation: d.explanation,
-                isCorrect: d.is_correct
+                isCorrect: d.is_correct,
+                topics: d.topics ?? [],
+                topicTitles: d.topic_titles ?? [],
+                referenceCode: d.reference_code
             )
         }
 
         return QuizResult(
             id: UUID(),
             quizId: quizId,
+            quizAttemptId: UUID(uuidString: r.quiz_attempt_id),
             score: r.score,
             correctCount: r.correct_count,
             totalCount: r.total_count,
@@ -244,34 +260,62 @@ final class SupabaseQuizService: QuizServiceProtocol {
 // MARK: - Tutor Service (Edge Function)
 
 final class SupabaseTutorService: TutorServiceProtocol {
-    func sendMessage(_ text: String, context: TutorContext?) async throws -> TutorMessage {
+    func sendMessage(
+        _ text: String,
+        context: TutorContext?,
+        history: [TutorMessage],
+        sessionID: UUID?
+    ) async throws -> TutorSendResult {
         struct Request: Encodable {
             let message: String
-            let context: ContextDTO?
-            struct ContextDTO: Encodable { let type: String; let id: String? }
+            let context: TutorContext?
+            let history: [HistoryDTO]
+            let session_id: String?
+
+            struct HistoryDTO: Encodable {
+                let role: String
+                let content: String
+            }
         }
         struct Response: Decodable {
             let answer: String
             let steps: [String]?
+            let bullets: [String]?
+            let references: [String]?
             let follow_ups: [String]?
+            let session_id: String?
+            let usage: UsageDTO?
+
+            struct UsageDTO: Decodable {
+                let used: Int
+                let limit: Int
+            }
         }
 
         let r = try await APIClient.shared.post(
             endpoint: "tutor",
             body: Request(
                 message: text,
-                context: context.map { .init(type: $0.type.rawValue, id: $0.id?.uuidString) }
+                context: context,
+                history: history.map { .init(role: $0.role.rawValue, content: $0.content) },
+                session_id: sessionID?.uuidString
             ),
             responseType: Response.self
         )
 
-        return TutorMessage(
-            id: UUID(),
-            content: r.answer,
-            role: .assistant,
-            timestamp: Date(),
-            steps: r.steps,
-            followUps: r.follow_ups
+        return TutorSendResult(
+            message: TutorMessage(
+                id: UUID(),
+                content: r.answer,
+                role: .assistant,
+                timestamp: Date(),
+                steps: r.steps,
+                bullets: r.bullets,
+                references: r.references,
+                followUps: r.follow_ups
+            ),
+            sessionId: r.session_id.flatMap(UUID.init(uuidString:)),
+            usage: r.usage.map { .init(used: $0.used, limit: $0.limit) }
         )
     }
 }
@@ -301,15 +345,26 @@ final class SupabaseNECService: NECServiceProtocol {
         return r.detail
     }
 
-    func explain(id: UUID) async throws -> String {
+    func explain(id: UUID) async throws -> NECExplanationResult {
         struct Request: Encodable { let nec_id: String }
-        struct Response: Decodable { let expanded: String }
+        struct Response: Decodable {
+            let expanded: String
+            let usage: UsageDTO?
+
+            struct UsageDTO: Decodable {
+                let used: Int
+                let limit: Int
+            }
+        }
         let r = try await APIClient.shared.post(
             endpoint: "nec_explain",
             body: Request(nec_id: id.uuidString),
             responseType: Response.self
         )
-        return r.expanded
+        return NECExplanationResult(
+            expanded: r.expanded,
+            usage: r.usage.map { .init(used: $0.used, limit: $0.limit) }
+        )
     }
 }
 
@@ -322,6 +377,8 @@ final class SupabaseProgressService: ProgressServiceProtocol {
             let daily_goal: DGDto
             let streak_days: Int
             let recommended_action: String?
+            let has_started_content: Bool?
+            let last_activity_at: String?
 
             struct CLDto: Decodable {
                 let lesson_id: String
@@ -347,7 +404,8 @@ final class SupabaseProgressService: ProgressServiceProtocol {
                              targetMinutes: r.daily_goal.target_minutes),
             streakDays: r.streak_days,
             recommendedAction: r.recommended_action,
-            hasStartedContent: r.continue_learning != nil || r.daily_goal.minutes_completed > 0 || r.streak_days > 0
+            hasStartedContent: r.has_started_content ?? (r.continue_learning != nil || r.daily_goal.minutes_completed > 0 || r.streak_days > 0),
+            lastActivityAt: r.last_activity_at.flatMap(ISO8601DateFormatter().date(from:))
         )
     }
 }
@@ -356,32 +414,143 @@ final class SupabaseProgressService: ProgressServiceProtocol {
 
 @MainActor
 final class SupabaseSubscriptionService: SubscriptionServiceProtocol {
-    private(set) var state: SubscriptionState = .freeTier
+    private(set) var state: SubscriptionState = .preview
+
+    private struct SyncRequest: Encodable {
+        let product_id: String?
+        let transaction_id: String?
+        let original_transaction_id: String?
+        let purchase_date: String?
+        let expires_at: String?
+        let receipt: String?
+    }
+
+    private func syncState(with request: SyncRequest? = nil) async throws -> SubscriptionState {
+        if let request {
+            _ = try await APIClient.shared.post(
+                endpoint: "sync_subscription",
+                body: request,
+                responseType: EmptyResponse.self
+            )
+        }
+        return try await fetchState()
+    }
+
+    private func verify<T>(_ result: VerificationResult<T>) throws -> T {
+        switch result {
+        case .verified(let signedType):
+            return signedType
+        case .unverified:
+            throw AppError.unknown
+        }
+    }
+
+    private func expiryDate(for productId: String, purchaseDate: Date) -> Date {
+        let expiry = purchaseDate
+        let months = productId == AccessProductID.fastTrack.rawValue ? 3 : 12
+        return Calendar.current.date(byAdding: .month, value: months, to: expiry) ?? purchaseDate
+    }
 
     func fetchState() async throws -> SubscriptionState {
-        struct Response: Decodable { let tier: String; let status: String }
+        struct Response: Decodable {
+            let tier: String
+            let status: String
+            let expires_at: String?
+            let store_product_id: String?
+            let preview_quizzes_used: Int
+            let preview_quizzes_limit: Int
+            let tutor_messages_used: Int
+            let tutor_messages_limit: Int
+            let nec_explanations_used: Int
+            let nec_explanations_limit: Int
+        }
         let r = try await APIClient.shared.post(endpoint: "sync_subscription", responseType: Response.self)
         state = SubscriptionState(
-            tier: SubscriptionTier(rawValue: r.tier) ?? .free,
+            tier: SubscriptionTier(rawValue: r.tier) ?? .preview,
             status: r.status,
-            expiresAt: nil,
-            dailyTutorMessagesUsed: 0,
-            dailyTutorMessagesLimit: r.tier == "pro" ? -1 : 5
+            expiresAt: r.expires_at.flatMap(ISO8601DateFormatter().date(from:)),
+            storeProductId: r.store_product_id,
+            previewQuickQuizzesUsed: r.preview_quizzes_used,
+            previewQuickQuizzesLimit: r.preview_quizzes_limit,
+            tutorMessagesUsed: r.tutor_messages_used,
+            tutorMessagesLimit: r.tutor_messages_limit,
+            necExplanationsUsed: r.nec_explanations_used,
+            necExplanationsLimit: r.nec_explanations_limit
         )
         return state
     }
 
     func purchase(productId: String) async throws -> SubscriptionState {
-        // StoreKit 2 purchase flow — receipt passed to sync_subscription
-        // Full implementation requires StoreKit product configuration
-        struct Request: Encodable { let receipt: String }
-        struct Response: Decodable { let tier: String; let status: String }
-        // For now, simulate success — replace with real StoreKit transaction receipt
-        state = .proTier
-        return state
+        let products = try await Product.products(for: [productId])
+        guard let product = products.first else {
+            throw AppError.notFound("This access option isn't available right now.")
+        }
+
+        let purchaseResult = try await product.purchase()
+
+        switch purchaseResult {
+        case .success(let verification):
+            let transaction = try verify(verification)
+            let purchaseDate = transaction.purchaseDate
+            let expiresAt = expiryDate(for: transaction.productID, purchaseDate: purchaseDate)
+            let syncedState = try await syncState(with: SyncRequest(
+                product_id: transaction.productID,
+                transaction_id: String(transaction.id),
+                original_transaction_id: String(transaction.originalID),
+                purchase_date: ISO8601DateFormatter().string(from: purchaseDate),
+                expires_at: ISO8601DateFormatter().string(from: expiresAt),
+                receipt: nil
+            ))
+            await transaction.finish()
+            state = syncedState
+            return syncedState
+        case .pending:
+            throw AppError.networkError("Your purchase is pending approval.")
+        case .userCancelled:
+            throw AppError.invalidInput("Purchase canceled.")
+        @unknown default:
+            throw AppError.unknown
+        }
     }
 
     func restorePurchases() async throws -> SubscriptionState {
-        return try await fetchState()
+        try await AppStore.sync()
+
+        var latestTransaction: Transaction?
+        var latestExpiry: Date?
+
+        for await entitlement in Transaction.all {
+            guard let transaction = try? verify(entitlement) else { continue }
+            guard transaction.productID == AccessProductID.fastTrack.rawValue || transaction.productID == AccessProductID.fullPrep.rawValue else {
+                continue
+            }
+
+            let expiresAt = expiryDate(for: transaction.productID, purchaseDate: transaction.purchaseDate)
+            guard expiresAt > Date() else { continue }
+
+            if let latestExpiry, latestExpiry >= expiresAt {
+                continue
+            }
+
+            latestTransaction = transaction
+            latestExpiry = expiresAt
+        }
+
+        if let latestTransaction, let latestExpiry {
+            let syncedState = try await syncState(with: SyncRequest(
+                product_id: latestTransaction.productID,
+                transaction_id: String(latestTransaction.id),
+                original_transaction_id: String(latestTransaction.originalID),
+                purchase_date: ISO8601DateFormatter().string(from: latestTransaction.purchaseDate),
+                expires_at: ISO8601DateFormatter().string(from: latestExpiry),
+                receipt: nil
+            ))
+            state = syncedState
+            return syncedState
+        }
+
+        return try await syncState()
     }
 }
+
+private struct EmptyResponse: Decodable {}

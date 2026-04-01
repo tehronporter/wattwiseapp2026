@@ -35,23 +35,32 @@ struct WWPrimaryButton: View {
 
 struct WWSecondaryButton: View {
     let title: String
+    var isLoading: Bool = false
     var isDisabled: Bool = false
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Text(title)
-                .font(WWFont.body(.semibold))
-                .foregroundColor(isDisabled ? .wwTextMuted : .wwBlue)
-                .tracking(0.1)
-                .frame(maxWidth: .infinity)
-                .frame(height: WWSpacing.minTapTarget + 4)
-                .overlay(
-                    Capsule()
-                        .strokeBorder(isDisabled ? Color.wwDivider : Color.wwBlue, lineWidth: 1.5)
-                )
+            ZStack {
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(.wwBlue)
+                } else {
+                    Text(title)
+                        .font(WWFont.body(.semibold))
+                        .foregroundColor(isDisabled ? .wwTextMuted : .wwBlue)
+                        .tracking(0.1)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: WWSpacing.minTapTarget + 4)
+            .overlay(
+                Capsule()
+                    .strokeBorder(isDisabled ? Color.wwDivider : Color.wwBlue, lineWidth: 1.5)
+            )
         }
-        .disabled(isDisabled)
+        .disabled(isDisabled || isLoading)
     }
 }
 

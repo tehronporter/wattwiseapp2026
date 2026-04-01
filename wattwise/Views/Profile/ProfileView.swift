@@ -5,6 +5,7 @@ struct ProfileView: View {
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
     @State private var showPaywall = false
+    @State private var showEditExamSettings = false
 
     var body: some View {
         ScrollView {
@@ -22,7 +23,9 @@ struct ProfileView: View {
 
                 // Exam Info
                 if let user = appVM.currentUser {
-                    ExamInfoSection(user: user)
+                    ExamInfoSection(user: user) {
+                        showEditExamSettings = true
+                    }
                 }
 
                 // Settings
@@ -54,9 +57,26 @@ struct ProfileView: View {
             Text("This will permanently delete all your progress, quiz history, and study data. This cannot be undone.")
         }
         .sheet(isPresented: $showPaywall) {
-            PaywallView(reason: "Unlock unlimited access to all features.")
+            PaywallView(context: .general)
                 .environment(services)
                 .environment(appVM)
+        }
+        .sheet(isPresented: $showEditExamSettings) {
+            if let user = appVM.currentUser {
+                EditExamSettingsSheet(user: user)
+                    .environment(services)
+                    .environment(appVM)
+            } else {
+                NavigationStack {
+                    WWEmptyState(
+                        icon: "person.crop.circle.badge.exclamationmark",
+                        title: "Profile unavailable",
+                        message: "Please sign in again to update your exam settings."
+                    )
+                    .navigationTitle("Exam Settings")
+                    .navigationBarTitleDisplayMode(.inline)
+                }
+            }
         }
     }
 }
@@ -119,11 +139,9 @@ private struct SubscriptionCard: View {
             VStack(alignment: .leading, spacing: WWSpacing.m) {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(state.isPro ? "WattWise Pro" : "WattWise Free")
+                        Text(state.accessTitle)
                             .wwSectionTitle()
-                        Text(state.isPro
-                             ? "Full access · All features unlocked"
-                             : "Limited access · Upgrade for full features")
+                        Text(state.accessDescription)
                             .wwBody(color: .wwTextSecondary)
                     }
                     Spacer()
@@ -132,11 +150,13 @@ private struct SubscriptionCard: View {
                         .foregroundColor(.wwBlue)
                 }
 
-                if !state.isPro {
-                    WWPrimaryButton(title: "Upgrade to Pro", action: onUpgrade)
-                } else if let expiry = state.expiresAt {
-                    Text("Renews \(expiry.formatted(.dateTime.month().day().year()))")
-                        .wwCaption()
+                if state.hasPaidAccess == false {
+                    Text(state.previewSummary)
+                        .wwCaption(color: .wwTextSecondary)
+                    WWPrimaryButton(title: "See Access Options", action: onUpgrade)
+                } else if let expiresDescription = state.expiresDescription {
+                    Text(expiresDescription)
+                        .wwCaption(color: .wwTextSecondary)
                 }
             }
         }
@@ -147,20 +167,190 @@ private struct SubscriptionCard: View {
 
 private struct ExamInfoSection: View {
     let user: WWUser
+    let onEdit: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: WWSpacing.m) {
             WWSectionHeader(title: "Exam Settings")
             WWCard {
-                VStack(spacing: 0) {
-                    ProfileRow(label: "Exam Type", value: user.examType.displayName)
-                    WWDivider()
-                    ProfileRow(label: "State", value: user.state.isEmpty ? "Not set" : user.state)
-                    WWDivider()
-                    ProfileRow(label: "Daily Goal", value: user.studyGoal.displayName)
+                VStack(alignment: .leading, spacing: WWSpacing.m) {
+                    VStack(spacing: 0) {
+                        ProfileRow(label: "Exam Type", value: user.examType.displayName)
+                        WWDivider()
+                        ProfileRow(label: "State", value: user.state.isEmpty ? "Not set" : user.state)
+                        WWDivider()
+                        ProfileRow(label: "Daily Goal", value: user.studyGoal.displayName)
+                    }
+
+                    WWGhostButton(title: "Update Exam Settings", color: .wwBlue, action: onEdit)
+                        .frame(maxWidth: .infinity)
                 }
             }
         }
+    }
+}
+
+private struct EditExamSettingsSheet: View {
+    let user: WWUser
+    @State private var examType: ExamType
+    @State private var stateCode: String
+    @State private var studyGoal: StudyGoal
+    @Environment(ServiceContainer.self) private var services
+    @Environment(AppViewModel.self) private var appVM
+    @Environment(\.dismiss) private var dismiss
+    @State private var vm = ProfileViewModel()
+
+    init(user: WWUser) {
+        self.user = user
+        _examType = State(initialValue: user.examType)
+        _stateCode = State(initialValue: user.state)
+        _studyGoal = State(initialValue: user.studyGoal)
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: WWSpacing.l) {
+                    Text("Keep your plan aligned with the exam and jurisdiction you're actually preparing for.")
+                        .wwBody(color: .wwTextSecondary)
+
+                    VStack(alignment: .leading, spacing: WWSpacing.m) {
+                        Text("Exam Type")
+                            .wwLabel()
+                        VStack(spacing: WWSpacing.m) {
+                            ForEach(ExamType.allCases) { type in
+                                SelectableSettingCard(
+                                    title: type.displayName,
+                                    subtitle: type.description,
+                                    isSelected: examType == type
+                                ) {
+                                    examType = type
+                                }
+                            }
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: WWSpacing.m) {
+                        Text("State")
+                            .wwLabel()
+                        Picker("State", selection: $stateCode) {
+                            ForEach(MockData.usStates, id: \.abbreviation) { state in
+                                Text("\(state.name) (\(state.abbreviation))")
+                                    .tag(state.abbreviation)
+                            }
+                        }
+                        .pickerStyle(.menu)
+
+                        HStack {
+                            Text("Selected")
+                                .wwBody(color: .wwTextSecondary)
+                            Spacer()
+                            Text(stateCode.isEmpty ? "Not set" : stateCode)
+                                .wwBody()
+                        }
+                        .padding(WWSpacing.m)
+                        .background(Color.wwSurface)
+                        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
+                    }
+
+                    VStack(alignment: .leading, spacing: WWSpacing.m) {
+                        Text("Daily Goal")
+                            .wwLabel()
+                        VStack(spacing: WWSpacing.m) {
+                            ForEach(StudyGoal.allCases) { goal in
+                                SelectableSettingCard(
+                                    title: goal.displayName,
+                                    subtitle: "Sets your daily progress target and Home goal tracker.",
+                                    isSelected: studyGoal == goal
+                                ) {
+                                    studyGoal = goal
+                                }
+                            }
+                        }
+                    }
+
+                    if let error = vm.profileUpdateErrorMessage {
+                        Text(error)
+                            .font(WWFont.caption(.medium))
+                            .foregroundColor(.wwError)
+                    }
+
+                    WWPrimaryButton(
+                        title: "Save Changes",
+                        isLoading: vm.isUpdatingProfile,
+                        isDisabled: stateCode.isEmpty
+                    ) {
+                        Task {
+                            let didSave = await vm.updateProfileSettings(
+                                for: user,
+                                examType: examType,
+                                state: stateCode,
+                                goal: studyGoal,
+                                services: services,
+                                appVM: appVM
+                            )
+                            if didSave {
+                                dismiss()
+                            }
+                        }
+                    }
+                }
+                .wwScreenPadding()
+                .padding(.vertical, WWSpacing.m)
+            }
+            .background(Color.wwBackground)
+            .navigationTitle("Exam Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") { dismiss() }
+                        .font(WWFont.body(.medium))
+                        .foregroundColor(.wwTextSecondary)
+                }
+            }
+        }
+    }
+}
+
+private struct SelectableSettingCard: View {
+    let title: String
+    let subtitle: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: WWSpacing.m) {
+                VStack(alignment: .leading, spacing: WWSpacing.xs) {
+                    Text(title)
+                        .font(WWFont.body(.medium))
+                        .foregroundColor(.wwTextPrimary)
+                    Text(subtitle)
+                        .wwCaption(color: .wwTextSecondary)
+                }
+
+                Spacer()
+
+                ZStack {
+                    Circle()
+                        .strokeBorder(isSelected ? Color.wwBlue : Color.wwDivider, lineWidth: 2)
+                        .frame(width: 22, height: 22)
+                    if isSelected {
+                        Circle()
+                            .fill(Color.wwBlue)
+                            .frame(width: 12, height: 12)
+                    }
+                }
+            }
+            .padding(WWSpacing.m)
+            .background(isSelected ? Color.wwBlueDim : Color.wwSurface)
+            .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous)
+                    .strokeBorder(isSelected ? Color.wwBlue : Color.clear, lineWidth: 1.5)
+            )
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -193,14 +383,12 @@ private struct SettingsSection: View {
             WWSectionHeader(title: "Account")
             WWCard(padding: 0) {
                 VStack(spacing: 0) {
-                    SettingsRow(icon: "arrow.clockwise", label: "Restore Purchases") {
+                    SettingsRow(icon: "arrow.clockwise", label: "Restore Access") {
                         Task {
                             do {
                                 let state = try await services.subscription.restorePurchases()
                                 appVM.subscriptionState = state
-                                restoreMessage = state.isPro
-                                    ? "Your Pro subscription has been restored."
-                                    : "No active subscription found."
+                                restoreMessage = state.restoreSuccessMessage
                             } catch {
                                 restoreMessage = error.localizedDescription
                             }
@@ -218,7 +406,7 @@ private struct SettingsSection: View {
                 }
             }
         }
-        .alert("Restore Purchases", isPresented: $showRestoreAlert) {
+        .alert("Restore Access", isPresented: $showRestoreAlert) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(restoreMessage ?? "")

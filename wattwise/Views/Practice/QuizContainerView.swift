@@ -4,28 +4,47 @@ import SwiftUI
 struct QuizContainerView: View {
     let quizType: QuizType
     @State private var vm = QuizViewModel()
+    @State private var showPaywall = false
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         Group {
-            if vm.isLoading {
-                QuizLoadingView()
+            if vm.shouldShowLoadingState {
+                QuizLoadingView(message: "Preparing your quiz…")
+            } else if let accessRestriction = vm.accessRestriction {
+                QuizAccessRestrictedView(
+                    title: quizType == .quickQuiz ? "Practice limit reached" : quizType.displayName,
+                    message: accessRestriction.message,
+                    actionTitle: "See Access Options"
+                ) {
+                    showPaywall = true
+                } onSecondary: {
+                    dismiss()
+                }
             } else if let result = vm.result {
                 QuizResultsView(result: result, quizType: quizType) {
                     vm.reset()
-                    Task { await vm.load(type: quizType, examType: appVM.currentUser?.examType, services: services) }
+                    Task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
                 }
-            } else if vm.quiz != nil {
+            } else if let quiz = vm.quiz, quiz.questions.isEmpty == false {
                 ActiveQuizView(vm: vm)
             } else if let error = vm.errorMessage {
                 WWEmptyState(icon: "exclamationmark.triangle", title: "Couldn't load quiz", message: error, actionTitle: "Retry") {
-                    Task { await vm.load(type: quizType, examType: appVM.currentUser?.examType, services: services) }
+                    vm.reset()
+                    Task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
                 }
+            } else {
+                WWEmptyState(
+                    icon: "list.bullet.clipboard",
+                    title: "Quiz unavailable",
+                    message: "This quiz couldn't be prepared safely. Please go back and try again."
+                )
             }
         }
         .background(Color.wwBackground)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .navigationTitle(quizType.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(vm.quiz != nil && vm.result == nil)
@@ -48,7 +67,12 @@ struct QuizContainerView: View {
         } message: {
             Text("Your progress will be lost.")
         }
-        .task { await vm.load(type: quizType, examType: appVM.currentUser?.examType, services: services) }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(context: vm.accessRestriction?.context ?? quizType.paywallContext)
+                .environment(services)
+                .environment(appVM)
+        }
+        .task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
     }
 }
 
@@ -57,6 +81,7 @@ struct QuizContainerView: View {
 private struct ActiveQuizView: View {
     @Bindable var vm: QuizViewModel
     @Environment(ServiceContainer.self) private var services
+    @Environment(AppViewModel.self) private var appVM
 
     var body: some View {
         VStack(spacing: 0) {
@@ -115,7 +140,7 @@ private struct ActiveQuizView: View {
                         isLoading: vm.isSubmitting,
                         isDisabled: vm.answers[vm.currentQuestion?.id ?? UUID()] == nil
                     ) {
-                        Task { await vm.submit(services: services) }
+                        Task { await vm.submit(services: services, appVM: appVM) }
                     }
                 } else {
                     WWPrimaryButton(
@@ -177,12 +202,38 @@ private struct AnswerOption: View {
 // MARK: - Loading View
 
 private struct QuizLoadingView: View {
+    let message: String
+
     var body: some View {
         VStack(spacing: WWSpacing.l) {
             ProgressView()
                 .scaleEffect(1.2)
-            Text("Generating your quiz…")
+            Text(message)
                 .wwBody(color: .wwTextSecondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+private struct QuizAccessRestrictedView: View {
+    let title: String
+    let message: String
+    let actionTitle: String
+    let onPrimary: () -> Void
+    let onSecondary: () -> Void
+
+    var body: some View {
+        VStack(spacing: WWSpacing.l) {
+            WWEmptyState(
+                icon: "lock",
+                title: title,
+                message: message,
+                actionTitle: actionTitle,
+                action: onPrimary
+            )
+
+            WWSecondaryButton(title: "Back", action: onSecondary)
+                .frame(maxWidth: 240)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

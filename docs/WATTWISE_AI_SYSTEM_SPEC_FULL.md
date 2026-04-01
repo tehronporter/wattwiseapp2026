@@ -108,10 +108,11 @@ NEC:
 
 ## 7. Rate Limiting & Quotas
 
-- Per-user daily limits (free tier)
+- Preview-lifetime limits for preview users
+- No preview caps for active paid access
 - Endpoint-level throttles
 - Backend-enforced counters (ai_usage_counters)
-- Graceful errors: “Limit reached. Try later or upgrade.”
+- Graceful errors tied to preview access, not generic subscription language
 
 ---
 

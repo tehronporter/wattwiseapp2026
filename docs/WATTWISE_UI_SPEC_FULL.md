@@ -275,10 +275,10 @@ Context-aware assistance.
 - Exam type
 - State
 - Progress summary
-- Subscription status
+- Access status
 
 ### Actions
-- Restore purchases
+- Restore access
 - Sign out
 - Reset progress (confirm modal)
 
@@ -287,14 +287,23 @@ Context-aware assistance.
 ## 13. Screen: Paywall
 
 ### Layout
-- Headline (clear value)
+- Headline focused on confidence and serious prep
+- Supporting subheadline explaining lessons, quizzes, NEC help, and tutor support
 - Benefits list
-- Pricing options (monthly/yearly)
-- CTA: “Start Free Trial”
+- Two pricing cards:
+- Fast Track
+- Full Prep
+- Calm recommended treatment on Full Prep
+- Context note tied to the entry path
+- Restore access action
 
 ### Rules
+- TEHSO white-dominant layout
+- TEHSO Blue as the only accent
+- Inter only
 - Minimal
 - No dark patterns
+- No subscription-trial framing
 - Clear restore option
 
 ---

@@ -97,6 +97,40 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    const { data: subscription } = await supabase
+      .from("subscriptions")
+      .select("tier, status, expires_at")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const hasPaidAccess = (
+      (subscription?.tier === "fast_track" || subscription?.tier === "full_prep") &&
+      subscription?.status === "active" &&
+      (!subscription?.expires_at || new Date(subscription.expires_at).getTime() > Date.now())
+    );
+
+    if (!hasPaidAccess) {
+      if (quizType !== "quick_quiz") {
+        return json(
+          { success: false, error: { message: "Preview includes one quick quiz. Choose full access for deeper practice." } },
+          403,
+        );
+      }
+
+      const { count: previewAttempts, error: attemptsError } = await supabase
+        .from("quiz_attempts")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+
+      if (attemptsError) throw attemptsError;
+      if ((previewAttempts ?? 0) >= 1) {
+        return json(
+          { success: false, error: { message: "You've already used your preview quiz. Choose full access to keep practicing." } },
+          403,
+        );
+      }
+    }
+
     const targeted = await fetchQuestions(supabase, {
       examType,
       topicTags,

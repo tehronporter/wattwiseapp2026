@@ -89,6 +89,10 @@ enum WattWiseContentRuntimeAdapter {
         return lesson
     }
 
+    static func previewLessonID() throws -> UUID? {
+        try loadModules().first?.lessons.first?.id
+    }
+
     static func modules(from pack: WattWiseContentPack) throws -> [WWModule] {
         let supportedCourses = pack.curriculumFramework.filter {
             supportedCertificationLevels.contains($0.certificationLevel.lowercased())
@@ -161,6 +165,11 @@ enum WattWiseContentRuntimeAdapter {
         let modules = try loadModules()
         let lessons = modules.flatMap(\.lessons)
         let progressByLesson = storedProgressByLesson()
+        let moduleTitleByLessonID = Dictionary(
+            uniqueKeysWithValues: modules.flatMap { module in
+                module.lessons.map { ($0.id, module.title) }
+            }
+        )
 
         let continueLearning = lessons
             .filter { $0.completionPercentage > 0 && $0.completionPercentage < 1 }
@@ -177,7 +186,7 @@ enum WattWiseContentRuntimeAdapter {
                     lessonId: $0.id,
                     lessonTitle: $0.title,
                     progress: $0.completionPercentage,
-                    moduleTitle: $0.topic
+                    moduleTitle: moduleTitleByLessonID[$0.id] ?? $0.topic
                 )
             }
             ?? lessons.first(where: { $0.completionPercentage == 0 }).map {
@@ -185,7 +194,7 @@ enum WattWiseContentRuntimeAdapter {
                     lessonId: $0.id,
                     lessonTitle: $0.title,
                     progress: 0,
-                    moduleTitle: $0.topic
+                    moduleTitle: moduleTitleByLessonID[$0.id] ?? $0.topic
                 )
             }
 

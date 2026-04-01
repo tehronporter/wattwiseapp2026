@@ -264,15 +264,16 @@ Provide explanations and guidance.
 - limited quizzes/day
 - limited tutor usage
 
-### Pro Tier
-- unlimited quizzes
-- unlimited tutor
+### Paid Access
+- Fast Track access
+- Full Prep access
 - full content access
+- full quiz and tutor access
 
 ### Features
 - paywall screen
 - restore purchases
-- trial support
+- preview gating
 
 ---
 

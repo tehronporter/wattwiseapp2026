@@ -49,11 +49,11 @@ A user with an account, selected exam type/state, and existing study history.
 ### 2.3 Returning Inactive User
 A user who previously onboarded but has been absent long enough that the app should re-establish direction.
 
-### 2.4 Free User
-A user on the free plan with limited tutor/quizzes/content access.
+### 2.4 Preview User
+A user in the guided preview with limited lesson, quiz, tutor, and NEC explanation access.
 
-### 2.5 Pro User
-A paying subscriber with full access.
+### 2.5 Paid Access User
+A user with Fast Track or Full Prep access enabled.
 
 ---
 
@@ -688,7 +688,8 @@ This must be hard to do accidentally.
 2. Paywall appears
 3. Clear value explanation shown
 4. User can:
-   - subscribe
+   - choose Fast Track
+   - choose Full Prep
    - restore
    - dismiss if appropriate
 
@@ -698,15 +699,15 @@ This must be hard to do accidentally.
 
 ---
 
-## 15.2 Subscribe Flow
+## 15.2 Purchase Access Flow
 
 ### Flow
 1. User sees paywall
-2. Selects plan
-3. Starts trial or purchase
+2. Selects access offer
+3. Starts purchase
 4. System purchase flow completes
 5. Entitlement updates
-6. Premium feature unlocks immediately
+6. Full access unlocks immediately
 
 ### Requirement
 The unlock must feel instant once purchase succeeds.
@@ -716,7 +717,7 @@ The unlock must feel instant once purchase succeeds.
 ## 15.3 Restore Purchase Flow
 
 ### Flow
-1. User taps Restore Purchases
+1. User taps Restore Access
 2. StoreKit restore runs
 3. App verifies entitlement
 4. State updates

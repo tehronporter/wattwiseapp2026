@@ -45,6 +45,50 @@ Deno.serve(async (req: Request) => {
       return json({ success: false, error: { message: "Missing lesson_id" } }, 400);
     }
 
+    const { data: subscription } = await supabase
+      .from("subscriptions")
+      .select("tier, status, expires_at")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const hasPaidAccess = (
+      (subscription?.tier === "fast_track" || subscription?.tier === "full_prep") &&
+      subscription?.status === "active" &&
+      (!subscription?.expires_at || new Date(subscription.expires_at).getTime() > Date.now())
+    );
+
+    if (!hasPaidAccess) {
+      const { data: firstModule, error: moduleError } = await supabase
+        .from("modules")
+        .select("id")
+        .eq("is_published", true)
+        .order("sort_order", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      if (moduleError) throw moduleError;
+
+      if (firstModule) {
+        const { data: previewLesson, error: previewLessonError } = await supabase
+          .from("lessons")
+          .select("id")
+          .eq("is_published", true)
+          .eq("module_id", firstModule.id)
+          .order("sort_order", { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+        if (previewLessonError) throw previewLessonError;
+
+        if (previewLesson && previewLesson.id !== lesson_id) {
+          return json(
+            { success: false, error: { message: "Preview includes your first full lesson. Choose full access to keep going." } },
+            403,
+          );
+        }
+      }
+    }
+
     const { data: lesson, error: lessonError } = await supabase
       .from("lessons")
       .select(`
