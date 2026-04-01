@@ -16,6 +16,13 @@ final class wattwiseUITests: XCTestCase {
         return app
     }
 
+    private func launchPendingConfirmationApp() -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments += ["UITEST_MODE", "UITEST_RESET_STATE", "UITEST_PENDING_CONFIRMATION"]
+        app.launch()
+        return app
+    }
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
@@ -81,5 +88,15 @@ final class wattwiseUITests: XCTestCase {
 
         XCTAssertTrue(app.staticTexts["Preview Access"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["See Full Access Options"].exists)
+    }
+
+    @MainActor
+    func testPendingConfirmationScreenShowsClearNextStep() throws {
+        let app = launchPendingConfirmationApp()
+
+        XCTAssertTrue(app.staticTexts["Check your email"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["Resend Link"].exists)
+        XCTAssertTrue(app.buttons["Back to Sign In"].exists)
+        XCTAssertFalse(app.staticTexts["localhost"].exists)
     }
 }

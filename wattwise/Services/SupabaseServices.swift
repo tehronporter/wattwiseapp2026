@@ -12,14 +12,15 @@ import StoreKit
 @MainActor
 final class SupabaseAuthService: AuthServiceProtocol {
     private(set) var currentUser: WWUser?
+    var pendingEmailConfirmation: PendingEmailConfirmation? {
+        PendingEmailConfirmationStore.load()
+    }
     private let profileKey = "ww_profile"
 
     func restoreSession() async -> WWUser? {
         guard let session = await SupabaseAuthClient.shared.restoreSession() else { return nil }
         await APIClient.shared.setAccessToken(session.accessToken)
-        let user = mapUser(from: session)
-        persist(user)
-        currentUser = user
+        let user = await reconcileSignedInUser(from: session)
         return user
     }
 
@@ -30,22 +31,29 @@ final class SupabaseAuthService: AuthServiceProtocol {
         let session = try await SupabaseAuthClient.shared.signIn(email: email, password: password)
         await SupabaseAuthClient.shared.saveSession(session)
         await APIClient.shared.setAccessToken(session.accessToken)
-        let user = mapUser(from: session)
-        persist(user)
-        currentUser = user
+        let user = await reconcileSignedInUser(from: session)
         return user
     }
 
-    func signUp(email: String, password: String) async throws -> WWUser {
+    func signUp(email: String, password: String, pending: PendingEmailConfirmation) async throws -> AuthSignUpResult {
         guard !email.isEmpty else { throw AppError.invalidInput("Email is required.") }
         guard password.count >= 8 else { throw AppError.invalidInput("Password must be at least 8 characters.") }
-        let session = try await SupabaseAuthClient.shared.signUp(email: email, password: password)
-        await SupabaseAuthClient.shared.saveSession(session)
-        await APIClient.shared.setAccessToken(session.accessToken)
-        let user = mapUser(from: session)
-        persist(user)
-        currentUser = user
-        return user
+        PendingEmailConfirmationStore.save(pending)
+
+        let response = try await SupabaseAuthClient.shared.signUp(
+            email: email,
+            password: password,
+            redirectTo: AuthRedirectConfiguration.confirmationBridgeURL()
+        )
+
+        if let session = response.session {
+            await SupabaseAuthClient.shared.saveSession(session)
+            await APIClient.shared.setAccessToken(session.accessToken)
+            let user = await reconcileSignedInUser(from: session)
+            return .authenticated(user)
+        }
+
+        return .awaitingEmailConfirmation(pending)
     }
 
     func signInWithApple(token: String) async throws -> WWUser {
@@ -64,6 +72,7 @@ final class SupabaseAuthService: AuthServiceProtocol {
             await APIClient.shared.setAccessToken(nil)
         }
         UserDefaults.standard.removeObject(forKey: profileKey)
+        PendingEmailConfirmationStore.clear()
         currentUser = nil
     }
 
@@ -81,6 +90,30 @@ final class SupabaseAuthService: AuthServiceProtocol {
         }
         persist(user)
         currentUser = user
+    }
+
+    func resendConfirmation(email: String) async throws {
+        try await SupabaseAuthClient.shared.resendSignUpConfirmation(email: email)
+
+        if let pending = PendingEmailConfirmationStore.load(),
+           pending.normalizedEmail == email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+            PendingEmailConfirmationStore.save(
+                PendingEmailConfirmation(
+                    email: pending.email,
+                    examType: pending.examType,
+                    state: pending.state,
+                    studyGoal: pending.studyGoal,
+                    requestedAt: Date()
+                )
+            )
+        }
+    }
+
+    func handleAuthCallback(url: URL) async throws -> WWUser {
+        let session = try await SupabaseAuthClient.shared.session(fromAuthCallbackURL: url)
+        await SupabaseAuthClient.shared.saveSession(session)
+        await APIClient.shared.setAccessToken(session.accessToken)
+        return await reconcileSignedInUser(from: session)
     }
 
     // MARK: - Private
@@ -109,6 +142,35 @@ final class SupabaseAuthService: AuthServiceProtocol {
             streakDays: 0,
             isOnboardingComplete: !(session.user.userMetadata?.state ?? "").isEmpty
         )
+    }
+
+    private func reconcileSignedInUser(from session: AuthSession) async -> WWUser {
+        let mapped = mapUser(from: session)
+        let user = (try? await applyPendingProfileIfNeeded(to: mapped)) ?? mapped
+        persist(user)
+        currentUser = user
+        return user
+    }
+
+    private func applyPendingProfileIfNeeded(to user: WWUser) async throws -> WWUser {
+        guard let pending = PendingEmailConfirmationStore.load() else { return user }
+        guard pending.normalizedEmail == user.email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() else {
+            return user
+        }
+
+        defer { PendingEmailConfirmationStore.clear() }
+
+        if user.isOnboardingComplete {
+            return user
+        }
+
+        var updated = user
+        updated.examType = pending.examType
+        updated.state = pending.state
+        updated.studyGoal = pending.studyGoal
+        updated.isOnboardingComplete = pending.state.isEmpty == false
+        try await updateProfile(updated)
+        return updated
     }
 
     private func persist(_ user: WWUser) {

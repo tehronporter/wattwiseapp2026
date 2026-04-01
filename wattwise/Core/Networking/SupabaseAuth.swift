@@ -25,16 +25,20 @@ actor SupabaseAuthClient {
 
     // MARK: - Sign Up
 
-    func signUp(email: String, password: String) async throws -> AuthSession {
-        let body = ["email": email, "password": password]
-        return try await postAuth(path: "/signup", body: body)
+    func signUp(email: String, password: String, redirectTo: URL?) async throws -> SignUpResponse {
+        let body = SignUpRequest(
+            email: email,
+            password: password,
+            redirectTo: redirectTo?.absoluteString
+        )
+        return try await post(path: "/signup", body: body, responseType: SignUpResponse.self)
     }
 
     // MARK: - Sign In
 
     func signIn(email: String, password: String) async throws -> AuthSession {
-        let body: [String: String] = ["email": email, "password": password]
-        return try await postAuth(path: "/token?grant_type=password", body: body)
+        let body = ["email": email, "password": password]
+        return try await post(path: "/token?grant_type=password", body: body, responseType: AuthSession.self)
     }
 
     // MARK: - Sign Out
@@ -49,7 +53,12 @@ actor SupabaseAuthClient {
 
     func refreshSession(refreshToken: String) async throws -> AuthSession {
         let body = ["refresh_token": refreshToken]
-        return try await postAuth(path: "/token?grant_type=refresh_token", body: body)
+        return try await post(path: "/token?grant_type=refresh_token", body: body, responseType: AuthSession.self)
+    }
+
+    func resendSignUpConfirmation(email: String) async throws {
+        let body = ResendSignUpRequest(email: email)
+        let _: EmptyResponse = try await post(path: "/resend", body: body, responseType: EmptyResponse.self)
     }
 
     // MARK: - Get User
@@ -109,9 +118,37 @@ actor SupabaseAuthClient {
         }
     }
 
+    func session(fromAuthCallbackURL url: URL) async throws -> AuthSession {
+        guard let payload = AuthCallbackPayload.from(url: url) else {
+            throw AuthError.invalidCallback("That link could not be read. Request a new confirmation email and try again.")
+        }
+
+        if let message = payload.surfacedErrorMessage {
+            throw AuthError.invalidCallback(message)
+        }
+
+        guard let accessToken = payload.accessToken,
+              let refreshToken = payload.refreshToken else {
+            throw AuthError.invalidCallback("That confirmation link is missing sign-in details. Request a new link and try again.")
+        }
+
+        let user = try await getUser(accessToken: accessToken)
+        return AuthSession(
+            accessToken: accessToken,
+            tokenType: payload.tokenType ?? "bearer",
+            expiresIn: payload.expiresIn,
+            refreshToken: refreshToken,
+            user: user
+        )
+    }
+
     // MARK: - Private helpers
 
-    private func postAuth(path: String, body: [String: String]) async throws -> AuthSession {
+    private func post<Body: Encodable, Response: Decodable>(
+        path: String,
+        body: Body,
+        responseType: Response.Type
+    ) async throws -> Response {
         var request = makeRequest(path: path, accessToken: nil)
         request.httpMethod = "POST"
         request.httpBody = try JSONEncoder().encode(body)
@@ -128,7 +165,7 @@ actor SupabaseAuthClient {
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(AuthSession.self, from: data)
+        return try decoder.decode(Response.self, from: data)
     }
 
     private func makeRequest(path: String, accessToken: String?) -> URLRequest {
@@ -153,6 +190,28 @@ nonisolated struct AuthSession: Decodable, Sendable {
     let expiresIn: Int?
     let refreshToken: String
     let user: SupabaseUser
+}
+
+nonisolated struct SignUpResponse: Decodable, Sendable {
+    let user: SupabaseUser?
+    let session: AuthSession?
+
+    init(from decoder: Decoder) throws {
+        if let session = try? AuthSession(from: decoder) {
+            self.session = session
+            self.user = session.user
+            return
+        }
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.user = try container.decodeIfPresent(SupabaseUser.self, forKey: .user)
+        self.session = try container.decodeIfPresent(AuthSession.self, forKey: .session)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case user
+        case session
+    }
 }
 
 nonisolated struct SupabaseUser: Decodable, Sendable {
@@ -183,12 +242,33 @@ enum AuthError: LocalizedError {
     case server(String)
     case invalidCredentials
     case sessionExpired
+    case invalidCallback(String)
 
     var errorDescription: String? {
         switch self {
         case .server(let msg): return msg
         case .invalidCredentials: return "Invalid email or password."
         case .sessionExpired: return "Session expired. Please sign in again."
+        case .invalidCallback(let message): return message
         }
     }
 }
+
+private nonisolated struct SignUpRequest: Encodable, Sendable {
+    let email: String
+    let password: String
+    let redirectTo: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case email
+        case password
+        case redirectTo = "redirect_to"
+    }
+}
+
+private nonisolated struct ResendSignUpRequest: Encodable, Sendable {
+    let email: String
+    let type = "signup"
+}
+
+private nonisolated struct EmptyResponse: Decodable, Sendable {}

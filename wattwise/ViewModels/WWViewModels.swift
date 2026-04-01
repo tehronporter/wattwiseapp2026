@@ -8,14 +8,25 @@ import SwiftUI
 final class AppViewModel {
     var authState: AuthState = .loading
     var subscriptionState: SubscriptionState = .preview
+    var authEntryPrefill: AuthEntryPrefill?
+    var authStatusMessage: String?
+    var authErrorMessage: String?
+    var isHandlingAuthLink: Bool = false
+    var isResendingConfirmation: Bool = false
 
     private let tutorConversationStoragePrefix = "ww_tutor_conversation_v1_"
 
     enum AuthState {
         case loading
         case unauthenticated
+        case awaitingEmailConfirmation(PendingEmailConfirmation)
         case onboarding(WWUser)
         case authenticated(WWUser)
+    }
+
+    struct AuthEntryPrefill: Equatable {
+        let email: String
+        let isSignIn: Bool
     }
 
     var currentUser: WWUser? {
@@ -35,22 +46,101 @@ final class AppViewModel {
         return false
     }
 
+    var pendingEmailConfirmation: PendingEmailConfirmation? {
+        if case .awaitingEmailConfirmation(let pending) = authState {
+            return pending
+        }
+        return nil
+    }
+
     func restoreSession(services: ServiceContainer) async {
         if let user = await services.auth.restoreSession() {
-            if user.isOnboardingComplete {
-                authState = .authenticated(user)
-            } else {
-                authState = .onboarding(user)
-            }
-            subscriptionState = (try? await services.subscription.fetchState()) ?? .preview
+            await applyAuthenticatedUser(user, services: services)
+        } else if let pending = services.auth.pendingEmailConfirmation {
+            authState = .awaitingEmailConfirmation(pending)
         } else {
             authState = .unauthenticated
         }
     }
 
+    func applyAuthenticatedUser(_ user: WWUser, services: ServiceContainer) async {
+        authErrorMessage = nil
+        if user.isOnboardingComplete {
+            authState = .authenticated(user)
+        } else {
+            authState = .onboarding(user)
+        }
+        subscriptionState = (try? await services.subscription.fetchState()) ?? .preview
+    }
+
+    func enterAwaitingEmailConfirmation(_ pending: PendingEmailConfirmation) {
+        authErrorMessage = nil
+        authStatusMessage = "We sent a confirmation link to \(pending.email). Open it on this device to continue."
+        authState = .awaitingEmailConfirmation(pending)
+    }
+
+    func resendConfirmation(services: ServiceContainer) async {
+        guard let pending = services.auth.pendingEmailConfirmation else { return }
+
+        isResendingConfirmation = true
+        authErrorMessage = nil
+        defer { isResendingConfirmation = false }
+
+        do {
+            try await services.auth.resendConfirmation(email: pending.email)
+            authStatusMessage = "We sent a new confirmation link to \(pending.email)."
+            if let refreshed = services.auth.pendingEmailConfirmation {
+                authState = .awaitingEmailConfirmation(refreshed)
+            }
+        } catch {
+            authErrorMessage = mapAuthFlowError(error)
+        }
+    }
+
+    func handleIncomingURL(_ url: URL, services: ServiceContainer) async {
+        guard AuthRedirectConfiguration.isAuthCallbackURL(url) else { return }
+
+        let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        if queryItems.first(where: { $0.name == "mode" })?.value == "signin" {
+            showSignIn(email: services.auth.pendingEmailConfirmation?.email ?? "")
+            return
+        }
+
+        isHandlingAuthLink = true
+        authErrorMessage = nil
+        defer { isHandlingAuthLink = false }
+
+        do {
+            let user = try await services.auth.handleAuthCallback(url: url)
+            authStatusMessage = "Your email is confirmed. You're signed in."
+            await applyAuthenticatedUser(user, services: services)
+        } catch {
+            authErrorMessage = mapAuthFlowError(error)
+            if let pending = services.auth.pendingEmailConfirmation {
+                authState = .awaitingEmailConfirmation(pending)
+            } else {
+                authState = .unauthenticated
+            }
+        }
+    }
+
+    func showSignIn(email: String) {
+        authEntryPrefill = AuthEntryPrefill(email: email, isSignIn: true)
+        authState = .unauthenticated
+    }
+
+    func consumeAuthEntryPrefill() -> AuthEntryPrefill? {
+        let prefill = authEntryPrefill
+        authEntryPrefill = nil
+        return prefill
+    }
+
     func signOut(services: ServiceContainer) {
         try? services.auth.signOut()
         clearLocalSessionArtifacts()
+        authEntryPrefill = nil
+        authStatusMessage = nil
+        authErrorMessage = nil
         authState = .unauthenticated
         subscriptionState = .preview
     }
@@ -62,10 +152,25 @@ final class AppViewModel {
         defaults.removeObject(forKey: "ww_access_token")
         defaults.removeObject(forKey: "ww_refresh_token")
         defaults.removeObject(forKey: "ww_user_data")
+        PendingEmailConfirmationStore.clear()
 
         defaults.dictionaryRepresentation().keys
             .filter { $0.hasPrefix(tutorConversationStoragePrefix) }
             .forEach { defaults.removeObject(forKey: $0) }
+    }
+
+    private func mapAuthFlowError(_ error: Error) -> String {
+        let raw = error.localizedDescription
+
+        if raw.localizedCaseInsensitiveContains("expired") || raw.localizedCaseInsensitiveContains("invalid") {
+            return "That link is no longer valid. Request a new confirmation email and try again."
+        }
+
+        if raw.localizedCaseInsensitiveContains("network") {
+            return "We couldn't reach the server. Check your connection and try again."
+        }
+
+        return raw
     }
 }
 
@@ -130,21 +235,35 @@ final class OnboardingViewModel {
         defer { isLoading = false }
 
         do {
-            var user: WWUser
             if isSignIn {
-                user = try await services.auth.signIn(email: email, password: password)
-                // Returning users keep their saved profile; route incomplete profiles back through onboarding.
-                appVM.authState = user.isOnboardingComplete ? .authenticated(user) : .onboarding(user)
+                let user = try await services.auth.signIn(email: email, password: password)
+                await appVM.applyAuthenticatedUser(user, services: services)
             } else {
-                user = try await services.auth.signUp(email: email, password: password)
-                user.examType = selectedExamType
-                user.state = selectedState
-                user.studyGoal = selectedGoal
-                user.isOnboardingComplete = true
-                try await services.auth.updateProfile(user)
-                appVM.authState = .authenticated(user)
+                let pending = PendingEmailConfirmation(
+                    email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+                    examType: selectedExamType,
+                    state: selectedState,
+                    studyGoal: selectedGoal,
+                    requestedAt: Date()
+                )
+
+                switch try await services.auth.signUp(email: email, password: password, pending: pending) {
+                case .authenticated(let user):
+                    await appVM.applyAuthenticatedUser(user, services: services)
+                case .awaitingEmailConfirmation(let pending):
+                    password = ""
+                    confirmPassword = ""
+                    appVM.enterAwaitingEmailConfirmation(pending)
+                }
             }
         } catch {
+            if isSignIn,
+               isEmailConfirmationRequired(error),
+               let pending = services.auth.pendingEmailConfirmation,
+               pending.normalizedEmail == email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+                appVM.enterAwaitingEmailConfirmation(pending)
+                return
+            }
             errorMessage = mapAuthError(error)
         }
     }
@@ -161,7 +280,7 @@ final class OnboardingViewModel {
             return "Incorrect email or password. Please try again."
         }
         if raw.contains("Email not confirmed") || raw.contains("email_not_confirmed") {
-            return "Please check your email and confirm your account before signing in."
+            return "Your account isn't confirmed yet. Check your inbox and open the confirmation link, or resend it."
         }
         if raw.contains("Password should be") || raw.contains("weak_password") {
             return "Password is too weak. Use at least 8 characters with a mix of letters and numbers."
@@ -170,6 +289,11 @@ final class OnboardingViewModel {
             return "Network error. Please check your connection and try again."
         }
         return raw
+    }
+
+    private func isEmailConfirmationRequired(_ error: Error) -> Bool {
+        let raw = error.localizedDescription
+        return raw.contains("Email not confirmed") || raw.contains("email_not_confirmed")
     }
 }
 

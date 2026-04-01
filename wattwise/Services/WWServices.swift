@@ -5,17 +5,21 @@ import Observation
 
 protocol AuthServiceProtocol: AnyObject {
     var currentUser: WWUser? { get }
+    var pendingEmailConfirmation: PendingEmailConfirmation? { get }
     func signIn(email: String, password: String) async throws -> WWUser
-    func signUp(email: String, password: String) async throws -> WWUser
+    func signUp(email: String, password: String, pending: PendingEmailConfirmation) async throws -> AuthSignUpResult
     func signInWithApple(token: String) async throws -> WWUser
     func signOut() throws
     func restoreSession() async -> WWUser?
     func updateProfile(_ user: WWUser) async throws
+    func resendConfirmation(email: String) async throws
+    func handleAuthCallback(url: URL) async throws -> WWUser
 }
 
 @MainActor
 final class MockAuthService: AuthServiceProtocol {
     private(set) var currentUser: WWUser?
+    var pendingEmailConfirmation: PendingEmailConfirmation? = PendingEmailConfirmationStore.load()
 
     private let userKey = "ww_user"
 
@@ -48,7 +52,7 @@ final class MockAuthService: AuthServiceProtocol {
         return user
     }
 
-    func signUp(email: String, password: String) async throws -> WWUser {
+    func signUp(email: String, password: String, pending: PendingEmailConfirmation) async throws -> AuthSignUpResult {
         try await Task.sleep(for: .milliseconds(800))
         guard !email.isEmpty else { throw AppError.invalidInput("Email is required.") }
         guard password.count >= 8 else { throw AppError.invalidInput("Password must be at least 8 characters.") }
@@ -56,15 +60,16 @@ final class MockAuthService: AuthServiceProtocol {
             id: UUID(),
             email: email,
             displayName: nil,
-            examType: .apprentice,
-            state: "",
-            studyGoal: .moderate,
+            examType: pending.examType,
+            state: pending.state,
+            studyGoal: pending.studyGoal,
             streakDays: 0,
-            isOnboardingComplete: false
+            isOnboardingComplete: true
         )
         persist(user)
         currentUser = user
-        return user
+        pendingEmailConfirmation = nil
+        return .authenticated(user)
     }
 
     func signInWithApple(token: String) async throws -> WWUser {
@@ -87,11 +92,48 @@ final class MockAuthService: AuthServiceProtocol {
     func signOut() throws {
         UserDefaults.standard.removeObject(forKey: userKey)
         currentUser = nil
+        pendingEmailConfirmation = nil
+        PendingEmailConfirmationStore.clear()
     }
 
     func updateProfile(_ user: WWUser) async throws {
         persist(user)
         currentUser = user
+    }
+
+    func resendConfirmation(email: String) async throws {
+        pendingEmailConfirmation = PendingEmailConfirmation(
+            email: email,
+            examType: .apprentice,
+            state: "TX",
+            studyGoal: .moderate,
+            requestedAt: Date()
+        )
+        if let pendingEmailConfirmation {
+            PendingEmailConfirmationStore.save(pendingEmailConfirmation)
+        }
+    }
+
+    func handleAuthCallback(url: URL) async throws -> WWUser {
+        guard let pending = pendingEmailConfirmation else {
+            throw AuthError.invalidCallback("No confirmation is waiting on this device. Sign in to continue.")
+        }
+
+        let user = WWUser(
+            id: UUID(),
+            email: pending.email,
+            displayName: nil,
+            examType: pending.examType,
+            state: pending.state,
+            studyGoal: pending.studyGoal,
+            streakDays: 0,
+            isOnboardingComplete: pending.state.isEmpty == false
+        )
+        persist(user)
+        currentUser = user
+        pendingEmailConfirmation = nil
+        PendingEmailConfirmationStore.clear()
+        return user
     }
 
     private func persist(_ user: WWUser) {

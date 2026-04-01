@@ -16,6 +16,9 @@ struct WattWiseApp: App {
                 .environment(services)
                 .environment(appVM)
                 .task { await appVM.restoreSession(services: services) }
+                .onOpenURL { url in
+                    Task { await appVM.handleIncomingURL(url, services: services) }
+                }
         }
     }
 }
@@ -33,6 +36,10 @@ struct AppRootView: View {
 
             case .unauthenticated:
                 WelcomeView()
+                    .transition(.opacity)
+
+            case .awaitingEmailConfirmation(let pending):
+                EmailConfirmationPendingView(pending: pending)
                     .transition(.opacity)
 
             case .onboarding(let user):
@@ -128,6 +135,18 @@ private enum UITestBootstrap {
             if let data = try? JSONEncoder().encode(user) {
                 UserDefaults.standard.set(data, forKey: "ww_user")
             }
+        }
+
+        if arguments.contains("UITEST_PENDING_CONFIRMATION") {
+            PendingEmailConfirmationStore.save(
+                PendingEmailConfirmation(
+                    email: "pending@wattwiseapp.com",
+                    examType: .apprentice,
+                    state: "TX",
+                    studyGoal: .moderate,
+                    requestedAt: Date()
+                )
+            )
         }
     }
 }

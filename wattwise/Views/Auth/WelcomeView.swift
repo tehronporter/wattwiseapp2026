@@ -47,13 +47,34 @@ struct WelcomeView: View {
 
                     Spacer()
 
+                    if let status = appVM.authStatusMessage {
+                        Text(status)
+                            .wwBody(color: .wwTextSecondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, WWSpacing.xl)
+                            .padding(.bottom, WWSpacing.l)
+                    }
+
+                    if let error = appVM.authErrorMessage {
+                        Text(error)
+                            .font(WWFont.caption(.medium))
+                            .foregroundColor(.wwError)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, WWSpacing.xl)
+                            .padding(.bottom, WWSpacing.m)
+                    }
+
                     // CTAs
                     VStack(spacing: WWSpacing.m) {
                         WWPrimaryButton(title: "Get Started") {
+                            appVM.authStatusMessage = nil
+                            appVM.authErrorMessage = nil
                             onboardingVM.isSignIn = false
                             onboardingVM.step = 1
                         }
                         WWSecondaryButton(title: "Sign In") {
+                            appVM.authStatusMessage = nil
+                            appVM.authErrorMessage = nil
                             onboardingVM.isSignIn = true
                             onboardingVM.step = 4
                         }
@@ -71,6 +92,23 @@ struct WelcomeView: View {
                 .environment(services)
                 .environment(appVM)
         }
+        .onAppear {
+            applyAuthPrefillIfNeeded()
+        }
+        .onChange(of: appVM.authEntryPrefill) { _, _ in
+            applyAuthPrefillIfNeeded()
+        }
+    }
+
+    private func applyAuthPrefillIfNeeded() {
+        guard let prefill = appVM.consumeAuthEntryPrefill() else { return }
+
+        onboardingVM.email = prefill.email
+        onboardingVM.password = ""
+        onboardingVM.confirmPassword = ""
+        onboardingVM.errorMessage = nil
+        onboardingVM.isSignIn = prefill.isSignIn
+        onboardingVM.step = prefill.isSignIn ? 4 : 1
     }
 }
 
