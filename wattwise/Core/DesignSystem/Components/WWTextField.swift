@@ -38,6 +38,42 @@ struct WWTextField: View {
     }
 }
 
+struct WWSearchField: View {
+    let placeholder: String
+    @Binding var text: String
+    var onSubmit: (() -> Void)? = nil
+    var onClear: (() -> Void)? = nil
+
+    var body: some View {
+        HStack(spacing: WWSpacing.s) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 15, weight: .regular))
+                .foregroundColor(.wwTextMuted)
+
+            TextField(placeholder, text: $text)
+                .font(WWFont.body())
+                .foregroundColor(.wwTextPrimary)
+                .submitLabel(.search)
+                .onSubmit { onSubmit?() }
+
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                    onClear?()
+                } label: {
+                    Image(systemName: "xmark.circle")
+                        .font(.system(size: 15, weight: .regular))
+                        .foregroundColor(.wwTextMuted)
+                }
+            }
+        }
+        .padding(.horizontal, WWSpacing.m)
+        .frame(height: 52)
+        .background(Color.wwSurface)
+        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.pill, style: .continuous))
+    }
+}
+
 // MARK: - Labeled Field
 
 struct WWLabeledField: View {

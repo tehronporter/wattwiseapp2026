@@ -2,14 +2,14 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var vm = HomeViewModel()
+    @State private var route: HomeRoute?
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
 
     var body: some View {
         ScrollView {
             VStack(spacing: WWSpacing.l) {
-                // Header
-                HStack {
+                HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(vm.greeting)
                             .wwCaption()
@@ -19,18 +19,18 @@ struct HomeView: View {
                         }
                     }
                     Spacer()
-                    // Streak badge
                     if let summary = vm.loadState.value, summary.streakDays > 0 {
                         StreakBadge(days: summary.streakDays)
                     }
                 }
 
-                // Content
                 switch vm.loadState {
                 case .idle, .loading:
                     HomeSkeletonView()
                 case .loaded(let summary):
-                    HomeContentView(summary: summary)
+                    HomeContentView(summary: summary) { destination in
+                        route = destination
+                    }
                 case .failed(let msg):
                     WWEmptyState(
                         icon: "wifi.slash",
@@ -48,49 +48,198 @@ struct HomeView: View {
         .background(Color.wwBackground)
         .navigationTitle("")
         .navigationBarHidden(true)
+        .navigationDestination(item: $route) { destination in
+            switch destination {
+            case .lesson(let lessonId):
+                LessonView(lessonId: lessonId)
+            case .learn:
+                LearnView()
+            case .quiz(let type):
+                QuizContainerView(quizType: type)
+            case .tutor:
+                TutorView()
+            }
+        }
         .task { await vm.load(services: services) }
         .refreshable { await vm.refresh(services: services) }
     }
 }
 
-// MARK: - Home Content
+private enum HomeRoute: Hashable, Identifiable {
+    case lesson(UUID)
+    case learn
+    case quiz(QuizType)
+    case tutor
 
-private struct HomeContentView: View {
-    let summary: ProgressSummary
-
-    var body: some View {
-        VStack(spacing: WWSpacing.l) {
-            // Continue Learning Card
-            if let cl = summary.continueLearning {
-                ContinueLearningCard(lesson: cl)
-            }
-
-            // Today's Focus
-            if let rec = summary.recommendedAction {
-                TodaysFocusCard(message: rec)
-            }
-
-            // Daily Goal
-            DailyGoalCard(goal: summary.dailyGoal)
-
-            // Quick Actions
-            QuickActionsSection()
+    var id: String {
+        switch self {
+        case .lesson(let lessonId):
+            return "lesson-\(lessonId.uuidString)"
+        case .learn:
+            return "learn"
+        case .quiz(let type):
+            return "quiz-\(type.rawValue)"
+        case .tutor:
+            return "tutor"
         }
     }
 }
 
-// MARK: - Continue Learning Card
+private struct HomeContentView: View {
+    let summary: ProgressSummary
+    let onRoute: (HomeRoute) -> Void
 
-private struct ContinueLearningCard: View {
-    let lesson: ProgressSummary.ContinueLearning
-    @State private var navigateToLesson = false
+    private enum PresentationState {
+        case newUser(ProgressSummary.ContinueLearning?)
+        case active(ProgressSummary.ContinueLearning?)
+        case returning(ProgressSummary.ContinueLearning?)
+    }
+
+    private var state: PresentationState {
+        guard summary.hasStartedContent else { return .newUser(summary.continueLearning) }
+        if let lastActivityAt = summary.lastActivityAt,
+           Calendar.current.isDateInToday(lastActivityAt) || Calendar.current.isDateInYesterday(lastActivityAt) || summary.hasInProgressLesson {
+            return .active(summary.continueLearning)
+        }
+        return .returning(summary.continueLearning)
+    }
+
+    var body: some View {
+        VStack(spacing: WWSpacing.l) {
+            switch state {
+            case .newUser(let lesson):
+                if let lesson {
+                    PrimaryActionCard(
+                        eyebrow: "Get Started",
+                        title: "Start your first lesson",
+                        message: "Begin with \(lesson.lessonTitle) and build momentum right away.",
+                        primaryTitle: "Start Learning",
+                        secondaryTitle: "Browse Modules",
+                        icon: "book"
+                    ) {
+                        onRoute(.lesson(lesson.lessonId))
+                    } onSecondary: {
+                        onRoute(.learn)
+                    }
+                }
+                DailyGoalCard(goal: summary.dailyGoal)
+
+            case .active(let lesson):
+                if let lesson {
+                    ContinueLearningCard(
+                        lesson: lesson,
+                        title: "Resume Lesson",
+                        actionTitle: "Resume Lesson"
+                    ) {
+                        onRoute(.lesson(lesson.lessonId))
+                    }
+                }
+
+                TodaysFocusCard(
+                    title: "Today's Focus",
+                    message: summary.recommendedAction ?? "Keep moving through your study path.",
+                    actionTitle: summary.hasInProgressLesson ? "Start Quick Quiz" : "Open Learn",
+                    icon: summary.hasInProgressLesson ? "bolt" : "lightbulb"
+                ) {
+                    onRoute(summary.hasInProgressLesson ? .quiz(.quickQuiz) : .learn)
+                }
+
+                DailyGoalCard(goal: summary.dailyGoal)
+                QuickActionsSection(onRoute: onRoute)
+
+            case .returning(let lesson):
+                PrimaryActionCard(
+                    eyebrow: "Welcome Back",
+                    title: lesson?.progress ?? 0 > 0 ? "Resume where you left off" : "Restart with a clear next step",
+                    message: lesson.map {
+                        "Return to \($0.lessonTitle) in \($0.moduleTitle) or take a short refresher quiz to get back into rhythm."
+                    } ?? "Open Learn and jump into the next lesson when you're ready.",
+                    primaryTitle: lesson == nil ? "Open Learn" : "Resume Lesson",
+                    secondaryTitle: "Start Quick Quiz",
+                    icon: "clock.arrow.circlepath"
+                ) {
+                    if let lesson {
+                        onRoute(.lesson(lesson.lessonId))
+                    } else {
+                        onRoute(.learn)
+                    }
+                } onSecondary: {
+                    onRoute(.quiz(.quickQuiz))
+                }
+
+                TodaysFocusCard(
+                    title: "Re-entry Focus",
+                    message: "A short quiz is the fastest way to rebuild confidence and remember what needs attention.",
+                    actionTitle: "Review with Quiz",
+                    icon: "list.bullet.clipboard"
+                ) {
+                    onRoute(.quiz(.quickQuiz))
+                }
+
+                DailyGoalCard(goal: summary.dailyGoal)
+            }
+        }
+    }
+}
+
+private struct PrimaryActionCard: View {
+    let eyebrow: String
+    let title: String
+    let message: String
+    let primaryTitle: String
+    let secondaryTitle: String?
+    let icon: String
+    let onPrimary: () -> Void
+    var onSecondary: (() -> Void)? = nil
 
     var body: some View {
         WWCard {
             VStack(alignment: .leading, spacing: WWSpacing.m) {
-                HStack {
+                HStack(alignment: .top, spacing: WWSpacing.m) {
+                    ZStack {
+                        Circle()
+                            .stroke(Color.wwBlue.opacity(0.18), lineWidth: 1)
+                            .frame(width: 44, height: 44)
+                        Image(systemName: icon)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundColor(.wwBlue)
+                    }
+
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Continue Learning")
+                        Text(eyebrow)
+                            .wwLabel()
+                            .textCase(.uppercase)
+                        Text(title)
+                            .wwSectionTitle()
+                        Text(message)
+                            .wwBody(color: .wwTextSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+
+                WWPrimaryButton(title: primaryTitle, action: onPrimary)
+
+                if let secondaryTitle, let onSecondary {
+                    WWGhostButton(title: secondaryTitle, color: .wwBlue, action: onSecondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+        }
+    }
+}
+
+private struct ContinueLearningCard: View {
+    let lesson: ProgressSummary.ContinueLearning
+    let title: String
+    let actionTitle: String
+    let action: () -> Void
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
                             .wwLabel()
                             .textCase(.uppercase)
                         Text(lesson.lessonTitle)
@@ -99,8 +248,8 @@ private struct ContinueLearningCard: View {
                             .wwCaption()
                     }
                     Spacer()
-                    Image(systemName: "play.circle.fill")
-                        .font(.system(size: 36, weight: .regular))
+                    Image(systemName: "play.circle")
+                        .font(.system(size: 34, weight: .regular))
                         .foregroundColor(.wwBlue)
                 }
 
@@ -113,54 +262,47 @@ private struct ContinueLearningCard: View {
                     WWProgressBar(value: lesson.progress)
                 }
 
-                NavigationLink {
-                    LessonView(lessonId: lesson.lessonId)
-                } label: {
-                    Text("Resume Lesson")
-                        .font(WWFont.body(.semibold))
-                        .foregroundColor(.wwBlue)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 44)
-                        .background(Color.wwBlueDim)
-                        .clipShape(Capsule())
-                }
-                .buttonStyle(.plain)
+                WWPrimaryButton(title: actionTitle, action: action)
             }
         }
     }
 }
 
-// MARK: - Today's Focus Card
-
 private struct TodaysFocusCard: View {
+    let title: String
     let message: String
+    let actionTitle: String
+    let icon: String
+    let action: () -> Void
 
     var body: some View {
         WWCard {
-            HStack(spacing: WWSpacing.m) {
-                ZStack {
-                    Circle()
-                        .fill(Color.wwBlueDim)
-                        .frame(width: 44, height: 44)
-                    Image(systemName: "lightbulb.fill")
-                        .font(.system(size: 18))
-                        .foregroundColor(.wwBlue)
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                HStack(spacing: WWSpacing.m) {
+                    ZStack {
+                        Circle()
+                            .stroke(Color.wwBlue.opacity(0.16), lineWidth: 1)
+                            .frame(width: 40, height: 40)
+                        Image(systemName: icon)
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundColor(.wwBlue)
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(title)
+                            .wwLabel()
+                            .textCase(.uppercase)
+                        Text(message)
+                            .wwBody()
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Today's Focus")
-                        .wwLabel()
-                        .textCase(.uppercase)
-                    Text(message)
-                        .wwBody()
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                Spacer(minLength: 0)
+
+                WWSecondaryButton(title: actionTitle, action: action)
             }
         }
     }
 }
-
-// MARK: - Daily Goal Card
 
 private struct DailyGoalCard: View {
     let goal: ProgressSummary.DailyGoal
@@ -178,96 +320,82 @@ private struct DailyGoalCard: View {
                 }
                 WWProgressBar(value: goal.progress, height: 6)
                 Text(goal.minutesCompleted >= goal.targetMinutes
-                     ? "Goal reached! Great work today."
+                     ? "Goal reached. Keep going only if you have the energy."
                      : "\(goal.targetMinutes - goal.minutesCompleted) minutes left to reach your goal")
-                    .wwCaption(color: goal.minutesCompleted >= goal.targetMinutes ? .wwSuccess : .wwTextSecondary)
+                    .wwCaption(color: .wwTextSecondary)
             }
         }
     }
 }
 
-// MARK: - Quick Actions
-
 private struct QuickActionsSection: View {
+    let onRoute: (HomeRoute) -> Void
+
     var body: some View {
         VStack(alignment: .leading, spacing: WWSpacing.m) {
-            Text("Quick Actions")
+            Text("More Options")
                 .wwLabel()
                 .textCase(.uppercase)
 
             HStack(spacing: WWSpacing.m) {
-                NavigationLink {
-                    QuizContainerView(quizType: .quickQuiz)
-                } label: {
-                    QuickActionCard(icon: "bolt.fill", label: "Start Quiz")
+                CompactActionCard(icon: "bolt", label: "Quick Quiz") {
+                    onRoute(.quiz(.quickQuiz))
                 }
-                .buttonStyle(.plain)
-
-                NavigationLink {
-                    TutorView()
-                } label: {
-                    QuickActionCard(icon: "bubble.left.fill", label: "Ask Tutor")
+                CompactActionCard(icon: "bubble.left", label: "Ask Tutor") {
+                    onRoute(.tutor)
                 }
-                .buttonStyle(.plain)
-
-                NavigationLink {
-                    NECView()
-                } label: {
-                    QuickActionCard(icon: "book.pages.fill", label: "NEC Code")
-                }
-                .buttonStyle(.plain)
             }
         }
     }
 }
 
-private struct QuickActionCard: View {
+private struct CompactActionCard: View {
     let icon: String
     let label: String
+    let action: () -> Void
 
     var body: some View {
-        VStack(spacing: WWSpacing.s) {
-            Image(systemName: icon)
-                .font(.system(size: 22, weight: .regular))
-                .foregroundColor(.wwBlue)
-                .frame(height: 28)
-            Text(label)
-                .font(WWFont.caption(.medium))
-                .foregroundColor(.wwTextPrimary)
+        Button(action: action) {
+            VStack(spacing: WWSpacing.s) {
+                Image(systemName: icon)
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundColor(.wwBlue)
+                    .frame(height: 24)
+                Text(label)
+                    .font(WWFont.caption(.medium))
+                    .foregroundColor(.wwTextPrimary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, WWSpacing.m)
+            .background(Color.wwSurface)
+            .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, WWSpacing.m)
-        .background(Color.wwSurface)
-        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
+        .buttonStyle(.plain)
     }
 }
-
-// MARK: - Streak Badge
 
 private struct StreakBadge: View {
     let days: Int
 
     var body: some View {
         HStack(spacing: 4) {
-            Image(systemName: "flame.fill")
+            Image(systemName: "flame")
                 .font(.system(size: 14))
-                .foregroundColor(Color(hex: "#FF6B35"))
+                .foregroundColor(.wwBlue)
             Text("\(days) day\(days == 1 ? "" : "s")")
                 .font(WWFont.caption(.semibold))
                 .foregroundColor(.wwTextPrimary)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 7)
-        .background(Color(hex: "#FF6B35").opacity(0.1))
+        .background(Color.wwBlueDim)
         .clipShape(Capsule())
         .overlay(
             Capsule()
-                .strokeBorder(Color(hex: "#FF6B35").opacity(0.25), lineWidth: 1)
+                .strokeBorder(Color.wwBlue.opacity(0.18), lineWidth: 1)
         )
     }
 }
-
-// MARK: - Skeleton
 
 private struct HomeSkeletonView: View {
     var body: some View {
@@ -281,8 +409,6 @@ private struct HomeSkeletonView: View {
         }
     }
 }
-
-// MARK: - Shimmer modifier
 
 private struct ShimmerModifier: ViewModifier {
     @State private var phase: CGFloat = -1
@@ -318,13 +444,5 @@ private struct ShimmerModifier: ViewModifier {
 extension View {
     func shimmering() -> some View {
         modifier(ShimmerModifier())
-    }
-}
-
-#Preview {
-    NavigationStack {
-        HomeView()
-            .environment(ServiceContainer())
-            .environment(AppViewModel())
     }
 }

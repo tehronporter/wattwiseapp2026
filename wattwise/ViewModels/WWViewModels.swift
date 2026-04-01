@@ -217,10 +217,22 @@ final class LearnViewModel {
 
 // MARK: - Lesson ViewModel
 
+struct LessonFlowContext {
+    let module: WWModule
+    let lessonIndex: Int
+    let previousLessonId: UUID?
+    let nextLessonId: UUID?
+
+    var lessonNumber: Int { lessonIndex + 1 }
+    var totalLessons: Int { module.lessons.count }
+    var moduleProgress: Double { module.progress }
+}
+
 @Observable
 @MainActor
 final class LessonViewModel {
     var lesson: WWLesson?
+    var flowContext: LessonFlowContext?
     var isLoading: Bool = false
     var errorMessage: String?
     var scrollProgress: Double = 0.0
@@ -236,6 +248,18 @@ final class LessonViewModel {
             let loadedLesson = try await services.content.fetchLesson(id: lessonId)
             lesson = loadedLesson
             scrollProgress = max(scrollProgress, loadedLesson.completionPercentage)
+            let modules = try await services.content.fetchModules()
+            if let module = modules.first(where: { $0.id == loadedLesson.moduleId }),
+               let lessonIndex = module.lessons.firstIndex(where: { $0.id == loadedLesson.id }) {
+                flowContext = LessonFlowContext(
+                    module: module,
+                    lessonIndex: lessonIndex,
+                    previousLessonId: lessonIndex > 0 ? module.lessons[lessonIndex - 1].id : nil,
+                    nextLessonId: lessonIndex < module.lessons.count - 1 ? module.lessons[lessonIndex + 1].id : nil
+                )
+            } else {
+                flowContext = nil
+            }
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -245,6 +269,10 @@ final class LessonViewModel {
         guard let lesson else { return }
         let effectiveProgress = max(scrollProgress, lesson.completionPercentage)
         try? await services.content.saveProgress(lessonId: lesson.id, completion: effectiveProgress)
+    }
+
+    func markComplete() {
+        scrollProgress = 1.0
     }
 
     func tapNEC(_ ref: NECReference) {
@@ -260,6 +288,7 @@ final class LessonViewModel {
 final class PracticeViewModel {
     var showPaywall: Bool = false
     var selectedQuizType: QuizType? = nil
+    var dashboard: PracticeDashboardSnapshot = .empty
 
     func startQuiz(_ type: QuizType, subscription: SubscriptionState) -> Bool {
         if type == .fullPracticeExam && !subscription.isPro {
@@ -268,6 +297,10 @@ final class PracticeViewModel {
         }
         selectedQuizType = type
         return true
+    }
+
+    func refreshDashboard() {
+        dashboard = PracticeHistoryStore.shared.dashboard()
     }
 }
 
@@ -300,12 +333,12 @@ final class QuizViewModel {
         return Double(currentIndex + 1) / Double(max(1, quiz.questions.count))
     }
 
-    func load(type: QuizType, services: ServiceContainer) async {
+    func load(type: QuizType, examType: ExamType?, services: ServiceContainer) async {
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
         do {
-            quiz = try await services.quiz.generateQuiz(type: type, topicTags: [])
+            quiz = try await services.quiz.generateQuiz(type: type, topicTags: [], examType: examType)
         } catch {
             errorMessage = error.localizedDescription
         }

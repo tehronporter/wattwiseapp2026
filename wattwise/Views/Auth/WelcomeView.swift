@@ -22,7 +22,7 @@ struct WelcomeView: View {
                             Circle()
                                 .fill(Color.wwBlue.opacity(0.08))
                                 .frame(width: 120, height: 120)
-                            Image(systemName: "bolt.fill")
+                            Image(systemName: "bolt")
                                 .font(.system(size: 40, weight: .semibold))
                                 .foregroundColor(.wwBlue)
                         }
@@ -40,8 +40,8 @@ struct WelcomeView: View {
                     // Value props
                     VStack(alignment: .leading, spacing: WWSpacing.m) {
                         FeatureRow(icon: "brain.head.profile", text: "AI tutor that knows the NEC")
-                        FeatureRow(icon: "chart.bar.fill", text: "Adaptive quizzes based on your weaknesses")
-                        FeatureRow(icon: "checkmark.seal.fill", text: "State-specific exam preparation")
+                        FeatureRow(icon: "chart.bar", text: "Adaptive quizzes based on your weaknesses")
+                        FeatureRow(icon: "checkmark.seal", text: "State-specific exam preparation")
                     }
                     .wwScreenPadding()
 

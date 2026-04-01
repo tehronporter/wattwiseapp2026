@@ -5,6 +5,10 @@ struct WattWiseApp: App {
     @State private var services = ServiceContainer()
     @State private var appVM = AppViewModel()
 
+    init() {
+        WWFontRegistrar.registerIfNeeded()
+    }
+
     var body: some Scene {
         WindowGroup {
             AppRootView()
@@ -56,7 +60,7 @@ struct SplashView: View {
                     Circle()
                         .fill(Color.wwBlueDim)
                         .frame(width: 80, height: 80)
-                    Image(systemName: "bolt.fill")
+                    Image(systemName: "bolt")
                         .font(.system(size: 34, weight: .semibold))
                         .foregroundColor(.wwBlue)
                 }

@@ -9,10 +9,10 @@ struct PaywallView: View {
 
     private let benefits: [(icon: String, title: String, description: String)] = [
         ("infinity", "Unlimited AI Tutor", "Ask as many questions as you need, any time"),
-        ("doc.text.fill", "Full Practice Exams", "Complete 25-question timed practice exams"),
-        ("chart.bar.fill", "Weak Area Review", "AI-targeted quizzes on your problem topics"),
-        ("books.vertical.fill", "Full Curriculum", "All modules and lessons unlocked"),
-        ("book.pages.fill", "Deep NEC Explanations", "AI-powered explanations for any NEC article")
+        ("doc.text", "Full Practice Exams", "Complete 25-question timed practice exams"),
+        ("chart.bar", "Weak Area Review", "AI-targeted quizzes on your problem topics"),
+        ("books.vertical", "Full Curriculum", "All modules and lessons unlocked"),
+        ("book.pages", "Deep NEC Explanations", "AI-powered explanations for any NEC article")
     ]
 
     var body: some View {
@@ -25,7 +25,7 @@ struct PaywallView: View {
                             Circle()
                                 .fill(Color.wwBlueDim)
                                 .frame(width: 72, height: 72)
-                            Image(systemName: "star.fill")
+                            Image(systemName: "star")
                                 .font(.system(size: 30))
                                 .foregroundColor(.wwBlue)
                         }

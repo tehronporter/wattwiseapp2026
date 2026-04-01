@@ -11,6 +11,8 @@ private func uniqueLessonReferenceCodes(for record: LessonContentRecord) -> [Str
 }
 
 enum WattWiseContentRuntimeAdapter {
+    private static let supportedCertificationLevels: Set<String> = ["apprentice", "master"]
+
     private struct StoredLessonProgress: Codable {
         var completion: Double
         var lastAccessedAt: Date
@@ -88,11 +90,14 @@ enum WattWiseContentRuntimeAdapter {
     }
 
     static func modules(from pack: WattWiseContentPack) throws -> [WWModule] {
+        let supportedCourses = pack.curriculumFramework.filter {
+            supportedCertificationLevels.contains($0.certificationLevel.lowercased())
+        }
         let lessonsByID = Dictionary(uniqueKeysWithValues: try pack.fullLessonContent.map { record in
             (record.id, try makeLesson(record: record, pack: pack))
         })
 
-        return try pack.curriculumFramework.flatMap { course in
+        return try supportedCourses.flatMap { course in
             try course.modules.map { module in
                 let lessonModels = try module.lessons.map { blueprint in
                     guard let lesson = lessonsByID[blueprint.id] else {
@@ -187,6 +192,10 @@ enum WattWiseContentRuntimeAdapter {
         let activity = storedStudyActivity()
         let today = isoDate(Date())
         let minutesCompleted = activity[today, default: 0]
+        let startedLessons = lessons.filter { $0.completionPercentage > 0 }
+        let lastActivityAt = progressByLesson.values
+            .map(\.lastAccessedAt)
+            .max()
 
         var streak = 0
         var cursor = Calendar.current.startOfDay(for: Date())
@@ -212,7 +221,9 @@ enum WattWiseContentRuntimeAdapter {
                 targetMinutes: defaultDailyGoalMinutes
             ),
             streakDays: streak,
-            recommendedAction: recommendation
+            recommendedAction: recommendation,
+            hasStartedContent: startedLessons.isEmpty == false,
+            lastActivityAt: lastActivityAt
         )
     }
 
@@ -235,6 +246,28 @@ enum WattWiseContentRuntimeAdapter {
             throw AppError.notFound("NEC reference not found in the content pack.")
         }
         return reference
+    }
+
+    static func loadQuestionBank() -> [QuizQuestion] {
+        guard let pack = try? WattWiseContentCatalog.loadFromBundle() else { return [] }
+        return pack.questionBank.map { record in
+            let topicTag = record.topicCategory
+                .lowercased()
+                .replacingOccurrences(of: " and ", with: "-")
+                .replacingOccurrences(of: " ", with: "-")
+            return QuizQuestion(
+                id: uuid(for: "question:\(record.id)"),
+                question: record.questionText,
+                choices: record.answerChoices,
+                correctChoice: record.correctAnswer,
+                explanation: record.explanation,
+                topics: [topicTag],
+                topicTitles: [record.topicCategory],
+                difficultyLevel: record.difficultyLevel,
+                referenceCode: record.necReference,
+                certificationLevel: record.certificationLevel
+            )
+        }
     }
 
     static func uuid(for key: String) -> UUID {

@@ -75,8 +75,8 @@ private struct LessonRow: View {
 
     private var statusIcon: String {
         switch lesson.status {
-        case .completed:  return "checkmark.circle.fill"
-        case .inProgress: return "circle.lefthalf.filled"
+        case .completed:  return "checkmark.circle"
+        case .inProgress: return "circle"
         case .notStarted: return "circle"
         }
     }

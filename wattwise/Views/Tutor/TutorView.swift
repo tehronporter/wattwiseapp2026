@@ -4,6 +4,7 @@ struct TutorView: View {
     var initialContext: TutorContext? = nil
     @State private var vm = TutorViewModel()
     @State private var showClearConfirmation = false
+    @State private var showNECLookup = false
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
 
@@ -24,6 +25,15 @@ struct TutorView: View {
         .navigationTitle("AI Tutor")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    showNECLookup = true
+                } label: {
+                    Label("NEC", systemImage: "book.pages")
+                        .font(WWFont.body(.medium))
+                        .foregroundColor(.wwBlue)
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 if !vm.messages.isEmpty {
                     Button("Clear") {
@@ -47,6 +57,11 @@ struct TutorView: View {
                 .environment(services)
                 .environment(appVM)
         }
+        .navigationDestination(isPresented: $showNECLookup) {
+            NECView()
+                .environment(services)
+                .environment(appVM)
+        }
         .onAppear {
             if let ctx = initialContext {
                 vm.context = ctx
@@ -60,6 +75,8 @@ struct TutorView: View {
             TutorEmptyState(subscription: appVM.subscriptionState) { suggestion in
                 vm.inputText = suggestion
                 Task { await vm.send(services: services, subscription: appVM.subscriptionState) }
+            } onOpenNEC: {
+                showNECLookup = true
             }
         } else {
             ScrollViewReader { proxy in
@@ -146,6 +163,7 @@ private struct UsageLimitBanner: View {
 private struct TutorEmptyState: View {
     let subscription: SubscriptionState
     let onSuggestion: (String) -> Void
+    let onOpenNEC: () -> Void
 
     private let suggestions = [
         "Explain Ohm's Law with an example",
@@ -200,7 +218,7 @@ private struct TutorEmptyState: View {
                                     .wwBody()
                                     .multilineTextAlignment(.leading)
                                 Spacer()
-                                Image(systemName: "arrow.up.circle.fill")
+                                Image(systemName: "arrow.up.circle")
                                     .foregroundColor(.wwBlue)
                                     .font(.system(size: 20))
                             }
@@ -211,6 +229,25 @@ private struct TutorEmptyState: View {
                         .buttonStyle(.plain)
                         .wwScreenPadding()
                     }
+
+                    Button(action: onOpenNEC) {
+                        HStack(spacing: WWSpacing.s) {
+                            Image(systemName: "book.pages")
+                                .font(.system(size: 16, weight: .regular))
+                                .foregroundColor(.wwBlue)
+                            Text("Open NEC Lookup")
+                                .wwBody(color: .wwBlue)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 11, weight: .semibold))
+                                .foregroundColor(.wwTextMuted)
+                        }
+                        .padding(WWSpacing.m)
+                        .background(Color.wwSurface)
+                        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
+                    }
+                    .buttonStyle(.plain)
+                    .wwScreenPadding()
                 }
             }
         }
@@ -233,7 +270,7 @@ private struct MessageBubble: View {
                 // AI avatar
                 ZStack {
                     Circle().fill(Color.wwBlueDim).frame(width: 28, height: 28)
-                    Image(systemName: "bolt.fill")
+                    Image(systemName: "bolt")
                         .font(.system(size: 12))
                         .foregroundColor(.wwBlue)
                 }
@@ -312,7 +349,7 @@ private struct TypingIndicator: View {
         HStack(alignment: .bottom, spacing: WWSpacing.s) {
             ZStack {
                 Circle().fill(Color.wwBlueDim).frame(width: 28, height: 28)
-                Image(systemName: "bolt.fill")
+                Image(systemName: "bolt")
                     .font(.system(size: 12))
                     .foregroundColor(.wwBlue)
             }

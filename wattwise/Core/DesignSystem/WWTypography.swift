@@ -1,8 +1,8 @@
 import SwiftUI
+import CoreText
 
 // TEHSO Design System — Typography
-// Uses Inter font family. Add Inter .ttf files to the project and register in Info.plist.
-// Falls back to SF Pro if Inter is unavailable.
+// Uses the bundled Inter variable font so weight stays consistent across the app.
 
 enum WWFont {
     // MARK: - Sizes
@@ -43,17 +43,19 @@ enum WWFont {
 
     // MARK: - Private
     private static func inter(size: CGFloat, weight: Font.Weight) -> Font {
-        let name: String
-        switch weight {
-        case .black:              name = "Inter-Black"
-        case .heavy:              name = "Inter-ExtraBold"
-        case .bold:               name = "Inter-Bold"
-        case .semibold:           name = "Inter-SemiBold"
-        case .medium:             name = "Inter-Medium"
-        default:                  name = "Inter-Regular"
-        }
-        return Font.custom(name, size: size).weight(weight)
+        Font.custom("Inter", size: size).weight(weight)
     }
+}
+
+enum WWFontRegistrar {
+    static func registerIfNeeded() {
+        _ = registered
+    }
+
+    private static let registered: Void = {
+        guard let url = Bundle.main.url(forResource: "Inter-VariableFont", withExtension: "ttf") else { return }
+        CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+    }()
 }
 
 // Convenience view modifier

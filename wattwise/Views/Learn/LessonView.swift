@@ -6,6 +6,8 @@ struct LessonView: View {
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
     @State private var showTutorSheet = false
+    @State private var nextLessonTarget: LessonNavigationTarget?
+    @State private var showModuleDetail = false
 
     var body: some View {
         Group {
@@ -13,7 +15,22 @@ struct LessonView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if let lesson = vm.lesson {
-                LessonContentView(lesson: lesson, vm: vm)
+                LessonContentView(
+                    lesson: lesson,
+                    vm: vm,
+                    onPreviousLesson: {
+                        guard let previousLessonId = vm.flowContext?.previousLessonId else { return }
+                        nextLessonTarget = LessonNavigationTarget(id: previousLessonId)
+                    },
+                    onBackToModule: {
+                        showModuleDetail = true
+                    },
+                    onNextLesson: {
+                        guard let nextLessonId = vm.flowContext?.nextLessonId else { return }
+                        vm.markComplete()
+                        nextLessonTarget = LessonNavigationTarget(id: nextLessonId)
+                    }
+                )
             } else if let error = vm.errorMessage {
                 WWEmptyState(
                     icon: "exclamationmark.triangle",
@@ -51,9 +68,21 @@ struct LessonView: View {
                 NECReferenceSheet(reference: nec)
             }
         }
+        .navigationDestination(item: $nextLessonTarget) { destination in
+            LessonView(lessonId: destination.id)
+        }
+        .navigationDestination(isPresented: $showModuleDetail) {
+            if let module = vm.flowContext?.module {
+                ModuleDetailView(module: module)
+            }
+        }
         .task { await vm.load(lessonId: lessonId, services: services) }
         .onDisappear { Task { await vm.saveProgress(services: services) } }
     }
+}
+
+private struct LessonNavigationTarget: Identifiable, Hashable {
+    let id: UUID
 }
 
 // MARK: - Lesson Content
@@ -61,6 +90,13 @@ struct LessonView: View {
 private struct LessonContentView: View {
     let lesson: WWLesson
     @Bindable var vm: LessonViewModel
+    let onPreviousLesson: () -> Void
+    let onBackToModule: () -> Void
+    let onNextLesson: () -> Void
+
+    private var effectiveProgress: Double {
+        max(vm.scrollProgress, lesson.completionPercentage)
+    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -68,7 +104,8 @@ private struct LessonContentView: View {
                 VStack(alignment: .leading, spacing: WWSpacing.l) {
                     LessonHeaderCard(
                         lesson: lesson,
-                        progress: max(vm.scrollProgress, lesson.completionPercentage)
+                        progress: effectiveProgress,
+                        flowContext: vm.flowContext
                     )
 
                     ForEach(lesson.sections) { section in
@@ -92,6 +129,14 @@ private struct LessonContentView: View {
                             }
                         }
                     }
+
+                    LessonNextStepCard(
+                        flowContext: vm.flowContext,
+                        isComplete: effectiveProgress >= 1,
+                        onPreviousLesson: onPreviousLesson,
+                        onBackToModule: onBackToModule,
+                        onNextLesson: onNextLesson
+                    )
 
                     Spacer().frame(height: WWSpacing.xxxl)
                 }
@@ -126,6 +171,16 @@ private struct LessonContentView: View {
 private struct LessonHeaderCard: View {
     let lesson: WWLesson
     let progress: Double
+    let flowContext: LessonFlowContext?
+
+    private var moduleProgress: Double {
+        guard let flowContext else { return progress }
+        let totalProgress = flowContext.module.lessons.reduce(0) { partialResult, lesson in
+            partialResult + lesson.completionPercentage
+        }
+        let adjusted = totalProgress - lesson.completionPercentage + progress
+        return adjusted / Double(max(flowContext.totalLessons, 1))
+    }
 
     var body: some View {
         WWCard {
@@ -139,6 +194,17 @@ private struct LessonHeaderCard: View {
 
                 Text(lesson.title)
                     .wwHeading()
+
+                if let flowContext {
+                    HStack(spacing: WWSpacing.s) {
+                        Text("Lesson \(flowContext.lessonNumber) of \(flowContext.totalLessons)")
+                            .wwCaption(color: .wwTextSecondary)
+                        Text("·")
+                            .wwCaption(color: .wwTextMuted)
+                        Text("Module progress \(Int(moduleProgress * 100))%")
+                            .wwCaption(color: .wwTextSecondary)
+                    }
+                }
 
                 Text("Work through the examples, use the takeaways to lock in the idea, and tap any referenced NEC article when you want more context.")
                     .wwBody(color: .wwTextSecondary)
@@ -154,6 +220,59 @@ private struct LessonHeaderCard: View {
                             .foregroundColor(.wwBlue)
                     }
                     WWProgressBar(value: progress, height: 6)
+                }
+
+                if progress >= 1 {
+                    HStack(spacing: WWSpacing.s) {
+                        Image(systemName: "checkmark.circle")
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundColor(.wwBlue)
+                        Text("Lesson complete")
+                            .wwCaption(color: .wwBlue)
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct LessonNextStepCard: View {
+    let flowContext: LessonFlowContext?
+    let isComplete: Bool
+    let onPreviousLesson: () -> Void
+    let onBackToModule: () -> Void
+    let onNextLesson: () -> Void
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                HStack(spacing: WWSpacing.s) {
+                    Image(systemName: isComplete ? "checkmark.circle" : "arrow.right.circle")
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundColor(.wwBlue)
+                    Text(isComplete ? "Ready for the next lesson" : "What should you do next?")
+                        .wwSectionTitle()
+                }
+
+                Text(isComplete
+                     ? "Keep moving while the material is fresh, or step back to the module and review your place."
+                     : "Finish this lesson when you're ready, then move straight into the next step without losing momentum.")
+                    .wwBody(color: .wwTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                if flowContext?.nextLessonId != nil {
+                    WWPrimaryButton(title: "Next Lesson", action: onNextLesson)
+                } else {
+                    WWPrimaryButton(title: "Back to Module", action: onBackToModule)
+                }
+
+                HStack(spacing: WWSpacing.m) {
+                    if flowContext?.previousLessonId != nil {
+                        WWSecondaryButton(title: "Previous Lesson", action: onPreviousLesson)
+                    }
+                    if flowContext?.nextLessonId != nil {
+                        WWSecondaryButton(title: "Back to Module", action: onBackToModule)
+                    }
                 }
             }
         }
@@ -271,7 +390,7 @@ private struct NECReferenceChip: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: WWSpacing.s) {
-                Image(systemName: "book.pages.fill")
+                Image(systemName: "book.pages")
                     .font(.system(size: 14))
                     .foregroundColor(.wwBlue)
                 VStack(alignment: .leading, spacing: 2) {

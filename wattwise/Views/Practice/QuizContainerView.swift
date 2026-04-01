@@ -15,13 +15,13 @@ struct QuizContainerView: View {
             } else if let result = vm.result {
                 QuizResultsView(result: result, quizType: quizType) {
                     vm.reset()
-                    Task { await vm.load(type: quizType, services: services) }
+                    Task { await vm.load(type: quizType, examType: appVM.currentUser?.examType, services: services) }
                 }
             } else if vm.quiz != nil {
                 ActiveQuizView(vm: vm)
             } else if let error = vm.errorMessage {
                 WWEmptyState(icon: "exclamationmark.triangle", title: "Couldn't load quiz", message: error, actionTitle: "Retry") {
-                    Task { await vm.load(type: quizType, services: services) }
+                    Task { await vm.load(type: quizType, examType: appVM.currentUser?.examType, services: services) }
                 }
             }
         }
@@ -48,7 +48,7 @@ struct QuizContainerView: View {
         } message: {
             Text("Your progress will be lost.")
         }
-        .task { await vm.load(type: quizType, services: services) }
+        .task { await vm.load(type: quizType, examType: appVM.currentUser?.examType, services: services) }
     }
 }
 
@@ -67,6 +67,8 @@ private struct ActiveQuizView: View {
                     Text("Question \(vm.currentIndex + 1) of \(vm.quiz?.questions.count ?? 0)")
                         .wwCaption()
                     Spacer()
+                    Text(vm.quiz?.type.progressLabel ?? "")
+                        .wwCaption(color: .wwTextMuted)
                 }
             }
             .wwScreenPadding()

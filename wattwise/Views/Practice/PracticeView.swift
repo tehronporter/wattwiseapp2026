@@ -2,7 +2,6 @@ import SwiftUI
 
 struct PracticeView: View {
     @State private var vm = PracticeViewModel()
-    @State private var quizVM = QuizViewModel()
     @State private var navigateToQuiz = false
     @State private var activeQuizType: QuizType?
     @Environment(ServiceContainer.self) private var services
@@ -11,13 +10,18 @@ struct PracticeView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: WWSpacing.l) {
-                Text("Test your knowledge and track your weak areas.")
+                Text("Choose the kind of practice that fits your time and what you need right now.")
                     .wwBody(color: .wwTextSecondary)
+
+                if vm.dashboard.attemptCount > 0 {
+                    PracticeSummaryCard(dashboard: vm.dashboard)
+                }
 
                 ForEach(QuizType.allCases, id: \.self) { type in
                     QuizOptionCard(
                         type: type,
-                        isPro: appVM.subscriptionState.isPro
+                        isPro: appVM.subscriptionState.isPro,
+                        dashboard: vm.dashboard
                     ) {
                         if vm.startQuiz(type, subscription: appVM.subscriptionState) {
                             activeQuizType = type
@@ -42,6 +46,8 @@ struct PracticeView: View {
                 .environment(services)
                 .environment(appVM)
         }
+        .task { vm.refreshDashboard() }
+        .onAppear { vm.refreshDashboard() }
     }
 }
 
@@ -50,10 +56,26 @@ struct PracticeView: View {
 private struct QuizOptionCard: View {
     let type: QuizType
     let isPro: Bool
+    let dashboard: PracticeDashboardSnapshot
     let action: () -> Void
 
     private var isLocked: Bool {
         type == .fullPracticeExam && !isPro
+    }
+
+    private var detailText: String {
+        if type == .weakAreaReview {
+            if let firstWeakTopic = dashboard.weakTopics.first?.title {
+                return "Based on recent misses in \(firstWeakTopic)."
+            }
+            return "Unlocks focused follow-up after your first scored quiz."
+        }
+
+        if type == .quickQuiz, let latestScorePercentage = dashboard.latestScorePercentage {
+            return "Last score: \(latestScorePercentage)%. Great for a quick check-in."
+        }
+
+        return type.description
     }
 
     var body: some View {
@@ -74,13 +96,15 @@ private struct QuizOptionCard: View {
                             Text(type.displayName)
                                 .wwSectionTitle()
                             if isLocked {
-                                Image(systemName: "lock.fill")
+                                Image(systemName: "lock")
                                     .font(.system(size: 12))
                                     .foregroundColor(.wwTextMuted)
                             }
                         }
-                        Text(type.description)
+                        Text(detailText)
                             .wwBody(color: .wwTextSecondary)
+                        Text(type.bestFor)
+                            .wwCaption()
                         Text("\(type.questionCount) questions")
                             .wwCaption()
                     }
@@ -95,6 +119,32 @@ private struct QuizOptionCard: View {
         }
         .buttonStyle(.plain)
         .opacity(isLocked ? 0.7 : 1.0)
+    }
+}
+
+private struct PracticeSummaryCard: View {
+    let dashboard: PracticeDashboardSnapshot
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.s) {
+                Text("Practice Snapshot")
+                    .wwSectionTitle()
+
+                if let latestScorePercentage = dashboard.latestScorePercentage {
+                    Text("Most recent score: \(latestScorePercentage)%")
+                        .wwBody()
+                }
+
+                if let firstWeakTopic = dashboard.weakTopics.first {
+                    Text("Next focus: \(firstWeakTopic.title)")
+                        .wwBody(color: .wwTextSecondary)
+                } else {
+                    Text("No active weak areas right now. A full practice test is the best way to pressure-test your readiness.")
+                        .wwBody(color: .wwTextSecondary)
+                }
+            }
+        }
     }
 }
 

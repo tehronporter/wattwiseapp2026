@@ -17,7 +17,21 @@ struct QuizResultsView: View {
 
                 // Action Buttons
                 VStack(spacing: WWSpacing.m) {
-                    WWPrimaryButton(title: "Retry Quiz", action: onRetry)
+                    WWPrimaryButton(title: "Retake Quiz", action: onRetry)
+
+                    NavigationLink {
+                        QuizContainerView(quizType: .weakAreaReview)
+                    } label: {
+                        ActionLinkLabel(title: "Review Weak Areas", style: .secondary)
+                    }
+                    .buttonStyle(.plain)
+
+                    NavigationLink {
+                        LearnView()
+                    } label: {
+                        ActionLinkLabel(title: "Continue Learning", style: .secondary)
+                    }
+                    .buttonStyle(.plain)
 
                     WWGhostButton(title: "Ask Tutor About Results") {
                         tutorContext = TutorContext(type: .quizReview, id: result.id)
@@ -26,8 +40,8 @@ struct QuizResultsView: View {
                 }
 
                 // Weak Topics (if any)
-                if !result.weakTopics.isEmpty {
-                    WeakTopicsCard(topics: result.weakTopics)
+                if result.weakTopicDetails.isEmpty == false {
+                    WeakTopicsCard(topics: result.weakTopicDetails)
                 }
 
                 // Question Breakdown
@@ -89,6 +103,11 @@ private struct ScoreHeroView: View {
                         .wwHeading()
                     Text("\(result.correctCount) of \(result.totalCount) correct")
                         .wwBody(color: .wwTextSecondary)
+                    if let firstWeakTopic = result.weakTopicDetails.first?.title {
+                        Text(result.passed ? "Keep \(firstWeakTopic) fresh in your rotation." : "Review \(firstWeakTopic) first while this quiz is still fresh.")
+                            .wwCaption()
+                            .multilineTextAlignment(.center)
+                    }
 
                     // Pass/Fail badge
                     Text(result.passed ? "PASSED" : "NEEDS REVIEW")
@@ -108,27 +127,30 @@ private struct ScoreHeroView: View {
 // MARK: - Weak Topics Card
 
 private struct WeakTopicsCard: View {
-    let topics: [String]
+    let topics: [WeakTopicDetail]
 
     var body: some View {
         WWCard {
             VStack(alignment: .leading, spacing: WWSpacing.m) {
                 HStack(spacing: WWSpacing.s) {
-                    Image(systemName: "chart.bar.fill")
+                    Image(systemName: "chart.bar")
                         .foregroundColor(.wwBlue)
                     Text("Areas to Review")
                         .wwSectionTitle()
                 }
-                // Use adaptive grid instead of broken fixed-height FlowLayout
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 90, maximum: 200), spacing: WWSpacing.s)], spacing: WWSpacing.s) {
-                    ForEach(topics, id: \.self) { topic in
-                        Text(topic)
-                            .wwLabel(color: .wwBlue)
-                            .lineLimit(1)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .background(Color.wwBlueDim)
-                            .clipShape(Capsule())
+                VStack(spacing: WWSpacing.s) {
+                    ForEach(topics) { topic in
+                        HStack(alignment: .top, spacing: WWSpacing.s) {
+                            Text(topic.title)
+                                .wwLabel(color: .wwBlue)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 6)
+                                .background(Color.wwBlueDim)
+                                .clipShape(Capsule())
+                            Spacer()
+                            Text("\(topic.incorrectCount) miss\(topic.incorrectCount == 1 ? "" : "es")")
+                                .wwCaption(color: .wwTextMuted)
+                        }
                     }
                 }
             }
@@ -149,7 +171,7 @@ private struct QuestionResultCard: View {
             // Header
             Button(action: onToggle) {
                 HStack(spacing: WWSpacing.m) {
-                    Image(systemName: result.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    Image(systemName: result.isCorrect ? "checkmark.circle" : "xmark.circle")
                         .font(.system(size: 20))
                         .foregroundColor(result.isCorrect ? .wwSuccess : .wwError)
 
@@ -188,6 +210,10 @@ private struct QuestionResultCard: View {
 
                     // Explanation
                     VStack(alignment: .leading, spacing: WWSpacing.s) {
+                        if let referenceCode = result.referenceCode {
+                            Text("Reference: \(referenceCode)")
+                                .wwCaption(color: .wwBlue)
+                        }
                         Text("Explanation")
                             .font(WWFont.caption(.semibold))
                             .foregroundColor(.wwTextSecondary)
@@ -210,6 +236,30 @@ private struct QuestionResultCard: View {
         }
         .background(Color.wwSurface)
         .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
+    }
+}
+
+private struct ActionLinkLabel: View {
+    enum Style {
+        case primary
+        case secondary
+    }
+
+    let title: String
+    let style: Style
+
+    var body: some View {
+        Text(title)
+            .font(WWFont.body(.semibold))
+            .foregroundColor(style == .primary ? .white : .wwBlue)
+            .frame(maxWidth: .infinity)
+            .frame(height: WWSpacing.minTapTarget + 4)
+            .background(style == .primary ? Color.wwBlue : Color.clear)
+            .overlay(
+                Capsule()
+                    .strokeBorder(style == .primary ? Color.clear : Color.wwBlue, lineWidth: 1.5)
+            )
+            .clipShape(Capsule())
     }
 }
 

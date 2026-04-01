@@ -15,22 +15,32 @@ enum LoadState<T> {
 
 enum ExamType: String, CaseIterable, Codable, Identifiable {
     case apprentice = "apprentice"
-    case journeyman = "journeyman"
     case master = "master"
     var id: String { rawValue }
     var displayName: String {
         switch self {
         case .apprentice: return "Apprentice"
-        case .journeyman: return "Journeyman"
         case .master: return "Master"
         }
     }
     var description: String {
         switch self {
         case .apprentice: return "Foundational trade knowledge, safety, tools, and basic code navigation."
-        case .journeyman: return "Installation, calculations, grounding, motors, and code application."
         case .master: return "Advanced design, service sizing, interpretation, and complex systems."
         }
+    }
+}
+
+extension ExamType {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self).lowercased()
+        self = ExamType(rawValue: rawValue) ?? .apprentice
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }
 
@@ -153,23 +163,38 @@ enum QuizType: String, Codable, CaseIterable {
     }
     var description: String {
         switch self {
-        case .quickQuiz: return "5–10 questions on today's material"
-        case .fullPracticeExam: return "Full-length timed practice exam"
-        case .weakAreaReview: return "Targeted questions on your weak spots"
+        case .quickQuiz: return "A short check-in to keep your study streak moving."
+        case .fullPracticeExam: return "A longer exam-style session for serious review."
+        case .weakAreaReview: return "Targeted practice focused on the concepts you miss most."
+        }
+    }
+    var bestFor: String {
+        switch self {
+        case .quickQuiz: return "Best for a fast refresher between lessons"
+        case .fullPracticeExam: return "Best for a focused practice block"
+        case .weakAreaReview: return "Best after results show weak spots"
         }
     }
     var icon: String {
         switch self {
-        case .quickQuiz: return "bolt.fill"
-        case .fullPracticeExam: return "doc.text.fill"
-        case .weakAreaReview: return "chart.bar.fill"
+        case .quickQuiz: return "bolt"
+        case .fullPracticeExam: return "doc.text"
+        case .weakAreaReview: return "chart.bar"
         }
     }
     var questionCount: Int {
         switch self {
         case .quickQuiz: return 10
         case .fullPracticeExam: return 25
-        case .weakAreaReview: return 15
+        case .weakAreaReview: return 10
+        }
+    }
+
+    var progressLabel: String {
+        switch self {
+        case .quickQuiz: return "Short daily check-in"
+        case .fullPracticeExam: return "Exam-style mixed assessment"
+        case .weakAreaReview: return "Targeted follow-up drill"
         }
     }
 }
@@ -187,6 +212,10 @@ struct QuizQuestion: Identifiable, Codable {
     var correctChoice: String      // "A", "B", "C", or "D"
     var explanation: String
     var topics: [String]
+    var topicTitles: [String] = []
+    var difficultyLevel: String? = nil
+    var referenceCode: String? = nil
+    var certificationLevel: String? = nil
 }
 
 struct QuizAnswer: Codable {
@@ -202,6 +231,8 @@ struct QuizResult: Identifiable, Codable {
     var totalCount: Int
     var results: [QuestionResult]
     var weakTopics: [String]
+    var weakTopicDetails: [WeakTopicDetail] = []
+    var completedAt: Date = Date()
 
     var passed: Bool { score >= 0.7 }
     var percentage: Int { Int(score * 100) }
@@ -215,6 +246,22 @@ struct QuestionResult: Identifiable, Codable {
     var correctAnswer: String
     var explanation: String
     var isCorrect: Bool
+    var topics: [String] = []
+    var topicTitles: [String] = []
+    var referenceCode: String? = nil
+}
+
+struct WeakTopicDetail: Identifiable, Codable {
+    var id: String { key }
+    var key: String
+    var title: String
+    var incorrectCount: Int
+    var attemptedCount: Int
+
+    var accuracy: Double {
+        guard attemptedCount > 0 else { return 0 }
+        return Double(attemptedCount - incorrectCount) / Double(attemptedCount)
+    }
 }
 
 // MARK: - Tutor
@@ -247,6 +294,13 @@ struct ProgressSummary: Codable {
     var dailyGoal: DailyGoal
     var streakDays: Int
     var recommendedAction: String?
+    var hasStartedContent: Bool = false
+    var lastActivityAt: Date? = nil
+
+    var hasInProgressLesson: Bool {
+        guard let continueLearning else { return false }
+        return continueLearning.progress > 0 && continueLearning.progress < 1
+    }
 
     struct ContinueLearning: Codable {
         var lessonId: UUID

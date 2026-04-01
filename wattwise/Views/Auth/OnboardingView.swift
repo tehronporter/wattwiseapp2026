@@ -161,15 +161,7 @@ private struct StateSelectionStep: View {
 
             Spacer().frame(height: WWSpacing.m)
 
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.wwTextMuted)
-                TextField("Search states…", text: $searchText)
-                    .font(WWFont.body())
-            }
-            .padding(WWSpacing.m)
-            .background(Color.wwSurface)
-            .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
+            WWSearchField(placeholder: "Search states…", text: $searchText)
             .wwScreenPadding()
 
             ScrollView {

@@ -83,12 +83,12 @@ private struct UserHeaderSection: View {
                 Text(user.email)
                     .wwBody(color: .wwTextSecondary)
                 HStack(spacing: 4) {
-                    Image(systemName: "flame.fill")
+                    Image(systemName: "flame")
                         .font(.system(size: 12))
-                        .foregroundColor(Color(hex: "#FF6B35"))
+                        .foregroundColor(.wwBlue)
                     Text("\(user.streakDays) day streak")
                         .font(WWFont.caption(.semibold))
-                        .foregroundColor(Color(hex: "#FF6B35"))
+                        .foregroundColor(.wwBlue)
                 }
             }
             Spacer()
@@ -127,7 +127,7 @@ private struct SubscriptionCard: View {
                             .wwBody(color: .wwTextSecondary)
                     }
                     Spacer()
-                    Image(systemName: state.isPro ? "bolt.fill" : "bolt")
+                    Image(systemName: "bolt")
                         .font(.system(size: 22))
                         .foregroundColor(.wwBlue)
                 }

@@ -7,29 +7,30 @@ struct NECView: View {
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
 
+    private let suggestedSearches = [
+        "210.8",
+        "210.52",
+        "250.50",
+        "310.16",
+        "110.26"
+    ]
+
+    private let starterReferences: [(code: String, title: String, summary: String)] = [
+        ("210.8", "GFCI Protection", "Where GFCI protection is required for personnel safety."),
+        ("210.52", "Dwelling Receptacle Requirements", "Core outlet-spacing rules that appear often on exams."),
+        ("250.50", "Grounding Electrode System", "How available electrodes must be bonded together."),
+        ("310.16", "Ampacity Table", "One of the most tested conductor-ampacity references."),
+        ("110.26", "Working Space", "Required clearance around electrical equipment.")
+    ]
+
     var body: some View {
         VStack(spacing: 0) {
-            // Search bar
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.wwTextMuted)
-                TextField("Search NEC code or topic…", text: $vm.searchQuery)
-                    .font(WWFont.body())
-                    .onSubmit { vm.search(services: services) }
-                if !vm.searchQuery.isEmpty {
-                    Button {
-                        vm.searchQuery = ""
-                        vm.search(services: services)
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.wwTextMuted)
-                    }
-                }
-            }
-            .padding(.horizontal, WWSpacing.m)
-            .padding(.vertical, 12)
-            .background(Color.wwSurface)
-            .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.pill, style: .continuous))
+            WWSearchField(
+                placeholder: "Search NEC code or topic…",
+                text: $vm.searchQuery,
+                onSubmit: { vm.search(services: services) },
+                onClear: { vm.search(services: services) }
+            )
             .wwScreenPadding()
             .padding(.vertical, WWSpacing.m)
             .onChange(of: vm.searchQuery) { _, _ in
@@ -60,27 +61,79 @@ struct NECView: View {
                 )
             } else {
                 ScrollView {
-                    LazyVStack(spacing: 0) {
-                        if vm.searchQuery.isEmpty {
-                            Text("Common References")
-                                .wwLabel()
-                                .textCase(.uppercase)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .wwScreenPadding()
-                                .padding(.top, WWSpacing.m)
-                        }
+                    if vm.searchQuery.isEmpty {
+                        VStack(alignment: .leading, spacing: WWSpacing.l) {
+                            VStack(alignment: .leading, spacing: WWSpacing.s) {
+                                Text("Suggested Searches")
+                                    .wwLabel()
+                                    .textCase(.uppercase)
 
-                        ForEach(vm.results) { result in
-                            NavigationLink {
-                                NECDetailView(necId: result.id, code: result.code)
-                                    .environment(services)
-                                    .environment(appVM)
-                            } label: {
-                                NECResultRow(result: result)
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: WWSpacing.s) {
+                                        ForEach(suggestedSearches, id: \.self) { suggestion in
+                                            Button {
+                                                vm.searchQuery = suggestion
+                                                vm.search(services: services)
+                                            } label: {
+                                                Text(suggestion)
+                                                    .wwCaption(color: .wwBlue)
+                                                    .padding(.horizontal, 10)
+                                                    .padding(.vertical, 6)
+                                                    .background(Color.wwBlueDim)
+                                                    .clipShape(Capsule())
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                    }
+                                }
                             }
-                            .buttonStyle(.plain)
 
-                            WWDivider().padding(.leading, WWSpacing.m)
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text("Starter References")
+                                    .wwLabel()
+                                    .textCase(.uppercase)
+                                    .padding(.bottom, WWSpacing.s)
+
+                                ForEach(starterReferences, id: \.code) { reference in
+                                    NavigationLink {
+                                        NECDetailView(
+                                            necId: WattWiseContentRuntimeAdapter.uuid(for: "nec:\(reference.code)"),
+                                            code: reference.code
+                                        )
+                                        .environment(services)
+                                        .environment(appVM)
+                                    } label: {
+                                        NECResultRow(result: NECSearchResult(
+                                            id: WattWiseContentRuntimeAdapter.uuid(for: "nec:\(reference.code)"),
+                                            code: reference.code,
+                                            title: reference.title,
+                                            summary: reference.summary
+                                        ))
+                                    }
+                                    .buttonStyle(.plain)
+
+                                    if reference.code != starterReferences.last?.code {
+                                        WWDivider().padding(.leading, WWSpacing.m)
+                                    }
+                                }
+                            }
+                        }
+                        .wwScreenPadding()
+                        .padding(.vertical, WWSpacing.m)
+                    } else {
+                        LazyVStack(spacing: 0) {
+                            ForEach(vm.results) { result in
+                                NavigationLink {
+                                    NECDetailView(necId: result.id, code: result.code)
+                                        .environment(services)
+                                        .environment(appVM)
+                                } label: {
+                                    NECResultRow(result: result)
+                                }
+                                .buttonStyle(.plain)
+
+                                WWDivider().padding(.leading, WWSpacing.m)
+                            }
                         }
                     }
                 }

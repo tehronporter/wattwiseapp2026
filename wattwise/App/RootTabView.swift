@@ -1,14 +1,14 @@
 import SwiftUI
 
 enum WWTab: Int, CaseIterable {
-    case home, learn, practice, nec, profile
+    case home, learn, practice, tutor, profile
 
     var title: String {
         switch self {
         case .home:     return "Home"
         case .learn:    return "Learn"
         case .practice: return "Practice"
-        case .nec:      return "NEC"
+        case .tutor:    return "Tutor"
         case .profile:  return "Profile"
         }
     }
@@ -18,18 +18,8 @@ enum WWTab: Int, CaseIterable {
         case .home:     return "house"
         case .learn:    return "book"
         case .practice: return "list.bullet.clipboard"
-        case .nec:      return "book.pages"
+        case .tutor:    return "bubble.left"
         case .profile:  return "person"
-        }
-    }
-
-    var selectedIcon: String {
-        switch self {
-        case .home:     return "house.fill"
-        case .learn:    return "book.fill"
-        case .practice: return "list.bullet.clipboard.fill"
-        case .nec:      return "book.pages.fill"
-        case .profile:  return "person.fill"
         }
     }
 }
@@ -46,7 +36,7 @@ struct RootTabView: View {
                     tabContent(tab)
                 }
                 .tabItem {
-                    Label(tab.title, systemImage: selectedTab == tab ? tab.selectedIcon : tab.icon)
+                    Label(tab.title, systemImage: tab.icon)
                 }
                 .tag(tab)
             }
@@ -60,7 +50,7 @@ struct RootTabView: View {
         case .home:     HomeView()
         case .learn:    LearnView()
         case .practice: PracticeView()
-        case .nec:      NECView()
+        case .tutor:    TutorView()
         case .profile:  ProfileView()
         }
     }

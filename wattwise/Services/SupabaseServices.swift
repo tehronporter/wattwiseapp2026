@@ -144,11 +144,12 @@ final class SupabaseContentService: ContentServiceProtocol {
 // MARK: - Quiz Service (Edge Functions)
 
 final class SupabaseQuizService: QuizServiceProtocol {
-    func generateQuiz(type: QuizType, topicTags: [String]) async throws -> WWQuiz {
+    func generateQuiz(type: QuizType, topicTags: [String], examType: ExamType?) async throws -> WWQuiz {
         struct Request: Encodable {
             let quiz_type: String
             let topic_tags: [String]
             let question_count: Int
+            let exam_type: String?
         }
         struct Response: Decodable {
             let quiz_id: String
@@ -163,7 +164,12 @@ final class SupabaseQuizService: QuizServiceProtocol {
 
         let r = try await APIClient.shared.post(
             endpoint: "generate_quiz",
-            body: Request(quiz_type: type.rawValue, topic_tags: topicTags, question_count: type.questionCount),
+            body: Request(
+                quiz_type: type.rawValue,
+                topic_tags: topicTags,
+                question_count: type.questionCount,
+                exam_type: examType?.rawValue
+            ),
             responseType: Response.self
         )
 
@@ -189,6 +195,7 @@ final class SupabaseQuizService: QuizServiceProtocol {
         struct Response: Decodable {
             let score: Double
             let correct_count: Int
+            let total_count: Int
             let results: [ResultDTO]
             let weak_topics: [String]
             struct ResultDTO: Decodable {
@@ -227,7 +234,7 @@ final class SupabaseQuizService: QuizServiceProtocol {
             quizId: quizId,
             score: r.score,
             correctCount: r.correct_count,
-            totalCount: answers.count,
+            totalCount: r.total_count,
             results: results,
             weakTopics: r.weak_topics
         )
@@ -339,7 +346,8 @@ final class SupabaseProgressService: ProgressServiceProtocol {
             dailyGoal: .init(minutesCompleted: r.daily_goal.minutes_completed,
                              targetMinutes: r.daily_goal.target_minutes),
             streakDays: r.streak_days,
-            recommendedAction: r.recommended_action
+            recommendedAction: r.recommended_action,
+            hasStartedContent: r.continue_learning != nil || r.daily_goal.minutes_completed > 0 || r.streak_days > 0
         )
     }
 }
