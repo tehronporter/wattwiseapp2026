@@ -3,133 +3,148 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.42.0";
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+function firstRelation<T>(value: T | T[] | null | undefined): T | null {
+  if (Array.isArray(value)) {
+    return value[0] ?? null;
+  }
+  return value ?? null;
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
+    return json({ success: false, error: { message: "Method not allowed" } }, 405);
   }
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ success: false, error: { message: "Unauthorized" } }, 401);
     }
 
     const token = authHeader.replace("Bearer ", "");
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Verify token and get user
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser(token);
+
     if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ success: false, error: { message: "Unauthorized" } }, 401);
     }
 
-    const userId = user.id;
     const { lesson_id } = await req.json();
-
     if (!lesson_id) {
-      return new Response(JSON.stringify({ error: "Missing lesson_id" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ success: false, error: { message: "Missing lesson_id" } }, 400);
     }
 
-    // Get lesson with sections and NEC references
     const { data: lesson, error: lessonError } = await supabase
       .from("lessons")
-      .select(
-        `
+      .select(`
         id,
-        title,
-        description,
-        difficulty_level,
-        estimated_minutes,
         module_id,
-        modules (title),
-        lesson_sections (
-          id,
-          section_number,
-          title,
-          content,
-          nec_references: lesson_nec_references (
-            nec_entries (
-              id,
-              section,
-              subsection,
-              title
-            )
-          )
-        ),
-        topic_tags: lesson_topic_tags (
-          topic_tags (tag)
+        title,
+        estimated_minutes,
+        is_published,
+        modules (
+          title
         )
-      `
-      )
+      `)
       .eq("id", lesson_id)
-      .single();
+      .maybeSingle();
 
-    if (lessonError || !lesson) {
-      return new Response(JSON.stringify({ error: "Lesson not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
+    if (lessonError) throw lessonError;
+    if (!lesson || lesson.is_published === false) {
+      return json({ success: false, error: { message: "Lesson not found" } }, 404);
     }
 
-    // Get user progress for this lesson
-    const { data: progress } = await supabase
-      .from("lesson_progress")
-      .select("completion_percentage")
-      .eq("user_id", userId)
+    const { data: sectionRows, error: sectionsError } = await supabase
+      .from("lesson_sections")
+      .select("id, sort_order, section_type, heading, body_plaintext, body_markdown, meta_json")
       .eq("lesson_id", lesson_id)
-      .single();
+      .order("sort_order", { ascending: true });
 
-    // Transform NEC references
-    const sections = lesson.lesson_sections.map((section: any) => ({
+    if (sectionsError) throw sectionsError;
+
+    const { data: necRows, error: necError } = await supabase
+      .from("lesson_nec_references")
+      .select(`
+        display_order,
+        nec_entries (
+          id,
+          reference_code,
+          title,
+          simplified_summary,
+          topic_notes
+        )
+      `)
+      .eq("lesson_id", lesson_id)
+      .order("display_order", { ascending: true });
+
+    if (necError) throw necError;
+
+    const { data: progressRow, error: progressError } = await supabase
+      .from("lesson_progress")
+      .select("status, completion_percentage")
+      .eq("user_id", user.id)
+      .eq("lesson_id", lesson_id)
+      .maybeSingle();
+
+    if (progressError) throw progressError;
+
+    const sections = (sectionRows ?? []).map((section: any) => ({
       id: section.id,
-      section_number: section.section_number,
-      title: section.title,
-      content: section.content,
-      nec_callouts: section.nec_references.map((ref: any) => ({
-        id: ref.nec_entries.id,
-        section: ref.nec_entries.section,
-        subsection: ref.nec_entries.subsection,
-        title: ref.nec_entries.title,
-      })),
+      heading: section.heading,
+      body: section.body_plaintext ?? section.body_markdown ?? "",
+      type: section.section_type,
+      necCode: section.meta_json?.necReferences?.[0] ?? null,
     }));
 
-    const topics = lesson.topic_tags.map((t: any) => t.topic_tags.tag);
+    const necReferences = (necRows ?? [])
+      .map((row: any) => firstRelation(row.nec_entries))
+      .filter(Boolean)
+      .map((entry: any) => ({
+        id: entry.id,
+        code: entry.reference_code,
+        title: entry.title,
+        summary: entry.simplified_summary,
+        expanded: entry.topic_notes ?? null,
+      }));
 
-    return new Response(
-      JSON.stringify({
+    const completion = progressRow
+      ? Number(progressRow.completion_percentage) / 100
+      : 0;
+
+    const moduleRecord = firstRelation(lesson.modules);
+
+    return json({
+      success: true,
+      data: {
         lesson: {
           id: lesson.id,
+          moduleId: lesson.module_id,
           title: lesson.title,
-          description: lesson.description,
-          difficulty_level: lesson.difficulty_level,
-          estimated_minutes: lesson.estimated_minutes,
-          module_title: lesson.modules.title,
+          topic: moduleRecord?.title ?? "Lesson",
+          estimatedMinutes: lesson.estimated_minutes ?? 15,
+          status: progressRow?.status ?? "not_started",
+          completionPercentage: completion,
           sections,
-          topics,
-          progress_percentage: progress?.completion_percentage || 0,
+          necReferences,
         },
-      }),
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  } catch (error) {
-    console.error("Error:", error);
-    return new Response(JSON.stringify({ error: "Internal server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
+      },
     });
+  } catch (error) {
+    console.error("get_lesson error:", error);
+    return json(
+      { success: false, error: { message: "Internal server error" } },
+      500
+    );
   }
 });

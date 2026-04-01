@@ -63,46 +63,99 @@ private struct LessonContentView: View {
     @Bindable var vm: LessonViewModel
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: WWSpacing.l) {
-                // Lesson meta
-                HStack(spacing: WWSpacing.m) {
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: WWSpacing.l) {
+                    LessonHeaderCard(
+                        lesson: lesson,
+                        progress: max(vm.scrollProgress, lesson.completionPercentage)
+                    )
+
+                    ForEach(lesson.sections) { section in
+                        LessonSectionView(section: section) { necCode in
+                            if let ref = lesson.necReferences.first(where: { $0.code == necCode }) {
+                                vm.tapNEC(ref)
+                            }
+                        }
+                    }
+
+                    if !lesson.necReferences.isEmpty {
+                        VStack(alignment: .leading, spacing: WWSpacing.m) {
+                            WWDivider()
+                            Text("Referenced Articles")
+                                .wwLabel()
+                                .textCase(.uppercase)
+                            ForEach(lesson.necReferences) { ref in
+                                NECReferenceChip(reference: ref) {
+                                    vm.tapNEC(ref)
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer().frame(height: WWSpacing.xxxl)
+                }
+                .wwScreenPadding()
+                .padding(.vertical, WWSpacing.m)
+                .background(
+                    GeometryReader { contentProxy in
+                        Color.clear.preference(
+                            key: LessonScrollMetricsPreferenceKey.self,
+                            value: LessonScrollMetrics(
+                                minY: contentProxy.frame(in: .named("lessonScroll")).minY,
+                                contentHeight: contentProxy.size.height
+                            )
+                        )
+                    }
+                )
+            }
+            .coordinateSpace(name: "lessonScroll")
+            .onPreferenceChange(LessonScrollMetricsPreferenceKey.self) { metrics in
+                let viewportHeight = max(proxy.size.height - 1, 1)
+                let totalScrollable = max(metrics.contentHeight - viewportHeight, 0)
+                let offset = min(max(-metrics.minY, 0), totalScrollable)
+                let progress = totalScrollable == 0
+                    ? 1.0
+                    : min(max(offset / totalScrollable, lesson.completionPercentage), 1.0)
+                vm.scrollProgress = max(vm.scrollProgress, progress)
+            }
+        }
+    }
+}
+
+private struct LessonHeaderCard: View {
+    let lesson: WWLesson
+    let progress: Double
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                HStack(spacing: WWSpacing.s) {
                     Label(lesson.topic, systemImage: "tag")
                     Label("\(lesson.estimatedMinutes) min", systemImage: "clock")
                 }
                 .font(WWFont.caption(.medium))
                 .foregroundColor(.wwTextMuted)
 
-                WWDivider()
+                Text(lesson.title)
+                    .wwHeading()
 
-                // Content sections
-                ForEach(lesson.sections) { section in
-                    LessonSectionView(section: section) { necCode in
-                        if let ref = lesson.necReferences.first(where: { $0.code == necCode }) {
-                            vm.tapNEC(ref)
-                        }
-                    }
-                }
+                Text("Work through the examples, use the takeaways to lock in the idea, and tap any referenced NEC article when you want more context.")
+                    .wwBody(color: .wwTextSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
 
-                // NEC References
-                if !lesson.necReferences.isEmpty {
-                    VStack(alignment: .leading, spacing: WWSpacing.m) {
-                        WWDivider()
-                        Text("Referenced Articles")
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text("Reading Progress")
                             .wwLabel()
-                            .textCase(.uppercase)
-                        ForEach(lesson.necReferences) { ref in
-                            NECReferenceChip(reference: ref) {
-                                vm.tapNEC(ref)
-                            }
-                        }
+                        Spacer()
+                        Text("\(Int(progress * 100))%")
+                            .font(WWFont.caption(.semibold))
+                            .foregroundColor(.wwBlue)
                     }
+                    WWProgressBar(value: progress, height: 6)
                 }
-
-                Spacer().frame(height: WWSpacing.xxxl)
             }
-            .wwScreenPadding()
-            .padding(.vertical, WWSpacing.m)
         }
     }
 }
@@ -147,6 +200,19 @@ private struct LessonSectionView: View {
         case .necCallout:
             CalloutCard(heading: section.heading, text: section.body, necCode: section.necCode, onNECTap: onNECTap, isNEC: true)
         }
+    }
+}
+
+private struct LessonScrollMetrics: Equatable {
+    var minY: CGFloat
+    var contentHeight: CGFloat
+}
+
+private struct LessonScrollMetricsPreferenceKey: PreferenceKey {
+    static var defaultValue = LessonScrollMetrics(minY: 0, contentHeight: 0)
+
+    static func reduce(value: inout LessonScrollMetrics, nextValue: () -> LessonScrollMetrics) {
+        value = nextValue()
     }
 }
 
@@ -301,7 +367,7 @@ struct TutorSheet: View {
 
 #Preview {
     NavigationStack {
-        LessonView(lessonId: MockData.fundamentalsLessons[0].id)
+        LessonView(lessonId: WattWiseContentRuntimeAdapter.uuid(for: "lesson:ap-les-001"))
             .environment(ServiceContainer())
             .environment(AppViewModel())
     }

@@ -233,7 +233,9 @@ final class LessonViewModel {
         errorMessage = nil
         defer { isLoading = false }
         do {
-            lesson = try await services.content.fetchLesson(id: lessonId)
+            let loadedLesson = try await services.content.fetchLesson(id: lessonId)
+            lesson = loadedLesson
+            scrollProgress = max(scrollProgress, loadedLesson.completionPercentage)
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -241,7 +243,8 @@ final class LessonViewModel {
 
     func saveProgress(services: ServiceContainer) async {
         guard let lesson else { return }
-        try? await services.content.saveProgress(lessonId: lesson.id, completion: scrollProgress)
+        let effectiveProgress = max(scrollProgress, lesson.completionPercentage)
+        try? await services.content.saveProgress(lessonId: lesson.id, completion: effectiveProgress)
     }
 
     func tapNEC(_ ref: NECReference) {
@@ -418,6 +421,14 @@ final class NECViewModel {
     func search(services: ServiceContainer) {
         searchTask?.cancel()
         searchTask = Task {
+            let trimmed = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+            if trimmed.isEmpty {
+                isSearching = false
+                searchError = nil
+                results = []
+                return
+            }
+
             isSearching = true
             searchError = nil
             defer { isSearching = false }
@@ -425,7 +436,7 @@ final class NECViewModel {
             do {
                 try await Task.sleep(for: .milliseconds(300))  // debounce
                 guard !Task.isCancelled else { return }
-                results = try await services.nec.search(query: searchQuery)
+                results = try await services.nec.search(query: trimmed)
             } catch is CancellationError {
                 // A new search superseded this one — do not surface as error
             } catch {

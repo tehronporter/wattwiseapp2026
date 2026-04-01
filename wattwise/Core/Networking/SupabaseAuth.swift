@@ -61,6 +61,26 @@ actor SupabaseAuthClient {
         return try JSONDecoder().decode(SupabaseUser.self, from: data)
     }
 
+    func updateUserMetadata(accessToken: String, metadata: [String: String]) async throws -> SupabaseUser {
+        var request = makeRequest(path: "/user", accessToken: accessToken)
+        request.httpMethod = "PUT"
+        request.httpBody = try JSONEncoder().encode(["data": metadata])
+
+        let (data, response) = try await session.data(for: request)
+        let http = response as? HTTPURLResponse
+
+        if let status = http?.statusCode, status >= 400 {
+            if let errBody = try? JSONDecoder().decode(AuthErrorBody.self, from: data) {
+                throw AuthError.server(errBody.msg ?? errBody.error_description ?? "Auth error")
+            }
+            throw AuthError.server("HTTP \(status)")
+        }
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(SupabaseUser.self, from: data)
+    }
+
     // MARK: - Session Persistence
 
     func saveSession(_ session: AuthSession) {
@@ -127,7 +147,7 @@ actor SupabaseAuthClient {
 
 // MARK: - Models
 
-struct AuthSession: Decodable {
+nonisolated struct AuthSession: Decodable, Sendable {
     let accessToken: String
     let tokenType: String
     let expiresIn: Int?
@@ -135,25 +155,25 @@ struct AuthSession: Decodable {
     let user: SupabaseUser
 }
 
-struct SupabaseUser: Decodable {
+nonisolated struct SupabaseUser: Decodable, Sendable {
     let id: String
     let email: String?
     let userMetadata: UserMetadata?
     let appMetadata: AppMetadata?
 
-    struct UserMetadata: Decodable {
+    nonisolated struct UserMetadata: Decodable, Sendable {
         let displayName: String?
         let examType: String?
         let state: String?
         let studyGoal: String?
     }
 
-    struct AppMetadata: Decodable {
+    nonisolated struct AppMetadata: Decodable, Sendable {
         let provider: String?
     }
 }
 
-private struct AuthErrorBody: Decodable {
+private nonisolated struct AuthErrorBody: Decodable, Sendable {
     let error: String?
     let error_description: String?
     let msg: String?

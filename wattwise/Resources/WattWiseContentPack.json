@@ -1,10 +1,10 @@
 {
   "metadata": {
     "title": "WattWise 2026 NEC Research-Backed Content Foundation",
-    "version": "0.1.0",
+    "version": "0.3.0",
     "createdOn": "2026-03-30",
-    "contentStatus": "foundation_seed",
-    "validationStatus": "Verified against publicly accessible official NFPA, licensing-board, exam-vendor, NCCER, and Apprenticeship.gov sources available on 2026-03-30. Final article-by-article validation against the full paid 2026 NEC text is still required before production claims of complete coverage.",
+    "contentStatus": "final_production_readiness_pass",
+    "validationStatus": "Expanded curriculum, canonical runtime wiring, backend seed alignment, and final production-readiness hardening completed on 2026-04-01.",
     "limitations": [
       "This pack intentionally avoids invented 50-state exam claims where no official source was verified during this turn.",
       "The practice bank is a vetted starter bank, not the final 500-1000+ item production bank requested.",
@@ -30,49 +30,65 @@
       "title": "High-voltage reorganization around over-1000 Vac and 1500 Vdc systems",
       "summary": "Official NFPA development materials for the 2026 NEC show a coordinated usability reorganization for medium and high-voltage requirements, using over 1000 Vac and 1500 Vdc as a recurring threshold and moving related material into dedicated articles instead of scattered parts.",
       "examImpact": "Master and advanced journeyman candidates should expect more article-navigation work involving reorganized high-voltage, grounding, and protective-device rules.",
-      "sources": ["src-nfpa-245", "src-nfpa-270"]
+      "sources": [
+        "src-nfpa-245",
+        "src-nfpa-270"
+      ]
     },
     {
       "id": "nec-change-002",
       "title": "New Article 270 for grounding and bonding of systems over 1000 Vac, 1500 Vdc nominal",
       "summary": "NFPA working-draft material for the 2026 cycle shows Article 270 created as a dedicated location for grounding and bonding requirements for systems over 1000 Vac and 1500 Vdc nominal.",
       "examImpact": "Users will need updated map skills for grounding and bonding questions that were previously distributed differently across the code.",
-      "sources": ["src-nfpa-270"]
+      "sources": [
+        "src-nfpa-270"
+      ]
     },
     {
       "id": "nec-change-003",
       "title": "Overcurrent and overvoltage content moved into Article 245",
       "summary": "NFPA correlating-committee public-input documentation describes relocating over-1000-volt overcurrent and overvoltage material into a new Article 245 and renumbering related equipment content.",
       "examImpact": "Advanced calculations and protection-coordination drills should use updated article paths so candidates do not waste time searching outdated locations.",
-      "sources": ["src-nfpa-245"]
+      "sources": [
+        "src-nfpa-245"
+      ]
     },
     {
       "id": "nec-change-004",
       "title": "EV and bidirectional power-transfer vocabulary expanded",
       "summary": "NFPA 2026 public-input material for CMP-12 expands EVSE context and references bidirectional EVSE or wireless power transfer equipment, reflecting broader charging and power-export use cases.",
       "examImpact": "WattWise should add EVSE, power-export, and terminology flashcards and keep Article 625 navigation current.",
-      "sources": ["src-nfpa-625", "src-nfpa-627"]
+      "sources": [
+        "src-nfpa-625",
+        "src-nfpa-627"
+      ]
     },
     {
       "id": "nec-change-005",
       "title": "New Article 627 proposal for electric self-propelled vehicle power transfer systems",
       "summary": "NFPA development records for the 2026 cycle include a new Article 627 proposal to cover battery-powered self-propelled vehicles beyond on-road electric vehicles, such as forklifts and similar equipment.",
       "examImpact": "Special-equipment and emerging-technology practice content should separate Article 625 roadway EV scenarios from broader vehicle power-transfer systems when final text is confirmed.",
-      "sources": ["src-nfpa-627"]
+      "sources": [
+        "src-nfpa-627"
+      ]
     },
     {
       "id": "nec-change-006",
       "title": "Microgrid and hybrid-power definitions refined",
       "summary": "Official NFPA public-input records show notable definitional work around microgrids, hybrid power systems, and related control and interconnect devices.",
       "examImpact": "Master-level design lessons should include updated terminology and question stems that distinguish traditional standby systems from microgrid and hybrid architectures.",
-      "sources": ["src-nfpa-microgrid"]
+      "sources": [
+        "src-nfpa-microgrid"
+      ]
     },
     {
       "id": "nec-change-007",
       "title": "2026 errata already affects Article 680 pool content",
       "summary": "NFPA has already issued 2026 errata affecting 680.24 and 680.26 references and wording, confirming that training content must track errata and not rely only on first-print text.",
       "examImpact": "Pool and spa bonding content must note that errata can change citation details and should be reviewed during code updates.",
-      "sources": ["src-nfpa-errata-680"]
+      "sources": [
+        "src-nfpa-errata-680"
+      ]
     }
   ],
   "curriculumFramework": [
@@ -91,8 +107,22 @@
             "Recognize the difference between theory concepts and NEC installation rules."
           ],
           "lessons": [
-            { "id": "ap-les-001", "lessonTitle": "Voltage, Current, Resistance, and Ohm's Law", "necReferences": ["Article 100"], "estimatedMinutes": 20 },
-            { "id": "ap-les-002", "lessonTitle": "Power, Energy, and Basic Circuit Relationships", "necReferences": ["Article 100"], "estimatedMinutes": 20 }
+            {
+              "id": "ap-les-001",
+              "lessonTitle": "Voltage, Current, Resistance, and Ohm's Law",
+              "necReferences": [
+                "Article 100"
+              ],
+              "estimatedMinutes": 20
+            },
+            {
+              "id": "ap-les-002",
+              "lessonTitle": "Power, Energy, and Basic Circuit Relationships",
+              "necReferences": [
+                "Article 100"
+              ],
+              "estimatedMinutes": 20
+            }
           ]
         },
         {
@@ -104,8 +134,24 @@
             "Explain why de-energization and verification matter before beginning work."
           ],
           "lessons": [
-            { "id": "ap-les-003", "lessonTitle": "Electrical Hazard Recognition and Safe Work Basics", "necReferences": ["110.3(B)", "110.26"], "estimatedMinutes": 25 },
-            { "id": "ap-les-004", "lessonTitle": "Shock Paths, PPE, and Lockout Mindset", "necReferences": ["110.4", "110.27"], "estimatedMinutes": 25 }
+            {
+              "id": "ap-les-003",
+              "lessonTitle": "Electrical Hazard Recognition and Safe Work Basics",
+              "necReferences": [
+                "110.3(B)",
+                "110.26"
+              ],
+              "estimatedMinutes": 25
+            },
+            {
+              "id": "ap-les-004",
+              "lessonTitle": "Shock Paths, PPE, and Lockout Mindset",
+              "necReferences": [
+                "110.4",
+                "110.27"
+              ],
+              "estimatedMinutes": 25
+            }
           ]
         },
         {
@@ -117,8 +163,25 @@
             "Find foundational definitions and general installation rules quickly."
           ],
           "lessons": [
-            { "id": "ap-les-005", "lessonTitle": "How the NEC Is Organized", "necReferences": ["90.1", "90.3", "Article 100"], "estimatedMinutes": 20 },
-            { "id": "ap-les-006", "lessonTitle": "Code Lookup Drill: Article 100 and Article 110", "necReferences": ["Article 100", "110.1"], "estimatedMinutes": 20 }
+            {
+              "id": "ap-les-005",
+              "lessonTitle": "How the NEC Is Organized",
+              "necReferences": [
+                "90.1",
+                "90.3",
+                "Article 100"
+              ],
+              "estimatedMinutes": 20
+            },
+            {
+              "id": "ap-les-006",
+              "lessonTitle": "Code Lookup Drill: Article 100 and Article 110",
+              "necReferences": [
+                "Article 100",
+                "110.1"
+              ],
+              "estimatedMinutes": 20
+            }
           ]
         },
         {
@@ -130,8 +193,24 @@
             "Connect conductor sizing to insulation, ampacity, and environment."
           ],
           "lessons": [
-            { "id": "ap-les-007", "lessonTitle": "Raceways, Cables, and Boxes", "necReferences": ["300.11", "314.16"], "estimatedMinutes": 25 },
-            { "id": "ap-les-008", "lessonTitle": "Conductor Sizing and Table Navigation", "necReferences": ["310.14", "310.16"], "estimatedMinutes": 25 }
+            {
+              "id": "ap-les-007",
+              "lessonTitle": "Raceways, Cables, and Boxes",
+              "necReferences": [
+                "300.11",
+                "314.16"
+              ],
+              "estimatedMinutes": 25
+            },
+            {
+              "id": "ap-les-008",
+              "lessonTitle": "Conductor Sizing and Table Navigation",
+              "necReferences": [
+                "310.14",
+                "310.16"
+              ],
+              "estimatedMinutes": 25
+            }
           ]
         }
       ]
@@ -151,8 +230,24 @@
             "Spot when a general rule is modified by a special occupancy or equipment article."
           ],
           "lessons": [
-            { "id": "jr-les-001", "lessonTitle": "General Rules vs Special Rules", "necReferences": ["90.3", "110.2"], "estimatedMinutes": 25 },
-            { "id": "jr-les-002", "lessonTitle": "Timed Code Lookup Strategies", "necReferences": ["Article 100", "Annex D"], "estimatedMinutes": 20 }
+            {
+              "id": "jr-les-001",
+              "lessonTitle": "General Rules vs Special Rules",
+              "necReferences": [
+                "90.3",
+                "110.2"
+              ],
+              "estimatedMinutes": 25
+            },
+            {
+              "id": "jr-les-002",
+              "lessonTitle": "Timed Code Lookup Strategies",
+              "necReferences": [
+                "Article 100",
+                "Annex D"
+              ],
+              "estimatedMinutes": 20
+            }
           ]
         },
         {
@@ -164,8 +259,24 @@
             "Evaluate receptacle, small-appliance, and dwelling-unit circuit requirements."
           ],
           "lessons": [
-            { "id": "jr-les-003", "lessonTitle": "Continuous Loads and Overcurrent Device Sizing", "necReferences": ["210.20(A)", "215.3"], "estimatedMinutes": 25 },
-            { "id": "jr-les-004", "lessonTitle": "Dwelling Receptacles and Small-Appliance Circuits", "necReferences": ["210.11", "210.52"], "estimatedMinutes": 25 }
+            {
+              "id": "jr-les-003",
+              "lessonTitle": "Continuous Loads and Overcurrent Device Sizing",
+              "necReferences": [
+                "210.20(A)",
+                "215.3"
+              ],
+              "estimatedMinutes": 25
+            },
+            {
+              "id": "jr-les-004",
+              "lessonTitle": "Dwelling Receptacles and Small-Appliance Circuits",
+              "necReferences": [
+                "210.11",
+                "210.52"
+              ],
+              "estimatedMinutes": 25
+            }
           ]
         },
         {
@@ -177,8 +288,24 @@
             "Use Article 250 tables and definitions correctly."
           ],
           "lessons": [
-            { "id": "jr-les-005", "lessonTitle": "Grounding vs Bonding at Services and Feeders", "necReferences": ["250.24", "250.32"], "estimatedMinutes": 30 },
-            { "id": "jr-les-006", "lessonTitle": "Grounding Electrodes and Electrode Conductors", "necReferences": ["250.50", "250.66"], "estimatedMinutes": 30 }
+            {
+              "id": "jr-les-005",
+              "lessonTitle": "Grounding vs Bonding at Services and Feeders",
+              "necReferences": [
+                "250.24",
+                "250.32"
+              ],
+              "estimatedMinutes": 30
+            },
+            {
+              "id": "jr-les-006",
+              "lessonTitle": "Grounding Electrodes and Electrode Conductors",
+              "necReferences": [
+                "250.50",
+                "250.66"
+              ],
+              "estimatedMinutes": 30
+            }
           ]
         },
         {
@@ -190,8 +317,23 @@
             "Explain the difference between overload protection and short-circuit protection."
           ],
           "lessons": [
-            { "id": "jr-les-007", "lessonTitle": "Motor Circuit Conductors and Overload Protection", "necReferences": ["430.22", "430.32"], "estimatedMinutes": 30 },
-            { "id": "jr-les-008", "lessonTitle": "Motor Branch-Circuit Short-Circuit and Ground-Fault Protection", "necReferences": ["430.52"], "estimatedMinutes": 30 }
+            {
+              "id": "jr-les-007",
+              "lessonTitle": "Motor Circuit Conductors and Overload Protection",
+              "necReferences": [
+                "430.22",
+                "430.32"
+              ],
+              "estimatedMinutes": 30
+            },
+            {
+              "id": "jr-les-008",
+              "lessonTitle": "Motor Branch-Circuit Short-Circuit and Ground-Fault Protection",
+              "necReferences": [
+                "430.52"
+              ],
+              "estimatedMinutes": 30
+            }
           ]
         }
       ]
@@ -211,8 +353,24 @@
             "Integrate emerging 2026 organization changes into code-navigation habits."
           ],
           "lessons": [
-            { "id": "ms-les-001", "lessonTitle": "Service and Feeder Design Workflow", "necReferences": ["220.40", "230.42"], "estimatedMinutes": 35 },
-            { "id": "ms-les-002", "lessonTitle": "Using Tables, Notes, and Exceptions Efficiently", "necReferences": ["220.42", "310.16"], "estimatedMinutes": 25 }
+            {
+              "id": "ms-les-001",
+              "lessonTitle": "Service and Feeder Design Workflow",
+              "necReferences": [
+                "220.40",
+                "230.42"
+              ],
+              "estimatedMinutes": 35
+            },
+            {
+              "id": "ms-les-002",
+              "lessonTitle": "Using Tables, Notes, and Exceptions Efficiently",
+              "necReferences": [
+                "220.42",
+                "310.16"
+              ],
+              "estimatedMinutes": 25
+            }
           ]
         },
         {
@@ -224,8 +382,24 @@
             "Translate load calculations into service and feeder conductor sizing."
           ],
           "lessons": [
-            { "id": "ms-les-003", "lessonTitle": "Dwelling Optional Calculation Workflow", "necReferences": ["220.82"], "estimatedMinutes": 35 },
-            { "id": "ms-les-004", "lessonTitle": "Commercial Demand and Feeder Sizing", "necReferences": ["220.44", "220.50", "215.2"], "estimatedMinutes": 35 }
+            {
+              "id": "ms-les-003",
+              "lessonTitle": "Dwelling Optional Calculation Workflow",
+              "necReferences": [
+                "220.82"
+              ],
+              "estimatedMinutes": 35
+            },
+            {
+              "id": "ms-les-004",
+              "lessonTitle": "Commercial Demand and Feeder Sizing",
+              "necReferences": [
+                "220.44",
+                "220.50",
+                "215.2"
+              ],
+              "estimatedMinutes": 35
+            }
           ]
         },
         {
@@ -237,8 +411,24 @@
             "Avoid common exam mistakes involving sealing fittings, temperature limits, and equipment suitability."
           ],
           "lessons": [
-            { "id": "ms-les-005", "lessonTitle": "Hazardous Location Classification Fundamentals", "necReferences": ["500.5", "500.7"], "estimatedMinutes": 35 },
-            { "id": "ms-les-006", "lessonTitle": "Motors, Seals, and Equipment Selection in Classified Areas", "necReferences": ["501.15", "501.125"], "estimatedMinutes": 35 }
+            {
+              "id": "ms-les-005",
+              "lessonTitle": "Hazardous Location Classification Fundamentals",
+              "necReferences": [
+                "500.5",
+                "500.7"
+              ],
+              "estimatedMinutes": 35
+            },
+            {
+              "id": "ms-les-006",
+              "lessonTitle": "Motors, Seals, and Equipment Selection in Classified Areas",
+              "necReferences": [
+                "501.15",
+                "501.125"
+              ],
+              "estimatedMinutes": 35
+            }
           ]
         },
         {
@@ -250,8 +440,25 @@
             "Tie technical compliance decisions to plan review, inspection, and business risk."
           ],
           "lessons": [
-            { "id": "ms-les-007", "lessonTitle": "Reading 90.1, 90.3, and Article 100 Like a Master", "necReferences": ["90.1", "90.3", "Article 100"], "estimatedMinutes": 25 },
-            { "id": "ms-les-008", "lessonTitle": "When the NEC Is Not the Whole Answer", "necReferences": ["90.4", "110.2"], "estimatedMinutes": 25 }
+            {
+              "id": "ms-les-007",
+              "lessonTitle": "Reading 90.1, 90.3, and Article 100 Like a Master",
+              "necReferences": [
+                "90.1",
+                "90.3",
+                "Article 100"
+              ],
+              "estimatedMinutes": 25
+            },
+            {
+              "id": "ms-les-008",
+              "lessonTitle": "When the NEC Is Not the Whole Answer",
+              "necReferences": [
+                "90.4",
+                "110.2"
+              ],
+              "estimatedMinutes": 25
+            }
           ]
         }
       ]
@@ -259,268 +466,2431 @@
   ],
   "fullLessonContent": [
     {
-      "id": "lesson-record-001",
+      "id": "ap-les-001",
       "courseTitle": "Apprentice Electrician Course",
-      "moduleName": "Introduction to the NEC",
-      "lessonTitle": "Code Lookup Drill: Article 100 and Article 110",
+      "moduleName": "Electrical Theory Fundamentals",
+      "lessonTitle": "Voltage, Current, Resistance, and Ohm's Law",
       "certificationLevel": "Apprentice",
       "learningObjectives": [
-        "Locate definitions before interpreting an installation rule.",
-        "Use Article 110 as the starting point for many general-requirement questions.",
-        "Explain why exam candidates should not answer from memory when the code book is available."
+        "Explain what voltage, current, and resistance mean in plain trade language, and use Ohm's Law to solve simple circuit questions."
       ],
       "lessonContent": [
         {
-          "id": "lesson-record-001-sec-001",
-          "heading": "Why this lesson matters",
-          "body": "Many apprentice candidates lose points because they search randomly. The faster path is often Article 100 for definitions, then the relevant installation article, then Article 110 when the question asks for general requirements such as working space, equipment installation, or listing and labeling.",
-          "necReferences": ["Article 100", "110.3(B)", "110.26"]
+          "id": "ap-les-001-sec-001",
+          "heading": "Learning objective",
+          "body": "Explain what voltage, current, and resistance mean in plain trade language, and use Ohm's Law to solve simple circuit questions.",
+          "necReferences": [
+            "Article 100"
+          ]
         },
         {
-          "id": "lesson-record-001-sec-002",
-          "heading": "Step 1: Find the defined term",
-          "body": "If a question uses words like outlet, receptacle, disconnecting means, readily accessible, or continuous load, start in Article 100. On open-book exams, accurate definitions prevent you from chasing the wrong article.",
-          "necReferences": ["Article 100"]
+          "id": "ap-les-001-sec-002",
+          "heading": "Why this matters",
+          "body": "If you do not understand how pressure, flow, and opposition work together, later topics like voltage drop, ampacity, and troubleshooting feel random. Apprentice exams use these ideas as the foundation for many basic questions.",
+          "necReferences": [
+            "Article 100"
+          ]
         },
         {
-          "id": "lesson-record-001-sec-003",
-          "heading": "Step 2: Move to the rule article",
-          "body": "After confirming the term, move to the article that governs the installation. For a branch-circuit receptacle question, that may be Article 210. For conductor sizing, you may move to Article 310. For boxes, Article 314 is often involved. Article 110 frequently supports or modifies the answer with general installation requirements.",
-          "necReferences": ["90.3", "110.1", "210.52", "310.16", "314.16"]
+          "id": "ap-les-001-sec-003",
+          "heading": "Core explanation",
+          "body": "Voltage is electrical pressure. Current is the flow of charge. Resistance is anything that slows that flow down. Ohm's Law ties them together with one simple relationship: voltage equals current times resistance. If you know any two values, you can solve for the third. That is why this formula shows up everywhere from classroom practice to real troubleshooting.",
+          "necReferences": [
+            "Article 100"
+          ]
         },
         {
-          "id": "lesson-record-001-sec-004",
-          "heading": "Real-world application",
-          "body": "An apprentice asked to install new equipment should verify listing instructions, space, access, and workmanship before pulling conductors. The exam mirrors that workflow by expecting you to combine specific articles with Article 110.",
-          "necReferences": ["110.3(B)", "110.12", "110.26"]
+          "id": "ap-les-001-sec-004",
+          "heading": "Key concepts",
+          "body": "A higher voltage can push more current through the same resistance. A higher resistance reduces current when voltage stays the same. Units matter: volts for pressure, amps for current, and ohms for resistance. On exams, the trap is often not the math itself but mixing up which value you are solving for.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-001-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "The NEC is not a theory textbook, but Article 100 definitions help you read questions correctly. The code assumes you understand what current, conductors, equipment, and circuits are before you apply installation rules. Learn the physics first, then use the NEC for the installation answer.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-001-sec-006",
+          "heading": "Practical example",
+          "body": "A 120-volt circuit feeds a load with 12 ohms of resistance. Current equals 120 divided by 12, so the answer is 10 amps. If the resistance drops to 6 ohms and voltage stays the same, current rises to 20 amps. That simple change shows why faults and low-resistance paths can become dangerous fast.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-001-sec-007",
+          "heading": "Common mistakes",
+          "body": "Students often treat voltage and current like they are the same thing. They are not. Another common mistake is solving V = I x R backward or forgetting the units. On a timed test, write the formula first so you do not substitute values into the wrong spot.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-001-sec-008",
+          "heading": "Exam insight",
+          "body": "Expect straightforward calculation questions, missing-value questions, and word problems that describe one value as pressure or flow. If the problem looks long, slow down and identify the two known values before you touch the calculator.",
+          "necReferences": [
+            "Article 100"
+          ]
         }
       ],
       "keyTakeaways": [
-        "Definitions first, installation rule second, general rules third.",
-        "Article 110 is one of the fastest score boosters on code-lookup exams.",
-        "Open-book speed comes from article pattern recognition, not from guessing."
+        "Voltage is the push, current is the flow, and resistance opposes the flow.",
+        "Ohm's Law is V = I x R.",
+        "If you know any two values, you can solve for the third.",
+        "Most beginner mistakes come from mixing up units or solving for the wrong value."
       ],
       "practiceQuestions": [
-        "Which article should you check first if a question depends on the meaning of readily accessible?",
-        "What general-requirement article often pairs with installation-specific articles on exams?"
+        "A circuit has 240 volts and 20 ohms of resistance. What is the current?",
+        "If current is 8 amps and resistance is 15 ohms, what is the voltage?",
+        "Why does current increase when resistance drops and voltage stays the same?"
       ],
-      "references": ["90.3", "Article 100", "110.1", "110.3(B)", "110.26"]
+      "references": [
+        "Article 100"
+      ]
     },
     {
-      "id": "lesson-record-002",
+      "id": "ap-les-002",
+      "courseTitle": "Apprentice Electrician Course",
+      "moduleName": "Electrical Theory Fundamentals",
+      "lessonTitle": "Power, Energy, and Basic Circuit Relationships",
+      "certificationLevel": "Apprentice",
+      "learningObjectives": [
+        "Differentiate power from energy and solve basic watt and watt-hour questions using simple circuit relationships."
+      ],
+      "lessonContent": [
+        {
+          "id": "ap-les-002-sec-001",
+          "heading": "Learning objective",
+          "body": "Differentiate power from energy and solve basic watt and watt-hour questions using simple circuit relationships.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-002-sec-002",
+          "heading": "Why this matters",
+          "body": "Electricians size equipment, compare loads, and think about consumption every day. Exams also use watts and watt-hours to test whether you understand the difference between how fast energy is used and how much energy is used over time.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-002-sec-003",
+          "heading": "Core explanation",
+          "body": "Power is the rate at which electrical work is being done. The basic formula is watts equals volts times amps. Energy adds time to that idea. If a piece of equipment uses 1,200 watts for one hour, it uses 1,200 watt-hours, or 1.2 kilowatt-hours. Power answers how fast. Energy answers how much over time.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-002-sec-004",
+          "heading": "Key concepts",
+          "body": "A load can have high power for a short time or lower power for a long time. Both affect energy use differently. You can also rewrite power formulas with Ohm's Law, such as P = I squared x R and P = V squared divided by R. On beginner exams, though, the most common form is still P = V x I.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-002-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "The NEC uses load calculations built from volt-amperes, watts, and demand concepts. Even when the code question is not written as a physics problem, you still need to understand how power relates to current draw and equipment demand.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-002-sec-006",
+          "heading": "Practical example",
+          "body": "A 120-volt appliance draws 10 amps. Power is 120 times 10, so the appliance uses 1,200 watts. If it runs for 3 hours, it uses 3,600 watt-hours, or 3.6 kilowatt-hours. That same thinking helps when comparing branch-circuit load to breaker size and daily energy use.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-002-sec-007",
+          "heading": "Common mistakes",
+          "body": "One common mistake is calling watts and watt-hours the same thing. Another is forgetting to convert watt-hours to kilowatt-hours by dividing by 1,000. On tests, watch for answer choices that are numerically close but use the wrong unit.",
+          "necReferences": [
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-002-sec-008",
+          "heading": "Exam insight",
+          "body": "Power questions are often short and direct, but they may be mixed into load, motor, or service-sizing problems later. Get comfortable changing between volts, amps, watts, and time without overthinking it.",
+          "necReferences": [
+            "Article 100"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Power tells you the rate of use. Energy tells you use over time.",
+        "The basic power formula is P = V x I.",
+        "Kilowatt-hours are watt-hours divided by 1,000.",
+        "The unit matters as much as the number."
+      ],
+      "practiceQuestions": [
+        "A 240-volt water heater draws 18 amps. How many watts does it use?",
+        "If a 1,500-watt heater runs for 2 hours, how many kilowatt-hours does it use?",
+        "Why is a watt-hour not the same thing as a watt?"
+      ],
+      "references": [
+        "Article 100"
+      ]
+    },
+    {
+      "id": "ap-les-003",
       "courseTitle": "Apprentice Electrician Course",
       "moduleName": "Basic Safety (OSHA and NFPA 70E)",
       "lessonTitle": "Electrical Hazard Recognition and Safe Work Basics",
       "certificationLevel": "Apprentice",
       "learningObjectives": [
-        "Identify common shock and arc hazards before beginning work.",
-        "Explain the difference between de-energized work and presumed-safe work.",
-        "Connect code compliance with safer installations and safer maintenance conditions."
+        "Identify common electrical hazards and explain the basic safe-work habits that reduce shock, burn, and arc-related risk."
       ],
       "lessonContent": [
         {
-          "id": "lesson-record-002-sec-001",
-          "heading": "Hazard recognition comes before tools",
-          "body": "The first safety decision is not what tool to grab but whether the circuit is energized, whether the enclosure is suitable, and whether enough working space exists to inspect, test, or maintain equipment without creating a new hazard.",
-          "necReferences": ["110.26", "110.27"]
+          "id": "ap-les-003-sec-001",
+          "heading": "Learning objective",
+          "body": "Identify common electrical hazards and explain the basic safe-work habits that reduce shock, burn, and arc-related risk.",
+          "necReferences": [
+            "110.3(B)",
+            "110.26"
+          ]
         },
         {
-          "id": "lesson-record-002-sec-002",
-          "heading": "Listing and labeling are safety topics",
-          "body": "Candidates often treat listing and labeling as paperwork. In reality, equipment used outside its listing or outside manufacturer instructions can create shock, overheating, and failure hazards. That is why the NEC repeatedly directs installers back to listed equipment and installation instructions.",
-          "necReferences": ["110.3(B)"]
+          "id": "ap-les-003-sec-002",
+          "heading": "Why this matters",
+          "body": "Safety questions are not filler. They test whether you understand the real consequences of bad decisions around energized equipment, poor access, and improper installation. A calm safety mindset protects both test scores and real people.",
+          "necReferences": [
+            "110.3(B)",
+            "110.26"
+          ]
         },
         {
-          "id": "lesson-record-002-sec-003",
-          "heading": "Exam habit",
-          "body": "When a question asks what is safest or most compliant, look for the answer that removes exposure first, then the one that follows equipment instructions, and then the one that preserves access and working space.",
-          "necReferences": ["110.3(B)", "110.26", "110.27"]
+          "id": "ap-les-003-sec-003",
+          "heading": "Core explanation",
+          "body": "Electrical hazards usually show up as shock, burn, blast pressure, or fire risk. Shock happens when current travels through the body. Arc-flash hazards involve intense heat and light from an electrical fault. Good safety habits start with planning the task, controlling exposure, and reducing the chance of accidental contact or fault energy.",
+          "necReferences": [
+            "110.3(B)",
+            "110.26"
+          ]
+        },
+        {
+          "id": "ap-les-003-sec-004",
+          "heading": "Key concepts",
+          "body": "Hazard recognition means looking for energized parts, damaged insulation, wet conditions, poor housekeeping, and blocked access. Safe work basics include de-energizing when possible, using the right tools, keeping required working space clear, and following equipment instructions. Safety is not one step. It is a chain of correct decisions.",
+          "necReferences": [
+            "110.3(B)",
+            "110.26"
+          ]
+        },
+        {
+          "id": "ap-les-003-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 110.26 supports safe access and working space around equipment. NEC 110.3(B) matters because listed equipment has to be installed and used according to its instructions. Many unsafe conditions start when installers ignore the product listing or crowd the workspace around equipment.",
+          "necReferences": [
+            "110.3(B)",
+            "110.26"
+          ]
+        },
+        {
+          "id": "ap-les-003-sec-006",
+          "heading": "Practical example",
+          "body": "A worker opens a panel in a tight storage closet with boxes stacked in front of it. Even before touching a conductor, the setup is unsafe because required access and working space are compromised. Good hazard recognition means stopping before the task begins, not after something goes wrong.",
+          "necReferences": [
+            "110.26"
+          ]
+        },
+        {
+          "id": "ap-les-003-sec-007",
+          "heading": "Common mistakes",
+          "body": "New learners sometimes think safety only means wearing gloves. PPE matters, but it does not replace planning, de-energizing, verifying, and keeping clear working space. Another mistake is treating near misses like proof that a shortcut is acceptable.",
+          "necReferences": [
+            "110.3(B)",
+            "110.26"
+          ]
+        },
+        {
+          "id": "ap-les-003-sec-008",
+          "heading": "Exam insight",
+          "body": "Expect questions that ask which condition is unsafe, what step should happen first, or why access and labeling matter. Choose the answer that reduces exposure before the work starts, not the answer that reacts after the hazard is already in front of you.",
+          "necReferences": [
+            "110.3(B)",
+            "110.26"
+          ]
         }
       ],
       "keyTakeaways": [
-        "Safe work starts with condition assessment, not speed.",
-        "Manufacturer instructions are enforceable when the code says listed equipment must be installed that way.",
-        "Working-space questions are both code and safety questions."
+        "Electrical hazards include shock, burns, arc-flash, blast pressure, and fire risk.",
+        "Safe work starts with planning and hazard recognition.",
+        "Working space and listed-equipment instructions are safety issues, not paperwork issues.",
+        "PPE helps, but it does not replace de-energizing and verification."
       ],
       "practiceQuestions": [
-        "Why can a listing-and-labeling question also be a safety question?",
-        "What article should you check when clearance and access are involved?"
+        "Why is blocked panel access a safety problem even before work begins?",
+        "What is the difference between a shock hazard and an arc-flash hazard?",
+        "Which is the safer first move: grab PPE and continue, or stop and correct the unsafe setup?"
       ],
-      "references": ["110.3(B)", "110.26", "110.27"]
+      "references": [
+        "110.3(B)",
+        "110.26"
+      ]
     },
     {
-      "id": "lesson-record-003",
+      "id": "ap-les-004",
+      "courseTitle": "Apprentice Electrician Course",
+      "moduleName": "Basic Safety (OSHA and NFPA 70E)",
+      "lessonTitle": "Shock Paths, PPE, and Lockout Mindset",
+      "certificationLevel": "Apprentice",
+      "learningObjectives": [
+        "Explain how current travels through the body, what PPE can and cannot do, and why lockout-style thinking matters before work begins."
+      ],
+      "lessonContent": [
+        {
+          "id": "ap-les-004-sec-001",
+          "heading": "Learning objective",
+          "body": "Explain how current travels through the body, what PPE can and cannot do, and why lockout-style thinking matters before work begins.",
+          "necReferences": [
+            "110.4",
+            "110.27"
+          ]
+        },
+        {
+          "id": "ap-les-004-sec-002",
+          "heading": "Why this matters",
+          "body": "A lot of injuries happen because someone assumes equipment is off, assumes another worker already made it safe, or assumes gloves alone solve the problem. Exams test that mindset because the real job depends on it.",
+          "necReferences": [
+            "110.27"
+          ]
+        },
+        {
+          "id": "ap-les-004-sec-003",
+          "heading": "Core explanation",
+          "body": "Current harms the body when it finds a path through tissue. Hand-to-hand and hand-to-foot paths are especially dangerous because they can cross the chest. PPE reduces exposure, but it does not make energized work harmless. Lockout-style thinking means identifying the source, isolating it, preventing unexpected re-energization, and verifying the condition before touching conductors or equipment.",
+          "necReferences": [
+            "110.27"
+          ]
+        },
+        {
+          "id": "ap-les-004-sec-004",
+          "heading": "Key concepts",
+          "body": "Shock severity depends on current, path, time, and conditions such as moisture. PPE is a layer, not permission to be careless. Guarding live parts matters because accidental contact is one of the easiest ways to turn a routine task into an emergency. Safe workers assume nothing until they verify it.",
+          "necReferences": [
+            "110.4",
+            "110.27"
+          ]
+        },
+        {
+          "id": "ap-les-004-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 110.27 requires live parts to be guarded against accidental contact. NEC 110.4 reminds you that voltage level affects how equipment is applied and protected. The NEC does not replace lockout procedures, but it supports the same idea: control exposure to energized parts.",
+          "necReferences": [
+            "110.4",
+            "110.27"
+          ]
+        },
+        {
+          "id": "ap-les-004-sec-006",
+          "heading": "Practical example",
+          "body": "Imagine a disconnect is switched off, but no one verifies absence of voltage at the load side. A mislabeled source or backfeed can still leave dangerous voltage present. The correct habit is not to trust position alone. It is to isolate, lock or secure when required, and verify.",
+          "necReferences": [
+            "110.27"
+          ]
+        },
+        {
+          "id": "ap-les-004-sec-007",
+          "heading": "Common mistakes",
+          "body": "The biggest mistake is confusing turned off with electrically safe. Another is believing PPE makes direct contact acceptable. Learners also forget that metal ladders, wet hands, and cramped body position can increase the danger of a shock path.",
+          "necReferences": [
+            "110.27"
+          ]
+        },
+        {
+          "id": "ap-les-004-sec-008",
+          "heading": "Exam insight",
+          "body": "On safety questions, the best answer usually includes isolation and verification. If two answers both sound reasonable, choose the one that removes uncertainty instead of the one that simply hopes the circuit is dead.",
+          "necReferences": [
+            "110.4",
+            "110.27"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Current must have a path, and the body can become that path.",
+        "PPE reduces risk but does not erase it.",
+        "Lockout-style thinking means isolate, secure, and verify before touching.",
+        "Never assume equipment is safe just because a switch or disconnect is open."
+      ],
+      "practiceQuestions": [
+        "Why is verification more reliable than trusting a disconnect handle position?",
+        "What body current path is especially dangerous and why?",
+        "What is one major limit of PPE in electrical work?"
+      ],
+      "references": [
+        "110.4",
+        "110.27"
+      ]
+    },
+    {
+      "id": "ap-les-005",
+      "courseTitle": "Apprentice Electrician Course",
+      "moduleName": "Introduction to the NEC",
+      "lessonTitle": "How the NEC Is Organized",
+      "certificationLevel": "Apprentice",
+      "learningObjectives": [
+        "Describe how the NEC is arranged so you can move through chapters, articles, parts, and definitions without getting lost."
+      ],
+      "lessonContent": [
+        {
+          "id": "ap-les-005-sec-001",
+          "heading": "Learning objective",
+          "body": "Describe how the NEC is arranged so you can move through chapters, articles, parts, and definitions without getting lost.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-005-sec-002",
+          "heading": "Why this matters",
+          "body": "Open-book exam speed does not come from memorizing every section. It comes from knowing where a topic usually lives and how the code is organized. That skill saves time on the job too.",
+          "necReferences": [
+            "90.3"
+          ]
+        },
+        {
+          "id": "ap-les-005-sec-003",
+          "heading": "Core explanation",
+          "body": "The NEC is organized by chapters, then articles, then sections and subsections. Chapter 1 covers general rules. Chapters 2 through 4 cover wiring and equipment. Chapters 5 through 7 can modify or add special rules. Article 100 holds definitions. Informational notes can help understanding, but they are not the same as enforceable rules.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-005-sec-004",
+          "heading": "Key concepts",
+          "body": "Read the article title first because it tells you the subject. Read the section number carefully because small number changes can mean a completely different rule. Learn the difference between an article, a part, a table, an exception, and an informational note. Code users lose time when they skim structure instead of reading it.",
+          "necReferences": [
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-005-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 90.1 explains the practical purpose of the code. NEC 90.3 explains how the chapters interact. Article 100 is critical because defined terms control how later rules are read. If you ignore the structure, you often end up in the wrong answer path.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-005-sec-006",
+          "heading": "Practical example",
+          "body": "A question asks about a required disconnect location. A strong code user first identifies the equipment type, then goes to the relevant article, then checks whether a special occupancy article changes the general rule. That is much faster than flipping pages at random.",
+          "necReferences": [
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-005-sec-007",
+          "heading": "Common mistakes",
+          "body": "One common mistake is treating informational notes like direct requirements. Another is skipping definitions and jumping straight to an installation rule. Students also forget that special chapters can override earlier general rules.",
+          "necReferences": [
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-005-sec-008",
+          "heading": "Exam insight",
+          "body": "Expect simple structure questions early and hidden structure questions later. A problem may look like a branch-circuit question but actually turn on a definition or a special rule in another chapter.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "The NEC is organized by chapters, articles, sections, and subsections.",
+        "Article 100 is the definition hub for the code.",
+        "Special chapters can modify general rules.",
+        "Informational notes help understanding but are not the same as enforceable text."
+      ],
+      "practiceQuestions": [
+        "What is the first place to check when a code question depends on a defined term?",
+        "Why does NEC 90.3 matter during open-book exams?",
+        "What is the difference between an enforceable rule and an informational note?"
+      ],
+      "references": [
+        "90.1",
+        "90.3",
+        "Article 100"
+      ]
+    },
+    {
+      "id": "ap-les-006",
+      "courseTitle": "Apprentice Electrician Course",
+      "moduleName": "Introduction to the NEC",
+      "lessonTitle": "Code Lookup Drill: Article 100 and Article 110",
+      "certificationLevel": "Apprentice",
+      "learningObjectives": [
+        "Use a repeatable code-lookup process that starts with definitions, moves to the governing rule, and then checks general installation requirements."
+      ],
+      "lessonContent": [
+        {
+          "id": "ap-les-006-sec-001",
+          "heading": "Learning objective",
+          "body": "Use a repeatable code-lookup process that starts with definitions, moves to the governing rule, and then checks general installation requirements.",
+          "necReferences": [
+            "Article 100",
+            "110.1"
+          ]
+        },
+        {
+          "id": "ap-les-006-sec-002",
+          "heading": "Why this matters",
+          "body": "Many apprentice candidates know the topic but still miss the question because they searched in the wrong order. A repeatable lookup process turns open-book exams into a navigation problem instead of a panic problem.",
+          "necReferences": [
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ap-les-006-sec-003",
+          "heading": "Core explanation",
+          "body": "Start by asking what the question is really about. If the answer depends on the meaning of a term, go to Article 100 first. Then move to the article that governs the installation itself. After that, check whether Chapter 1 or another general requirement article adds conditions about approval, listing, access, guarding, or workspace. This order keeps your search tight and logical.",
+          "necReferences": [
+            "90.3",
+            "Article 100",
+            "110.1"
+          ]
+        },
+        {
+          "id": "ap-les-006-sec-004",
+          "heading": "Key concepts",
+          "body": "Definitions tell you what the code means by a word. The rule article tells you what must be done. General requirements often tell you how the installation must be applied, approved, or accessed. Strong code users move in that order instead of flipping randomly between chapters.",
+          "necReferences": [
+            "Article 100",
+            "110.1",
+            "110.3(B)"
+          ]
+        },
+        {
+          "id": "ap-les-006-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "Article 100 is the first stop for defined terms. NEC 110.1 and related sections matter because many installation questions also depend on listing, workmanship, guarding, or workspace. NEC 90.3 reminds you to notice whether a special rule changes the general path.",
+          "necReferences": [
+            "90.3",
+            "Article 100",
+            "110.1",
+            "110.3(B)",
+            "110.26"
+          ]
+        },
+        {
+          "id": "ap-les-006-sec-006",
+          "heading": "Practical example",
+          "body": "Suppose a question uses the term readily accessible and asks about equipment placement. First confirm the term in Article 100. Next find the installation article for the equipment involved. Then check Article 110 for access, guarding, and workspace issues that may affect the final answer.",
+          "necReferences": [
+            "Article 100",
+            "110.26"
+          ]
+        },
+        {
+          "id": "ap-les-006-sec-007",
+          "heading": "Common mistakes",
+          "body": "The most common mistake is starting with a guess instead of a term. Another is finding a promising rule and stopping too soon without checking for a general requirement or special exception. Students also waste time by not reading article titles carefully.",
+          "necReferences": [
+            "90.3",
+            "110.3(B)",
+            "110.26"
+          ]
+        },
+        {
+          "id": "ap-les-006-sec-008",
+          "heading": "Exam insight",
+          "body": "This lesson is really about speed and accuracy together. When answer choices are close, the student who checked the term first usually beats the student who guessed from memory.",
+          "necReferences": [
+            "Article 100",
+            "110.1"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Definitions first, governing rule second, general requirements third.",
+        "A repeatable search order is faster than flipping pages randomly.",
+        "Article 110 often adds installation conditions that matter to the final answer.",
+        "Careful code navigation reduces both time loss and misread questions."
+      ],
+      "practiceQuestions": [
+        "If a question depends on the meaning of readily accessible, where should you start?",
+        "After you find the installation article, what general article often deserves a quick check?",
+        "Why is a repeatable lookup process better than searching from memory alone?"
+      ],
+      "references": [
+        "90.3",
+        "Article 100",
+        "110.1",
+        "110.3(B)",
+        "110.26"
+      ]
+    },
+    {
+      "id": "ap-les-007",
+      "courseTitle": "Apprentice Electrician Course",
+      "moduleName": "Wiring Methods and Materials",
+      "lessonTitle": "Raceways, Cables, and Boxes",
+      "certificationLevel": "Apprentice",
+      "learningObjectives": [
+        "Recognize common wiring methods and box-related rules so you can match materials to the installation and avoid basic support and fill mistakes."
+      ],
+      "lessonContent": [
+        {
+          "id": "ap-les-007-sec-001",
+          "heading": "Learning objective",
+          "body": "Recognize common wiring methods and box-related rules so you can match materials to the installation and avoid basic support and fill mistakes.",
+          "necReferences": [
+            "300.11",
+            "314.16"
+          ]
+        },
+        {
+          "id": "ap-les-007-sec-002",
+          "heading": "Why this matters",
+          "body": "Apprentice exams often mix material recognition with simple rule application. On the job, the wrong raceway, cable assembly, or box size can create support problems, overcrowded splices, and failed inspections before the system is even energized.",
+          "necReferences": [
+            "300.11",
+            "314.16"
+          ]
+        },
+        {
+          "id": "ap-les-007-sec-003",
+          "heading": "Core explanation",
+          "body": "Raceways such as EMT, PVC, and rigid conduit protect conductors and give you a defined wiring path. Cable assemblies such as NM-B and MC package conductors inside one listed product. Boxes enclose splices, devices, and terminations. The right choice depends on the location, the kind of protection needed, how the wiring will be supported, and how much conductor volume the box must handle.",
+          "necReferences": [
+            "300.11",
+            "314.16"
+          ]
+        },
+        {
+          "id": "ap-les-007-sec-004",
+          "heading": "Key concepts",
+          "body": "Do not treat all wiring methods as interchangeable. Some methods are better for exposed work, some for concealed work, and some for wet, damp, or corrosive conditions. Box fill is also more than physical fit. Each insulated conductor counts, all equipment grounds together count as one volume allowance, and devices or internal clamps can add more volume to the calculation.",
+          "necReferences": [
+            "300.11",
+            "314.16"
+          ]
+        },
+        {
+          "id": "ap-les-007-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 300.11 covers securing and supporting raceways, cable assemblies, and boxes. NEC 314.16 covers box fill. Together they test whether you understand both the outside of the installation and the inside of the box.",
+          "necReferences": [
+            "300.11",
+            "314.16"
+          ]
+        },
+        {
+          "id": "ap-les-007-sec-006",
+          "heading": "Practical example",
+          "body": "A switch box may look roomy until you count two current-carrying conductors, a switched leg, all grounds together, an internal clamp, and the device yoke. The switch might still fit physically, but the code answer depends on the conductor-volume count, not on whether you can force the device into the opening.",
+          "necReferences": [
+            "314.16"
+          ]
+        },
+        {
+          "id": "ap-les-007-sec-007",
+          "heading": "Common mistakes",
+          "body": "A common mistake is choosing the wiring method by habit instead of by location. Another is assuming a bigger-looking box is automatically compliant. Exam problems often hide the real answer inside support details, conductor count, clamps, or device yokes.",
+          "necReferences": [
+            "300.11",
+            "314.16"
+          ]
+        },
+        {
+          "id": "ap-les-007-sec-008",
+          "heading": "Exam insight",
+          "body": "Slow down when the question mentions support, concealed versus exposed work, clamps, grounds, or devices in the same box. Those small details usually decide whether the tested concept is permitted use, support, or box fill.",
+          "necReferences": [
+            "300.11",
+            "314.16"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Raceways, cable assemblies, and boxes each solve different installation problems.",
+        "Support rules and box-fill rules are both practical Chapter 3 topics.",
+        "Physical fit is not the same thing as code-compliant box volume.",
+        "Small details like clamps, grounds, and device yokes can change the correct answer."
+      ],
+      "practiceQuestions": [
+        "Why can a box fail the code even when the switch or receptacle still fits inside it?",
+        "What is one practical difference between choosing a raceway and choosing a cable assembly?",
+        "When a question mentions support, clamps, and conductors in the same setup, what should you slow down and identify first?"
+      ],
+      "references": [
+        "300.11",
+        "314.16"
+      ]
+    },
+    {
+      "id": "ap-les-008",
+      "courseTitle": "Apprentice Electrician Course",
+      "moduleName": "Wiring Methods and Materials",
+      "lessonTitle": "Conductor Sizing and Table Navigation",
+      "certificationLevel": "Apprentice",
+      "learningObjectives": [
+        "Read conductor sizing tables with more confidence and understand how insulation rating, terminal limits, and ampacity relate to one another."
+      ],
+      "lessonContent": [
+        {
+          "id": "ap-les-008-sec-001",
+          "heading": "Learning objective",
+          "body": "Read conductor sizing tables with more confidence and understand how insulation rating, terminal limits, and ampacity relate to one another.",
+          "necReferences": [
+            "310.14",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ap-les-008-sec-002",
+          "heading": "Why this matters",
+          "body": "Wire sizing is one of the first places where new learners feel buried by tables. Exams reward students who know what the table is actually telling them and what conditions can reduce the usable ampacity.",
+          "necReferences": [
+            "310.14",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ap-les-008-sec-003",
+          "heading": "Core explanation",
+          "body": "Ampacity is the amount of current a conductor can carry continuously under stated conditions without exceeding its temperature rating. NEC Table 310.16 gives base ampacity values, but you still have to read the row and the temperature columns correctly. Material, conductor size, insulation rating, termination limits, and conditions of use all matter before you call the answer final.",
+          "necReferences": [
+            "310.14",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ap-les-008-sec-004",
+          "heading": "Key concepts",
+          "body": "The highest temperature column is not automatically the answer you can use in the field. A conductor may have 90-degree insulation, but the connected equipment may still limit the final ampacity to a lower temperature basis. Table use is a process: identify the conductor, choose the correct row, respect the terminal limit, and then remember that adjustment or correction rules may still apply afterward.",
+          "necReferences": [
+            "310.14",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ap-les-008-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 310.14 points you to the proper ampacity-selection rules. NEC 310.16 gives the base table values. Together they teach an important exam habit: the table is the starting point, but the installation conditions decide whether that table value can stand unchanged.",
+          "necReferences": [
+            "310.14",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ap-les-008-sec-006",
+          "heading": "Practical example",
+          "body": "Suppose you see a conductor row with more than one ampacity listed and immediately pick the biggest number. That feels efficient, but it is often the wrong move. A 90-degree-rated conductor does not let you ignore the equipment termination limit or other installation conditions that control the final usable ampacity.",
+          "necReferences": [
+            "310.14",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ap-les-008-sec-007",
+          "heading": "Common mistakes",
+          "body": "Students often confuse conductor ampacity with breaker size as if they are always identical. Another mistake is jumping to the 90-degree column because it looks safest or strongest. On the exam, the better answer path is to ask what temperature basis the connected equipment actually allows.",
+          "necReferences": [
+            "310.14",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ap-les-008-sec-008",
+          "heading": "Exam insight",
+          "body": "Many ampacity questions are really process questions in disguise. Identify the conductor, the temperature basis, and any limiting condition before choosing a number from the table. If you skip that order, the distractors start to look correct.",
+          "necReferences": [
+            "310.14",
+            "310.16"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Ampacity is a temperature-based carrying limit, not just a memorized number.",
+        "Table 310.16 gives base values, not automatic final answers.",
+        "Termination limits can keep you from using the highest column in the row.",
+        "Good table work follows an order instead of chasing the biggest number."
+      ],
+      "practiceQuestions": [
+        "Why can the 90-degree column still be the wrong final answer even when the conductor insulation is 90-degree rated?",
+        "What information should you identify before you trust an ampacity value from Table 310.16?",
+        "How is conductor ampacity reasoning different from simply memorizing common breaker sizes?"
+      ],
+      "references": [
+        "310.14",
+        "310.16"
+      ]
+    },
+    {
+      "id": "jr-les-001",
+      "courseTitle": "Journeyman Electrician Course",
+      "moduleName": "Advanced NEC Navigation",
+      "lessonTitle": "General Rules vs Special Rules",
+      "certificationLevel": "Journeyman",
+      "learningObjectives": [
+        "Use NEC hierarchy correctly by separating general rules from special rules and recognizing when a later article changes the normal answer path."
+      ],
+      "lessonContent": [
+        {
+          "id": "jr-les-001-sec-001",
+          "heading": "Learning objective",
+          "body": "Use NEC hierarchy correctly by separating general rules from special rules and recognizing when a later article changes the normal answer path.",
+          "necReferences": [
+            "90.3",
+            "110.2"
+          ]
+        },
+        {
+          "id": "jr-les-001-sec-002",
+          "heading": "Why this matters",
+          "body": "Journeyman exams stop rewarding simple recognition alone. They often test whether you know which rule governs when two sections seem to compete. That is really a hierarchy problem.",
+          "necReferences": [
+            "90.3"
+          ]
+        },
+        {
+          "id": "jr-les-001-sec-003",
+          "heading": "Core explanation",
+          "body": "General rules usually live in Chapters 1 through 4. Special occupancies, equipment, and conditions are often in Chapters 5 through 7. NEC 90.3 tells you that those later chapters can supplement or modify the general chapters. That means a correct general answer can still become wrong if a special article applies to the situation.",
+          "necReferences": [
+            "90.3"
+          ]
+        },
+        {
+          "id": "jr-les-001-sec-004",
+          "heading": "Key concepts",
+          "body": "Start with the general rule so you understand the normal requirement. Then ask whether the location, equipment, or condition is special enough to trigger another article. Approval, suitability, and product listing still matter along the way. Strong code reasoning is layered, not one-dimensional.",
+          "necReferences": [
+            "90.3",
+            "110.2"
+          ]
+        },
+        {
+          "id": "jr-les-001-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 90.3 is the hierarchy rule that keeps code users from getting lost. NEC 110.2 adds the approval lens. Even if you find a rule that seems to permit something, the equipment still has to be acceptable for that use and jurisdiction.",
+          "necReferences": [
+            "90.3",
+            "110.2"
+          ]
+        },
+        {
+          "id": "jr-les-001-sec-006",
+          "heading": "Practical example",
+          "body": "A wiring method may be acceptable under a general Chapter 3 rule, but a hazardous location article may impose a narrower rule for the same material. The right process is not to argue with the general rule. It is to recognize that the special article controls in that condition.",
+          "necReferences": [
+            "90.3"
+          ]
+        },
+        {
+          "id": "jr-les-001-sec-007",
+          "heading": "Common mistakes",
+          "body": "A frequent mistake is stopping after reading a familiar general section. Another is assuming the last section read is always the most specific. You have to decide whether it actually applies to the facts in the question.",
+          "necReferences": [
+            "90.3",
+            "110.2"
+          ]
+        },
+        {
+          "id": "jr-les-001-sec-008",
+          "heading": "Exam insight",
+          "body": "Expect question stems that hide the special condition in a few words. Phrases about hazardous areas, health care spaces, marinas, agricultural buildings, or emergency systems often mean you need to move beyond the general rule.",
+          "necReferences": [
+            "90.3"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "General rules do not automatically control when a special article applies.",
+        "NEC 90.3 is the roadmap for rule hierarchy.",
+        "Approval and suitability still matter even after you find the right article.",
+        "Read the facts closely to see whether the situation is actually special."
+      ],
+      "practiceQuestions": [
+        "Why can a correct Chapter 3 rule still lead to the wrong final answer?",
+        "What does NEC 90.3 help you decide during a code lookup?",
+        "What kind of words in a question suggest you may need a special article?"
+      ],
+      "references": [
+        "90.3",
+        "110.2"
+      ]
+    },
+    {
+      "id": "jr-les-002",
+      "courseTitle": "Journeyman Electrician Course",
+      "moduleName": "Advanced NEC Navigation",
+      "lessonTitle": "Timed Code Lookup Strategies",
+      "certificationLevel": "Journeyman",
+      "learningObjectives": [
+        "Build a faster, repeatable code-lookup method for timed open-book exams by using article patterns, key words, and examples wisely."
+      ],
+      "lessonContent": [
+        {
+          "id": "jr-les-002-sec-001",
+          "heading": "Learning objective",
+          "body": "Build a faster, repeatable code-lookup method for timed open-book exams by using article patterns, key words, and examples wisely.",
+          "necReferences": [
+            "Article 100",
+            "Annex D"
+          ]
+        },
+        {
+          "id": "jr-les-002-sec-002",
+          "heading": "Why this matters",
+          "body": "Timed open-book exams punish wandering. The candidate who knows how to narrow the search wins back minutes that can be used on calculations and review.",
+          "necReferences": [
+            "Article 100",
+            "Annex D"
+          ]
+        },
+        {
+          "id": "jr-les-002-sec-003",
+          "heading": "Core explanation",
+          "body": "Fast code lookup starts before you open the book. Identify the subject, the equipment type, and whether the problem is about definitions, installation rules, or calculations. Use the index to narrow the article, then confirm the exact section by reading titles and subsection structure carefully. Annex D can help when the question is calculation-shaped, but it is a guide, not the enforceable rule itself.",
+          "necReferences": [
+            "Article 100",
+            "Annex D"
+          ]
+        },
+        {
+          "id": "jr-les-002-sec-004",
+          "heading": "Key concepts",
+          "body": "Pattern recognition matters. Receptacles often point you toward Article 210. Motors point to Article 430. Grounding questions point to Article 250. If a question depends on what a term means, Article 100 is still one of the fastest first stops. When you practice enough, code lookup becomes a map, not a maze.",
+          "necReferences": [
+            "Article 100",
+            "Annex D"
+          ]
+        },
+        {
+          "id": "jr-les-002-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "Article 100 remains the definition anchor. Annex D helps you see how certain calculation methods are applied in example form. It is useful for learning the path, but the enforceable answer still belongs to the governing article and section.",
+          "necReferences": [
+            "Article 100",
+            "Annex D"
+          ]
+        },
+        {
+          "id": "jr-les-002-sec-006",
+          "heading": "Practical example",
+          "body": "A calculation question on dwelling-unit service size may feel intimidating, but the keywords optional calculation, dwelling unit, and service should immediately push you toward Article 220, not a random table in Chapter 3. That time-saving recognition is a learned skill.",
+          "necReferences": [
+            "Annex D"
+          ]
+        },
+        {
+          "id": "jr-les-002-sec-007",
+          "heading": "Common mistakes",
+          "body": "Students lose time by chasing every keyword instead of the main subject. Another mistake is relying on memory of page layout instead of reading titles and section numbers carefully. Under pressure, close answer choices punish sloppy navigation.",
+          "necReferences": [
+            "Article 100",
+            "Annex D"
+          ]
+        },
+        {
+          "id": "jr-les-002-sec-008",
+          "heading": "Exam insight",
+          "body": "Practice timed lookups with a notebook beside you. Write the search path after each question. Over time, you will start seeing repeat routes, and those routes are where open-book speed comes from.",
+          "necReferences": [
+            "Article 100",
+            "Annex D"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Timed code lookup is a search strategy, not just a memory test.",
+        "Start by identifying the subject and the type of question.",
+        "Article 100 helps with definitions, and Annex D helps with example-driven calculations.",
+        "Pattern recognition is one of the biggest open-book advantages."
+      ],
+      "practiceQuestions": [
+        "What is the first thing you should identify before opening the code book on a timed exam?",
+        "Why is Annex D helpful but not a substitute for the governing rule?",
+        "How does article pattern recognition save time during open-book testing?"
+      ],
+      "references": [
+        "Article 100",
+        "Annex D"
+      ]
+    },
+    {
+      "id": "jr-les-003",
       "courseTitle": "Journeyman Electrician Course",
       "moduleName": "Branch Circuits and Feeders",
       "lessonTitle": "Continuous Loads and Overcurrent Device Sizing",
       "certificationLevel": "Journeyman",
       "learningObjectives": [
-        "Define continuous load correctly.",
-        "Apply the 125 percent sizing concept to branch-circuit and feeder overcurrent devices where required.",
-        "Avoid mixing conductor ampacity rules with overcurrent sizing rules."
+        "Apply continuous-load logic to branch circuits and feeders so conductor sizing and overcurrent-device sizing stay in the right order."
       ],
       "lessonContent": [
         {
-          "id": "lesson-record-003-sec-001",
-          "heading": "Definition first",
-          "body": "A continuous load is one where the maximum current is expected to continue for 3 hours or more. This definition drives several sizing decisions and appears often in both residential and commercial exam problems.",
-          "necReferences": ["Article 100"]
+          "id": "jr-les-003-sec-001",
+          "heading": "Learning objective",
+          "body": "Apply continuous-load logic to branch circuits and feeders so conductor sizing and overcurrent-device sizing stay in the right order.",
+          "necReferences": [
+            "210.19(A)(1)",
+            "210.20(A)",
+            "215.2",
+            "215.3"
+          ]
         },
         {
-          "id": "lesson-record-003-sec-002",
-          "heading": "Branch-circuit overcurrent sizing",
-          "body": "For branch circuits, the rating of the overcurrent device must be sufficient for the noncontinuous load plus 125 percent of the continuous load when the applicable rule requires it. Candidates should read the question closely and determine whether it is asking about the overcurrent device, the conductor, or both.",
-          "necReferences": ["210.20(A)", "210.19(A)(1)"]
+          "id": "jr-les-003-sec-002",
+          "heading": "Why this matters",
+          "body": "This topic shows up constantly because it blends code language, arithmetic, and logic. A student may know the 125 percent rule but still miss the question by applying it to the wrong component.",
+          "necReferences": [
+            "210.19(A)(1)",
+            "210.20(A)"
+          ]
         },
         {
-          "id": "lesson-record-003-sec-003",
-          "heading": "Feeder follow-through",
-          "body": "The same logic continues into feeder problems. Journeyman candidates should practice moving from Article 220 load calculations to Article 215 sizing rules without losing track of whether the problem is asking for minimum ampacity, minimum overcurrent device rating, or both.",
-          "necReferences": ["215.2", "215.3", "220.40"]
+          "id": "jr-les-003-sec-003",
+          "heading": "Core explanation",
+          "body": "A continuous load is one where the maximum current is expected to continue for 3 hours or more. The NEC requires branch-circuit conductors and feeders for these loads to be sized differently from short-duration loads. Conductors and overcurrent devices each have their own rules, and the exam often checks whether you know which section controls which piece of the design.",
+          "necReferences": [
+            "Article 100",
+            "210.19(A)(1)",
+            "210.20(A)",
+            "215.2",
+            "215.3"
+          ]
         },
         {
-          "id": "lesson-record-003-sec-004",
-          "heading": "Worked example",
-          "body": "If the calculated continuous load is 48 amperes and there is no noncontinuous load, 48 x 1.25 = 60 amperes. The candidate then checks the applicable article for the conductor and overcurrent device path instead of stopping at the arithmetic.",
-          "necReferences": ["210.20(A)", "215.3"]
+          "id": "jr-les-003-sec-004",
+          "heading": "Key concepts",
+          "body": "Do not lump branch circuits and feeders together without checking the article. Do not lump conductors and breakers together either. The most important habit is to identify the load type first, then choose the section for conductor sizing, then choose the section for overcurrent protection.",
+          "necReferences": [
+            "210.19(A)(1)",
+            "210.20(A)",
+            "215.2",
+            "215.3"
+          ]
+        },
+        {
+          "id": "jr-les-003-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "Article 100 defines continuous load. NEC 210.19(A)(1) and 210.20(A) apply on the branch-circuit side. NEC 215.2 and 215.3 apply on the feeder side. NEC 220.40 reminds you that load calculations are part of the overall answer path.",
+          "necReferences": [
+            "Article 100",
+            "210.19(A)(1)",
+            "210.20(A)",
+            "215.2",
+            "215.3",
+            "220.40"
+          ]
+        },
+        {
+          "id": "jr-les-003-sec-006",
+          "heading": "Practical example",
+          "body": "A 40-amp continuous load on a branch circuit is not handled the same way as a short-duration load. The student has to identify the continuous nature of the load first, then follow the proper branch-circuit conductor and overcurrent sizing rules. Skipping that first step leads to the wrong number even if the arithmetic is clean.",
+          "necReferences": [
+            "210.19(A)(1)",
+            "210.20(A)"
+          ]
+        },
+        {
+          "id": "jr-les-003-sec-007",
+          "heading": "Common mistakes",
+          "body": "The biggest mistake is applying 125 percent to everything in the problem without thinking. Another is using the branch-circuit rule on a feeder question or the feeder rule on a branch-circuit question.",
+          "necReferences": [
+            "210.19(A)(1)",
+            "210.20(A)",
+            "215.2",
+            "215.3"
+          ]
+        },
+        {
+          "id": "jr-les-003-sec-008",
+          "heading": "Exam insight",
+          "body": "Continuous-load questions often look easy until you see the answer choices. The test is checking your process. Label each value as branch circuit, feeder, conductor, or overcurrent device before you calculate.",
+          "necReferences": [
+            "Article 100",
+            "210.20(A)",
+            "215.3"
+          ]
         }
       ],
       "keyTakeaways": [
-        "Always identify whether a load is continuous before sizing.",
-        "125 percent shows up in multiple places, but you still need the correct article.",
-        "Calculation questions are often won or lost in the code path after the math."
+        "A continuous load is expected to run at maximum current for 3 hours or more.",
+        "Branch-circuit and feeder rules are related but not identical.",
+        "Conductor sizing and overcurrent-device sizing must be handled in the right order.",
+        "Most misses happen because students apply one rule to the wrong component."
       ],
       "practiceQuestions": [
-        "A continuous load of 32 A is supplied by a branch circuit. What minimum overcurrent device rating should you consider first under the continuous-load rule?",
-        "Which article should you pair with Article 220 when the problem becomes a feeder-sizing question?"
+        "What defined term tells you whether the 3-hour rule applies?",
+        "Why is it risky to apply 125 percent to every number in the problem automatically?",
+        "What is the difference between the branch-circuit path and the feeder path for continuous loads?"
       ],
-      "references": ["Article 100", "210.19(A)(1)", "210.20(A)", "215.2", "215.3", "220.40"]
+      "references": [
+        "Article 100",
+        "210.19(A)(1)",
+        "210.20(A)",
+        "215.2",
+        "215.3",
+        "220.40"
+      ]
     },
     {
-      "id": "lesson-record-004",
+      "id": "jr-les-004",
+      "courseTitle": "Journeyman Electrician Course",
+      "moduleName": "Branch Circuits and Feeders",
+      "lessonTitle": "Dwelling Receptacles and Small-Appliance Circuits",
+      "certificationLevel": "Journeyman",
+      "learningObjectives": [
+        "Explain the purpose of required dwelling-unit branch circuits and use the basic receptacle-placement rules in Article 210 with better accuracy."
+      ],
+      "lessonContent": [
+        {
+          "id": "jr-les-004-sec-001",
+          "heading": "Learning objective",
+          "body": "Explain the purpose of required dwelling-unit branch circuits and use the basic receptacle-placement rules in Article 210 with better accuracy.",
+          "necReferences": [
+            "210.11",
+            "210.52"
+          ]
+        },
+        {
+          "id": "jr-les-004-sec-002",
+          "heading": "Why this matters",
+          "body": "Dwelling-unit questions are frequent because they connect everyday residential layouts to code decisions. They are also easy points for candidates who can separate required circuits from required outlet placement instead of treating Article 210 like one giant memorization problem.",
+          "necReferences": [
+            "210.11",
+            "210.52"
+          ]
+        },
+        {
+          "id": "jr-les-004-sec-003",
+          "heading": "Core explanation",
+          "body": "Article 210 does more than talk about receptacles. It also requires certain dwelling-unit branch circuits to serve specific areas and uses. For example, dwelling kitchens and related areas require dedicated small-appliance circuit planning, while bathrooms and laundry areas have their own required branch-circuit treatment. Receptacle placement rules then decide where outlets must be located so occupants are not forced into unsafe extension-cord habits.",
+          "necReferences": [
+            "210.11",
+            "210.52"
+          ]
+        },
+        {
+          "id": "jr-les-004-sec-004",
+          "heading": "Key concepts",
+          "body": "Required circuits and required receptacle locations are related but different questions. One asks what kind of branch-circuit capacity the dwelling must have. The other asks where outlets must be placed. The familiar 6-foot and 12-foot wall-space logic helps with general wall spaces, but countertop areas, bathrooms, laundry areas, and similar spaces can trigger different rule paths.",
+          "necReferences": [
+            "210.11",
+            "210.52"
+          ]
+        },
+        {
+          "id": "jr-les-004-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 210.11 identifies branch circuits that are specifically required in dwelling units. NEC 210.52 covers minimum receptacle placement. Together they form one of the most testable residential areas because the exam can ask about circuit purpose, spacing, or a special room in the same problem.",
+          "necReferences": [
+            "210.11",
+            "210.52"
+          ]
+        },
+        {
+          "id": "jr-les-004-sec-006",
+          "heading": "Practical example",
+          "body": "A 12-foot living-room wall can often be satisfied by one centered receptacle because no point along the floor line ends up more than 6 feet from an outlet. But that same thinking does not answer a kitchen countertop question, because kitchen small-appliance circuits and countertop receptacles follow their own residential rules.",
+          "necReferences": [
+            "210.11",
+            "210.52"
+          ]
+        },
+        {
+          "id": "jr-les-004-sec-007",
+          "heading": "Common mistakes",
+          "body": "The most common mistake is memorizing the wall-space rule and then forcing it onto every dwelling situation. Another is forgetting that required small-appliance, bathroom, and laundry circuit questions are asking about dedicated branch-circuit coverage, not just receptacle spacing.",
+          "necReferences": [
+            "210.11",
+            "210.52"
+          ]
+        },
+        {
+          "id": "jr-les-004-sec-008",
+          "heading": "Exam insight",
+          "body": "When a residential question feels crowded, decide what it is testing before reading the answers twice. Is it asking about wall spacing, a special room, or a required branch circuit? That decision removes a lot of close-sounding distractors fast.",
+          "necReferences": [
+            "210.11",
+            "210.52"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Required dwelling circuits and receptacle placement rules work together, but they are not the same thing.",
+        "Article 210 is a major residential exam article because it combines layout and branch-circuit rules.",
+        "The general wall-space rule does not answer every kitchen, bathroom, or laundry question.",
+        "Start by identifying whether the problem is testing placement, circuit purpose, or a special dwelling area."
+      ],
+      "practiceQuestions": [
+        "Why is it a mistake to apply the general wall-space rule to every dwelling-unit question?",
+        "What is the difference between a required branch circuit and a required receptacle location?",
+        "If a problem mentions kitchen countertop receptacles and small-appliance circuits together, what should you identify first?"
+      ],
+      "references": [
+        "210.11",
+        "210.52"
+      ]
+    },
+    {
+      "id": "jr-les-005",
       "courseTitle": "Journeyman Electrician Course",
       "moduleName": "Grounding and Bonding",
       "lessonTitle": "Grounding vs Bonding at Services and Feeders",
       "certificationLevel": "Journeyman",
       "learningObjectives": [
-        "Differentiate grounding from bonding using NEC terminology.",
-        "Identify the service bonding jumper and grounding electrode conductor roles.",
-        "Recognize why separately derived systems and feeders create common exam traps."
+        "Separate grounding from bonding at the service and feeder level so you can follow the fault-current path and earth-reference path without mixing them up."
       ],
       "lessonContent": [
         {
-          "id": "lesson-record-004-sec-001",
-          "heading": "The distinction the exam tests repeatedly",
-          "body": "Grounding ties an electrical system to earth for stabilization and voltage limitation. Bonding joins conductive parts together to create an effective fault-current path. Candidates who use the words as if they mean the same thing routinely miss service and feeder questions.",
-          "necReferences": ["250.4", "250.24"]
+          "id": "jr-les-005-sec-001",
+          "heading": "Learning objective",
+          "body": "Separate grounding from bonding at the service and feeder level so you can follow the fault-current path and earth-reference path without mixing them up.",
+          "necReferences": [
+            "250.24",
+            "250.32",
+            "250.50"
+          ]
         },
         {
-          "id": "lesson-record-004-sec-002",
-          "heading": "Service equipment focus",
-          "body": "At service equipment, the grounded conductor, service disconnecting means, and grounding electrode system relationship must be understood as a system, not as isolated parts. Read the question closely to see whether it is asking about the neutral-to-case bonding location, the electrode path, or equipment grounding conductors on the load side.",
-          "necReferences": ["250.24", "250.50"]
+          "id": "jr-les-005-sec-002",
+          "heading": "Why this matters",
+          "body": "Grounding and bonding is one of the most misunderstood electrician exam topics. Students often know pieces of the vocabulary but cannot explain the function of each conductor or connection point.",
+          "necReferences": [
+            "250.24",
+            "250.32"
+          ]
         },
         {
-          "id": "lesson-record-004-sec-003",
-          "heading": "Feeder and building questions",
-          "body": "When a feeder supplies another building or structure, candidates must slow down and follow the specific building or structure feeder rule instead of assuming the service rule applies unchanged. That is why Article 250 question stems often test whether you know when to leave the service article and move deeper into the article.",
-          "necReferences": ["250.32"]
+          "id": "jr-les-005-sec-003",
+          "heading": "Core explanation",
+          "body": "Grounding and bonding work together, but they do not do the same job. The grounded service conductor, service bonding jumper, equipment grounding conductor, and grounding electrode system each have a specific role. At the service, the code brings system grounding and bonding together in a defined way. At feeders and separate buildings, the rules shift because the source point and return path are different.",
+          "necReferences": [
+            "250.24",
+            "250.32",
+            "250.50"
+          ]
+        },
+        {
+          "id": "jr-les-005-sec-004",
+          "heading": "Key concepts",
+          "body": "The grounding electrode system connects the electrical system to earth. Bonding ties conductive parts together so fault current has an effective low-impedance path back to the source. If you cannot explain where fault current is supposed to travel, you probably do not understand the bonding part yet.",
+          "necReferences": [
+            "250.24",
+            "250.32",
+            "250.50"
+          ]
+        },
+        {
+          "id": "jr-les-005-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 250.24 covers service grounding and bonding. NEC 250.32 applies to buildings or structures supplied by feeders. NEC 250.50 describes the grounding electrode system. These sections are tested together because the exam wants functional understanding, not just word recognition.",
+          "necReferences": [
+            "250.24",
+            "250.32",
+            "250.50"
+          ]
+        },
+        {
+          "id": "jr-les-005-sec-006",
+          "heading": "Practical example",
+          "body": "If a fault energizes a metal enclosure, the equipment bonding path should carry that fault current back to the source quickly enough to operate the protective device. Earth is not supposed to be the normal fault-clearing path for that enclosure. That is a core exam distinction.",
+          "necReferences": [
+            "250.24",
+            "250.32"
+          ]
+        },
+        {
+          "id": "jr-les-005-sec-007",
+          "heading": "Common mistakes",
+          "body": "Students often say grounding clears faults and stop there. That answer is incomplete and usually wrong in the exam sense. Another mistake is using service rules at a feeder-supplied detached structure without checking the separate-building rules carefully.",
+          "necReferences": [
+            "250.24",
+            "250.32"
+          ]
+        },
+        {
+          "id": "jr-les-005-sec-008",
+          "heading": "Exam insight",
+          "body": "When the answer choices sound similar, ask yourself two questions: is this about reference to earth, or is it about returning fault current to the source? That question alone removes a lot of wrong options.",
+          "necReferences": [
+            "250.24",
+            "250.32",
+            "250.50"
+          ]
         }
       ],
       "keyTakeaways": [
-        "Grounding and bonding are related but not interchangeable terms.",
-        "Service questions often require more than one section of Article 250.",
-        "Feeder-to-building questions are common traps because they look like service questions."
+        "Grounding and bonding are related but different functions.",
+        "The grounding electrode system is not the same thing as the equipment bonding path.",
+        "Service rules and feeder-to-building rules are not interchangeable.",
+        "Following the intended fault-current path is the fastest way to reason through tough questions."
       ],
       "practiceQuestions": [
-        "What is the exam-safe definition difference between grounding and bonding?",
-        "Which section should you check for feeders to separate buildings or structures?"
+        "Why is earth not the normal fault-clearing path for metal enclosures?",
+        "What main code section would you check for a feeder to a separate building?",
+        "How can you tell whether a question is really about grounding or about bonding?"
       ],
-      "references": ["250.4", "250.24", "250.32", "250.50"]
+      "references": [
+        "250.24",
+        "250.32",
+        "250.50"
+      ]
     },
     {
-      "id": "lesson-record-005",
+      "id": "jr-les-006",
+      "courseTitle": "Journeyman Electrician Course",
+      "moduleName": "Grounding and Bonding",
+      "lessonTitle": "Grounding Electrodes and Electrode Conductors",
+      "certificationLevel": "Journeyman",
+      "learningObjectives": [
+        "Identify common grounding electrodes and understand how grounding electrode conductors are selected and sized at a practical exam-prep level."
+      ],
+      "lessonContent": [
+        {
+          "id": "jr-les-006-sec-001",
+          "heading": "Learning objective",
+          "body": "Identify common grounding electrodes and understand how grounding electrode conductors are selected and sized at a practical exam-prep level.",
+          "necReferences": [
+            "250.50",
+            "250.66"
+          ]
+        },
+        {
+          "id": "jr-les-006-sec-002",
+          "heading": "Why this matters",
+          "body": "This topic appears in both direct code questions and bigger service questions. Students lose easy points when they know electrode names but do not understand the system idea behind them.",
+          "necReferences": [
+            "250.50",
+            "250.66"
+          ]
+        },
+        {
+          "id": "jr-les-006-sec-003",
+          "heading": "Core explanation",
+          "body": "A building may have more than one qualifying grounding electrode. When electrodes are present, the NEC requires them to be bonded together into one grounding electrode system. The grounding electrode conductor connects the grounded service conductor or derived-system connection point to that system, and its size depends on code rules rather than guesswork.",
+          "necReferences": [
+            "250.50",
+            "250.66"
+          ]
+        },
+        {
+          "id": "jr-les-006-sec-004",
+          "heading": "Key concepts",
+          "body": "Common electrodes include metal underground water pipe, building steel, concrete-encased electrodes, rods, pipes, plates, and ground rings. The exam often tests whether you know that available electrodes are not optional extras. If they qualify, they become part of the required system. Sizing the grounding electrode conductor is then tied to the code method, not to a casual field estimate.",
+          "necReferences": [
+            "250.50",
+            "250.66"
+          ]
+        },
+        {
+          "id": "jr-les-006-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 250.50 requires all available electrodes to be bonded together into one system. NEC 250.66 gives sizing rules for grounding electrode conductors. Those two sections are closely linked on exams because one tells you what must exist and the other tells you how the conductor is selected.",
+          "necReferences": [
+            "250.50",
+            "250.66"
+          ]
+        },
+        {
+          "id": "jr-les-006-sec-006",
+          "heading": "Practical example",
+          "body": "If a building has both qualifying building steel and a concrete-encased electrode, the design conversation is not which one you prefer. The conversation is how the grounding electrode system is formed and how the grounding electrode conductor ties into the required arrangement.",
+          "necReferences": [
+            "250.50",
+            "250.66"
+          ]
+        },
+        {
+          "id": "jr-les-006-sec-007",
+          "heading": "Common mistakes",
+          "body": "Students sometimes think one driven rod solves every grounding-electrode question. That shortcut misses the bigger system concept. Another mistake is forgetting that electrode-conductor sizing follows code rules tied to service-conductor size and electrode type.",
+          "necReferences": [
+            "250.50",
+            "250.66"
+          ]
+        },
+        {
+          "id": "jr-les-006-sec-008",
+          "heading": "Exam insight",
+          "body": "If the question asks what electrodes must be part of the system, think system first. If it asks what size conductor is required, shift to the sizing section and read carefully for the conductor and electrode details.",
+          "necReferences": [
+            "250.50",
+            "250.66"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Available qualifying electrodes must be bonded into one grounding electrode system.",
+        "A grounding electrode conductor connects the system to that electrode system according to code rules.",
+        "Electrode questions often test system thinking first and sizing second.",
+        "Driven rods are only one part of a broader grounding-electrode picture."
+      ],
+      "practiceQuestions": [
+        "Why is a grounding-electrode question often bigger than just one driven rod?",
+        "Which section tells you that available electrodes must be bonded together?",
+        "What is the difference between identifying required electrodes and sizing the grounding electrode conductor?"
+      ],
+      "references": [
+        "250.50",
+        "250.66"
+      ]
+    },
+    {
+      "id": "jr-les-007",
+      "courseTitle": "Journeyman Electrician Course",
+      "moduleName": "Motors and Controls",
+      "lessonTitle": "Motor Circuit Conductors and Overload Protection",
+      "certificationLevel": "Journeyman",
+      "learningObjectives": [
+        "Use the NEC motor-conductor and overload rules more accurately by understanding why motor circuits are not sized like ordinary branch circuits."
+      ],
+      "lessonContent": [
+        {
+          "id": "jr-les-007-sec-001",
+          "heading": "Learning objective",
+          "body": "Use the NEC motor-conductor and overload rules more accurately by understanding why motor circuits are not sized like ordinary branch circuits.",
+          "necReferences": [
+            "430.22",
+            "430.32"
+          ]
+        },
+        {
+          "id": "jr-les-007-sec-002",
+          "heading": "Why this matters",
+          "body": "Motor questions scare many candidates because the rules feel different from everyday branch-circuit work. The difference is intentional. Motors start, run, and overload in ways that ordinary lighting loads do not.",
+          "necReferences": [
+            "430.22",
+            "430.32"
+          ]
+        },
+        {
+          "id": "jr-les-007-sec-003",
+          "heading": "Core explanation",
+          "body": "Motor branch-circuit conductors are typically sized from the NEC motor full-load current tables where the code requires it, not automatically from the nameplate current. Overload protection has a different job from short-circuit and ground-fault protection. Overload protection is there to protect the motor from overheating due to excess running current, not to clear high-level fault current instantly.",
+          "necReferences": [
+            "430.22",
+            "430.32"
+          ]
+        },
+        {
+          "id": "jr-les-007-sec-004",
+          "heading": "Key concepts",
+          "body": "Motor conductor sizing, overload protection, and short-circuit protection are three related but separate design steps. The exam often checks whether you know which device is being discussed. If the question says overload, think about protecting the motor windings from excess current over time. If it says branch-circuit short-circuit protection, that is a different code path.",
+          "necReferences": [
+            "430.22",
+            "430.32"
+          ]
+        },
+        {
+          "id": "jr-les-007-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 430.22 covers motor branch-circuit conductors. NEC 430.32 covers overload protection. Together they show that motors have their own code logic and should not be treated like a simple resistive load on a standard branch circuit.",
+          "necReferences": [
+            "430.22",
+            "430.32"
+          ]
+        },
+        {
+          "id": "jr-les-007-sec-006",
+          "heading": "Practical example",
+          "body": "A motor may need conductors sized by the applicable motor rules while the overload device is set to protect the motor from sustained overcurrent during operation. That can feel strange to students who expect one number to control every part of the circuit design.",
+          "necReferences": [
+            "430.22",
+            "430.32"
+          ]
+        },
+        {
+          "id": "jr-les-007-sec-007",
+          "heading": "Common mistakes",
+          "body": "The biggest mistake is using the nameplate current everywhere without checking whether the NEC table value is required. Another is confusing overload protection with the branch-circuit device that handles short circuits and ground faults.",
+          "necReferences": [
+            "430.22",
+            "430.32"
+          ]
+        },
+        {
+          "id": "jr-les-007-sec-008",
+          "heading": "Exam insight",
+          "body": "When you see a motor question, write down which of the three jobs is being tested: conductors, overload, or short-circuit protection. That simple habit prevents a lot of wrong turns.",
+          "necReferences": [
+            "430.22",
+            "430.32"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Motor circuits follow their own NEC logic.",
+        "Conductors, overload protection, and short-circuit protection are separate design steps.",
+        "Overload protection protects the motor from overheating during operation.",
+        "Motor questions often turn on whether you should use a table value or another source value."
+      ],
+      "practiceQuestions": [
+        "Why is overload protection not the same thing as short-circuit protection in a motor circuit?",
+        "What is the first question to ask when a motor problem appears on an exam?",
+        "Why can motor circuits feel different from ordinary branch-circuit sizing questions?"
+      ],
+      "references": [
+        "430.22",
+        "430.32"
+      ]
+    },
+    {
+      "id": "jr-les-008",
+      "courseTitle": "Journeyman Electrician Course",
+      "moduleName": "Motors and Controls",
+      "lessonTitle": "Motor Branch-Circuit Short-Circuit and Ground-Fault Protection",
+      "certificationLevel": "Journeyman",
+      "learningObjectives": [
+        "Understand what motor branch-circuit short-circuit and ground-fault protection is supposed to do and why its sizing rules can look higher than new learners expect."
+      ],
+      "lessonContent": [
+        {
+          "id": "jr-les-008-sec-001",
+          "heading": "Learning objective",
+          "body": "Understand what motor branch-circuit short-circuit and ground-fault protection is supposed to do and why its sizing rules can look higher than new learners expect.",
+          "necReferences": [
+            "430.52"
+          ]
+        },
+        {
+          "id": "jr-les-008-sec-002",
+          "heading": "Why this matters",
+          "body": "Students often panic when they see a motor protective-device value that seems larger than the conductor ampacity or overload setting. The rules look unusual only until you understand the purpose of each protective layer.",
+          "necReferences": [
+            "430.52"
+          ]
+        },
+        {
+          "id": "jr-les-008-sec-003",
+          "heading": "Core explanation",
+          "body": "Motor branch-circuit short-circuit and ground-fault protection is designed to protect the circuit against severe fault current and allow the motor to start without nuisance tripping. That is different from overload protection, which protects the motor from excess running current over time. Because the purposes differ, the sizing path also differs.",
+          "necReferences": [
+            "430.52"
+          ]
+        },
+        {
+          "id": "jr-les-008-sec-004",
+          "heading": "Key concepts",
+          "body": "The branch-circuit protective device is not there to perform every protective job by itself. Motor starting current can be high for a short time, so the branch-circuit protection has to be chosen with that operating reality in mind. The code tables and rules exist so the motor can start while still having fault protection.",
+          "necReferences": [
+            "430.52"
+          ]
+        },
+        {
+          "id": "jr-les-008-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 430.52 is the key section for motor branch-circuit short-circuit and ground-fault protection. It is heavily tested because it forces candidates to understand purpose, not just memorize a single percentage.",
+          "necReferences": [
+            "430.52"
+          ]
+        },
+        {
+          "id": "jr-les-008-sec-006",
+          "heading": "Practical example",
+          "body": "A student may be surprised that a motor branch-circuit protective device can be sized differently from the overload device. That is not a contradiction. It reflects the difference between handling startup and clearing a fault versus protecting the motor from long-term overheating.",
+          "necReferences": [
+            "430.52"
+          ]
+        },
+        {
+          "id": "jr-les-008-sec-007",
+          "heading": "Common mistakes",
+          "body": "A common mistake is calling every motor protective device an overload device. Another is assuming a larger short-circuit protective-device setting is automatically unsafe without understanding why the code allows it in that context.",
+          "necReferences": [
+            "430.52"
+          ]
+        },
+        {
+          "id": "jr-les-008-sec-008",
+          "heading": "Exam insight",
+          "body": "Read the exact words in the question. If it says short-circuit and ground-fault protection, go straight to 430.52 logic. Do not answer with overload language just because it sounds familiar.",
+          "necReferences": [
+            "430.52"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Motor short-circuit protection and overload protection serve different functions.",
+        "Motor startup current is one reason these rules look different from ordinary circuits.",
+        "Article 430.52 is the main code path for this topic.",
+        "The wording of the question tells you which protective job is being tested."
+      ],
+      "practiceQuestions": [
+        "Why can a motor branch-circuit protective device look larger than a learner expects?",
+        "What is the main difference between overload protection and short-circuit protection for motors?",
+        "If a question says ground-fault and short-circuit protection, which section should guide your search?"
+      ],
+      "references": [
+        "430.52"
+      ]
+    },
+    {
+      "id": "ms-les-001",
+      "courseTitle": "Master Electrician Course",
+      "moduleName": "Advanced System Design",
+      "lessonTitle": "Service and Feeder Design Workflow",
+      "certificationLevel": "Master",
+      "learningObjectives": [
+        "Follow a service-and-feeder design workflow that starts with load identification, moves through calculation logic, and ends with conductor and equipment decisions."
+      ],
+      "lessonContent": [
+        {
+          "id": "ms-les-001-sec-001",
+          "heading": "Learning objective",
+          "body": "Follow a service-and-feeder design workflow that starts with load identification, moves through calculation logic, and ends with conductor and equipment decisions.",
+          "necReferences": [
+            "220.40",
+            "230.42"
+          ]
+        },
+        {
+          "id": "ms-les-001-sec-002",
+          "heading": "Why this matters",
+          "body": "Master-level exams reward process discipline. These questions are less about one isolated section and more about whether you can move through the design path without skipping a step.",
+          "necReferences": [
+            "220.40",
+            "230.42"
+          ]
+        },
+        {
+          "id": "ms-les-001-sec-003",
+          "heading": "Core explanation",
+          "body": "Service and feeder design starts with understanding the occupancy, load types, and calculation method that applies. After that, the designer determines connected load, applies demand or optional rules where allowed, identifies the governing ampacity, and then selects conductors and equipment to match the final calculated load. Good workflow prevents rework because each later choice depends on the earlier load decision.",
+          "necReferences": [
+            "220.40",
+            "230.42"
+          ]
+        },
+        {
+          "id": "ms-les-001-sec-004",
+          "heading": "Key concepts",
+          "body": "Do not start with a conductor size and work backward. Start with the load path. Separate lighting, receptacle, appliance, HVAC, motor, and noncoincident considerations as needed. Then decide whether the question is really about a service, a feeder, or both. Master-level accuracy comes from sequencing, not speed alone.",
+          "necReferences": [
+            "220.40",
+            "230.42"
+          ]
+        },
+        {
+          "id": "ms-les-001-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 220.40 frames the calculation path for feeders and services. NEC 230.42 covers service-conductor ampacity requirements. Together they remind the reader that conductors are chosen after the correct load logic is established, not before.",
+          "necReferences": [
+            "220.40",
+            "230.42"
+          ]
+        },
+        {
+          "id": "ms-les-001-sec-006",
+          "heading": "Practical example",
+          "body": "A mixed-load building problem often tempts students to jump straight to conductor ampacity. The better move is to list the loads by category, identify any demand-factor rules that apply, add the controlling values, and only then move to service or feeder conductor sizing.",
+          "necReferences": [
+            "220.40",
+            "230.42"
+          ]
+        },
+        {
+          "id": "ms-les-001-sec-007",
+          "heading": "Common mistakes",
+          "body": "Master candidates still lose points by mixing service and feeder language or by skipping the question of which loads can be reduced. Another mistake is assuming the largest connected number must always control the final calculation without checking the demand rules.",
+          "necReferences": [
+            "220.40",
+            "230.42"
+          ]
+        },
+        {
+          "id": "ms-les-001-sec-008",
+          "heading": "Exam insight",
+          "body": "Write a workflow on scratch paper before solving complex design questions. A short checklist such as identify loads, choose method, apply demand, size conductors keeps advanced problems from turning into messy guesses.",
+          "necReferences": [
+            "220.40",
+            "230.42"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Design questions are workflow questions before they are conductor questions.",
+        "Load identification comes before ampacity selection.",
+        "Service and feeder language should stay clearly separated.",
+        "Demand logic can change the answer path significantly."
+      ],
+      "practiceQuestions": [
+        "Why is starting with conductor size a weak approach to service design questions?",
+        "What is the value of writing a workflow before solving a complex load problem?",
+        "How can confusing feeder language with service language affect the final answer?"
+      ],
+      "references": [
+        "220.40",
+        "230.42"
+      ]
+    },
+    {
+      "id": "ms-les-002",
+      "courseTitle": "Master Electrician Course",
+      "moduleName": "Advanced System Design",
+      "lessonTitle": "Using Tables, Notes, and Exceptions Efficiently",
+      "certificationLevel": "Master",
+      "learningObjectives": [
+        "Use NEC tables, notes, and exceptions more strategically so you can read advanced questions with better judgment and fewer avoidable misses."
+      ],
+      "lessonContent": [
+        {
+          "id": "ms-les-002-sec-001",
+          "heading": "Learning objective",
+          "body": "Use NEC tables, notes, and exceptions more strategically so you can read advanced questions with better judgment and fewer avoidable misses.",
+          "necReferences": [
+            "220.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-002-sec-002",
+          "heading": "Why this matters",
+          "body": "Master exams often hide the real challenge in the small print. A student may know the main rule but still miss the problem by overlooking a table note, exception, or limitation that changes the result.",
+          "necReferences": [
+            "220.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-002-sec-003",
+          "heading": "Core explanation",
+          "body": "Tables organize complex information efficiently, but they only work when you read their titles, scope, notes, and conditions carefully. Notes and exceptions can narrow, expand, or redirect the answer path depending on the article. Advanced code work is not about reading faster. It is about reading more deliberately when the code starts layering conditions.",
+          "necReferences": [
+            "220.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-002-sec-004",
+          "heading": "Key concepts",
+          "body": "A table value outside its stated conditions is not a valid answer. An exception is not a free shortcut; it applies only when its conditions are satisfied. Notes also need context. Some are informational and explanatory, while others are integral to how the table is read. Strong exam performance comes from treating every table like a small rule system, not a list of numbers.",
+          "necReferences": [
+            "220.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-002-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 220.42 and NEC 310.16 are good examples of places where table reading and context matter. In both cases, the title and surrounding language control how the data is used. The advanced student reads the structure around the table, not just the cells inside it.",
+          "necReferences": [
+            "220.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-002-sec-006",
+          "heading": "Practical example",
+          "body": "A candidate may find the number they expected in a table and circle it too quickly. But if the problem conditions do not match the table assumptions, or if a note changes how the value is applied, that quick answer becomes the wrong answer with great confidence.",
+          "necReferences": [
+            "220.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-002-sec-007",
+          "heading": "Common mistakes",
+          "body": "The common mistake is tunnel vision. Students see a familiar table and stop reading. Another mistake is treating all notes the same instead of deciding whether the note is explanatory, limiting, or part of the application path.",
+          "necReferences": [
+            "220.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-002-sec-008",
+          "heading": "Exam insight",
+          "body": "When a question includes a table citation, slow down on purpose. The time you spend reading the heading, note, or exception is often the time that protects you from a very expensive wrong answer.",
+          "necReferences": [
+            "220.42",
+            "310.16"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "A table must be read with its title, scope, and surrounding language.",
+        "Exceptions only apply when their conditions are actually met.",
+        "Advanced exam problems often turn on the small print around a familiar rule.",
+        "Deliberate reading beats fast guessing on master-level code questions."
+      ],
+      "practiceQuestions": [
+        "Why is reading only the table values without the heading risky?",
+        "What is the difference between seeing a table and truly applying it correctly?",
+        "Why can a note or exception change the answer even when the main table looks familiar?"
+      ],
+      "references": [
+        "220.42",
+        "310.16"
+      ]
+    },
+    {
+      "id": "ms-les-003",
       "courseTitle": "Master Electrician Course",
       "moduleName": "Complex Load Calculations",
       "lessonTitle": "Dwelling Optional Calculation Workflow",
       "certificationLevel": "Master",
       "learningObjectives": [
-        "Use a repeatable workflow for optional dwelling calculations.",
-        "Separate general load, small-appliance, laundry, appliances, dryers, ranges, and HVAC adjustments.",
-        "Translate the final load into service or feeder ampacity."
+        "Work through the optional dwelling calculation method with better structure so you can decide what belongs in the calculation, what can be reduced, and what must still be carried at full value."
       ],
       "lessonContent": [
         {
-          "id": "lesson-record-005-sec-001",
-          "heading": "Why workflow matters",
-          "body": "Master exam problems are rarely failed because of simple multiplication. They are failed because the candidate uses the wrong calculation method, misses a category, or applies a demand factor to the wrong subtotal.",
-          "necReferences": ["220.82"]
+          "id": "ms-les-003-sec-001",
+          "heading": "Learning objective",
+          "body": "Work through the optional dwelling calculation method with better structure so you can decide what belongs in the calculation, what can be reduced, and what must still be carried at full value.",
+          "necReferences": [
+            "220.82",
+            "220.53",
+            "220.54",
+            "220.60"
+          ]
         },
         {
-          "id": "lesson-record-005-sec-002",
-          "heading": "Recommended sequence",
-          "body": "Start with the applicable optional-method rule, identify whether the occupancy qualifies, total the general and required loads, process appliances and fixed equipment correctly, then compare heating and cooling under the applicable method. Only after the load is complete should you move to conductor and overcurrent device sizing.",
-          "necReferences": ["220.82", "230.42", "310.16"]
+          "id": "ms-les-003-sec-002",
+          "heading": "Why this matters",
+          "body": "Optional dwelling calculations are attractive because they can simplify service-sizing problems, but they also create mistakes when students apply the method too casually or mix it with standard-method logic.",
+          "necReferences": [
+            "220.82"
+          ]
         },
         {
-          "id": "lesson-record-005-sec-003",
-          "heading": "Exam discipline",
-          "body": "Master-level candidates should write the categories in order before solving. That keeps you from skipping a laundry circuit, double-counting a fastened-in-place appliance, or confusing the calculation article with the conductor article.",
-          "necReferences": ["220.82", "220.53", "220.54", "220.60"]
+          "id": "ms-les-003-sec-003",
+          "heading": "Core explanation",
+          "body": "The optional dwelling calculation is a specific path allowed for qualifying dwelling-unit services and feeders. It is not a free-form shortcut. The method gathers the appropriate loads, applies the rule structure in the optional section, and then carries the result into conductor and equipment sizing. A strong solution depends on organizing the categories before any arithmetic begins.",
+          "necReferences": [
+            "220.82",
+            "230.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-003-sec-004",
+          "heading": "Key concepts",
+          "body": "Know what qualifies as the dwelling load base, what appliance demand concepts may matter, what dryer and cooking rules may still shape the number, and when noncoincident treatment applies. The method is optional, but once the problem directs you there, the steps should stay consistent.",
+          "necReferences": [
+            "220.53",
+            "220.54",
+            "220.60",
+            "220.82"
+          ]
+        },
+        {
+          "id": "ms-les-003-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 220.82 is the center of the method. NEC 220.53, 220.54, and 220.60 support common load-treatment issues that may influence the calculation. NEC 230.42 and 310.16 matter after the load is established because service or feeder conductor selection still has to follow the final ampacity result.",
+          "necReferences": [
+            "220.53",
+            "220.54",
+            "220.60",
+            "220.82",
+            "230.42",
+            "310.16"
+          ]
+        },
+        {
+          "id": "ms-les-003-sec-006",
+          "heading": "Practical example",
+          "body": "A dwelling calculation problem becomes much easier when the student separates general load, appliances, dryers, cooking equipment, and heating or cooling before combining anything. That list-building step is what keeps advanced questions from turning into arithmetic clutter.",
+          "necReferences": [
+            "220.82"
+          ]
+        },
+        {
+          "id": "ms-les-003-sec-007",
+          "heading": "Common mistakes",
+          "body": "Students often blend standard-method habits into optional-method questions. Another mistake is failing to identify which loads are noncoincident or which loads should be handled as a distinct category before reduction logic is applied.",
+          "necReferences": [
+            "220.60",
+            "220.82"
+          ]
+        },
+        {
+          "id": "ms-les-003-sec-008",
+          "heading": "Exam insight",
+          "body": "Master-level dwelling questions reward clean setup. Use columns or short labels on scratch paper. The student with an organized load list will usually beat the student with better mental math but weaker structure.",
+          "necReferences": [
+            "220.82",
+            "230.42"
+          ]
         }
       ],
       "keyTakeaways": [
-        "Pick the right method before doing math.",
-        "Keep calculation articles separate from conductor-sizing articles until the load is complete.",
-        "Write the category list before solving."
+        "The optional dwelling calculation is a defined method, not a loose shortcut.",
+        "Organizing loads by category is the most important first step.",
+        "Supporting sections can affect how individual dwelling loads are treated.",
+        "Conductor selection still happens after the correct load result is found."
       ],
       "practiceQuestions": [
-        "What common error occurs when a candidate moves to conductor sizing before the optional calculation is complete?",
-        "Which article governs the optional calculation itself?"
+        "Why is load organization so important before using the optional dwelling method?",
+        "What is one way standard-method thinking can cause mistakes in an optional-calculation problem?",
+        "After the optional calculation total is found, what design step still remains?"
       ],
-      "references": ["220.53", "220.54", "220.60", "220.82", "230.42", "310.16"]
+      "references": [
+        "220.53",
+        "220.54",
+        "220.60",
+        "220.82",
+        "230.42",
+        "310.16"
+      ]
     },
     {
-      "id": "lesson-record-006",
+      "id": "ms-les-004",
+      "courseTitle": "Master Electrician Course",
+      "moduleName": "Complex Load Calculations",
+      "lessonTitle": "Commercial Demand and Feeder Sizing",
+      "certificationLevel": "Master",
+      "learningObjectives": [
+        "Approach commercial demand and feeder-sizing questions with a sequence that separates receptacle demand, motor impact, and final feeder ampacity."
+      ],
+      "lessonContent": [
+        {
+          "id": "ms-les-004-sec-001",
+          "heading": "Learning objective",
+          "body": "Approach commercial demand and feeder-sizing questions with a sequence that separates receptacle demand, motor impact, and final feeder ampacity.",
+          "necReferences": [
+            "220.44",
+            "220.50",
+            "215.2"
+          ]
+        },
+        {
+          "id": "ms-les-004-sec-002",
+          "heading": "Why this matters",
+          "body": "Commercial calculations combine several load types, which makes them easy to overcount or undercount. Master-level questions reward candidates who organize the load categories before they start doing arithmetic.",
+          "necReferences": [
+            "220.44",
+            "220.50",
+            "215.2"
+          ]
+        },
+        {
+          "id": "ms-les-004-sec-003",
+          "heading": "Core explanation",
+          "body": "Commercial feeder sizing begins with connected load, but the categories do not all follow the same rule path. Receptacle loads may allow demand treatment under one section, while motor loads may change the feeder result for a different reason. Lighting, receptacles, and motors should be separated first, adjusted by their governing rules, and only then recombined into one feeder load.",
+          "necReferences": [
+            "220.44",
+            "220.50",
+            "215.2"
+          ]
+        },
+        {
+          "id": "ms-les-004-sec-004",
+          "heading": "Key concepts",
+          "body": "A blanket multiplier is a warning sign in commercial work. Receptacle demand treatment is not the same thing as motor treatment, and neither one answers the final feeder-conductor choice by itself. Strong master-level solutions show a clean category list, the rule that controls each category, and the final recombined load used for feeder ampacity.",
+          "necReferences": [
+            "220.44",
+            "220.50",
+            "215.2"
+          ]
+        },
+        {
+          "id": "ms-les-004-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 220.44 addresses receptacle-load demand factors. NEC 220.50 addresses motor loads in Article 220 calculations. NEC 215.2 covers feeder conductor ampacity. The code path matters because the motor effect and the conductor-selection step are related, but they are not the same decision.",
+          "necReferences": [
+            "220.44",
+            "220.50",
+            "215.2"
+          ]
+        },
+        {
+          "id": "ms-les-004-sec-006",
+          "heading": "Practical example",
+          "body": "Imagine a small office suite with lighting, general receptacles, and a motor-driven air-handling unit. A weak solution lumps the whole job together and reaches for one demand factor. A stronger solution isolates the receptacle treatment, evaluates the motor impact separately, and then carries the adjusted total into feeder sizing under the feeder-ampacity rule.",
+          "necReferences": [
+            "220.44",
+            "220.50",
+            "215.2"
+          ]
+        },
+        {
+          "id": "ms-les-004-sec-007",
+          "heading": "Common mistakes",
+          "body": "The biggest mistake is treating all commercial loads like one pile. Another is applying receptacle-style demand thinking to motor load treatment, or selecting feeder conductors before the adjusted category totals are actually settled.",
+          "necReferences": [
+            "220.44",
+            "220.50",
+            "215.2"
+          ]
+        },
+        {
+          "id": "ms-les-004-sec-008",
+          "heading": "Exam insight",
+          "body": "If a commercial problem feels messy, stop and build a category list on scratch paper before touching the math. On master exams, the candidate with the clearer workflow usually beats the candidate with the faster calculator.",
+          "necReferences": [
+            "220.44",
+            "220.50",
+            "215.2"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Commercial feeder sizing starts with load categories, not blanket math.",
+        "Receptacle demand treatment and motor treatment can affect the total for different reasons.",
+        "Feeder conductor sizing happens after the adjusted load path is established.",
+        "An organized category workflow is one of the best master-level exam advantages."
+      ],
+      "practiceQuestions": [
+        "Why is it risky to treat lighting, receptacles, and motors as one undifferentiated commercial load?",
+        "What makes motor treatment different from ordinary receptacle demand treatment in a feeder problem?",
+        "At what point in the workflow should feeder conductor sizing happen?"
+      ],
+      "references": [
+        "220.44",
+        "220.50",
+        "215.2"
+      ]
+    },
+    {
+      "id": "ms-les-005",
       "courseTitle": "Master Electrician Course",
       "moduleName": "Hazardous Locations",
       "lessonTitle": "Hazardous Location Classification Fundamentals",
       "certificationLevel": "Master",
       "learningObjectives": [
-        "Distinguish class, division, and zone concepts at a test-taking level.",
-        "Use Article 500 as the common starting point before moving to occupancy-specific articles.",
-        "Recognize when the question is about classification and when it is about equipment selection."
+        "Classify hazardous locations more confidently by understanding the logic behind class, division, and zone language and the role of protection techniques."
       ],
       "lessonContent": [
         {
-          "id": "lesson-record-006-sec-001",
-          "heading": "Classification before equipment",
-          "body": "If you do not know whether the location is Class I, II, or III, and Division 1 or 2, equipment-selection rules will not help you. Start with the classification concept, then move to the article and section that addresses permitted equipment or sealing requirements.",
-          "necReferences": ["500.5", "500.7"]
+          "id": "ms-les-005-sec-001",
+          "heading": "Learning objective",
+          "body": "Classify hazardous locations more confidently by understanding the logic behind class, division, and zone language and the role of protection techniques.",
+          "necReferences": [
+            "500.5",
+            "500.7"
+          ]
         },
         {
-          "id": "lesson-record-006-sec-002",
-          "heading": "How the code path usually works",
-          "body": "Article 500 gives the general framework and references the occupancy-specific articles. From there, the question may drive you to 501, 502, 503, 505, or 506 depending on the hazard and the classification method used by the jurisdiction or problem statement.",
-          "necReferences": ["500.5", "501.10", "502.10", "505.9"]
+          "id": "ms-les-005-sec-002",
+          "heading": "Why this matters",
+          "body": "Hazardous-location questions feel intimidating because the vocabulary is dense. But once you understand what is being classified and why, the topic becomes much more teachable and much less mysterious.",
+          "necReferences": [
+            "500.5",
+            "500.7"
+          ]
         },
         {
-          "id": "lesson-record-006-sec-003",
-          "heading": "Real-world application",
-          "body": "A designer or master electrician working with a classified location does not guess. They confirm the process hazard, verify the classified area, and then choose wiring methods, seals, fittings, motors, and luminaires appropriate to that classification.",
-          "necReferences": ["500.7", "501.15", "501.125"]
+          "id": "ms-les-005-sec-003",
+          "heading": "Core explanation",
+          "body": "Hazardous locations are classified based on the type of material present and the likelihood that it may be present in an ignitable concentration. Class points to the broad hazard type, while division or zone language refines the exposure condition. Equipment and wiring methods are then selected based on that classification so the installation does not become the ignition source.",
+          "necReferences": [
+            "500.5",
+            "500.7"
+          ]
+        },
+        {
+          "id": "ms-les-005-sec-004",
+          "heading": "Key concepts",
+          "body": "Do not start with the equipment. Start with the atmosphere or material. Then determine whether the condition is normal, abnormal, continuous, or occasional according to the classification system in use. Protection techniques matter because different locations permit different approaches to controlling ignition risk.",
+          "necReferences": [
+            "500.5",
+            "500.7",
+            "505.9"
+          ]
+        },
+        {
+          "id": "ms-les-005-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 500.5 addresses classifications. NEC 500.7 addresses protection techniques. Articles 501, 502, and 505 then apply those ideas to specific location types and permitted equipment and wiring methods. This is a classic hierarchy-and-application exam topic.",
+          "necReferences": [
+            "500.5",
+            "500.7",
+            "501.10",
+            "501.15",
+            "501.125",
+            "502.10",
+            "505.9"
+          ]
+        },
+        {
+          "id": "ms-les-005-sec-006",
+          "heading": "Practical example",
+          "body": "A classified-location question may mention vapors, dust, or fibers and then ask about wiring method or equipment type. The right move is to classify the location first. If you skip that step and jump to materials, you usually choose the wrong code path.",
+          "necReferences": [
+            "500.5",
+            "501.10",
+            "502.10",
+            "505.9"
+          ]
+        },
+        {
+          "id": "ms-les-005-sec-007",
+          "heading": "Common mistakes",
+          "body": "Students often memorize a few article numbers and try to answer from memory alone. That breaks down quickly when the problem changes from one hazard type to another. Another mistake is mixing division language and zone language without noticing the question's framework.",
+          "necReferences": [
+            "500.5",
+            "500.7",
+            "505.9"
+          ]
+        },
+        {
+          "id": "ms-les-005-sec-008",
+          "heading": "Exam insight",
+          "body": "On master exams, the winning skill is classification discipline. Classify the hazard first, identify the framework second, and only then move to wiring methods, seals, motors, or equipment selection.",
+          "necReferences": [
+            "500.5",
+            "500.7"
+          ]
         }
       ],
       "keyTakeaways": [
-        "Classification comes before equipment selection.",
-        "Article 500 is the map; the later articles are the destination.",
-        "Hazardous-location questions often hide the real task in the wording."
+        "Hazardous-location questions should start with classification, not equipment choice.",
+        "Class identifies the broad hazard, while division or zone refines the condition.",
+        "Protection techniques are part of the code path, not side notes.",
+        "Mixing division and zone frameworks is a common exam mistake."
       ],
       "practiceQuestions": [
-        "What should you determine before selecting equipment for a classified location?",
-        "Which article should usually be your starting map for classified-location questions?"
+        "Why is equipment selection the wrong first step in a hazardous-location question?",
+        "What does the class tell you in a hazardous-location classification?",
+        "Why is it important to notice whether the problem uses division language or zone language?"
       ],
-      "references": ["500.5", "500.7", "501.10", "501.15", "501.125", "502.10", "505.9"]
+      "references": [
+        "500.5",
+        "500.7",
+        "501.10",
+        "501.15",
+        "501.125",
+        "502.10",
+        "505.9"
+      ]
+    },
+    {
+      "id": "ms-les-006",
+      "courseTitle": "Master Electrician Course",
+      "moduleName": "Hazardous Locations",
+      "lessonTitle": "Motors, Seals, and Equipment Selection in Classified Areas",
+      "certificationLevel": "Master",
+      "learningObjectives": [
+        "Evaluate motors, sealing fittings, and equipment choices in classified areas by tying each decision back to the location classification and protection method."
+      ],
+      "lessonContent": [
+        {
+          "id": "ms-les-006-sec-001",
+          "heading": "Learning objective",
+          "body": "Evaluate motors, sealing fittings, and equipment choices in classified areas by tying each decision back to the location classification and protection method.",
+          "necReferences": [
+            "501.15",
+            "501.125"
+          ]
+        },
+        {
+          "id": "ms-les-006-sec-002",
+          "heading": "Why this matters",
+          "body": "After classification, master-level questions usually shift into application. That is where many candidates lose points. They know the area is hazardous, but they cannot explain why a certain motor, enclosure, or sealing approach is or is not acceptable.",
+          "necReferences": [
+            "501.15",
+            "501.125"
+          ]
+        },
+        {
+          "id": "ms-les-006-sec-003",
+          "heading": "Core explanation",
+          "body": "In classified areas, equipment selection is controlled by the location classification and the approved protection approach. Motors, raceway seals, and enclosures must work together to reduce the chance of ignition. Sealing fittings are used where the code requires control of gas, vapor, or pressure movement through the raceway system. Motor suitability depends on whether the motor and its protection method match the classified location.",
+          "necReferences": [
+            "501.15",
+            "501.125"
+          ]
+        },
+        {
+          "id": "ms-les-006-sec-004",
+          "heading": "Key concepts",
+          "body": "Do not treat seals like ordinary fittings or as general-purpose moisture control. Their role is tied to hazard control. Motors also cannot be judged by appearance alone. The nameplate, approval, and protection approach have to match the classified condition. In hazardous locations, application always follows classification.",
+          "necReferences": [
+            "501.15",
+            "501.125"
+          ]
+        },
+        {
+          "id": "ms-les-006-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 501.15 covers sealing and drainage in Class I locations. NEC 501.125 covers motors in those locations. These sections are often tested together because a problem can begin with classification language and end by asking what equipment arrangement actually makes sense.",
+          "necReferences": [
+            "501.15",
+            "501.125"
+          ]
+        },
+        {
+          "id": "ms-les-006-sec-006",
+          "heading": "Practical example",
+          "body": "A Class I pump area question may describe a motor, a raceway leaving the area, and a sealing fitting in the same paragraph. The exam is not asking for random article recall. It is asking whether you understand that the motor must be suitable for the classified location and that the seal serves a specific hazard-control purpose where the code requires it.",
+          "necReferences": [
+            "501.15",
+            "501.125"
+          ]
+        },
+        {
+          "id": "ms-les-006-sec-007",
+          "heading": "Common mistakes",
+          "body": "Students often place seals anywhere they seem helpful instead of where the code requires them. Another mistake is choosing a familiar industrial motor without asking whether its protection method and approval match the classified location being described.",
+          "necReferences": [
+            "501.15",
+            "501.125"
+          ]
+        },
+        {
+          "id": "ms-les-006-sec-008",
+          "heading": "Exam insight",
+          "body": "When a question mentions both a motor and a seal, connect both decisions back to the classified hazard first. The answer usually becomes clearer when you think about ignition control instead of memorizing article numbers in isolation.",
+          "necReferences": [
+            "501.15",
+            "501.125"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Equipment selection in classified areas always follows the location classification first.",
+        "Sealing fittings are hazard-control devices, not generic raceway accessories.",
+        "Motor suitability depends on approval and protection method, not on appearance or brand familiarity.",
+        "Purpose-based reasoning is the safest way to solve hazardous-location questions."
+      ],
+      "practiceQuestions": [
+        "Why is a sealing fitting not just another ordinary raceway fitting in a classified location?",
+        "What should determine whether a motor is suitable for a hazardous location?",
+        "When a classified-area question mentions both motors and seals, what should you connect them back to first?"
+      ],
+      "references": [
+        "501.15",
+        "501.125"
+      ]
+    },
+    {
+      "id": "ms-les-007",
+      "courseTitle": "Master Electrician Course",
+      "moduleName": "Code Interpretation and Compliance",
+      "lessonTitle": "Reading 90.1, 90.3, and Article 100 Like a Master",
+      "certificationLevel": "Master",
+      "learningObjectives": [
+        "Read NEC 90.1, 90.3, and Article 100 with a master-level mindset so you can use purpose, hierarchy, and definitions to settle difficult code questions more efficiently."
+      ],
+      "lessonContent": [
+        {
+          "id": "ms-les-007-sec-001",
+          "heading": "Learning objective",
+          "body": "Read NEC 90.1, 90.3, and Article 100 with a master-level mindset so you can use purpose, hierarchy, and definitions to settle difficult code questions more efficiently.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ms-les-007-sec-002",
+          "heading": "Why this matters",
+          "body": "At the master level, the code is not just a list of isolated rules. It is a structured document with purpose, hierarchy, and defined language. These opening sections help you reason through hard questions instead of just hunting citations.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ms-les-007-sec-003",
+          "heading": "Core explanation",
+          "body": "NEC 90.1 reminds you what the code is trying to do: provide practical safeguarding. NEC 90.3 shows how the document is arranged and how later special rules may modify general rules. Article 100 controls the meaning of defined terms used throughout the code. Together, these sections help you decide not only where to search, but how to interpret what you find.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ms-les-007-sec-004",
+          "heading": "Key concepts",
+          "body": "Purpose matters because the NEC is not intended as a design manual for every good outcome. Hierarchy matters because a general answer may change when a special rule applies. Definitions matter because common-language assumptions often do not match code-language meaning. Master-level reading starts with those three anchors.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ms-les-007-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "These are the sections that shape the way you read the rest of the NEC. They are not just introductory pages. They are interpretation tools. When a problem is ambiguous, these sections often point you toward the right search path and the right reading discipline.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ms-les-007-sec-006",
+          "heading": "Practical example",
+          "body": "An advanced code dispute may look technical on the surface, but the real issue can be whether a term is defined, whether a special rule controls, or whether the code is being stretched beyond its stated purpose. That is why experienced code users keep coming back to these sections.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ms-les-007-sec-007",
+          "heading": "Common mistakes",
+          "body": "A common mistake is treating Article 100 as beginner material instead of a master-level interpretation tool. Another is using NEC purpose language to justify a preferred design choice when the enforceable text points somewhere else.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        },
+        {
+          "id": "ms-les-007-sec-008",
+          "heading": "Exam insight",
+          "body": "Master exams often reward the candidate who can reason from code structure, not just quote a section number. If a question feels vague, check whether purpose, hierarchy, or a defined term is the real hinge point.",
+          "necReferences": [
+            "90.1",
+            "90.3",
+            "Article 100"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "Purpose, hierarchy, and definitions are interpretation tools.",
+        "Article 100 remains important even at the master level.",
+        "A difficult question may turn on structure before it turns on technical detail.",
+        "Strong code reading uses these opening sections to frame the rest of the search."
+      ],
+      "practiceQuestions": [
+        "Why are NEC 90.1 and 90.3 more than introductory material?",
+        "How can Article 100 affect an advanced code question?",
+        "What should you ask when a code question feels vague or conflicted?"
+      ],
+      "references": [
+        "90.1",
+        "90.3",
+        "Article 100"
+      ]
+    },
+    {
+      "id": "ms-les-008",
+      "courseTitle": "Master Electrician Course",
+      "moduleName": "Code Interpretation and Compliance",
+      "lessonTitle": "When the NEC Is Not the Whole Answer",
+      "certificationLevel": "Master",
+      "learningObjectives": [
+        "Recognize when the NEC is only part of the answer and explain how authority, approval, listed-equipment instructions, and adopted local conditions can change the practical outcome."
+      ],
+      "lessonContent": [
+        {
+          "id": "ms-les-008-sec-001",
+          "heading": "Learning objective",
+          "body": "Recognize when the NEC is only part of the answer and explain how authority, approval, listed-equipment instructions, and adopted local conditions can change the practical outcome.",
+          "necReferences": [
+            "90.4",
+            "110.2",
+            "110.3(B)"
+          ]
+        },
+        {
+          "id": "ms-les-008-sec-002",
+          "heading": "Why this matters",
+          "body": "Master electricians are expected to think beyond a single section citation. Real projects involve code adoption, authority-having-jurisdiction decisions, listed-equipment instructions, and local processes that affect what actually gets approved and installed.",
+          "necReferences": [
+            "90.4",
+            "110.2",
+            "110.3(B)"
+          ]
+        },
+        {
+          "id": "ms-les-008-sec-003",
+          "heading": "Core explanation",
+          "body": "The NEC is central, but it is not the whole compliance universe. Jurisdictions adopt editions and may apply local amendments. The authority having jurisdiction interprets and enforces the adopted rules. Listed equipment must still be installed and used according to its approval and instructions. A complete answer often requires more than reading one NEC section in isolation.",
+          "necReferences": [
+            "90.4",
+            "110.2",
+            "110.3(B)"
+          ]
+        },
+        {
+          "id": "ms-les-008-sec-004",
+          "heading": "Key concepts",
+          "body": "Code adoption, approval, listing, and enforcement all influence the real-world answer. A correct national-core NEC citation may still need adjustment if the jurisdiction uses a different adopted edition or local amendment. Even then, listed-equipment instructions still matter. Strong master-level judgment means knowing whether the missing piece is technical, procedural, or both.",
+          "necReferences": [
+            "90.4",
+            "110.2",
+            "110.3(B)"
+          ]
+        },
+        {
+          "id": "ms-les-008-sec-005",
+          "heading": "NEC / code relevance",
+          "body": "NEC 90.4 addresses interpretation and enforcement by the authority having jurisdiction. NEC 110.2 emphasizes approval. NEC 110.3(B) ties listed equipment to its installation and use instructions. Together they remind advanced users that compliance is technical, procedural, and product-specific at the same time.",
+          "necReferences": [
+            "90.4",
+            "110.2",
+            "110.3(B)"
+          ]
+        },
+        {
+          "id": "ms-les-008-sec-006",
+          "heading": "Practical example",
+          "body": "A design may look acceptable under a general NEC rule, but the final answer can still change if the jurisdiction has adopted a different edition, the inspector requires a documented approval path, or the listed equipment instructions control how the product must be mounted, protected, or terminated. Master-level questions often compress all of that into one short scenario.",
+          "necReferences": [
+            "90.4",
+            "110.2",
+            "110.3(B)"
+          ]
+        },
+        {
+          "id": "ms-les-008-sec-007",
+          "heading": "Common mistakes",
+          "body": "A common mistake is treating one NEC citation like the last word in every jurisdiction. Another is ignoring listed-equipment instructions because the installer thinks broad code language is enough. Approval and listing instructions can still decide the final outcome.",
+          "necReferences": [
+            "90.4",
+            "110.2",
+            "110.3(B)"
+          ]
+        },
+        {
+          "id": "ms-les-008-sec-008",
+          "heading": "Exam insight",
+          "body": "When a question asks who decides, who approves, or what happens when local adoption differs, the exam is testing maturity of judgment. The best answer respects both code knowledge and the authority structure around it.",
+          "necReferences": [
+            "90.4",
+            "110.2",
+            "110.3(B)"
+          ]
+        }
+      ],
+      "keyTakeaways": [
+        "The NEC is central, but local adoption and approval still affect the final answer.",
+        "The authority having jurisdiction plays a real role in interpretation and enforcement.",
+        "Listed-equipment instructions remain important even when the NEC path seems clear.",
+        "Master-level judgment includes knowing when the answer is technical, procedural, product-specific, or all three."
+      ],
+      "practiceQuestions": [
+        "Why can a correct NEC citation still be incomplete in a real jurisdiction?",
+        "What role does the authority having jurisdiction play in code application?",
+        "Why can listed-equipment instructions still control the final installation answer?"
+      ],
+      "references": [
+        "90.4",
+        "110.2",
+        "110.3(B)"
+      ]
     }
   ],
   "questionBank": [
@@ -529,7 +2899,12 @@
       "certificationLevel": "Apprentice",
       "topicCategory": "NEC Navigation",
       "questionText": "A question depends on the NEC meaning of the term 'readily accessible.' Which location should you check first?",
-      "answerChoices": { "A": "Article 100", "B": "Article 110", "C": "Article 210", "D": "Annex D" },
+      "answerChoices": {
+        "A": "Article 100",
+        "B": "Article 110",
+        "C": "Article 210",
+        "D": "Annex D"
+      },
       "correctAnswer": "A",
       "explanation": "Defined terms should be checked in Article 100 before you interpret the installation rule. That prevents using an everyday meaning when the NEC has a technical one.",
       "necReference": "Article 100",
@@ -540,7 +2915,12 @@
       "certificationLevel": "Apprentice",
       "topicCategory": "Safety",
       "questionText": "Which NEC section is commonly used for questions about required working space around electrical equipment?",
-      "answerChoices": { "A": "110.12", "B": "110.14", "C": "110.26", "D": "300.4" },
+      "answerChoices": {
+        "A": "110.12",
+        "B": "110.14",
+        "C": "110.26",
+        "D": "300.4"
+      },
       "correctAnswer": "C",
       "explanation": "Section 110.26 addresses access and working space around electrical equipment. It is one of the most common general-requirement lookup points on electrician exams.",
       "necReference": "110.26",
@@ -551,7 +2931,12 @@
       "certificationLevel": "Apprentice",
       "topicCategory": "Branch Circuits",
       "questionText": "In dwelling-unit habitable rooms, receptacle placement rules are found primarily in which section?",
-      "answerChoices": { "A": "210.52(A)", "B": "220.12", "C": "250.24", "D": "314.16" },
+      "answerChoices": {
+        "A": "210.52(A)",
+        "B": "220.12",
+        "C": "250.24",
+        "D": "314.16"
+      },
       "correctAnswer": "A",
       "explanation": "Section 210.52(A) addresses dwelling-unit receptacle spacing requirements for wall spaces in habitable rooms.",
       "necReference": "210.52(A)",
@@ -562,7 +2947,12 @@
       "certificationLevel": "Apprentice",
       "topicCategory": "Boxes and Fittings",
       "questionText": "Box-fill calculations for conductor volume are found in which NEC section?",
-      "answerChoices": { "A": "300.11", "B": "310.16", "C": "314.16", "D": "430.52" },
+      "answerChoices": {
+        "A": "300.11",
+        "B": "310.16",
+        "C": "314.16",
+        "D": "430.52"
+      },
       "correctAnswer": "C",
       "explanation": "Section 314.16 covers box volume and conductor-fill requirements. This is a core apprentice code-lookup topic.",
       "necReference": "314.16",
@@ -573,7 +2963,12 @@
       "certificationLevel": "Apprentice",
       "topicCategory": "Conductors",
       "questionText": "Which NEC table is commonly used to look up general conductor ampacity values before applying adjustment or correction factors?",
-      "answerChoices": { "A": "250.66", "B": "310.16", "C": "430.250", "D": "Table 8, Chapter 9" },
+      "answerChoices": {
+        "A": "250.66",
+        "B": "310.16",
+        "C": "430.250",
+        "D": "Table 8, Chapter 9"
+      },
       "correctAnswer": "B",
       "explanation": "Table 310.16 is the common starting point for general conductor ampacity lookup. The user must still read the surrounding sections and applicable conditions.",
       "necReference": "310.16",
@@ -584,7 +2979,12 @@
       "certificationLevel": "Journeyman",
       "topicCategory": "Continuous Load",
       "questionText": "Under the NEC, a continuous load is one where the maximum current is expected to continue for how long?",
-      "answerChoices": { "A": "30 minutes or more", "B": "1 hour or more", "C": "2 hours or more", "D": "3 hours or more" },
+      "answerChoices": {
+        "A": "30 minutes or more",
+        "B": "1 hour or more",
+        "C": "2 hours or more",
+        "D": "3 hours or more"
+      },
       "correctAnswer": "D",
       "explanation": "Article 100 defines a continuous load as one where the maximum current is expected to continue for 3 hours or more.",
       "necReference": "Article 100",
@@ -595,7 +2995,12 @@
       "certificationLevel": "Journeyman",
       "topicCategory": "Branch Circuits and Feeders",
       "questionText": "A branch circuit supplies a 40-ampere continuous load and no noncontinuous load. Ignoring conductor-terminal limitations and using the NEC continuous-load rule, what is the minimum overcurrent device rating to consider first?",
-      "answerChoices": { "A": "40 A", "B": "45 A", "C": "50 A", "D": "60 A" },
+      "answerChoices": {
+        "A": "40 A",
+        "B": "45 A",
+        "C": "50 A",
+        "D": "60 A"
+      },
       "correctAnswer": "C",
       "explanation": "For a continuous load, start with 125 percent: 40 x 1.25 = 50 A. The code path then continues through the applicable overcurrent and conductor rules.",
       "necReference": "210.20(A)",
@@ -606,7 +3011,12 @@
       "certificationLevel": "Journeyman",
       "topicCategory": "Grounding and Bonding",
       "questionText": "Which NEC section should you check when a feeder supplies a separate building or structure?",
-      "answerChoices": { "A": "250.24", "B": "250.32", "C": "250.50", "D": "300.3" },
+      "answerChoices": {
+        "A": "250.24",
+        "B": "250.32",
+        "C": "250.50",
+        "D": "300.3"
+      },
       "correctAnswer": "B",
       "explanation": "Section 250.32 addresses buildings or structures supplied by feeder or branch circuit. Candidates often miss this by staying in the service-equipment section.",
       "necReference": "250.32",
@@ -617,7 +3027,12 @@
       "certificationLevel": "Journeyman",
       "topicCategory": "Motors",
       "questionText": "When sizing motor branch-circuit conductors, electricians are often directed to use what value rather than only the nameplate current?",
-      "answerChoices": { "A": "Service demand load", "B": "Full-load current from the applicable NEC table", "C": "Largest branch-circuit overcurrent device", "D": "Equipment grounding conductor ampacity" },
+      "answerChoices": {
+        "A": "Service demand load",
+        "B": "Full-load current from the applicable NEC table",
+        "C": "Largest branch-circuit overcurrent device",
+        "D": "Equipment grounding conductor ampacity"
+      },
       "correctAnswer": "B",
       "explanation": "Motor conductor and protection rules often rely on the applicable NEC full-load current tables rather than only the nameplate current. Journeyman candidates should know where to find those motor tables and rules.",
       "necReference": "430.22",
@@ -628,7 +3043,12 @@
       "certificationLevel": "Journeyman",
       "topicCategory": "Load Calculations",
       "questionText": "Which article is the main starting point for feeder and service load calculations?",
-      "answerChoices": { "A": "Article 220", "B": "Article 250", "C": "Article 300", "D": "Article 430" },
+      "answerChoices": {
+        "A": "Article 220",
+        "B": "Article 250",
+        "C": "Article 300",
+        "D": "Article 430"
+      },
       "correctAnswer": "A",
       "explanation": "Article 220 contains the load-calculation rules used before moving to conductor and overcurrent sizing articles.",
       "necReference": "Article 220",
@@ -639,7 +3059,12 @@
       "certificationLevel": "Master",
       "topicCategory": "Load Calculations",
       "questionText": "Before starting a dwelling optional calculation problem, what should a master candidate determine first?",
-      "answerChoices": { "A": "The conductor insulation rating", "B": "Whether the occupancy qualifies for the optional method being used", "C": "The grounding electrode type", "D": "The available fault current" },
+      "answerChoices": {
+        "A": "The conductor insulation rating",
+        "B": "Whether the occupancy qualifies for the optional method being used",
+        "C": "The grounding electrode type",
+        "D": "The available fault current"
+      },
       "correctAnswer": "B",
       "explanation": "The first step is determining that the optional method applies. If the wrong method is chosen, the rest of the calculation can be invalid even if the arithmetic is correct.",
       "necReference": "220.82",
@@ -650,7 +3075,12 @@
       "certificationLevel": "Master",
       "topicCategory": "Hazardous Locations",
       "questionText": "In a hazardous-location problem, what should generally be established before selecting equipment or fittings?",
-      "answerChoices": { "A": "The box-fill volume", "B": "The service conductor size", "C": "The classification of the location", "D": "The panelboard directory format" },
+      "answerChoices": {
+        "A": "The box-fill volume",
+        "B": "The service conductor size",
+        "C": "The classification of the location",
+        "D": "The panelboard directory format"
+      },
       "correctAnswer": "C",
       "explanation": "Classification comes first. Once the Class, Division, or Zone is known, the candidate can move to the appropriate equipment and wiring-method rules.",
       "necReference": "500.5",
@@ -661,7 +3091,12 @@
       "certificationLevel": "Master",
       "topicCategory": "Code Interpretation",
       "questionText": "Which NEC section is commonly used to explain the hierarchy between general rules and rules for special occupancies, equipment, or conditions?",
-      "answerChoices": { "A": "90.3", "B": "110.14", "C": "220.40", "D": "250.66" },
+      "answerChoices": {
+        "A": "90.3",
+        "B": "110.14",
+        "C": "220.40",
+        "D": "250.66"
+      },
       "correctAnswer": "A",
       "explanation": "Section 90.3 explains the arrangement of the Code and the relationship between Chapters 1 through 4 and the special rules in Chapters 5 through 7.",
       "necReference": "90.3",
@@ -672,7 +3107,12 @@
       "certificationLevel": "Master",
       "topicCategory": "2026 NEC Changes",
       "questionText": "According to official NFPA development material for the 2026 NEC, which new article was created to address grounding and bonding of systems over 1000 Vac and 1500 Vdc nominal?",
-      "answerChoices": { "A": "Article 245", "B": "Article 270", "C": "Article 495", "D": "Article 627" },
+      "answerChoices": {
+        "A": "Article 245",
+        "B": "Article 270",
+        "C": "Article 495",
+        "D": "Article 627"
+      },
       "correctAnswer": "B",
       "explanation": "NFPA working-draft material for the 2026 cycle shows the creation of Article 270 for grounding and bonding of systems over 1000 Vac and 1500 Vdc nominal.",
       "necReference": "2026 NFPA development material for Article 270",
@@ -683,7 +3123,12 @@
       "certificationLevel": "Master",
       "topicCategory": "Special Equipment",
       "questionText": "Official NFPA public-input material for the 2026 cycle proposed a new Article 627 primarily to address power transfer for what broad category?",
-      "answerChoices": { "A": "Swimming pools and spas", "B": "Electric self-propelled vehicles beyond standard on-road EV coverage", "C": "Hospitals only", "D": "Temporary wiring on construction sites" },
+      "answerChoices": {
+        "A": "Swimming pools and spas",
+        "B": "Electric self-propelled vehicles beyond standard on-road EV coverage",
+        "C": "Hospitals only",
+        "D": "Temporary wiring on construction sites"
+      },
       "correctAnswer": "B",
       "explanation": "NFPA 2026 public-input records describe Article 627 as addressing electric self-propelled vehicle power transfer systems, expanding beyond only on-road electric vehicles.",
       "necReference": "2026 NFPA public input for Article 627",
@@ -697,8 +3142,20 @@
       "certificationLevel": "Apprentice",
       "structureNotes": "Starter national-core simulation focused on code navigation, safety, branch circuits, boxes, and conductors. Not a jurisdiction-specific official exam form.",
       "timingMinutes": 25,
-      "questionIds": ["A-001", "A-002", "A-003", "A-004", "A-005"],
-      "answerKey": { "A-001": "A", "A-002": "C", "A-003": "A", "A-004": "C", "A-005": "B" }
+      "questionIds": [
+        "A-001",
+        "A-002",
+        "A-003",
+        "A-004",
+        "A-005"
+      ],
+      "answerKey": {
+        "A-001": "A",
+        "A-002": "C",
+        "A-003": "A",
+        "A-004": "C",
+        "A-005": "B"
+      }
     },
     {
       "id": "exam-journeyman-core-001",
@@ -706,8 +3163,20 @@
       "certificationLevel": "Journeyman",
       "structureNotes": "Starter national-core simulation emphasizing continuous loads, feeder questions, grounding, motors, and load calculations. Texas should receive a separate knowledge-versus-calculation overlay because TDLR changed the journeyman exam to two parts effective March 11, 2025.",
       "timingMinutes": 35,
-      "questionIds": ["J-001", "J-002", "J-003", "J-004", "J-005"],
-      "answerKey": { "J-001": "D", "J-002": "C", "J-003": "B", "J-004": "B", "J-005": "A" }
+      "questionIds": [
+        "J-001",
+        "J-002",
+        "J-003",
+        "J-004",
+        "J-005"
+      ],
+      "answerKey": {
+        "J-001": "D",
+        "J-002": "C",
+        "J-003": "B",
+        "J-004": "B",
+        "J-005": "A"
+      }
     },
     {
       "id": "exam-master-core-001",
@@ -715,20 +3184,86 @@
       "certificationLevel": "Master",
       "structureNotes": "Starter national-core simulation emphasizing calculation method choice, hazardous locations, code hierarchy, and 2026-cycle change awareness. Maine official materials show 100-question master exams with a 70 percent passing score, while ICC notes many contractor/trades exams require 70 percent and some master electrician exams require 75 percent depending on the bulletin.",
       "timingMinutes": 40,
-      "questionIds": ["M-001", "M-002", "M-003", "M-004", "M-005"],
-      "answerKey": { "M-001": "B", "M-002": "C", "M-003": "A", "M-004": "B", "M-005": "B" }
+      "questionIds": [
+        "M-001",
+        "M-002",
+        "M-003",
+        "M-004",
+        "M-005"
+      ],
+      "answerKey": {
+        "M-001": "B",
+        "M-002": "C",
+        "M-003": "A",
+        "M-004": "B",
+        "M-005": "B"
+      }
     }
   ],
   "flashcards": [
-    { "id": "fc-001", "front": "Continuous load", "back": "A load where the maximum current is expected to continue for 3 hours or more. This definition drives several sizing rules.", "necReference": "Article 100", "certificationLevel": "Journeyman" },
-    { "id": "fc-002", "front": "Readily accessible", "back": "A defined NEC term that should be checked in Article 100 before answering access questions.", "necReference": "Article 100", "certificationLevel": "Apprentice" },
-    { "id": "fc-003", "front": "Working space", "back": "General rules for access and working space around electrical equipment are commonly found in 110.26.", "necReference": "110.26", "certificationLevel": "Apprentice" },
-    { "id": "fc-004", "front": "Grounding vs bonding", "back": "Grounding connects to earth for stabilization and voltage limitation. Bonding joins conductive parts to establish an effective fault-current path.", "necReference": "250.4", "certificationLevel": "Journeyman" },
-    { "id": "fc-005", "front": "Optional dwelling calculation", "back": "A master-level load-calculation path that must only be used when the occupancy and problem conditions qualify.", "necReference": "220.82", "certificationLevel": "Master" },
-    { "id": "fc-006", "front": "Code hierarchy", "back": "Section 90.3 explains how Chapters 1 through 4 interact with special rules in Chapters 5 through 7.", "necReference": "90.3", "certificationLevel": "Master" },
-    { "id": "fc-007", "front": "Table 310.16", "back": "Common starting point for general conductor ampacity lookup before applying other applicable rules.", "necReference": "310.16", "certificationLevel": "Apprentice" },
-    { "id": "fc-008", "front": "Article 270", "back": "2026-cycle NFPA development material shows Article 270 created for grounding and bonding of systems over 1000 Vac and 1500 Vdc nominal.", "necReference": "2026 NFPA Article 270 development material", "certificationLevel": "Master" },
-    { "id": "fc-009", "front": "Article 627", "back": "2026-cycle NFPA public-input material proposed Article 627 for electric self-propelled vehicle power transfer systems.", "necReference": "2026 NFPA Article 627 public input", "certificationLevel": "Master" }
+    {
+      "id": "fc-001",
+      "front": "Continuous load",
+      "back": "A load where the maximum current is expected to continue for 3 hours or more. This definition drives several sizing rules.",
+      "necReference": "Article 100",
+      "certificationLevel": "Journeyman"
+    },
+    {
+      "id": "fc-002",
+      "front": "Readily accessible",
+      "back": "A defined NEC term that should be checked in Article 100 before answering access questions.",
+      "necReference": "Article 100",
+      "certificationLevel": "Apprentice"
+    },
+    {
+      "id": "fc-003",
+      "front": "Working space",
+      "back": "General rules for access and working space around electrical equipment are commonly found in 110.26.",
+      "necReference": "110.26",
+      "certificationLevel": "Apprentice"
+    },
+    {
+      "id": "fc-004",
+      "front": "Grounding vs bonding",
+      "back": "Grounding connects to earth for stabilization and voltage limitation. Bonding joins conductive parts to establish an effective fault-current path.",
+      "necReference": "250.4",
+      "certificationLevel": "Journeyman"
+    },
+    {
+      "id": "fc-005",
+      "front": "Optional dwelling calculation",
+      "back": "A master-level load-calculation path that must only be used when the occupancy and problem conditions qualify.",
+      "necReference": "220.82",
+      "certificationLevel": "Master"
+    },
+    {
+      "id": "fc-006",
+      "front": "Code hierarchy",
+      "back": "Section 90.3 explains how Chapters 1 through 4 interact with special rules in Chapters 5 through 7.",
+      "necReference": "90.3",
+      "certificationLevel": "Master"
+    },
+    {
+      "id": "fc-007",
+      "front": "Table 310.16",
+      "back": "Common starting point for general conductor ampacity lookup before applying other applicable rules.",
+      "necReference": "310.16",
+      "certificationLevel": "Apprentice"
+    },
+    {
+      "id": "fc-008",
+      "front": "Article 270",
+      "back": "2026-cycle NFPA development material shows Article 270 created for grounding and bonding of systems over 1000 Vac and 1500 Vdc nominal.",
+      "necReference": "2026 NFPA Article 270 development material",
+      "certificationLevel": "Master"
+    },
+    {
+      "id": "fc-009",
+      "front": "Article 627",
+      "back": "2026-cycle NFPA public-input material proposed Article 627 for electric self-propelled vehicle power transfer systems.",
+      "necReference": "2026 NFPA Article 627 public input",
+      "certificationLevel": "Master"
+    }
   ],
   "quickReferenceGuides": [
     {
@@ -745,7 +3280,16 @@
         "Boxes and conduit bodies: Article 314",
         "Motors: Article 430"
       ],
-      "references": ["Article 100", "Article 110", "Article 210", "Article 220", "Article 250", "Article 310", "Article 314", "Article 430"]
+      "references": [
+        "Article 100",
+        "Article 110",
+        "Article 210",
+        "Article 220",
+        "Article 250",
+        "Article 310",
+        "Article 314",
+        "Article 430"
+      ]
     },
     {
       "id": "qrg-002",
@@ -757,7 +3301,13 @@
         "Step 3: Apply the relevant 125 percent rule where required.",
         "Step 4: Finish the code path in conductor and overcurrent articles."
       ],
-      "references": ["Article 100", "210.19(A)(1)", "210.20(A)", "215.2", "215.3"]
+      "references": [
+        "Article 100",
+        "210.19(A)(1)",
+        "210.20(A)",
+        "215.2",
+        "215.3"
+      ]
     },
     {
       "id": "qrg-003",
@@ -770,7 +3320,13 @@
         "250.50: Grounding electrode system",
         "250.66: Grounding electrode conductor sizing"
       ],
-      "references": ["250.4", "250.24", "250.32", "250.50", "250.66"]
+      "references": [
+        "250.4",
+        "250.24",
+        "250.32",
+        "250.50",
+        "250.66"
+      ]
     },
     {
       "id": "qrg-004",
@@ -784,7 +3340,10 @@
         "Article 627 self-propelled vehicle power-transfer proposal",
         "Article 680 errata tracking"
       ],
-      "references": ["2026 NFPA development material", "Errata 70-26-2"]
+      "references": [
+        "2026 NFPA development material",
+        "Errata 70-26-2"
+      ]
     },
     {
       "id": "qrg-005",
@@ -795,31 +3354,199 @@
         "Use the applicable motor table or section specified by the NEC.",
         "Do not assume nameplate current is always the controlling value."
       ],
-      "references": ["430.22", "430.32", "430.52"]
+      "references": [
+        "430.22",
+        "430.32",
+        "430.52"
+      ]
     }
   ],
   "studyPlans": [
-    { "id": "plan-a-4", "title": "4-Week Apprentice Sprint", "certificationLevel": "Apprentice", "durationWeeks": 4, "weeklyFocus": ["Week 1: Theory and safety", "Week 2: NEC organization and Article 110", "Week 3: Branch circuits, boxes, and conductors", "Week 4: Mixed review and timed lookup drills"] },
-    { "id": "plan-a-8", "title": "8-Week Apprentice Plan", "certificationLevel": "Apprentice", "durationWeeks": 8, "weeklyFocus": ["Weeks 1-2: Theory and safety", "Weeks 3-4: NEC navigation and general requirements", "Weeks 5-6: Wiring methods, boxes, and conductor basics", "Weeks 7-8: Review, flashcards, and speed drills"] },
-    { "id": "plan-a-12", "title": "12-Week Apprentice Plan", "certificationLevel": "Apprentice", "durationWeeks": 12, "weeklyFocus": ["Weeks 1-3: Electrical theory", "Weeks 4-5: Safety and work practices", "Weeks 6-8: NEC navigation and Chapter 1 rules", "Weeks 9-10: Branch circuits and wiring methods", "Weeks 11-12: Mixed quizzes and code drills"] },
-    { "id": "plan-j-4", "title": "4-Week Journeyman Sprint", "certificationLevel": "Journeyman", "durationWeeks": 4, "weeklyFocus": ["Week 1: NEC navigation and branch circuits", "Week 2: Grounding and bonding", "Week 3: Load calculations and motors", "Week 4: Timed mixed exams and error review"] },
-    { "id": "plan-j-8", "title": "8-Week Journeyman Plan", "certificationLevel": "Journeyman", "durationWeeks": 8, "weeklyFocus": ["Weeks 1-2: NEC structure and Articles 90, 100, 110", "Weeks 3-4: Branch circuits, feeders, and dwelling rules", "Weeks 5-6: Grounding, bonding, and motors", "Weeks 7-8: Transformers, special occupancies, and practice exams"] },
-    { "id": "plan-j-12", "title": "12-Week Journeyman Plan", "certificationLevel": "Journeyman", "durationWeeks": 12, "weeklyFocus": ["Weeks 1-3: Navigation and general requirements", "Weeks 4-5: Branch circuits and feeders", "Weeks 6-7: Grounding and bonding", "Weeks 8-9: Motors and transformers", "Weeks 10-11: Special occupancies and troubleshooting", "Week 12: Full review and timed exams"] },
-    { "id": "plan-m-4", "title": "4-Week Master Sprint", "certificationLevel": "Master", "durationWeeks": 4, "weeklyFocus": ["Week 1: Code hierarchy and advanced navigation", "Week 2: Service and feeder calculations", "Week 3: Hazardous locations and special systems", "Week 4: Mixed timed exams and jurisdiction review"] },
-    { "id": "plan-m-8", "title": "8-Week Master Plan", "certificationLevel": "Master", "durationWeeks": 8, "weeklyFocus": ["Weeks 1-2: Advanced code hierarchy and interpretation", "Weeks 3-4: Complex load calculations", "Weeks 5-6: Service design, overcurrent, and coordination", "Weeks 7-8: Hazardous locations, business rules, and full exams"] },
-    { "id": "plan-m-12", "title": "12-Week Master Plan", "certificationLevel": "Master", "durationWeeks": 12, "weeklyFocus": ["Weeks 1-2: NEC structure and interpretation", "Weeks 3-5: Dwelling and commercial calculations", "Weeks 6-7: Service and distribution design", "Weeks 8-9: Grounding, bonding, and overcurrent coordination", "Weeks 10-11: Hazardous locations and special systems", "Week 12: Timed final simulations and jurisdiction overlays"] }
+    {
+      "id": "plan-a-4",
+      "title": "4-Week Apprentice Sprint",
+      "certificationLevel": "Apprentice",
+      "durationWeeks": 4,
+      "weeklyFocus": [
+        "Week 1: Theory and safety",
+        "Week 2: NEC organization and Article 110",
+        "Week 3: Branch circuits, boxes, and conductors",
+        "Week 4: Mixed review and timed lookup drills"
+      ]
+    },
+    {
+      "id": "plan-a-8",
+      "title": "8-Week Apprentice Plan",
+      "certificationLevel": "Apprentice",
+      "durationWeeks": 8,
+      "weeklyFocus": [
+        "Weeks 1-2: Theory and safety",
+        "Weeks 3-4: NEC navigation and general requirements",
+        "Weeks 5-6: Wiring methods, boxes, and conductor basics",
+        "Weeks 7-8: Review, flashcards, and speed drills"
+      ]
+    },
+    {
+      "id": "plan-a-12",
+      "title": "12-Week Apprentice Plan",
+      "certificationLevel": "Apprentice",
+      "durationWeeks": 12,
+      "weeklyFocus": [
+        "Weeks 1-3: Electrical theory",
+        "Weeks 4-5: Safety and work practices",
+        "Weeks 6-8: NEC navigation and Chapter 1 rules",
+        "Weeks 9-10: Branch circuits and wiring methods",
+        "Weeks 11-12: Mixed quizzes and code drills"
+      ]
+    },
+    {
+      "id": "plan-j-4",
+      "title": "4-Week Journeyman Sprint",
+      "certificationLevel": "Journeyman",
+      "durationWeeks": 4,
+      "weeklyFocus": [
+        "Week 1: NEC navigation and branch circuits",
+        "Week 2: Grounding and bonding",
+        "Week 3: Load calculations and motors",
+        "Week 4: Timed mixed exams and error review"
+      ]
+    },
+    {
+      "id": "plan-j-8",
+      "title": "8-Week Journeyman Plan",
+      "certificationLevel": "Journeyman",
+      "durationWeeks": 8,
+      "weeklyFocus": [
+        "Weeks 1-2: NEC structure and Articles 90, 100, 110",
+        "Weeks 3-4: Branch circuits, feeders, and dwelling rules",
+        "Weeks 5-6: Grounding, bonding, and motors",
+        "Weeks 7-8: Transformers, special occupancies, and practice exams"
+      ]
+    },
+    {
+      "id": "plan-j-12",
+      "title": "12-Week Journeyman Plan",
+      "certificationLevel": "Journeyman",
+      "durationWeeks": 12,
+      "weeklyFocus": [
+        "Weeks 1-3: Navigation and general requirements",
+        "Weeks 4-5: Branch circuits and feeders",
+        "Weeks 6-7: Grounding and bonding",
+        "Weeks 8-9: Motors and transformers",
+        "Weeks 10-11: Special occupancies and troubleshooting",
+        "Week 12: Full review and timed exams"
+      ]
+    },
+    {
+      "id": "plan-m-4",
+      "title": "4-Week Master Sprint",
+      "certificationLevel": "Master",
+      "durationWeeks": 4,
+      "weeklyFocus": [
+        "Week 1: Code hierarchy and advanced navigation",
+        "Week 2: Service and feeder calculations",
+        "Week 3: Hazardous locations and special systems",
+        "Week 4: Mixed timed exams and jurisdiction review"
+      ]
+    },
+    {
+      "id": "plan-m-8",
+      "title": "8-Week Master Plan",
+      "certificationLevel": "Master",
+      "durationWeeks": 8,
+      "weeklyFocus": [
+        "Weeks 1-2: Advanced code hierarchy and interpretation",
+        "Weeks 3-4: Complex load calculations",
+        "Weeks 5-6: Service design, overcurrent, and coordination",
+        "Weeks 7-8: Hazardous locations, business rules, and full exams"
+      ]
+    },
+    {
+      "id": "plan-m-12",
+      "title": "12-Week Master Plan",
+      "certificationLevel": "Master",
+      "durationWeeks": 12,
+      "weeklyFocus": [
+        "Weeks 1-2: NEC structure and interpretation",
+        "Weeks 3-5: Dwelling and commercial calculations",
+        "Weeks 6-7: Service and distribution design",
+        "Weeks 8-9: Grounding, bonding, and overcurrent coordination",
+        "Weeks 10-11: Hazardous locations and special systems",
+        "Week 12: Timed final simulations and jurisdiction overlays"
+      ]
+    }
   ],
   "glossary": [
-    { "id": "gl-001", "term": "Continuous Load", "definition": "A load where the maximum current is expected to continue for 3 hours or more.", "necReference": "Article 100", "certificationLevel": "Journeyman" },
-    { "id": "gl-002", "term": "Readily Accessible", "definition": "A defined NEC access term that should be checked in Article 100 whenever availability or access affects the answer.", "necReference": "Article 100", "certificationLevel": "Apprentice" },
-    { "id": "gl-003", "term": "Grounding", "definition": "Connecting to ground or to a conductive body that serves in place of ground for system stabilization and voltage limitation purposes.", "necReference": "250.4", "certificationLevel": "Journeyman" },
-    { "id": "gl-004", "term": "Bonding", "definition": "Permanent joining of metallic parts to form an electrically conductive path that helps ensure electrical continuity and fault-current capability.", "necReference": "250.4", "certificationLevel": "Journeyman" },
-    { "id": "gl-005", "term": "Grounding Electrode System", "definition": "The grounding electrodes present at a building or structure that are bonded together as required by the NEC.", "necReference": "250.50", "certificationLevel": "Journeyman" },
-    { "id": "gl-006", "term": "Optional Method", "definition": "A calculation method permitted by the NEC for certain occupancies and conditions as an alternative to the standard method.", "necReference": "220.82", "certificationLevel": "Master" },
-    { "id": "gl-007", "term": "Classified Location", "definition": "A location where fire or explosion hazards may exist because of flammable gases, vapors, liquids, dusts, or fibers.", "necReference": "500.5", "certificationLevel": "Master" },
-    { "id": "gl-008", "term": "EVSE", "definition": "Equipment installed for transferring energy between premises wiring and an electric vehicle.", "necReference": "Article 625", "certificationLevel": "Master" },
-    { "id": "gl-009", "term": "Microgrid", "definition": "A term undergoing notable 2026-cycle refinement in official NFPA development records; WattWise should treat wording carefully until final text is licensed and verified.", "necReference": "2026 NFPA public-input material", "certificationLevel": "Master" },
-    { "id": "gl-010", "term": "Service Disconnecting Means", "definition": "The disconnecting means for service conductors, central to service-equipment and bonding questions.", "necReference": "230.70", "certificationLevel": "Journeyman" }
+    {
+      "id": "gl-001",
+      "term": "Continuous Load",
+      "definition": "A load where the maximum current is expected to continue for 3 hours or more.",
+      "necReference": "Article 100",
+      "certificationLevel": "Journeyman"
+    },
+    {
+      "id": "gl-002",
+      "term": "Readily Accessible",
+      "definition": "A defined NEC access term that should be checked in Article 100 whenever availability or access affects the answer.",
+      "necReference": "Article 100",
+      "certificationLevel": "Apprentice"
+    },
+    {
+      "id": "gl-003",
+      "term": "Grounding",
+      "definition": "Connecting to ground or to a conductive body that serves in place of ground for system stabilization and voltage limitation purposes.",
+      "necReference": "250.4",
+      "certificationLevel": "Journeyman"
+    },
+    {
+      "id": "gl-004",
+      "term": "Bonding",
+      "definition": "Permanent joining of metallic parts to form an electrically conductive path that helps ensure electrical continuity and fault-current capability.",
+      "necReference": "250.4",
+      "certificationLevel": "Journeyman"
+    },
+    {
+      "id": "gl-005",
+      "term": "Grounding Electrode System",
+      "definition": "The grounding electrodes present at a building or structure that are bonded together as required by the NEC.",
+      "necReference": "250.50",
+      "certificationLevel": "Journeyman"
+    },
+    {
+      "id": "gl-006",
+      "term": "Optional Method",
+      "definition": "A calculation method permitted by the NEC for certain occupancies and conditions as an alternative to the standard method.",
+      "necReference": "220.82",
+      "certificationLevel": "Master"
+    },
+    {
+      "id": "gl-007",
+      "term": "Classified Location",
+      "definition": "A location where fire or explosion hazards may exist because of flammable gases, vapors, liquids, dusts, or fibers.",
+      "necReference": "500.5",
+      "certificationLevel": "Master"
+    },
+    {
+      "id": "gl-008",
+      "term": "EVSE",
+      "definition": "Equipment installed for transferring energy between premises wiring and an electric vehicle.",
+      "necReference": "Article 625",
+      "certificationLevel": "Master"
+    },
+    {
+      "id": "gl-009",
+      "term": "Microgrid",
+      "definition": "A term undergoing notable 2026-cycle refinement in official NFPA development records; WattWise should treat wording carefully until final text is licensed and verified.",
+      "necReference": "2026 NFPA public-input material",
+      "certificationLevel": "Master"
+    },
+    {
+      "id": "gl-010",
+      "term": "Service Disconnecting Means",
+      "definition": "The disconnecting means for service conductors, central to service-equipment and bonding questions.",
+      "necReference": "230.70",
+      "certificationLevel": "Journeyman"
+    }
   ],
   "jurisdictionResearchNotes": [
     {

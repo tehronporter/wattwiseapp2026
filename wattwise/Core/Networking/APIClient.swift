@@ -88,18 +88,18 @@ actor APIClient {
 
 // MARK: - Response Wrapper
 
-private struct SupabaseResponse<T: Decodable>: Decodable {
+private nonisolated struct SupabaseResponse<T: Decodable>: Decodable {
     let success: Bool?
     let data: T?
     let error: SupabaseErrorBody?
 }
 
-private struct SupabaseErrorBody: Decodable {
+private nonisolated struct SupabaseErrorBody: Decodable {
     let code: String?
     let message: String?
 }
 
-private struct EmptyBody: Encodable {}
+private nonisolated struct EmptyBody: Encodable {}
 
 // MARK: - API Error
 

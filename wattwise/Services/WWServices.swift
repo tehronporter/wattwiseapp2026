@@ -112,21 +112,17 @@ protocol ContentServiceProtocol: AnyObject {
 final class MockContentService: ContentServiceProtocol {
     func fetchModules() async throws -> [WWModule] {
         try await Task.sleep(for: .milliseconds(600))
-        return MockData.modules
+        return try WattWiseContentRuntimeAdapter.loadModules()
     }
 
     func fetchLesson(id: UUID) async throws -> WWLesson {
         try await Task.sleep(for: .milliseconds(400))
-        let all = MockData.modules.flatMap(\.lessons)
-        guard let lesson = all.first(where: { $0.id == id }) else {
-            throw AppError.notFound("Lesson not found.")
-        }
-        return lesson
+        return try WattWiseContentRuntimeAdapter.loadLesson(id: id)
     }
 
     func saveProgress(lessonId: UUID, completion: Double) async throws {
         try await Task.sleep(for: .milliseconds(200))
-        // In production: POST /functions/v1/save_progress
+        try WattWiseContentRuntimeAdapter.saveProgress(lessonId: lessonId, completion: completion)
     }
 }
 
@@ -231,32 +227,21 @@ protocol NECServiceProtocol: AnyObject {
 final class MockNECService: NECServiceProtocol {
     func search(query: String) async throws -> [NECSearchResult] {
         try await Task.sleep(for: .milliseconds(400))
-        if query.isEmpty { return MockData.necReferences }
-        let q = query.lowercased()
-        return MockData.necReferences.filter {
-            $0.code.lowercased().contains(q) ||
-            $0.title.lowercased().contains(q) ||
-            $0.summary.lowercased().contains(q)
-        }
+        return try WattWiseContentRuntimeAdapter.searchNEC(query: query)
     }
 
     func detail(id: UUID) async throws -> NECReference {
         try await Task.sleep(for: .milliseconds(300))
-        guard let match = MockData.necReferences.first(where: { $0.id == id }) else {
-            throw AppError.notFound("NEC reference not found.")
-        }
-        return NECReference(
-            id: match.id,
-            code: match.code,
-            title: match.title,
-            summary: match.summary,
-            expanded: MockData.necExpandedText[match.code]
-        )
+        return try WattWiseContentRuntimeAdapter.necReference(id: id)
     }
 
     func explain(id: UUID) async throws -> String {
         try await Task.sleep(for: .milliseconds(1000))
-        return "This code section requires GFCI protection because water dramatically lowers the resistance of the human body, making even small ground faults potentially fatal. The GFCI device constantly monitors the current balance between the hot and neutral conductors — if more than ~5mA flows through an unintended path (like a person), the GFCI trips within 1/40th of a second. This is fast enough to prevent cardiac arrest, which typically requires sustained current exposure. For exam purposes, memorize all 210.8 required locations — bathrooms, garages, outdoors, crawl spaces, unfinished basements, kitchen countertops within 6 feet of sinks, and boathouses are the most commonly tested."
+        let reference = try WattWiseContentRuntimeAdapter.necReference(id: id)
+        if let expanded = reference.expanded, expanded.isEmpty == false {
+            return expanded
+        }
+        return "\(reference.title) matters because it shapes how electricians apply NEC \(reference.code) in the field and on open-book exams. Start with the simplified summary, then ask what hazard or design problem the rule is trying to control. For exam prep, the safest habit is to connect the article number to the installation decision it changes instead of memorizing the citation by itself."
     }
 }
 
@@ -269,7 +254,7 @@ protocol ProgressServiceProtocol: AnyObject {
 final class MockProgressService: ProgressServiceProtocol {
     func fetchSummary() async throws -> ProgressSummary {
         try await Task.sleep(for: .milliseconds(500))
-        return MockData.progressSummary
+        return try WattWiseContentRuntimeAdapter.loadProgressSummary()
     }
 }
 

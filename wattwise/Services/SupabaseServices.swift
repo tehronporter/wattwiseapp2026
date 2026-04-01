@@ -17,6 +17,7 @@ final class SupabaseAuthService: AuthServiceProtocol {
         guard let session = await SupabaseAuthClient.shared.restoreSession() else { return nil }
         await APIClient.shared.setAccessToken(session.accessToken)
         let user = mapUser(from: session)
+        persist(user)
         currentUser = user
         return user
     }
@@ -66,10 +67,19 @@ final class SupabaseAuthService: AuthServiceProtocol {
     }
 
     func updateProfile(_ user: WWUser) async throws {
+        if let token = UserDefaults.standard.string(forKey: "ww_access_token") {
+            _ = try await SupabaseAuthClient.shared.updateUserMetadata(
+                accessToken: token,
+                metadata: [
+                    "display_name": user.displayName ?? "",
+                    "exam_type": user.examType.rawValue,
+                    "state": user.state,
+                    "study_goal": user.studyGoal.rawValue
+                ]
+            )
+        }
         persist(user)
         currentUser = user
-        // In production: update user_metadata via Supabase Auth /user PATCH endpoint
-        // or insert/update the `profiles` table via the Edge Function
     }
 
     // MARK: - Private

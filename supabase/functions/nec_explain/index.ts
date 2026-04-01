@@ -2,124 +2,128 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.42.0";
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const openaiKey = Deno.env.get("OPENAI_API_KEY")!;
+const openaiKey = Deno.env.get("OPENAI_API_KEY");
+
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+function fallbackExplanation(entry: {
+  reference_code: string;
+  title: string;
+  simplified_summary: string;
+  topic_notes: string | null;
+}) {
+  const notes = entry.topic_notes?.trim();
+  if (notes) {
+    return notes;
+  }
+
+  return [
+    `${entry.title} in NEC ${entry.reference_code} is about the installation decision described in the summary.`,
+    entry.simplified_summary,
+    "For exam prep, focus on what hazard, equipment condition, or design choice the section is trying to control.",
+    "If a question sounds close, go back to the article scope and the exact installation context before choosing an answer.",
+  ].join(" ");
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
+    return json({ success: false, error: { message: "Method not allowed" } }, 405);
   }
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ success: false, error: { message: "Unauthorized" } }, 401);
     }
 
     const token = authHeader.replace("Bearer ", "");
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Verify token and get user
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser(token);
+
     if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ success: false, error: { message: "Unauthorized" } }, 401);
     }
 
-    const userId = user.id;
     const { nec_id } = await req.json();
-
     if (!nec_id) {
-      return new Response(JSON.stringify({ error: "Missing nec_id" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return json({ success: false, error: { message: "Missing nec_id" } }, 400);
     }
 
-    // Get NEC entry
-    const { data: entry, error: entryError } = await supabase
-      .from("nec_entries")
-      .select("id, section, subsection, title, summary, full_text")
-      .eq("id", nec_id)
-      .single();
-
-    if (entryError || !entry) {
-      return new Response(JSON.stringify({ error: "NEC entry not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    // Generate explanation using OpenAI
-    const prompt = `Provide a detailed but accessible explanation of NEC Article ${entry.section}.${entry.subsection}: "${entry.title}"
-
-Official text: ${entry.full_text || entry.summary}
-
-Explain:
-1. What this code section requires
-2. Why it exists (safety/practical reasons)
-3. Common applications in residential/commercial settings
-4. Key points for an apprentice to remember
-
-Keep the explanation 4-6 paragraphs, technical but understandable for someone studying for their electrician exam.`;
-
-    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${openaiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        temperature: 0.7,
-        max_tokens: 1000,
-      }),
-    });
-
-    if (!openaiResponse.ok) {
-      throw new Error(
-        `OpenAI API error: ${openaiResponse.status} ${openaiResponse.statusText}`
-      );
-    }
-
-    const openaiData = await openaiResponse.json();
-    const expanded = openaiData.choices[0].message.content;
-
-    // Log AI request
-    await supabase.from("ai_request_logs").insert({
-      user_id: userId,
-      request_type: "nec_explain",
-      prompt: `Explain NEC ${entry.section}.${entry.subsection}`,
-      response: expanded,
-      tokens_used: 0,
-    });
-
-    return new Response(
-      JSON.stringify({
-        expanded,
-      }),
+    await supabase.from("profiles").upsert(
       {
-        headers: { "Content-Type": "application/json" },
-      }
+        id: user.id,
+        email: user.email ?? null,
+        onboarding_completed: true,
+        last_active_at: new Date().toISOString(),
+      },
+      { onConflict: "id" }
     );
-  } catch (error) {
-    console.error("Error:", error);
-    return new Response(JSON.stringify({ error: "Internal server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
+
+    const { data: entry, error } = await supabase
+      .from("nec_entries")
+      .select("reference_code, title, simplified_summary, topic_notes")
+      .eq("id", nec_id)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!entry) {
+      return json({ success: false, error: { message: "NEC entry not found" } }, 404);
+    }
+
+    let expanded = fallbackExplanation(entry);
+    let modelUsed = "fallback";
+
+    if (openaiKey) {
+      const prompt = `Explain NEC ${entry.reference_code} (${entry.title}) for an electrician exam student.\n\nKnown simplified summary: ${entry.simplified_summary}\n\nAdditional notes: ${entry.topic_notes ?? "None"}\n\nWrite 4 short paragraphs in plain English that explain:\n1. What the section is generally about\n2. Why the rule matters in practice\n3. What people commonly confuse\n4. What to remember for exam prep\n\nDo not quote copyrighted NEC text. Keep the explanation general, accurate, and supportive.`;
+
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${openaiKey}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{ role: "user", content: prompt }],
+          temperature: 0.4,
+          max_tokens: 700,
+        }),
+      });
+
+      if (response.ok) {
+        const openaiData = await response.json();
+        expanded = openaiData.choices?.[0]?.message?.content ?? expanded;
+        modelUsed = "gpt-4o-mini";
+      }
+    }
+
+    await supabase.from("ai_request_logs").insert({
+      user_id: user.id,
+      request_type: "nec_explanation",
+      model_used: modelUsed,
+      status: "success",
     });
+
+    return json({
+      success: true,
+      data: {
+        expanded,
+      },
+    });
+  } catch (error) {
+    console.error("nec_explain error:", error);
+    return json(
+      { success: false, error: { message: "Internal server error" } },
+      500
+    );
   }
 });

@@ -73,23 +73,19 @@ POST /functions/v1/progress_summary
 
 ### Response
 {
-  "success": true,
   "data": {
     "continue_learning": {
       "lesson_id": "uuid",
       "title": "string",
-      "progress": 0.45
+      "progress": 0.45,
+      "module_title": "string"
     },
     "daily_goal": {
       "minutes_completed": 18,
       "target_minutes": 30
     },
     "streak_days": 5,
-    "recommended_action": {
-      "type": "lesson|quiz",
-      "id": "uuid",
-      "reason": "string"
-    }
+    "recommended_action": "Resume Branch Circuit Basics"
   }
 }
 
@@ -104,14 +100,21 @@ POST /functions/v1/get_modules
 
 ### Response
 {
-  "data": [
-    {
-      "id": "uuid",
-      "title": "string",
-      "description": "string",
-      "progress": 0.3
-    }
-  ]
+  "success": true,
+  "data": {
+    "modules": [
+      {
+        "id": "uuid",
+        "title": "string",
+        "description": "string",
+        "lessonCount": 2,
+        "estimatedMinutes": 30,
+        "topicTags": ["apprentice", "safety"],
+        "progress": 0.3,
+        "lessons": []
+      }
+    ]
+  }
 }
 
 ---
@@ -127,21 +130,35 @@ POST /functions/v1/get_lesson
 
 ### Response
 {
+  "success": true,
   "data": {
-    "id": "uuid",
-    "title": "string",
-    "sections": [
-      {
-        "type": "body",
-        "content": "string"
-      }
-    ],
-    "nec_references": [
-      {
-        "code": "210.8",
-        "summary": "string"
-      }
-    ]
+    "lesson": {
+      "id": "uuid",
+      "moduleId": "uuid",
+      "title": "string",
+      "topic": "string",
+      "estimatedMinutes": 15,
+      "status": "not_started|in_progress|completed",
+      "completionPercentage": 0.4,
+      "sections": [
+        {
+          "id": "uuid",
+          "heading": "Core explanation",
+          "body": "string",
+          "type": "paragraph|heading|bullet|callout|necCallout",
+          "necCode": "210.8"
+        }
+      ],
+      "necReferences": [
+        {
+          "id": "uuid",
+          "code": "210.8",
+          "title": "string",
+          "summary": "string",
+          "expanded": "string|null"
+        }
+      ]
+    }
   }
 }
 
@@ -159,7 +176,12 @@ POST /functions/v1/save_progress
 
 ### Response
 {
-  "success": true
+  "success": true,
+  "data": {
+    "success": true,
+    "completion_percentage": 0.5,
+    "status": "in_progress"
+  }
 }
 
 ---

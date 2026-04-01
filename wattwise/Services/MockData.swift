@@ -455,14 +455,14 @@ enum MockData {
 
     static let progressSummary = ProgressSummary(
         continueLearning: ProgressSummary.ContinueLearning(
-            lessonId: UUID(uuidString: "00000002-0000-0000-0000-000000000003")!,
-            lessonTitle: "Series vs. Parallel Circuits",
-            progress: 0.5,
-            moduleTitle: "Electrical Fundamentals"
+            lessonId: WattWiseContentRuntimeAdapter.uuid(for: "lesson:ap-les-004"),
+            lessonTitle: "Shock Paths, PPE, and Lockout Mindset",
+            progress: 0.55,
+            moduleTitle: "Basic Safety (OSHA and NFPA 70E)"
         ),
         dailyGoal: ProgressSummary.DailyGoal(minutesCompleted: 18, targetMinutes: 30),
         streakDays: 4,
-        recommendedAction: "Complete Series vs. Parallel Circuits to finish Module 1"
+        recommendedAction: "Finish Shock Paths, PPE, and Lockout Mindset to lock in safety fundamentals"
     )
 
     // MARK: - NEC Expanded Text (keyed by code)

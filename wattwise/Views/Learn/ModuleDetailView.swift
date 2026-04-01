@@ -6,27 +6,31 @@ struct ModuleDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: WWSpacing.l) {
-                // Module header
-                VStack(alignment: .leading, spacing: WWSpacing.m) {
-                    Text(module.description)
-                        .wwBody(color: .wwTextSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
+                WWCard {
+                    VStack(alignment: .leading, spacing: WWSpacing.m) {
+                        Text(module.title)
+                            .wwHeading()
 
-                    HStack(spacing: WWSpacing.m) {
-                        StatPill(icon: "list.bullet", value: "\(module.lessonCount) lessons")
-                        StatPill(icon: "clock", value: "\(module.estimatedMinutes) min")
-                        if module.progress > 0 {
-                            StatPill(icon: "checkmark.circle",
-                                     value: "\(Int(module.progress * 100))%",
-                                     color: .wwBlue)
+                        Text(module.description)
+                            .wwBody(color: .wwTextSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+
+                        HStack(spacing: WWSpacing.m) {
+                            StatPill(icon: "list.bullet", value: "\(module.lessonCount) lessons")
+                            StatPill(icon: "clock", value: "\(module.estimatedMinutes) min")
+                            if module.progress > 0 {
+                                StatPill(icon: "chart.line.uptrend.xyaxis",
+                                         value: "\(Int(module.progress * 100))%",
+                                         color: .wwBlue)
+                            }
                         }
-                    }
 
-                    if module.progress > 0 {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("Module Progress")
-                                .wwLabel()
-                            WWProgressBar(value: module.progress, height: 6)
+                        if module.progress > 0 {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Module Progress")
+                                    .wwLabel()
+                                WWProgressBar(value: module.progress, height: 6)
+                            }
                         }
                     }
                 }
@@ -144,6 +148,15 @@ private struct StatPill: View {
 
 #Preview {
     NavigationStack {
-        ModuleDetailView(module: MockData.modules[0])
+        ModuleDetailView(module: ((try? WattWiseContentRuntimeAdapter.loadModules())?.first) ?? WWModule(
+            id: UUID(),
+            title: "Preview Module",
+            description: "Preview data unavailable.",
+            lessonCount: 0,
+            estimatedMinutes: 0,
+            topicTags: [],
+            progress: 0,
+            lessons: []
+        ))
     }
 }

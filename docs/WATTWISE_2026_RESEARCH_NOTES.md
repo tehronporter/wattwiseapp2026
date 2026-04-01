@@ -11,7 +11,7 @@ That file contains:
 - executive summary
 - 2026 NEC change watchlist
 - apprentice, journeyman, and master curriculum framework
-- six fully written anchor lessons
+- a completed 24-lesson apprentice, journeyman, and master core library
 - starter question bank and practice exams
 - flashcards
 - quick reference guides
@@ -32,7 +32,7 @@ The seed was built from official public sources available on 2026-03-30, priorit
 
 ## Important production note
 
-This is a research-backed foundation, not a finished production release. Two things remain necessary before WattWise should market the content as fully complete:
+This is now a much stronger research-backed content foundation, but two things still remain necessary before WattWise should market the content as fully complete in every jurisdiction:
 
 1. Article-by-article validation against licensed access to the full 2026 NEC text, including any new errata or TIAs.
 2. Completion of a 50-state-plus-DC jurisdiction matrix sourced from each official licensing authority and current exam bulletin.
@@ -62,5 +62,7 @@ This is a research-backed foundation, not a finished production release. Two thi
 
 - typed content-pack models
 - bundle loader for app-side use
-- structural validator for duplicate IDs, invalid question keys, and broken references
-- unit tests that decode and validate the content pack
+- structural validator for duplicate IDs, invalid question keys, broken references, and incomplete lesson coverage
+- a runtime adapter that turns the content pack into app-ready modules and lessons
+- a deterministic Supabase seed generator that builds content tables from the same pack
+- unit tests that decode, validate, and adapter-check the content pack
