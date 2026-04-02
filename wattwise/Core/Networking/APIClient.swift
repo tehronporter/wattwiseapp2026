@@ -30,6 +30,33 @@ actor APIClient {
         body: Request,
         responseType: Response.Type
     ) async throws -> Response {
+        let bodyData = try JSONEncoder().encode(body)
+        let hadAccessToken = accessToken != nil
+        let initialRequest = makeRequest(endpoint: endpoint, bodyData: bodyData)
+
+        do {
+            return try await execute(initialRequest, responseType: responseType)
+        } catch APIError.unauthorized where hadAccessToken {
+            guard let refreshedSession = await SupabaseAuthClient.shared.restoreSession() else {
+                accessToken = nil
+                throw APIError.unauthorized
+            }
+
+            accessToken = refreshedSession.accessToken
+            let retriedRequest = makeRequest(endpoint: endpoint, bodyData: bodyData)
+            return try await execute(retriedRequest, responseType: responseType)
+        }
+    }
+
+    // Convenience overload for empty body
+    func post<Response: Decodable>(
+        endpoint: String,
+        responseType: Response.Type
+    ) async throws -> Response {
+        try await post(endpoint: endpoint, body: EmptyBody(), responseType: responseType)
+    }
+
+    private func makeRequest(endpoint: String, bodyData: Data) -> URLRequest {
         let url = AppConfig.edgeFunctionURL.appendingPathComponent(endpoint)
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -37,17 +64,21 @@ actor APIClient {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(AppConfig.supabaseAnonKey, forHTTPHeaderField: "apikey")
         request.setValue("ios", forHTTPHeaderField: "X-Platform")
+        request.httpBody = bodyData
 
-        // Auth header
         if let token = accessToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         } else {
-            // Fall back to anon key for unauthenticated endpoints
             request.setValue("Bearer \(AppConfig.supabaseAnonKey)", forHTTPHeaderField: "Authorization")
         }
 
-        request.httpBody = try JSONEncoder().encode(body)
+        return request
+    }
 
+    private func execute<Response: Decodable>(
+        _ request: URLRequest,
+        responseType: Response.Type
+    ) async throws -> Response {
         let (data, response) = try await session.data(for: request)
 
         guard let http = response as? HTTPURLResponse else {
@@ -78,14 +109,6 @@ actor APIClient {
             let msg = String(data: data, encoding: .utf8) ?? "Unknown error"
             throw APIError.serverError("HTTP \(http.statusCode): \(msg)")
         }
-    }
-
-    // Convenience overload for empty body
-    func post<Response: Decodable>(
-        endpoint: String,
-        responseType: Response.Type
-    ) async throws -> Response {
-        try await post(endpoint: endpoint, body: EmptyBody(), responseType: responseType)
     }
 }
 

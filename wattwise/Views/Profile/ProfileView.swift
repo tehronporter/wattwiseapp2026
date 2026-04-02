@@ -37,9 +37,15 @@ struct ProfileView: View {
             .wwScreenPadding()
             .padding(.vertical, WWSpacing.m)
         }
+        .refreshable {
+            await refreshSubscriptionState()
+        }
         .background(Color.wwBackground)
         .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(.large)
+        .task(id: appVM.currentUser?.id) {
+            await refreshSubscriptionState()
+        }
         .alert("Sign Out?", isPresented: $vm.showSignOutAlert) {
             Button("Sign Out", role: .destructive) {
                 Task { await vm.signOut(services: services, appVM: appVM) }
@@ -77,6 +83,13 @@ struct ProfileView: View {
                     .navigationBarTitleDisplayMode(.inline)
                 }
             }
+        }
+    }
+
+    private func refreshSubscriptionState() async {
+        guard appVM.currentUser != nil else { return }
+        if let state = try? await services.subscription.fetchState() {
+            appVM.subscriptionState = state
         }
     }
 }

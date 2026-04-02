@@ -56,8 +56,11 @@ actor SupabaseAuthClient {
         return try await post(path: "/token?grant_type=refresh_token", body: body, responseType: AuthSession.self)
     }
 
-    func resendSignUpConfirmation(email: String) async throws {
-        let body = ResendSignUpRequest(email: email)
+    func resendSignUpConfirmation(email: String, redirectTo: URL?) async throws {
+        let body = ResendSignUpRequest(
+            email: email,
+            redirectTo: redirectTo?.absoluteString
+        )
         let _: EmptyResponse = try await post(path: "/resend", body: body, responseType: EmptyResponse.self)
     }
 
@@ -266,9 +269,16 @@ private nonisolated struct SignUpRequest: Encodable, Sendable {
     }
 }
 
-private nonisolated struct ResendSignUpRequest: Encodable, Sendable {
+nonisolated struct ResendSignUpRequest: Encodable, Sendable {
     let email: String
     let type = "signup"
+    let redirectTo: String?
+
+    private enum CodingKeys: String, CodingKey {
+        case email
+        case type
+        case redirectTo = "redirect_to"
+    }
 }
 
 private nonisolated struct EmptyResponse: Decodable, Sendable {}

@@ -99,6 +99,20 @@ struct AuthFlowTests {
         #expect(payload?.surfacedErrorMessage == "Link expired")
     }
 
+    @Test func resendRequestEncodesConfirmationBridgeRedirect() throws {
+        let request = ResendSignUpRequest(
+            email: "pending@wattwiseapp.com",
+            redirectTo: "https://lxjjwodpiaivtkbjrodu.supabase.co/functions/v1/auth_confirmation"
+        )
+
+        let data = try JSONEncoder().encode(request)
+        let json = try JSONSerialization.jsonObject(with: data) as? [String: String]
+
+        #expect(json?["email"] == "pending@wattwiseapp.com")
+        #expect(json?["type"] == "signup")
+        #expect(json?["redirect_to"] == "https://lxjjwodpiaivtkbjrodu.supabase.co/functions/v1/auth_confirmation")
+    }
+
     @Test func authFlowRouteUsesOnboardingCompletion() {
         var incomplete = WWUser.guest
         incomplete.email = "pending@wattwiseapp.com"

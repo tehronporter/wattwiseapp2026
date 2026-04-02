@@ -93,7 +93,10 @@ final class SupabaseAuthService: AuthServiceProtocol {
     }
 
     func resendConfirmation(email: String) async throws {
-        try await SupabaseAuthClient.shared.resendSignUpConfirmation(email: email)
+        try await SupabaseAuthClient.shared.resendSignUpConfirmation(
+            email: email,
+            redirectTo: AuthRedirectConfiguration.confirmationBridgeURL()
+        )
 
         if let pending = PendingEmailConfirmationStore.load(),
            pending.normalizedEmail == email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
