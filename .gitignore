@@ -1,0 +1,8 @@
+.DS_Store
+**/.DS_Store
+wattwise/wattwise.xcodeproj/xcuserdata/
+wattwise/wattwise.xcodeproj/project.xcworkspace/xcuserdata/
+wattwise/DerivedData/
+*.xcuserstate
+*.xccheckout
+wattwise/.build/
