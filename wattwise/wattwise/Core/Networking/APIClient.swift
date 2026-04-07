@@ -54,7 +54,16 @@ actor APIClient {
 
             accessToken = refreshedSession.accessToken
             let retriedRequest = makeRequest(endpoint: endpoint, bodyData: bodyData)
-            return try await execute(retriedRequest, responseType: responseType)
+            do {
+                return try await execute(retriedRequest, responseType: responseType)
+            } catch APIError.unauthorized {
+                // Refresh succeeded but the retried call still got 401 — backend rejected
+                // the new token (e.g. Edge Function not deployed, revoked, etc.).
+                // Force sign-out so the user is never stuck in a broken authenticated state.
+                accessToken = nil
+                NotificationCenter.default.post(name: .wwSessionExpired, object: nil)
+                throw APIError.unauthorized
+            }
         }
     }
 
