@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct QuizResultsView: View {
     let result: QuizResult
@@ -406,13 +407,15 @@ struct ScoreShareImage: Transferable {
 
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(exportedContentType: .png) { item in
-            let renderer = ImageRenderer(content: item.cardView)
-            renderer.scale = 3
-            guard let uiImage = renderer.uiImage,
-                  let data = uiImage.pngData() else {
-                throw AppError.unknown
+            try await MainActor.run {
+                let renderer = ImageRenderer(content: item.cardView)
+                renderer.scale = 3
+                guard let uiImage = renderer.uiImage,
+                      let data = uiImage.pngData() else {
+                    throw AppError.unknown
+                }
+                return data
             }
-            return data
         }
     }
 

@@ -4,7 +4,7 @@ import Foundation
 // Posted by APIClient when a 401 cannot be recovered via token refresh.
 // AppRootView observes this and transitions the user back to the sign-in screen.
 extension Notification.Name {
-    nonisolated(unsafe) static let wwSessionExpired = Notification.Name("WattWise.SessionExpired")
+    static let wwSessionExpired = Notification.Name("WattWise.SessionExpired")
 }
 
 // MARK: - API Client (Supabase Edge Functions)
