@@ -78,9 +78,7 @@ INSERT INTO jurisdiction_nec_editions (jurisdiction_code, adopted_edition, adopt
 ('PA', '2020', 'Pennsylvania adopted 2020 NEC', '2021-07-01'),
 ('SC', '2020', 'South Carolina adopted 2020 NEC', '2021-01-01'),
 ('TN', '2020', 'Tennessee adopted 2020 NEC', '2021-01-01'),
-('WV', '2020', 'West Virginia adopted 2020 NEC', '2021-01-01'),
--- States with no statewide adoption (local jurisdiction controls)
-('AK', '2023', NULL, NULL)  -- overridden above; placeholder for tracking purposes
+('WV', '2020', 'West Virginia adopted 2020 NEC', '2021-01-01')
 ON CONFLICT (jurisdiction_code) DO UPDATE SET
     adopted_edition = EXCLUDED.adopted_edition,
     adoption_notes  = EXCLUDED.adoption_notes,

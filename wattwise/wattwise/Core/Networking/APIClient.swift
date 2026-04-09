@@ -115,7 +115,13 @@ actor APIClient {
                 }
                 throw APIError.serverError(wrapper.error?.message ?? "Empty response")
             } catch let decodeError as DecodingError {
-                throw APIError.decodingError(decodeError.localizedDescription)
+                // Provide detailed decoding error with raw response for debugging
+                let rawResponse = String(data: data, encoding: .utf8) ?? "Could not decode response"
+                let fullError = "Decoding failed: \(decodeError.localizedDescription). Response: \(rawResponse.prefix(500))"
+                throw APIError.decodingError(fullError)
+            } catch {
+                // Re-throw any other errors
+                throw error
             }
         case 401:
             throw APIError.unauthorized
