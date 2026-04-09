@@ -511,6 +511,11 @@ final class QuizViewModel {
     var showExitAlert: Bool = false
     var accessRestriction: QuizAccessRestriction?
 
+    // Timing
+    var sessionStartTime: Date? = nil
+    var questionStartTime: Date? = nil
+    var questionTimesSeconds: [UUID: Double] = [:]
+
     var shouldShowLoadingState: Bool {
         isLoading || (quiz == nil && result == nil && errorMessage == nil)
     }
@@ -550,6 +555,8 @@ final class QuizViewModel {
                 throw AppError.notFound("No quiz questions are available right now. Please try another quiz.")
             }
             quiz = generatedQuiz
+            sessionStartTime = Date()
+            questionStartTime = Date()
         } catch let apiError as APIError {
             switch apiError {
             case .forbidden(let message):
@@ -569,7 +576,17 @@ final class QuizViewModel {
 
     func next() {
         guard let quiz, currentIndex < quiz.questions.count - 1 else { return }
+        // Record time for the question we're leaving
+        recordTimeForCurrentQuestion()
         currentIndex += 1
+        questionStartTime = Date()
+    }
+
+    func recordTimeForCurrentQuestion() {
+        guard let q = currentQuestion, let start = questionStartTime else { return }
+        let elapsed = Date().timeIntervalSince(start)
+        questionTimesSeconds[q.id] = (questionTimesSeconds[q.id] ?? 0) + elapsed
+        questionStartTime = Date()
     }
 
     func previous() {
@@ -579,6 +596,8 @@ final class QuizViewModel {
 
     func submit(services: ServiceContainer, appVM: AppViewModel) async {
         guard let quiz else { return }
+        // Record time for the last question before submitting
+        recordTimeForCurrentQuestion()
         isSubmitting = true
         errorMessage = nil
         defer { isSubmitting = false }
@@ -588,8 +607,19 @@ final class QuizViewModel {
             return QuizAnswer(questionId: q.id, selected: selected)
         }
 
+        let totalElapsed = sessionStartTime.map { Date().timeIntervalSince($0) }
+        let timesSnapshot = Dictionary(uniqueKeysWithValues: questionTimesSeconds.map {
+            ($0.key.uuidString, $0.value)
+        })
+
         do {
-            result = try await services.quiz.submitQuiz(quizId: quiz.id, answers: answerList)
+            var fetchedResult = try await services.quiz.submitQuiz(quizId: quiz.id, answers: answerList)
+            // Attach timing data if this was a timed session
+            if quiz.type.isTimedSession {
+                fetchedResult.totalElapsedSeconds = totalElapsed
+                fetchedResult.questionTimesSeconds = timesSnapshot.isEmpty ? nil : timesSnapshot
+            }
+            result = fetchedResult
             if let result, result.quizAttemptId != nil {
                 PracticeHistoryStore.shared.recordAttempt(
                     quiz: quiz,
@@ -616,6 +646,9 @@ final class QuizViewModel {
         result = nil
         errorMessage = nil
         accessRestriction = nil
+        sessionStartTime = nil
+        questionStartTime = nil
+        questionTimesSeconds = [:]
     }
 }
 

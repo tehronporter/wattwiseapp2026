@@ -208,6 +208,7 @@ enum QuizType: String, Codable, CaseIterable, Identifiable {
     case quickQuiz = "quick_quiz"
     case fullPracticeExam = "full_practice_exam"
     case weakAreaReview = "weak_area_review"
+    case calculationDrill = "calculation_drill"
 
     var id: String { rawValue }
 
@@ -216,6 +217,7 @@ enum QuizType: String, Codable, CaseIterable, Identifiable {
         case .quickQuiz: return "Quick Quiz"
         case .fullPracticeExam: return "Full Practice Exam"
         case .weakAreaReview: return "Review Weak Areas"
+        case .calculationDrill: return "Calculation Drill"
         }
     }
     var description: String {
@@ -223,6 +225,7 @@ enum QuizType: String, Codable, CaseIterable, Identifiable {
         case .quickQuiz: return "A short check-in to keep your study streak moving."
         case .fullPracticeExam: return "A longer exam-style session for serious review."
         case .weakAreaReview: return "Targeted practice focused on the concepts you miss most."
+        case .calculationDrill: return "Step-by-step math drills: load calculations, ampacity, box fill, and voltage drop."
         }
     }
     var bestFor: String {
@@ -230,6 +233,7 @@ enum QuizType: String, Codable, CaseIterable, Identifiable {
         case .quickQuiz: return "Best for a fast refresher between lessons"
         case .fullPracticeExam: return "Best for a focused practice block"
         case .weakAreaReview: return "Best after results show weak spots"
+        case .calculationDrill: return "Best when math is your weakest pillar"
         }
     }
     var icon: String {
@@ -237,6 +241,7 @@ enum QuizType: String, Codable, CaseIterable, Identifiable {
         case .quickQuiz: return "bolt"
         case .fullPracticeExam: return "doc.text"
         case .weakAreaReview: return "chart.bar"
+        case .calculationDrill: return "function"
         }
     }
     var questionCount: Int {
@@ -244,6 +249,7 @@ enum QuizType: String, Codable, CaseIterable, Identifiable {
         case .quickQuiz: return 10
         case .fullPracticeExam: return 25
         case .weakAreaReview: return 10
+        case .calculationDrill: return 15
         }
     }
 
@@ -252,6 +258,7 @@ enum QuizType: String, Codable, CaseIterable, Identifiable {
         case .quickQuiz: return "Short daily check-in"
         case .fullPracticeExam: return "Exam-style mixed assessment"
         case .weakAreaReview: return "Targeted follow-up drill"
+        case .calculationDrill: return "Focused math and formula drill"
         }
     }
 
@@ -263,6 +270,16 @@ enum QuizType: String, Codable, CaseIterable, Identifiable {
             return .practiceExamLocked
         case .weakAreaReview:
             return .weakAreaLocked
+        case .calculationDrill:
+            return .practiceExamLocked
+        }
+    }
+
+    /// Whether this quiz type shows a live timer during the session.
+    var isTimedSession: Bool {
+        switch self {
+        case .fullPracticeExam, .calculationDrill: return true
+        default: return false
         }
     }
 }
@@ -302,9 +319,16 @@ struct QuizResult: Identifiable, Codable {
     var weakTopics: [String]
     var weakTopicDetails: [WeakTopicDetail] = []
     var completedAt: Date = Date()
+    var totalElapsedSeconds: Double? = nil         // overall session time
+    var questionTimesSeconds: [String: Double]? = nil  // questionId.uuidString → seconds
 
     var passed: Bool { score >= 0.7 }
     var percentage: Int { Int(score * 100) }
+
+    var averageSecondsPerQuestion: Double? {
+        guard let times = questionTimesSeconds, !times.isEmpty else { return nil }
+        return times.values.reduce(0, +) / Double(times.count)
+    }
 }
 
 struct QuestionResult: Identifiable, Codable {

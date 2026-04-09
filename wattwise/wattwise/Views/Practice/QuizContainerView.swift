@@ -29,7 +29,7 @@ struct QuizContainerView: View {
                     Task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
                 }
             } else if let quiz = vm.quiz, quiz.questions.isEmpty == false {
-                ActiveQuizView(vm: vm)
+                ActiveQuizView(vm: vm, quizType: quizType)
             } else if let error = vm.errorMessage {
                 WWEmptyState(icon: "exclamationmark.triangle", title: "Couldn't load quiz", message: error, actionTitle: "Retry") {
                     vm.reset()
@@ -80,8 +80,11 @@ struct QuizContainerView: View {
 
 private struct ActiveQuizView: View {
     @Bindable var vm: QuizViewModel
+    let quizType: QuizType
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
+    @State private var elapsedSeconds: Int = 0
+    @State private var timer: Timer? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -92,13 +95,28 @@ private struct ActiveQuizView: View {
                     Text("Question \(vm.currentIndex + 1) of \(vm.quiz?.questions.count ?? 0)")
                         .wwCaption()
                     Spacer()
-                    if let q = vm.currentQuestion {
+                    if quizType.isTimedSession {
+                        TimerBadge(seconds: elapsedSeconds)
+                    } else if let q = vm.currentQuestion {
+                        QuestionMetaBadges(question: q)
+                    }
+                    if quizType.isTimedSession, let q = vm.currentQuestion {
                         QuestionMetaBadges(question: q)
                     }
                 }
             }
             .wwScreenPadding()
             .padding(.top, WWSpacing.s)
+            .onAppear {
+                guard quizType.isTimedSession else { return }
+                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                    elapsedSeconds += 1
+                }
+            }
+            .onDisappear {
+                timer?.invalidate()
+                timer = nil
+            }
 
             ScrollView {
                 if let question = vm.currentQuestion {
@@ -185,6 +203,34 @@ private struct ActiveQuizView: View {
             .wwScreenPadding()
             .padding(.vertical, WWSpacing.m)
         }
+    }
+}
+
+// MARK: - Timer Badge
+
+private struct TimerBadge: View {
+    let seconds: Int
+
+    private var formatted: String {
+        let m = seconds / 60
+        let s = seconds % 60
+        return String(format: "%d:%02d", m, s)
+    }
+
+    private var isWarning: Bool { seconds >= 3600 } // over an hour, something's wrong
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "timer")
+                .font(.system(size: 11))
+            Text(formatted)
+                .font(WWFont.caption(.semibold))
+        }
+        .foregroundColor(isWarning ? .wwError : .wwTextSecondary)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 3)
+        .background(isWarning ? Color.wwError.opacity(0.08) : Color.wwSurface)
+        .clipShape(Capsule())
     }
 }
 

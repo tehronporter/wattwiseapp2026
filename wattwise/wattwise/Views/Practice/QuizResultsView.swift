@@ -23,6 +23,11 @@ struct QuizResultsView: View {
                 // Score Hero
                 ScoreHeroView(result: result)
 
+                // Time analytics — shown for timed sessions (full practice exam, calculation drill)
+                if result.totalElapsedSeconds != nil || result.questionTimesSeconds != nil {
+                    TimeAnalyticsCard(result: result, quizType: quizType)
+                }
+
                 if isPreviewResultsGate {
                     WWCard {
                         VStack(alignment: .leading, spacing: WWSpacing.m) {
@@ -396,6 +401,73 @@ private struct ActionLinkLabel: View {
                     .strokeBorder(style == .primary ? Color.clear : Color.wwBlue, lineWidth: 1.5)
             )
             .clipShape(Capsule())
+    }
+}
+
+// MARK: - Time Analytics Card
+
+private struct TimeAnalyticsCard: View {
+    let result: QuizResult
+    let quizType: QuizType
+
+    private var totalFormatted: String {
+        guard let total = result.totalElapsedSeconds else { return "--" }
+        let m = Int(total) / 60
+        let s = Int(total) % 60
+        return String(format: "%d:%02d", m, s)
+    }
+
+    private var avgFormatted: String {
+        guard let avg = result.averageSecondsPerQuestion else { return "--" }
+        return String(format: "%.0f sec", avg)
+    }
+
+    private var paceNote: String {
+        guard let avg = result.averageSecondsPerQuestion else { return "" }
+        switch avg {
+        case ..<60:
+            return "Fast pace — make sure you're reading each question fully."
+        case 60..<120:
+            return "Solid pace. Close to the 1–2 min/question target for real exams."
+        default:
+            return "Slower pace. Work on recognizing question patterns faster."
+        }
+    }
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                HStack(spacing: WWSpacing.s) {
+                    Image(systemName: "timer")
+                        .foregroundColor(.wwBlue)
+                    Text("Timing Breakdown")
+                        .wwSectionTitle()
+                }
+
+                HStack(spacing: WWSpacing.l) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Total Time")
+                            .wwCaption(color: .wwTextSecondary)
+                        Text(totalFormatted)
+                            .wwSubheading()
+                    }
+                    Divider().frame(height: 36)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Avg / Question")
+                            .wwCaption(color: .wwTextSecondary)
+                        Text(avgFormatted)
+                            .wwSubheading()
+                    }
+                    Spacer()
+                }
+
+                if !paceNote.isEmpty {
+                    Text(paceNote)
+                        .wwCaption(color: .wwTextSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
     }
 }
 

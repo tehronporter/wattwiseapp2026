@@ -250,15 +250,28 @@ enum WattWiseContentRuntimeAdapter {
     }
 
     /// Returns flashcards, optionally filtered to a certification level.
-    /// Pass nil to get all cards across all levels.
+    /// Includes supplemental NEC Table flashcards from MockData.
     static func flashcards(certificationLevel: String? = nil) throws -> [FlashcardRecord] {
         let pack = try WattWiseContentCatalog.loadFromBundle()
-        let all = pack.flashcards
+        var all = pack.flashcards
+        // Inject supplemental NEC Table flashcards (deduplicate by id)
+        let existingIDs = Set(all.map(\.id))
+        let supplemental = MockData.necTableFlashcards.filter { !existingIDs.contains($0.id) }
+        all.append(contentsOf: supplemental)
+
         guard let level = certificationLevel, !level.isEmpty else { return all }
-        let filtered = all.filter {
-            $0.certificationLevel.caseInsensitiveCompare(level) == .orderedSame
-        }
+        let certRank = certLevel(level)
+        let filtered = all.filter { certLevel($0.certificationLevel) <= certRank }
         return filtered.isEmpty ? all : filtered
+    }
+
+    private static func certLevel(_ level: String) -> Int {
+        switch level.lowercased() {
+        case "apprentice": return 1
+        case "journeyman": return 2
+        case "master": return 3
+        default: return 2
+        }
     }
 
     static func necReference(id: UUID) throws -> NECReference {

@@ -33,7 +33,8 @@ struct PracticeView: View {
                     PracticeSummaryCard(dashboard: vm.dashboard)
                 }
 
-                ForEach(QuizType.allCases, id: \.self) { type in
+                // Standard quiz types (exclude calculationDrill — it gets its own section below)
+                ForEach(QuizType.allCases.filter { $0 != .calculationDrill }, id: \.self) { type in
                     QuizOptionCard(
                         type: type,
                         hasPaidAccess: appVM.subscriptionState.hasPaidAccess,
@@ -41,6 +42,27 @@ struct PracticeView: View {
                         dashboard: vm.dashboard
                     ) {
                         switch vm.startQuiz(type, subscription: appVM.subscriptionState) {
+                        case .start(let type):
+                            route = type
+                        case .paywall:
+                            break
+                        case .unavailable(let title, let message, let suggestedQuiz):
+                            unavailableState = PracticeUnavailableState(
+                                title: title,
+                                message: message,
+                                suggestedQuiz: suggestedQuiz
+                            )
+                        }
+                    }
+                }
+
+                // Calculation Drill — dedicated math practice section
+                VStack(alignment: .leading, spacing: WWSpacing.s) {
+                    Text("Math & Formula Drills")
+                        .wwLabel()
+                        .textCase(.uppercase)
+                    CalculationDrillCard(hasPaidAccess: appVM.subscriptionState.hasPaidAccess) {
+                        switch vm.startQuiz(.calculationDrill, subscription: appVM.subscriptionState) {
                         case .start(let type):
                             route = type
                         case .paywall:
@@ -140,7 +162,7 @@ private struct QuizOptionCard: View {
         switch type {
         case .quickQuiz:
             return previewQuizUsed
-        case .fullPracticeExam, .weakAreaReview:
+        case .fullPracticeExam, .weakAreaReview, .calculationDrill:
             return true
         }
     }
@@ -243,6 +265,69 @@ private struct PracticeSummaryCard: View {
                 }
             }
         }
+    }
+}
+
+// MARK: - Calculation Drill Card
+
+private struct CalculationDrillCard: View {
+    let hasPaidAccess: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            WWCard {
+                VStack(alignment: .leading, spacing: WWSpacing.m) {
+                    HStack(spacing: WWSpacing.m) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(hasPaidAccess ? Color.wwBlueDim : Color.wwSurface)
+                                .frame(width: 50, height: 50)
+                            Image(systemName: "function")
+                                .font(.system(size: 20))
+                                .foregroundColor(hasPaidAccess ? .wwBlue : .wwTextMuted)
+                        }
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack(spacing: WWSpacing.s) {
+                                Text("Calculation Drill")
+                                    .wwSectionTitle()
+                                if !hasPaidAccess {
+                                    Image(systemName: "lock")
+                                        .font(.system(size: 12))
+                                        .foregroundColor(.wwTextMuted)
+                                }
+                            }
+                            Text("15 math problems — load calcs, ampacity, box fill, voltage drop.")
+                                .wwBody(color: .wwTextSecondary)
+                            Text("Best when math is your weakest pillar")
+                                .wwCaption()
+                        }
+
+                        Spacer()
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.wwTextMuted)
+                    }
+
+                    // Pillar badges
+                    HStack(spacing: WWSpacing.s) {
+                        ForEach(["Load Calc", "Box Fill", "Ampacity", "Voltage Drop"], id: \.self) { label in
+                            Text(label)
+                                .font(WWFont.caption(.medium))
+                                .foregroundColor(hasPaidAccess ? .wwBlue : .wwTextMuted)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(hasPaidAccess ? Color.wwBlueDim : Color.wwSurface)
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .opacity(hasPaidAccess ? 1.0 : 0.7)
     }
 }
 

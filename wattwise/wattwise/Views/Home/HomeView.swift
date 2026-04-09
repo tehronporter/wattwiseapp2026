@@ -34,7 +34,11 @@ struct HomeView: View {
                 case .idle, .loading:
                     HomeSkeletonView()
                 case .loaded(let summary):
-                    HomeContentView(summary: summary, subscription: appVM.subscriptionState) { destination in
+                    HomeContentView(
+                        summary: summary,
+                        subscription: appVM.subscriptionState,
+                        currentUser: appVM.currentUser
+                    ) { destination in
                         handleRoute(destination)
                     } onOpenPaywall: {
                         paywallContext = .general
@@ -115,6 +119,7 @@ private enum HomeRoute: Hashable, Identifiable {
 private struct HomeContentView: View {
     let summary: ProgressSummary
     let subscription: SubscriptionState
+    var currentUser: WWUser? = nil
     let onRoute: (HomeRoute) -> Void
     let onOpenPaywall: () -> Void
 
@@ -147,6 +152,11 @@ private struct HomeContentView: View {
                         WWGhostButton(title: "See Full Access Options", color: .wwBlue, action: onOpenPaywall)
                     }
                 }
+            }
+
+            // Exam track roadmap — always visible once user has a track set
+            if let examType = currentUser?.examType {
+                ExamTrackRoadmapCard(examType: examType, stateCode: currentUser?.state, onRoute: onRoute)
             }
 
             switch state {
@@ -501,6 +511,163 @@ private struct ExamCountdownBanner: View {
                 Spacer()
             }
         }
+    }
+}
+
+// MARK: - Exam Track Roadmap Card
+
+private struct ExamTrackRoadmapCard: View {
+    let examType: ExamType
+    var stateCode: String? = nil
+    let onRoute: (HomeRoute) -> Void
+
+    private static let copperColor = Color(red: 0.72, green: 0.45, blue: 0.2)
+    private static let greenColor  = Color(red: 0.13, green: 0.69, blue: 0.37)
+
+    private var pillars: [RoadmapPillar] {
+        switch examType {
+        case .apprentice:
+            return [
+                RoadmapPillar(label: "Comprehension", icon: "book.closed", color: .wwBlue,
+                              items: ["Electrical theory", "Basic NEC structure", "Safety rules"]),
+                RoadmapPillar(label: "Application", icon: "hammer", color: Self.copperColor,
+                              items: ["Branch circuits", "Grounding basics", "Wiring methods"]),
+                RoadmapPillar(label: "Execution", icon: "checkmark.seal", color: Self.greenColor,
+                              items: ["Exam strategy", "Code navigation", "Time management"])
+            ]
+        case .journeyman:
+            return [
+                RoadmapPillar(label: "Comprehension", icon: "book.closed", color: .wwBlue,
+                              items: ["NEC article mastery", "Load calc theory", "Conductor rules"]),
+                RoadmapPillar(label: "Application", icon: "hammer", color: Self.copperColor,
+                              items: ["Load calcs", "Box fill & conduit", "Motor circuits"]),
+                RoadmapPillar(label: "Execution", icon: "checkmark.seal", color: Self.greenColor,
+                              items: ["Question decoding", "NEC index speed", "Timed practice"])
+            ]
+        case .master:
+            return [
+                RoadmapPillar(label: "Comprehension", icon: "book.closed", color: .wwBlue,
+                              items: ["Advanced theory", "Code hierarchy", "Special occupancies"]),
+                RoadmapPillar(label: "Application", icon: "hammer", color: Self.copperColor,
+                              items: ["Multi-family calcs", "Voltage drop", "Motor feeders"]),
+                RoadmapPillar(label: "Execution", icon: "checkmark.seal", color: Self.greenColor,
+                              items: ["Complex analysis", "Table mastery", "Calc drills"])
+            ]
+        }
+    }
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                HStack(spacing: WWSpacing.s) {
+                    Image(systemName: "map")
+                        .font(.system(size: 14))
+                        .foregroundColor(.wwBlue)
+                    Text("\(examType.displayName) Exam Roadmap")
+                        .wwLabel()
+                        .textCase(.uppercase)
+                    Spacer()
+                    if let state = stateCode, !state.isEmpty {
+                        Text(state.uppercased())
+                            .font(WWFont.caption(.semibold))
+                            .foregroundColor(.wwBlue)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(Color.wwBlueDim)
+                            .clipShape(Capsule())
+                    }
+                }
+
+                Text("Three pillars every passing candidate masters.")
+                    .wwCaption(color: .wwTextSecondary)
+
+                HStack(alignment: .top, spacing: WWSpacing.s) {
+                    ForEach(pillars.indices, id: \.self) { i in
+                        PillarColumn(pillar: pillars[i])
+                    }
+                }
+
+                // CTA row
+                HStack(spacing: WWSpacing.m) {
+                    Button {
+                        onRoute(.learn)
+                    } label: {
+                        Label("Study", systemImage: "book")
+                            .font(WWFont.caption(.semibold))
+                            .foregroundColor(.wwBlue)
+                    }
+                    .buttonStyle(.plain)
+
+                    Divider().frame(height: 14)
+
+                    Button {
+                        onRoute(.quiz(.quickQuiz))
+                    } label: {
+                        Label("Practice", systemImage: "bolt")
+                            .font(WWFont.caption(.semibold))
+                            .foregroundColor(.wwBlue)
+                    }
+                    .buttonStyle(.plain)
+
+                    Divider().frame(height: 14)
+
+                    Button {
+                        onRoute(.tutor)
+                    } label: {
+                        Label("Ask Tutor", systemImage: "bubble.left")
+                            .font(WWFont.caption(.semibold))
+                            .foregroundColor(.wwBlue)
+                    }
+                    .buttonStyle(.plain)
+
+                    Spacer()
+                }
+            }
+        }
+    }
+}
+
+private struct RoadmapPillar {
+    let label: String
+    let icon: String
+    let color: Color
+    let items: [String]
+}
+
+private struct PillarColumn: View {
+    let pillar: RoadmapPillar
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: WWSpacing.s) {
+            HStack(spacing: 4) {
+                Image(systemName: pillar.icon)
+                    .font(.system(size: 11))
+                    .foregroundColor(pillar.color)
+                Text(pillar.label)
+                    .font(WWFont.caption(.semibold))
+                    .foregroundColor(pillar.color)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(pillar.color.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 4) {
+                ForEach(pillar.items, id: \.self) { item in
+                    HStack(alignment: .top, spacing: 4) {
+                        Circle()
+                            .fill(pillar.color.opacity(0.5))
+                            .frame(width: 4, height: 4)
+                            .padding(.top, 4)
+                        Text(item)
+                            .font(.system(size: 10, weight: .regular))
+                            .foregroundColor(.wwTextSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 

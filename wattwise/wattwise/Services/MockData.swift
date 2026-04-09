@@ -924,6 +924,159 @@ enum MockData {
         "110.26": "NEC 110.26 establishes working space requirements around electrical equipment for safe operation and maintenance. For 0–150V equipment, minimum depth is 3 feet; for 151–600V, up to 4 feet is required depending on conditions. Minimum width is 30 inches or the equipment width, whichever is greater. Minimum headroom is 6.5 feet. Dedicated electrical space must be maintained from floor to structural ceiling, and no piping, ducts, or leak-prone equipment may be installed above panelboards. These clearances are heavily tested on apprentice and master exams."
     ]
 
+    // MARK: - Supplemental NEC Table Flashcards
+
+    static let necTableFlashcards: [FlashcardRecord] = [
+        FlashcardRecord(id: "nec-tbl-001", front: "Which NEC table gives allowable ampacity for insulated conductors in a raceway or cable?", back: "Table 310.16 — lists ampacity for 60°C, 75°C, and 90°C conductors. Key: 12 AWG copper at 75°C = 25A; 10 AWG = 35A.", necReference: "310.16", certificationLevel: "Journeyman"),
+        FlashcardRecord(id: "nec-tbl-002", front: "What does Table 314.16(B) provide?", back: "The volume in cubic inches each conductor size contributes to box-fill. Key values: 14 AWG = 2.0 cu in; 12 AWG = 2.25 cu in; 10 AWG = 2.5 cu in.", necReference: "314.16(B)", certificationLevel: "Apprentice"),
+        FlashcardRecord(id: "nec-tbl-003", front: "What is the conduit fill percentage for three or more conductors per Chapter 9, Table 1?", back: "40% of the internal cross-sectional area. (One conductor = 53%; two = 31%; three or more = 40%.)", necReference: "Chapter 9, Table 1", certificationLevel: "Journeyman"),
+        FlashcardRecord(id: "nec-tbl-004", front: "Which table in the NEC do you use to size the grounding electrode conductor (GEC) based on service-entrance conductor size?", back: "Table 250.66. For example, 2/0 AWG copper service conductors → minimum 4 AWG copper GEC.", necReference: "250.66", certificationLevel: "Journeyman"),
+        FlashcardRecord(id: "nec-tbl-005", front: "What general lighting volt-ampere per square foot value does Table 220.12 assign to dwelling units?", back: "3 VA per square foot. Offices = 3.5 VA/sq ft. Banks = 3.5 VA/sq ft. Hospitals = 2 VA/sq ft.", necReference: "220.12", certificationLevel: "Journeyman"),
+        FlashcardRecord(id: "nec-tbl-006", front: "Table 220.42 applies demand factors to general lighting loads. What factor applies to the first 3,000 VA?", back: "100%. The next 117,000 VA is at 35%. Anything above 120,000 VA is at 25%.", necReference: "220.42", certificationLevel: "Journeyman"),
+        FlashcardRecord(id: "nec-tbl-007", front: "Which ampacity adjustment factor does Table 310.15(C)(1) require for 4–6 current-carrying conductors in a raceway?", back: "80% (multiply the Table 310.16 ampacity by 0.80). 7–9 conductors = 70%; 10–20 = 50%.", necReference: "310.15(C)(1)", certificationLevel: "Journeyman"),
+        FlashcardRecord(id: "nec-tbl-008", front: "Which NEC table lists full-load currents for single-phase AC motors used in load calculations?", back: "Table 430.248. (DC motors = 430.247; two-phase = 430.249; three-phase = 430.250.)", necReference: "430.248", certificationLevel: "Master"),
+        FlashcardRecord(id: "nec-tbl-009", front: "Table 310.15(B)(1) provides temperature correction factors. If the ambient temperature is 40°C and the conductor is rated for 75°C, what is the correction factor?", back: "0.88 — multiply Table 310.16 ampacity by 0.88 when ambient exceeds 30°C and conductor is 75°C-rated.", necReference: "310.15(B)(1)", certificationLevel: "Journeyman"),
+        FlashcardRecord(id: "nec-tbl-010", front: "What is the maximum percentage fill for a single conductor in a conduit per Chapter 9, Table 1?", back: "53% of the conduit's interior cross-sectional area. This applies when only one conductor is pulled.", necReference: "Chapter 9, Table 1", certificationLevel: "Apprentice"),
+        FlashcardRecord(id: "nec-tbl-011", front: "Which NEC table gives maximum motor short-circuit and ground-fault protection percentages?", back: "Table 430.52. It lists maximum overcurrent protection (as a percent of motor FLA) for inverse-time breakers, fuses, and other devices by motor type.", necReference: "430.52", certificationLevel: "Master"),
+        FlashcardRecord(id: "nec-tbl-012", front: "What does Annex D of the NEC contain?", back: "Informative examples showing step-by-step load calculations for dwelling units, multi-family buildings, and commercial occupancies. Not code — but critical for understanding the calculation sequence.", necReference: "Annex D", certificationLevel: "Master")
+    ]
+
+    // MARK: - Exam Strategy Module (Code Navigation Engine)
+
+    static let examStrategyModuleId = UUID(uuidString: "EAAA0000-0000-0000-0000-000000000001")!
+
+    static let examStrategyModule: WWModule = {
+        let moduleId = examStrategyModuleId
+        let lessons = examStrategyLessons(moduleId: moduleId)
+        return WWModule(
+            id: moduleId,
+            title: "Exam Strategy & Code Navigation",
+            description: "Systematic techniques for decoding exam questions, navigating the NEC index, and executing under time pressure.",
+            lessonCount: lessons.count,
+            estimatedMinutes: lessons.reduce(0) { $0 + $1.estimatedMinutes },
+            topicTags: ["exam-strategy", "code-navigation", "test-taking"],
+            progress: 0.0,
+            lessons: lessons
+        )
+    }()
+
+    private static func examStrategyLessons(moduleId: UUID) -> [WWLesson] {
+        [
+            WWLesson(
+                id: UUID(uuidString: "EAAA0001-0000-0000-0000-000000000001")!,
+                moduleId: moduleId,
+                title: "How Exam Questions Are Designed",
+                topic: "Exam Strategy",
+                estimatedMinutes: 10,
+                status: .notStarted,
+                completionPercentage: 0.0,
+                sections: [
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0001-0000-0000-000000000001")!, heading: "Learning objective", body: "Understand how electrician licensing exam questions are structured so you can decode them faster and avoid common traps.", type: .callout),
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0002-0000-0000-000000000001")!, heading: "The three layers of every exam question", body: "Every licensing question has three components: the stem (the scenario), the modifier (a key word that changes the answer), and the choices (usually one correct, two plausible distractors, one clearly wrong). Most students miss questions not because they don't know the material, but because they misread the modifier.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0003-0000-0000-000000000001")!, heading: "High-value modifiers to watch", body: "Words like 'minimum', 'maximum', 'not permitted', 'required', 'shall', 'recommended', and 'except' flip the meaning of a question. A question asking for the 'minimum conductor size' and the 'maximum overcurrent device rating' require completely different answers — but use the same code table.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0004-0000-0000-000000000001")!, heading: "Exam trap", body: "Watch for questions with 'EXCEPT' in capital letters — they reverse the answer. 'All of the following require GFCI protection EXCEPT...' means you must find the one location that does NOT require GFCI, not the ones that do.", type: .examTrap),
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0005-0000-0000-000000000001")!, heading: "Real-world knowledge vs. exam knowledge", body: "Your field experience can actually hurt you on an exam. Exam questions are written strictly from the NEC text — not how things are done in practice. When in doubt, trust the code, not the field habit.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0006-0000-0000-000000000001")!, heading: "Key Takeaways", body: "Key Takeaways", type: .heading),
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0007-0000-0000-000000000001")!, heading: nil, body: "Read every word — modifier words like 'minimum', 'maximum', 'except', and 'not' are the most important words in the question.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0008-0000-0000-000000000001")!, heading: nil, body: "Eliminate clearly wrong answers first, then choose between the remaining plausible ones.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0001-0009-0000-0000-000000000001")!, heading: nil, body: "Answer from the NEC, not from field experience — they can differ.", type: .bullet)
+                ],
+                necReferences: []
+            ),
+            WWLesson(
+                id: UUID(uuidString: "EAAA0002-0000-0000-0000-000000000001")!,
+                moduleId: moduleId,
+                title: "The 5-Step Code Navigation Process",
+                topic: "Exam Strategy",
+                estimatedMinutes: 12,
+                status: .notStarted,
+                completionPercentage: 0.0,
+                sections: [
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0001-0000-0000-000000000001")!, heading: "Learning objective", body: "Master the five-step systematic process for finding the correct NEC answer quickly and confidently under exam conditions.", type: .callout),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0002-0000-0000-000000000001")!, heading: "Step 1: Input — Read the question correctly", body: "Read the entire question before looking at the choices. Identify: What type of occupancy? What voltage? What kind of load? What is being asked — size, location, protection type? Rushing through the question is the single most common cause of wrong answers.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0003-0000-0000-000000000001")!, heading: "Step 2: Filter — Identify keywords, ignore traps", body: "Pull out the key technical terms from the question: occupancy type, conductor size, circuit type, voltage rating. Cross out the noise — irrelevant details exam writers add to slow you down. Key terms point directly to the NEC article you need.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0004-0000-0000-000000000001")!, heading: "Step 3: Route — Navigate to the correct NEC article", body: "Use the NEC index to route from your key terms to the right article. The index is alphabetical — look up the noun (conductor, receptacle, GFCI, motor) not the adjective. Memorize the 10 most-tested articles by number: 210, 220, 230, 240, 250, 300, 310, 314, 408, 430.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0005-0000-0000-000000000001")!, heading: "Step 4: Process — Apply the specific code rule", body: "Once at the correct article, read the applicable section carefully. Look for exceptions — they are often where the correct answer lives. Note whether the rule says 'shall' (mandatory) or 'should' (recommendation). Apply any required calculations or table lookups.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0006-0000-0000-000000000001")!, heading: "Step 5: Output — Confirm with calculation or table", body: "Verify your answer against the choices. If it is a calculation, show each step mentally: formula → numbers → result → closest answer. If it is a code lookup, verify the exact section applies to the exact conditions in the question.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0007-0000-0000-000000000001")!, heading: "NEC / code relevance", body: "This process applies to every question type — code lookup, calculation, and application. The examiner designed the wrong answers to match common errors in each step. Systematically following all five steps eliminates most traps.", type: .necCallout),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0008-0000-0000-000000000001")!, heading: "Key Takeaways", body: "Key Takeaways", type: .heading),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0009-0000-0000-000000000001")!, heading: nil, body: "Input → Filter → Route → Process → Output. Use this exact sequence on every question.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0010-0000-0000-000000000001")!, heading: nil, body: "The NEC index is your fastest route to the right article. Look up the noun, not the description.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0002-0011-0000-0000-000000000001")!, heading: nil, body: "Always verify: Does this code section apply to this specific occupancy, voltage, and situation?", type: .bullet)
+                ],
+                necReferences: []
+            ),
+            WWLesson(
+                id: UUID(uuidString: "EAAA0003-0000-0000-0000-000000000001")!,
+                moduleId: moduleId,
+                title: "Decoding Exam Language",
+                topic: "Exam Strategy",
+                estimatedMinutes: 10,
+                status: .notStarted,
+                completionPercentage: 0.0,
+                sections: [
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0001-0000-0000-000000000001")!, heading: "Learning objective", body: "Learn to recognize exam language patterns — the specific vocabulary exam writers use — so you can extract the right answer faster.", type: .callout),
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0002-0000-0000-000000000001")!, heading: "Shall vs. Should vs. Permitted", body: "'Shall' = mandatory requirement in the NEC. 'Should' = recommendation only (often in informational notes). 'Permitted' or 'allowed' = an option, not a requirement. Exam questions test whether you know the difference. 'The voltage drop shall not exceed...' is a different question than 'The voltage drop is recommended not to exceed...'", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0003-0000-0000-000000000001")!, heading: "Minimum vs. Maximum", body: "Minimum conductor size — find the smallest size that meets the rule. Maximum overcurrent protection — find the largest device that is still allowed. These answers are different. In calculations: minimum ampacity means ≥ the calculated value. Maximum device means ≤ the allowed rating.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0004-0000-0000-000000000001")!, heading: "Continuous vs. noncontinuous loads", body: "A continuous load is one expected to operate for 3 hours or more. The code requires overcurrent devices and conductors to be sized at 125% of continuous loads. A noncontinuous load uses 100%. Missing this distinction is one of the most common calculation errors on journeyman and master exams.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0005-0000-0000-000000000001")!, heading: "Exam trap", body: "Questions about '125%' are almost always about continuous loads. Questions that don't mention 'continuous' usually use 100%. Never apply the 125% factor unless the question says 'continuous' or describes a load running 3 or more hours.", type: .examTrap),
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0006-0000-0000-000000000001")!, heading: "Key Takeaways", body: "Key Takeaways", type: .heading),
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0007-0000-0000-000000000001")!, heading: nil, body: "'Shall' is mandatory. 'Should' is a recommendation. Know which one you're looking at before answering.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0008-0000-0000-000000000001")!, heading: nil, body: "Minimum and maximum require opposite actions — confirm which one is asked.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0003-0009-0000-0000-000000000001")!, heading: nil, body: "125% applies to continuous loads (3+ hours). 100% applies to noncontinuous loads.", type: .bullet)
+                ],
+                necReferences: []
+            ),
+            WWLesson(
+                id: UUID(uuidString: "EAAA0004-0000-0000-0000-000000000001")!,
+                moduleId: moduleId,
+                title: "NEC Index Navigation Mastery",
+                topic: "Exam Strategy",
+                estimatedMinutes: 12,
+                status: .notStarted,
+                completionPercentage: 0.0,
+                sections: [
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0001-0000-0000-000000000001")!, heading: "Learning objective", body: "Develop systematic NEC index lookup skills so you can locate any code requirement within 30 seconds during an open-book exam.", type: .callout),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0002-0000-0000-000000000001")!, heading: "The index is your fastest tool", body: "Most exam candidates underuse the NEC index. The index maps keywords to article and section numbers — which is exactly what you need when a question describes a scenario you can't immediately place. Practice looking up 5 to 10 index terms per study session.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0003-0000-0000-000000000001")!, heading: "Look up the noun, not the description", body: "Index entries are organized by the subject noun. 'GFCI protection for bathrooms' → look up 'Ground-fault circuit interrupters' or 'Receptacles, GFCI.' Not 'protection.' Not 'bathroom.' The noun is the anchor. Practice saying: What is the thing being protected or sized?", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0004-0000-0000-000000000001")!, heading: "Know the 10 most-tested articles by memory", body: "You should navigate to these articles by article number without using the index: 100 (Definitions), 110 (Requirements), 210 (Branch Circuits), 220 (Load Calculations), 230 (Services), 240 (Overcurrent Protection), 250 (Grounding & Bonding), 310 (Conductors), 314 (Boxes), 430 (Motors). These ten cover roughly 70% of exam questions.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0005-0000-0000-000000000001")!, heading: "NEC code hierarchy — 90.3", body: "Chapters 1–4 are general rules. Chapters 5–7 modify or supplement those rules for special occupancies, equipment, and conditions. Chapter 8 (communications) largely stands alone. When a Chapter 5 rule addresses the same situation as a Chapter 2 rule, Chapter 5 governs.", type: .necCallout),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0006-0000-0000-000000000001")!, heading: "Practice index runs", body: "Time yourself looking up each of these in the NEC index: 'Ampacity of conductors', 'Box fill', 'GFCI, dwelling units', 'Grounding electrode conductor, sizing', 'Motor, branch-circuit conductors'. Get each under 30 seconds. This is a trainable skill.", type: .callout),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0007-0000-0000-000000000001")!, heading: "Key Takeaways", body: "Key Takeaways", type: .heading),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0008-0000-0000-000000000001")!, heading: nil, body: "Look up the noun, not the description — the index is organized by subject.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0009-0000-0000-000000000001")!, heading: nil, body: "Memorize article numbers for the 10 most-tested topics to skip the index entirely.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0004-0010-0000-0000-000000000001")!, heading: nil, body: "Chapter 5–7 rules modify Chapter 1–4 rules. Always check if a special condition applies.", type: .bullet)
+                ],
+                necReferences: [
+                    NECReference(id: UUID(uuidString: "EAAA0004-NEC1-0000-0000-000000000001")!, code: "90.3", title: "Code Arrangement", summary: "Chapters 1–4 are general; Chapters 5–7 supplement or modify them for special conditions.", expanded: nil, edition: "2023")
+                ]
+            ),
+            WWLesson(
+                id: UUID(uuidString: "EAAA0005-0000-0000-0000-000000000001")!,
+                moduleId: moduleId,
+                title: "Exam Execution: Time & Pressure Management",
+                topic: "Exam Strategy",
+                estimatedMinutes: 10,
+                status: .notStarted,
+                completionPercentage: 0.0,
+                sections: [
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0001-0000-0000-000000000001")!, heading: "Learning objective", body: "Build the time-management and mental strategies needed to perform under the pressure of a real proctored licensing exam.", type: .callout),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0002-0000-0000-000000000001")!, heading: "Know your time budget", body: "Most journeyman exams run 3–4 hours for 80–100 questions. That is roughly 2 minutes per question. Master exams are similar. Calculate your personal budget before exam day: total minutes ÷ question count = your target per question. If you exceed your budget on a question, mark it and move on.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0003-0000-0000-000000000001")!, heading: "The three-pass strategy", body: "Pass 1: Answer every question you know immediately (under 60 seconds). Pass 2: Return to questions you skipped and work through them with the code. Pass 3: Use remaining time on flagged questions and guess on anything you cannot solve. Never leave an answer blank — there is no penalty for wrong answers on most state exams.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0004-0000-0000-000000000001")!, heading: "For calculation questions", body: "Write out each step even on scratch paper: identify the formula, plug in numbers, calculate, then match to the choices. Never try to do multi-step calculations mentally under pressure — errors compound. If your answer is not among the choices, recheck one step at a time rather than starting over.", type: .paragraph),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0005-0000-0000-000000000001")!, heading: "Exam trap", body: "If two answers seem correct and you cannot decide, choose the one that involves fewer exceptions. The NEC's general rules are usually the right answer. Exceptions require additional conditions that the question may not specify.", type: .examTrap),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0006-0000-0000-000000000001")!, heading: "State-specific readiness", body: "Your state may use a different NEC edition (2017, 2020, or 2023). Know which edition your exam tests — the NEC lookup section in WattWise shows your state's adopted edition. Article numbers are the same across editions, but specific requirements can differ.", type: .necCallout),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0007-0000-0000-000000000001")!, heading: "Key Takeaways", body: "Key Takeaways", type: .heading),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0008-0000-0000-000000000001")!, heading: nil, body: "Know your time budget per question before entering the exam room.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0009-0000-0000-000000000001")!, heading: nil, body: "Use three passes: quick wins first, code lookup second, guesses last.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0010-0000-0000-000000000001")!, heading: nil, body: "Write out calculation steps. Never do multi-step math in your head under pressure.", type: .bullet),
+                    LessonSection(id: UUID(uuidString: "EAAA0005-0011-0000-0000-000000000001")!, heading: nil, body: "Know which NEC edition your state uses — check the NEC tab in WattWise.", type: .bullet)
+                ],
+                necReferences: []
+            )
+        ]
+    }
+
     // MARK: - Tutor Responses
 
     static func tutorResponse(for message: String) -> TutorMessage {

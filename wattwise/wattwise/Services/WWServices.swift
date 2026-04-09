@@ -154,11 +154,18 @@ protocol ContentServiceProtocol: AnyObject {
 final class MockContentService: ContentServiceProtocol {
     func fetchModules() async throws -> [WWModule] {
         try await Task.sleep(for: .milliseconds(600))
-        return try WattWiseContentRuntimeAdapter.loadModules()
+        var modules = try WattWiseContentRuntimeAdapter.loadModules()
+        // Append the Exam Strategy module (Code Navigation Engine)
+        modules.append(MockData.examStrategyModule)
+        return modules
     }
 
     func fetchLesson(id: UUID) async throws -> WWLesson {
         try await Task.sleep(for: .milliseconds(400))
+        // Check exam strategy module first
+        if let lesson = MockData.examStrategyModule.lessons.first(where: { $0.id == id }) {
+            return lesson
+        }
         return try WattWiseContentRuntimeAdapter.loadLesson(id: id)
     }
 
@@ -1224,6 +1231,191 @@ private enum CuratedPracticeQuestionBank {
             difficultyLevel: "Hard"
         ).model
     ]
+
+    // MARK: - Calculation Drill Questions
+    // All questions require actual arithmetic — formulas, tables, and step-by-step math.
+    static let calculationDrillQuestions: [QuizQuestion] = [
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-001",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Ohm's Law",
+            question: "A 240-volt circuit has a total resistance of 12 ohms. Using Ohm's Law (I = V ÷ R), what is the current in this circuit?",
+            choices: ["A": "10 amperes", "B": "20 amperes", "C": "24 amperes", "D": "2,880 amperes"],
+            correctChoice: "B",
+            explanation: "I = V ÷ R = 240 ÷ 12 = 20 amperes. Ohm's Law is the foundation of every electrical calculation. Always identify what you know (V and R here) and solve for the unknown.",
+            referenceCode: "Article 100",
+            difficultyLevel: "Easy"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-002",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Power Formula",
+            question: "A 120-volt circuit draws 15 amperes. Using P = V × I, what is the power consumed?",
+            choices: ["A": "135 watts", "B": "1,200 watts", "C": "1,800 watts", "D": "8 watts"],
+            correctChoice: "C",
+            explanation: "P = V × I = 120 × 15 = 1,800 watts (1.8 kW). The power formula P = V × I is used to size circuits and verify equipment requirements.",
+            referenceCode: "Article 100",
+            difficultyLevel: "Easy"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-003",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Continuous Load Sizing",
+            question: "A branch circuit serves a 20-ampere continuous load only. Per 210.20(A), what minimum overcurrent device rating is required? (125% rule)",
+            choices: ["A": "20 amperes", "B": "25 amperes", "C": "30 amperes", "D": "35 amperes"],
+            correctChoice: "B",
+            explanation: "20 A × 125% = 25 amperes minimum overcurrent device rating. For continuous loads, the overcurrent device must be rated at no less than 125% of the load per 210.20(A). The next standard size at or above 25 A is 25 A.",
+            referenceCode: "210.20(A)",
+            difficultyLevel: "Easy"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-004",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "General Lighting Load",
+            question: "A dwelling unit has 1,800 square feet of floor area. Using Table 220.12 (3 VA/sq ft), what is the general lighting load in VA before demand factors?",
+            choices: ["A": "3,600 VA", "B": "5,400 VA", "C": "6,000 VA", "D": "9,000 VA"],
+            correctChoice: "B",
+            explanation: "1,800 sq ft × 3 VA/sq ft = 5,400 VA. This is the raw general lighting load per Table 220.12, before applying demand factors from Table 220.42. Always start the standard dwelling calculation with this step.",
+            referenceCode: "220.12",
+            difficultyLevel: "Easy"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-005",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Small-Appliance Load",
+            question: "A dwelling unit has the minimum two small-appliance circuits required by 210.11(C)(1). Per Section 220.52(A), what is the total small-appliance load to add to the calculation?",
+            choices: ["A": "1,500 VA", "B": "2,500 VA", "C": "3,000 VA", "D": "4,000 VA"],
+            correctChoice: "C",
+            explanation: "Each small-appliance circuit counts as 1,500 VA per 220.52(A). Two circuits × 1,500 VA = 3,000 VA. This 3,000 VA is added to the general lighting load before applying Table 220.42 demand factors.",
+            referenceCode: "220.52(A)",
+            difficultyLevel: "Easy"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-006",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Demand Factors",
+            question: "A dwelling has a combined general lighting + small-appliance + laundry load of 9,000 VA. Applying Table 220.42 (100% for first 3,000 VA; 35% for the next), what is the demand load in VA?",
+            choices: ["A": "3,000 VA", "B": "5,100 VA", "C": "6,300 VA", "D": "9,000 VA"],
+            correctChoice: "B",
+            explanation: "First 3,000 VA × 100% = 3,000 VA. Remaining 6,000 VA × 35% = 2,100 VA. Total demand = 3,000 + 2,100 = 5,100 VA. Table 220.42 demand factors reduce the total load used for sizing the service — a critical step in any dwelling calculation.",
+            referenceCode: "220.42",
+            difficultyLevel: "Medium"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-007",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Box Fill",
+            question: "A metal box contains: 3 × 12 AWG conductors (2.25 cu in each), 1 device (counts as 2 conductors = 4.5 cu in), and 1 equipment grounding conductor (counts as 1 conductor = 2.25 cu in). What is the total box fill in cubic inches?",
+            choices: ["A": "9.0 cu in", "B": "11.25 cu in", "C": "13.5 cu in", "D": "15.75 cu in"],
+            correctChoice: "C",
+            explanation: "Conductors: 3 × 2.25 = 6.75 cu in. Device: 2 × 2.25 = 4.50 cu in. EGC: 1 × 2.25 = 2.25 cu in. Total = 6.75 + 4.50 + 2.25 = 13.5 cu in. Per Table 314.16(B) and 314.16(B)(4)-(5), the device counts double the largest conductor volume and all EGCs count as one conductor.",
+            referenceCode: "314.16(B)",
+            difficultyLevel: "Medium"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-008",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Conduit Fill",
+            question: "Three 12 AWG THHN conductors (each 0.0133 sq in cross-section) are installed in a conduit. The maximum fill for three or more conductors is 40%. A ½-inch EMT has an internal area of 0.122 sq in. Does this conduit comply with Chapter 9 fill limits?",
+            choices: ["A": "Yes — three conductors at 0.0399 sq in total is well under 40% of 0.122 sq in (0.0488 sq in)", "B": "No — three conductors at 0.0399 sq in exceeds 40% of 0.122 sq in", "C": "Yes — three conductors always comply with ½-inch EMT", "D": "Cannot be determined without knowing conductor insulation type"],
+            correctChoice: "A",
+            explanation: "Three conductors × 0.0133 sq in = 0.0399 sq in total. 40% of 0.122 sq in = 0.0488 sq in maximum. 0.0399 < 0.0488, so the installation complies. This is the standard conduit fill calculation sequence: multiply count × area, then compare to the allowed percentage of the raceway's interior area.",
+            referenceCode: "Chapter 9, Table 1",
+            difficultyLevel: "Medium"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-009",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Ampacity Adjustment",
+            question: "A 10 AWG THHN conductor in 90°C column of Table 310.16 has an ampacity of 40 amperes. Seven current-carrying conductors are in the same conduit, requiring a 70% adjustment factor per Table 310.15(C)(1). What is the adjusted ampacity?",
+            choices: ["A": "24 amperes", "B": "28 amperes", "C": "32 amperes", "D": "36 amperes"],
+            correctChoice: "B",
+            explanation: "40 A × 0.70 = 28 amperes adjusted ampacity. For 7 to 9 current-carrying conductors in a raceway, Table 310.15(C)(1) requires a 70% adjustment. After adjusting, compare to the termination temperature rating to determine the final allowable ampacity.",
+            referenceCode: "310.15(C)(1)",
+            difficultyLevel: "Medium"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-010",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "Motor Branch Circuit",
+            question: "A single-phase 240V motor has a nameplate FLA of 24 amperes. Per Section 430.22, what is the minimum conductor ampacity for the motor branch circuit?",
+            choices: ["A": "24 amperes", "B": "26 amperes", "C": "30 amperes", "D": "36 amperes"],
+            correctChoice: "C",
+            explanation: "430.22 requires motor branch-circuit conductors to have an ampacity of at least 125% of the motor FLA. 24 × 1.25 = 30 amperes minimum. This calculation is performed before checking applicable conductor ampacity tables.",
+            referenceCode: "430.22",
+            difficultyLevel: "Medium"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-011",
+            certificationLevel: "Master",
+            topicKey: "calculation-drill",
+            topicTitle: "Voltage Drop",
+            question: "A 120V, 20A circuit has a single-phase load 150 feet away. Using VD = (2 × K × I × D) ÷ CM, with K = 12.9 for copper and 12,900 CM for 12 AWG copper, what is the approximate voltage drop?",
+            choices: ["A": "2.4 volts", "B": "4.5 volts", "C": "5.9 volts", "D": "8.0 volts"],
+            correctChoice: "C",
+            explanation: "VD = (2 × 12.9 × 20 × 150) ÷ 12,900 = 77,400 ÷ 12,900 ≈ 6.0 volts (≈5.9V with exact K). At 120V, 6V represents a 5% drop — above the NEC 3% recommendation for branch circuits. Voltage drop calculations are among the most common master exam calculation problems.",
+            referenceCode: "210.19(A) Inf. Note",
+            difficultyLevel: "Hard"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-012",
+            certificationLevel: "Master",
+            topicKey: "calculation-drill",
+            topicTitle: "Service Load Calculation",
+            question: "A 2,400 sq ft dwelling has: general lighting load (3 VA/sq ft), two small-appliance circuits (1,500 VA each), one laundry circuit (1,500 VA), and a 5,000 VA electric range. After Table 220.42 demand factors (100% on first 3,000 VA; 35% on remainder), what is the total demand load before adding the range?",
+            choices: ["A": "6,045 VA", "B": "6,750 VA", "C": "7,200 VA", "D": "11,700 VA"],
+            correctChoice: "A",
+            explanation: "Step 1: Lighting = 2,400 × 3 = 7,200 VA. Step 2: Add two small-appliance circuits (3,000 VA) + laundry (1,500 VA) = 11,700 VA total before demand factors. Step 3: Apply Table 220.42 — first 3,000 VA × 100% = 3,000 VA; remaining 8,700 VA × 35% = 3,045 VA. Total demand load = 3,000 + 3,045 = 6,045 VA. The range is then added separately using Table 220.55 before sizing the service.",
+            referenceCode: "220.42",
+            difficultyLevel: "Hard"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-013",
+            certificationLevel: "Master",
+            topicKey: "calculation-drill",
+            topicTitle: "Motor Feeder",
+            question: "A feeder serves two motors: Motor A has a Table 430.250 FLA of 34 amperes and Motor B has a FLA of 22 amperes. Per Section 430.24, what is the minimum feeder conductor ampacity?",
+            choices: ["A": "56 amperes", "B": "64.5 amperes", "C": "70 amperes", "D": "75 amperes"],
+            correctChoice: "B",
+            explanation: "430.24: Feeder ampacity = 125% of the largest motor FLA + sum of all other motor FLAs. Motor A (largest): 34 × 1.25 = 42.5 A. Add Motor B: 42.5 + 22 = 64.5 A minimum conductor ampacity. Then select a conductor from Table 310.16 with ampacity at or above 64.5 A at the appropriate temperature rating — but the minimum calculated ampacity required by 430.24 is 64.5 A.",
+            referenceCode: "430.24",
+            difficultyLevel: "Hard"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-014",
+            certificationLevel: "Journeyman",
+            topicKey: "calculation-drill",
+            topicTitle: "GEC Sizing",
+            question: "A service has 2/0 AWG copper service-entrance conductors. Using Table 250.66, what is the minimum copper grounding electrode conductor (GEC) size?",
+            choices: ["A": "6 AWG", "B": "4 AWG", "C": "2 AWG", "D": "1/0 AWG"],
+            correctChoice: "B",
+            explanation: "Per Table 250.66, the minimum copper GEC for 2/0 AWG copper service-entrance conductors is 4 AWG. Table milestone summary: SE conductor 2 AWG or smaller → 8 AWG GEC; 1 AWG or 1/0 AWG → 6 AWG GEC; 2/0 AWG or 3/0 AWG → 4 AWG GEC; over 3/0 through 350 kcmil → 2 AWG GEC. Knowing the break points between size ranges is the key to answering Table 250.66 questions quickly.",
+            referenceCode: "250.66",
+            difficultyLevel: "Medium"
+        ).model,
+        SupplementalPracticeQuestionSeed(
+            id: "CALC-015",
+            certificationLevel: "Master",
+            topicKey: "calculation-drill",
+            topicTitle: "Optional Dwelling Calculation",
+            question: "A dwelling's first 10 kVA of total load is calculated at 100% under Section 220.82(B)(1). The remaining load above 10 kVA uses a 40% demand factor per 220.82(B)(2). If the total connected load is 28 kVA, what is the total demand load?",
+            choices: ["A": "16.2 kVA", "B": "17.2 kVA", "C": "20.0 kVA", "D": "22.4 kVA"],
+            correctChoice: "B",
+            explanation: "First 10 kVA × 100% = 10 kVA. Remaining: 28 − 10 = 18 kVA × 40% = 7.2 kVA. Total demand = 10 + 7.2 = 17.2 kVA. The optional method in 220.82 is often faster for dwelling services and is frequently tested on master exams as an alternative to the standard method.",
+            referenceCode: "220.82",
+            difficultyLevel: "Hard"
+        ).model
+    ]
 }
 
 final class MockQuizService: QuizServiceProtocol {
@@ -1238,6 +1430,24 @@ final class MockQuizService: QuizServiceProtocol {
 
     func generateQuiz(type: QuizType, topicTags: [String], examType: ExamType?) async throws -> WWQuiz {
         try await Task.sleep(for: .milliseconds(800))
+
+        // Calculation Drill: pull from the dedicated math-focused question bank
+        if type == .calculationDrill {
+            var pool = CuratedPracticeQuestionBank.calculationDrillQuestions
+            if let examType {
+                let filtered = pool.filter { certificationRank(for: $0) <= certificationRankCeiling(for: examType) }
+                if filtered.count >= 10 { pool = filtered }
+            }
+            pool = pool.shuffled()
+            let selected = Array(pool.prefix(type.questionCount))
+            guard selected.count >= min(type.questionCount, 5) else {
+                throw AppError.notFound("There are not enough calculation questions available yet.")
+            }
+            let quiz = WWQuiz(id: UUID(), type: type, questions: selected)
+            activeQuizzes[quiz.id] = quiz
+            return quiz
+        }
+
         let count = type.questionCount
         let focusTags = resolveFocusTags(for: type, explicitTags: topicTags)
         let pool = questionPool(for: examType)
@@ -1250,6 +1460,14 @@ final class MockQuizService: QuizServiceProtocol {
         let quiz = WWQuiz(id: UUID(), type: type, questions: questions)
         activeQuizzes[quiz.id] = quiz
         return quiz
+    }
+
+    private func certificationRankCeiling(for examType: ExamType) -> Int {
+        switch examType {
+        case .apprentice: return 1
+        case .journeyman: return 2
+        case .master: return 3
+        }
     }
 
     func submitQuiz(quizId: UUID, answers: [QuizAnswer]) async throws -> QuizResult {
