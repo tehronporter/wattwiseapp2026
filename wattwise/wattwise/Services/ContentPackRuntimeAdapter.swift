@@ -94,45 +94,62 @@ enum WattWiseContentRuntimeAdapter {
     }
 
     static func modules(from pack: WattWiseContentPack) throws -> [WWModule] {
-        let supportedCourses = pack.curriculumFramework.filter {
+        // Build module structure directly from lesson records (JSON has no curriculumFramework)
+        let supportedRecords = pack.fullLessonContent.filter {
             supportedCertificationLevels.contains($0.certificationLevel.lowercased())
         }
-        let lessonsByID = Dictionary(uniqueKeysWithValues: try pack.fullLessonContent.map { record in
-            (record.id, try makeLesson(record: record, pack: pack))
-        })
 
-        return try supportedCourses.flatMap { course in
-            try course.modules.map { module in
-                let lessonModels = try module.lessons.map { blueprint in
-                    guard let lesson = lessonsByID[blueprint.id] else {
-                        throw AppError.notFound("Missing lesson content for \(blueprint.id).")
-                    }
-                    return lesson
-                }
-
-                let estimatedMinutes = lessonModels.reduce(0) { $0 + $1.estimatedMinutes }
-                let progress = lessonModels.isEmpty
-                    ? 0.0
-                    : lessonModels.reduce(0) { $0 + $1.completionPercentage } / Double(lessonModels.count)
-
-                return WWModule(
-                    id: uuid(for: "module:\(module.id)"),
-                    title: module.moduleName,
-                    description: module.learningObjectives.joined(separator: " "),
-                    lessonCount: lessonModels.count,
-                    estimatedMinutes: estimatedMinutes,
-                    topicTags: moduleTags(module: module, course: course),
-                    progress: progress,
-                    lessons: lessonModels
-                )
+        // Group lessons by (certificationLevel + moduleName), preserving insertion order
+        var moduleOrder: [String] = []
+        var recordsByModule: [String: [LessonContentRecord]] = [:]
+        for record in supportedRecords {
+            let key = "\(record.certificationLevel.lowercased())|\(record.moduleName)"
+            if recordsByModule[key] == nil {
+                moduleOrder.append(key)
+                recordsByModule[key] = []
             }
+            recordsByModule[key]!.append(record)
+        }
+
+        return try moduleOrder.compactMap { key -> WWModule? in
+            guard let records = recordsByModule[key], !records.isEmpty else { return nil }
+            let first = records[0]
+            let moduleId = "module:\(first.certificationLevel.lowercased())-\(first.moduleName.lowercased().replacingOccurrences(of: " ", with: "-"))"
+
+            let lessonModels = try records.map { record in
+                try makeLessonFromRecord(record: record, moduleId: moduleId)
+            }
+
+            let estimatedMinutes = lessonModels.reduce(0) { $0 + $1.estimatedMinutes }
+            let progress = lessonModels.isEmpty
+                ? 0.0
+                : lessonModels.reduce(0.0) { $0 + $1.completionPercentage } / Double(lessonModels.count)
+
+            let certLevel = first.certificationLevel.lowercased()
+            let moduleSlug = first.moduleName
+                .lowercased()
+                .replacingOccurrences(of: "(", with: "")
+                .replacingOccurrences(of: ")", with: "")
+                .replacingOccurrences(of: " and ", with: "-")
+                .replacingOccurrences(of: " ", with: "-")
+            let tags = [certLevel, moduleSlug].filter { !$0.isEmpty }
+
+            return WWModule(
+                id: uuid(for: moduleId),
+                title: first.moduleName,
+                description: first.learningObjectives.first ?? first.moduleName,
+                lessonCount: lessonModels.count,
+                estimatedMinutes: estimatedMinutes,
+                topicTags: tags,
+                progress: progress,
+                lessons: lessonModels
+            )
         }
     }
 
     static func saveProgress(lessonId: UUID, completion: Double) throws {
         let pack = try WattWiseContentCatalog.loadFromBundle()
-        guard let record = pack.fullLessonContent.first(where: { uuid(for: "lesson:\($0.id)") == lessonId }),
-              let blueprint = lessonBlueprint(for: record.id, in: pack) else {
+        guard let record = pack.fullLessonContent.first(where: { uuid(for: "lesson:\($0.id)") == lessonId }) else {
             throw AppError.notFound("Lesson progress could not be saved because the lesson was not found.")
         }
 
@@ -149,9 +166,10 @@ enum WattWiseContentRuntimeAdapter {
         )
         persistProgress(progressByLesson)
 
+        let estimatedMinutes = estimateMinutes(for: record)
         let gainedMinutes = max(
             0,
-            Int(round((effectiveCompletion - existing.completion) * Double(max(blueprint.estimatedMinutes, 1))))
+            Int(round((effectiveCompletion - existing.completion) * Double(max(estimatedMinutes, 1))))
         )
         if gainedMinutes > 0 {
             var studyActivity = storedStudyActivity()
@@ -319,17 +337,16 @@ enum WattWiseContentRuntimeAdapter {
     }
 
     private static func lessonMap(from pack: WattWiseContentPack) -> [UUID: WWLesson] {
-        let lessons = (try? pack.fullLessonContent.map { try makeLesson(record: $0, pack: pack) }) ?? []
+        let lessons: [WWLesson] = pack.fullLessonContent.compactMap { record in
+            let moduleId = "module:\(record.certificationLevel.lowercased())-\(record.moduleName.lowercased().replacingOccurrences(of: " ", with: "-"))"
+            return try? makeLessonFromRecord(record: record, moduleId: moduleId)
+        }
         return Dictionary(uniqueKeysWithValues: lessons.map { ($0.id, $0) })
     }
 
-    private static func makeLesson(record: LessonContentRecord, pack: WattWiseContentPack) throws -> WWLesson {
-        guard let blueprint = lessonBlueprint(for: record.id, in: pack),
-              let module = moduleBlueprint(for: record.id, in: pack) else {
-            throw AppError.notFound("Unable to map lesson content \(record.id) to the curriculum framework.")
-        }
-
-        let moduleId = uuid(for: "module:\(module.id)")
+    // Primary lesson builder — derives all info directly from the lesson record.
+    private static func makeLessonFromRecord(record: LessonContentRecord, moduleId: String) throws -> WWLesson {
+        let moduleUUID = uuid(for: moduleId)
         let lessonId = uuid(for: "lesson:\(record.id)")
         let progress = progressState(for: record.id)
 
@@ -395,15 +412,22 @@ enum WattWiseContentRuntimeAdapter {
 
         return WWLesson(
             id: lessonId,
-            moduleId: moduleId,
+            moduleId: moduleUUID,
             title: record.lessonTitle,
-            topic: module.moduleName,
-            estimatedMinutes: blueprint.estimatedMinutes,
+            topic: record.moduleName,
+            estimatedMinutes: estimateMinutes(for: record),
             status: progress.status,
             completionPercentage: progress.completion,
             sections: sections,
             necReferences: necReferences
         )
+    }
+
+    // Estimate reading time from content length since JSON has no estimatedMinutes field.
+    private static func estimateMinutes(for record: LessonContentRecord) -> Int {
+        let wordCount = record.lessonContent.reduce(0) { $0 + $1.body.split(separator: " ").count }
+        let readingMinutes = max(5, wordCount / 200) // ~200 words/min
+        return min(readingMinutes, 30)
     }
 
     private static func allNECReferences(from pack: WattWiseContentPack) throws -> [NECReference] {
@@ -430,22 +454,6 @@ enum WattWiseContentRuntimeAdapter {
         }
     }
 
-    private static func lessonBlueprint(for lessonID: String, in pack: WattWiseContentPack) -> LessonBlueprint? {
-        pack.curriculumFramework
-            .flatMap(\.modules)
-            .flatMap(\.lessons)
-            .first(where: { $0.id == lessonID })
-    }
-
-    private static func moduleBlueprint(for lessonID: String, in pack: WattWiseContentPack) -> ModuleBlueprint? {
-        for course in pack.curriculumFramework {
-            for module in course.modules where module.lessons.contains(where: { $0.id == lessonID }) {
-                return module
-            }
-        }
-        return nil
-    }
-
     private static func inferredSectionType(for heading: String) -> LessonSection.SectionType {
         switch heading {
         case "Learning objective", "Practical example", "Exam insight":
@@ -458,25 +466,6 @@ enum WattWiseContentRuntimeAdapter {
         default:
             return .paragraph
         }
-    }
-
-    private static func moduleTags(module: ModuleBlueprint, course: CourseBlueprint) -> [String] {
-        let rawTags = [
-            course.certificationLevel.lowercased(),
-            module.moduleName
-                .lowercased()
-                .replacingOccurrences(of: "(", with: "")
-                .replacingOccurrences(of: ")", with: "")
-                .replacingOccurrences(of: " and ", with: "-")
-                .replacingOccurrences(of: " ", with: "-"),
-            module.learningObjectives.contains(where: { $0.localizedCaseInsensitiveContains("NEC") }) ? "nec" : nil
-        ]
-
-        var unique: [String] = []
-        for tag in rawTags.compactMap({ $0 }) where unique.contains(tag) == false {
-            unique.append(tag)
-        }
-        return unique
     }
 
     private static func progressState(for canonicalLessonID: String) -> (status: WWLesson.LessonStatus, completion: Double) {
