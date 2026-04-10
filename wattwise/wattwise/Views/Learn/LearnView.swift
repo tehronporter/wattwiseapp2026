@@ -2,6 +2,7 @@ import SwiftUI
 
 struct LearnView: View {
     @State private var vm = LearnViewModel()
+    @State private var usePathLayout: Bool = true
     @Environment(ServiceContainer.self) private var services
 
     var body: some View {
@@ -10,7 +11,11 @@ struct LearnView: View {
             case .idle, .loading:
                 LearnSkeletonView()
             case .loaded(let modules):
-                ModuleListView(modules: modules)
+                if usePathLayout {
+                    LearnPathView(modules: modules)
+                } else {
+                    ModuleListView(modules: modules)
+                }
             case .failed(let msg):
                 WWEmptyState(
                     icon: "wifi.slash",
@@ -25,6 +30,19 @@ struct LearnView: View {
         .navigationTitle("Learn")
         .navigationBarTitleDisplayMode(.large)
         .background(Color.wwBackground)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        usePathLayout.toggle()
+                    }
+                } label: {
+                    Image(systemName: usePathLayout ? "list.bullet" : "map")
+                        .font(.system(size: 15))
+                        .foregroundColor(.wwBlue)
+                }
+            }
+        }
         .task { await vm.load(services: services) }
         .refreshable { await vm.refresh(services: services) }
     }

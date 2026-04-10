@@ -387,6 +387,13 @@ final class LessonViewModel {
         isLoading || (lesson == nil && errorMessage == nil)
     }
 
+    /// Set to true after XP is awarded for first completion so we don't double-award.
+    var hasAwardedXPThisSession: Bool = false
+    /// The XP earned this session — consumed by the celebration overlay.
+    var sessionXPEarned: Int = 0
+    /// Set to true when the lesson crosses 100% for the first time this session.
+    var showCelebration: Bool = false
+
     func loadIfNeeded(lessonId: UUID, services: ServiceContainer) async {
         guard lesson == nil, errorMessage == nil, isLoading == false else { return }
         await load(lessonId: lessonId, services: services)
@@ -427,6 +434,14 @@ final class LessonViewModel {
         try? await services.content.saveProgress(lessonId: lesson.id, completion: effectiveProgress)
         // User studied today — cancel today's streak-protection alert.
         StudyNotificationScheduler.shared.cancelStreakProtectionForToday()
+
+        // Award XP on first-time completion (crossed 100% for the first time).
+        let wasAlreadyComplete = lesson.completionPercentage >= 1.0
+        if effectiveProgress >= 1.0 && !wasAlreadyComplete && !hasAwardedXPThisSession {
+            hasAwardedXPThisSession = true
+            let award = XPStore.shared.award(WWGamification.XP.lessonFirstComplete, source: .lessonComplete)
+            sessionXPEarned = award.earned
+        }
     }
 
     func markComplete() {
@@ -619,6 +634,11 @@ final class QuizViewModel {
                 fetchedResult.totalElapsedSeconds = totalElapsed
                 fetchedResult.questionTimesSeconds = timesSnapshot.isEmpty ? nil : timesSnapshot
             }
+            // Award XP based on quiz score
+            let xpAmount = XPStore.xpForQuiz(score: fetchedResult.score)
+            XPStore.shared.award(xpAmount, source: fetchedResult.passed ? .quizPassed : .quizAttempt)
+            fetchedResult.xpEarned = xpAmount
+
             result = fetchedResult
             if let result, result.quizAttemptId != nil {
                 PracticeHistoryStore.shared.recordAttempt(

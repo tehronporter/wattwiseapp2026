@@ -28,6 +28,7 @@ struct RootTabView: View {
     @State private var selectedTab: WWTab = .home
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
+    private let xpStore = XPStore.shared
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -42,6 +43,17 @@ struct RootTabView: View {
             }
         }
         .tint(.wwBlue)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if appVM.isAuthenticated {
+                WWStudyStatsBar(
+                    streakDays: appVM.currentUser?.streakDays ?? 0,
+                    totalXP: xpStore.totalXP,
+                    levelProgress: xpStore.progressToNextLevel,
+                    levelLabel: xpStore.levelLabel,
+                    currentLevel: xpStore.currentLevel
+                )
+            }
+        }
     }
 
     @ViewBuilder

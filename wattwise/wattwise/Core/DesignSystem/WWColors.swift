@@ -23,6 +23,11 @@ extension Color {
     static let wwError   = Color(hex: "#E5534B")
     static let wwWarning = Color(hex: "#F0A500")
 
+    // MARK: - Topic Accent (supplementary, for Learn path nodes)
+    static let wwTopicGreen  = Color(hex: "#2E8B57")   // grounding / bonding
+    static let wwTopicAmber  = Color(hex: "#B8860B")   // wiring methods / conduit
+    static let wwTopicPurple = Color(hex: "#7B3FA0")   // NEC / GFCI / code
+
     // MARK: - Hex initializer
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)

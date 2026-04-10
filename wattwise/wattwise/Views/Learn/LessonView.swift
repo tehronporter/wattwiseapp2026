@@ -10,6 +10,7 @@ struct LessonView: View {
     @State private var showModuleDetail = false
     @State private var showPaywall = false
     @State private var bookmarks = BookmarkStore.shared
+    @State private var showCelebration = false
 
     private var previewLessonID: UUID? {
         try? WattWiseContentRuntimeAdapter.previewLessonID()
@@ -117,6 +118,28 @@ struct LessonView: View {
         }
         .task { await vm.loadIfNeeded(lessonId: lessonId, services: services) }
         .onDisappear { Task { await vm.saveProgress(services: services) } }
+        .onChange(of: vm.scrollProgress) { _, newValue in
+            guard !showCelebration,
+                  let lesson = vm.lesson,
+                  lesson.completionPercentage < 1.0,
+                  !vm.hasAwardedXPThisSession,
+                  newValue >= 1.0 else { return }
+            Task {
+                await vm.saveProgress(services: services)
+                if vm.sessionXPEarned > 0 {
+                    showCelebration = true
+                }
+            }
+        }
+        .fullScreenCover(isPresented: $showCelebration) {
+            WWCelebrationOverlay(
+                headline: "Lesson Complete!",
+                xpEarned: vm.sessionXPEarned,
+                streakDays: appVM.currentUser?.streakDays ?? 0,
+                accuracyPercent: nil,
+                onContinue: { showCelebration = false }
+            )
+        }
     }
 }
 

@@ -74,6 +74,7 @@ struct WWUser: Codable, Identifiable {
     var streakDays: Int
     var isOnboardingComplete: Bool
     var examDate: Date? = nil
+    var totalXP: Int = 0
 
     static let guest = WWUser(
         id: UUID(),
@@ -322,6 +323,7 @@ struct QuizResult: Identifiable, Codable {
     var totalElapsedSeconds: Double? = nil         // overall session time
     var questionTimesSeconds: [String: Double]? = nil  // questionId.uuidString → seconds
 
+    var xpEarned: Int = 0
     var passed: Bool { score >= 0.7 }
     var percentage: Int { Int(score * 100) }
 

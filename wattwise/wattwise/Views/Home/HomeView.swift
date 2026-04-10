@@ -21,9 +21,6 @@ struct HomeView: View {
                         }
                     }
                     Spacer()
-                    if let summary = vm.loadState.value, summary.streakDays > 0 {
-                        StreakBadge(days: summary.streakDays)
-                    }
                 }
 
                 if let user = appVM.currentUser, let days = user.daysUntilExam {

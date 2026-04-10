@@ -1,10 +1,11 @@
 import SwiftUI
 
-// Container that manages the quiz flow: Loading → Active Quiz → Results
+// Container that manages the quiz flow: Loading → Active Quiz → Celebration → Results
 struct QuizContainerView: View {
     let quizType: QuizType
     @State private var vm = QuizViewModel()
     @State private var showPaywall = false
+    @State private var showCelebration = false
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
     @Environment(\.dismiss) private var dismiss
@@ -23,7 +24,7 @@ struct QuizContainerView: View {
                 } onSecondary: {
                     dismiss()
                 }
-            } else if let result = vm.result {
+            } else if let result = vm.result, !showCelebration {
                 QuizResultsView(result: result, quizType: quizType) {
                     vm.reset()
                     Task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
@@ -73,6 +74,21 @@ struct QuizContainerView: View {
                 .environment(appVM)
         }
         .task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
+        .onChange(of: vm.result) { _, newResult in
+            guard newResult != nil else { return }
+            showCelebration = true
+        }
+        .fullScreenCover(isPresented: $showCelebration) {
+            if let result = vm.result {
+                WWCelebrationOverlay(
+                    headline: result.passed ? "Quiz Complete!" : "Quiz Done!",
+                    xpEarned: result.xpEarned,
+                    streakDays: appVM.currentUser?.streakDays ?? 0,
+                    accuracyPercent: result.percentage,
+                    onContinue: { showCelebration = false }
+                )
+            }
+        }
     }
 }
 
@@ -85,6 +101,8 @@ private struct ActiveQuizView: View {
     @Environment(AppViewModel.self) private var appVM
     @State private var elapsedSeconds: Int = 0
     @State private var timer: Timer? = nil
+    @State private var showXPFloat: Bool = false
+    @State private var lastRevealedCorrect: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -131,23 +149,52 @@ private struct ActiveQuizView: View {
                             .lineSpacing(4)
 
                         // Answer choices
-                        VStack(spacing: WWSpacing.s) {
-                            ForEach(["A", "B", "C", "D"], id: \.self) { key in
-                                if let choice = question.choices[key] {
-                                    AnswerOption(
-                                        key: key,
-                                        text: choice,
-                                        selectedKey: selectedKey,
-                                        correctKey: revealed ? question.correctChoice : nil,
-                                        isLocked: revealed
-                                    ) {
-                                        guard !revealed else { return }
-                                        vm.selectAnswer(key)
-                                        withAnimation(.easeInOut(duration: 0.25)) {
-                                            vm.revealedQuestions.insert(question.id)
+                        ZStack(alignment: .topTrailing) {
+                            VStack(spacing: WWSpacing.s) {
+                                ForEach(["A", "B", "C", "D"], id: \.self) { key in
+                                    if let choice = question.choices[key] {
+                                        AnswerOption(
+                                            key: key,
+                                            text: choice,
+                                            selectedKey: selectedKey,
+                                            correctKey: revealed ? question.correctChoice : nil,
+                                            isLocked: revealed,
+                                            isShaking: !revealed && selectedKey == key
+                                        ) {
+                                            guard !revealed else { return }
+                                            vm.selectAnswer(key)
+                                            let isCorrect = key == question.correctChoice
+                                            lastRevealedCorrect = isCorrect
+                                            if isCorrect {
+                                                UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                                                withAnimation(.easeOut(duration: 0.5)) { showXPFloat = true }
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                                                    showXPFloat = false
+                                                }
+                                            } else {
+                                                UINotificationFeedbackGenerator().notificationOccurred(.error)
+                                            }
+                                            withAnimation(.easeInOut(duration: 0.25)) {
+                                                vm.revealedQuestions.insert(question.id)
+                                            }
                                         }
                                     }
                                 }
+                            }
+
+                            // Floating "+10 XP" badge on correct answer
+                            if showXPFloat {
+                                Text("+\(WWGamification.XP.quizAttempt) XP")
+                                    .font(WWFont.caption(.bold))
+                                    .foregroundColor(.wwSuccess)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 4)
+                                    .background(Color.wwSuccess.opacity(0.12))
+                                    .clipShape(Capsule())
+                                    .offset(y: showXPFloat ? -28 : 0)
+                                    .opacity(showXPFloat ? 1 : 0)
+                                    .animation(.easeOut(duration: 0.5), value: showXPFloat)
+                                    .allowsHitTesting(false)
                             }
                         }
 
@@ -312,6 +359,16 @@ private struct FeedbackPanel: View {
     }
 }
 
+// MARK: - Shake Effect Modifier
+
+private struct ShakeEffect: GeometryEffect {
+    var animatableData: CGFloat
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let bounce = sin(animatableData * .pi * 4) * 6
+        return ProjectionTransform(CGAffineTransform(translationX: bounce, y: 0))
+    }
+}
+
 // MARK: - Answer Option
 
 private struct AnswerOption: View {
@@ -320,7 +377,10 @@ private struct AnswerOption: View {
     let selectedKey: String?     // nil = nothing selected yet
     let correctKey: String?      // nil = not yet revealed
     let isLocked: Bool
+    var isShaking: Bool = false
     let action: () -> Void
+
+    @State private var shakeCount: CGFloat = 0
 
     private var isSelected: Bool { selectedKey == key }
     private var isCorrect: Bool { correctKey == key }
@@ -396,9 +456,16 @@ private struct AnswerOption: View {
                     .strokeBorder(borderColor, lineWidth: 1.5)
             )
             .animation(.easeInOut(duration: 0.2), value: correctKey)
+            .modifier(ShakeEffect(animatableData: shakeCount))
         }
         .buttonStyle(.plain)
         .disabled(isLocked)
+        .onChange(of: isShaking) { _, shaking in
+            guard shaking, isWrongSelected else { return }
+            withAnimation(.linear(duration: 0.35)) {
+                shakeCount += 1
+            }
+        }
     }
 }
 
