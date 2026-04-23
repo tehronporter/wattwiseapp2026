@@ -1451,6 +1451,12 @@ final class MockQuizService: QuizServiceProtocol {
     func generateQuiz(type: QuizType, topicTags: [String], examType: ExamType?) async throws -> WWQuiz {
         try await Task.sleep(for: .milliseconds(800))
 
+        if type == .fullPracticeExam {
+            let quiz = try generatePracticeExamQuiz(examType: examType)
+            activeQuizzes[quiz.id] = quiz
+            return quiz
+        }
+
         // Calculation Drill: pull from the dedicated math-focused question bank
         if type == .calculationDrill {
             var pool = CuratedPracticeQuestionBank.calculationDrillQuestions
@@ -1480,6 +1486,75 @@ final class MockQuizService: QuizServiceProtocol {
         let quiz = WWQuiz(id: UUID(), type: type, questions: questions)
         activeQuizzes[quiz.id] = quiz
         return quiz
+    }
+
+    private func generatePracticeExamQuiz(examType: ExamType?) throws -> WWQuiz {
+        let pack = try WattWiseContentCatalog.loadFromBundle()
+        let targetLevel = (examType ?? .apprentice).rawValue.lowercased()
+        let matchingBlueprints = pack.practiceExams.filter {
+            $0.certificationLevel.lowercased() == targetLevel
+        }
+
+        guard matchingBlueprints.isEmpty == false else {
+            throw AppError.notFound("No full practice exams are available for this certification level yet.")
+        }
+
+        // Deterministic rotation to avoid always showing the first blueprint.
+        let dayIndex = Int(Date().timeIntervalSince1970 / 86_400)
+        let blueprint = matchingBlueprints[abs(dayIndex) % matchingBlueprints.count]
+
+        let recordsByID = Dictionary(uniqueKeysWithValues: pack.questionBank.map { ($0.id, $0) })
+        let selectedRecords = blueprint.questionIds.compactMap { recordsByID[$0] }.filter {
+            $0.verification.publishStatus == .published
+        }
+
+        guard selectedRecords.count == blueprint.questionIds.count else {
+            throw AppError.notFound("This practice exam has unpublished or missing questions and cannot be loaded safely.")
+        }
+
+        let questions = selectedRecords.map { record in
+            let topicTag = record.topicCategory
+                .lowercased()
+                .replacingOccurrences(of: " and ", with: "-")
+                .replacingOccurrences(of: " ", with: "-")
+            return QuizQuestion(
+                id: WattWiseContentRuntimeAdapter.uuid(for: "question:\(record.id)"),
+                question: record.questionText,
+                choices: record.answerChoices,
+                correctChoice: record.correctAnswer,
+                explanation: record.explanation,
+                topics: [topicTag],
+                topicTitles: [record.topicCategory],
+                difficultyLevel: record.difficultyLevel,
+                referenceCode: record.necReference,
+                certificationLevel: record.certificationLevel,
+                jurisdictionScope: record.jurisdictionScope,
+                examProvider: record.examProvider,
+                licenseType: record.licenseType,
+                codeCycle: record.codeCycle,
+                sourceUrls: record.sourceUrls,
+                sourceAccessedOn: record.sourceAccessedOn,
+                examBlueprintTags: record.examBlueprintTags,
+                isCalculation: record.isCalculation,
+                isCodeLookup: record.isCodeLookup
+            )
+        }
+
+        return WWQuiz(
+            id: UUID(),
+            type: .fullPracticeExam,
+            questions: questions,
+            sessionMetadata: QuizSessionMetadata(
+                examBlueprintId: blueprint.id,
+                examTitle: blueprint.title,
+                timingMinutes: blueprint.timingMinutes,
+                jurisdictionCode: blueprint.jurisdictionCode,
+                codeCycle: blueprint.codeCycle,
+                examProvider: blueprint.examProvider,
+                licenseType: blueprint.licenseType,
+                passingScore: blueprint.passingScore
+            )
+        )
     }
 
     private func certificationRankCeiling(for examType: ExamType) -> Int {
@@ -1547,7 +1622,12 @@ final class MockQuizService: QuizServiceProtocol {
             results: results,
             weakTopics: weakTopicDetails.map(\.title),
             weakTopicDetails: weakTopicDetails,
-            completedAt: Date()
+            completedAt: Date(),
+            examBlueprintId: quiz.sessionMetadata?.examBlueprintId,
+            examTitle: quiz.sessionMetadata?.examTitle,
+            examTimingMinutes: quiz.sessionMetadata?.timingMinutes,
+            jurisdictionCode: quiz.sessionMetadata?.jurisdictionCode,
+            codeCycle: quiz.sessionMetadata?.codeCycle
         )
     }
 

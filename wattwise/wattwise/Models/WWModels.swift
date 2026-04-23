@@ -306,6 +306,12 @@ struct WWQuiz: Identifiable, Codable {
     let id: UUID
     var type: QuizType
     var questions: [QuizQuestion]
+    var sessionMetadata: QuizSessionMetadata? = nil
+
+    var timeLimitSeconds: Int? {
+        guard let minutes = sessionMetadata?.timingMinutes else { return nil }
+        return max(0, minutes * 60)
+    }
 }
 
 struct QuizQuestion: Identifiable, Codable {
@@ -319,6 +325,28 @@ struct QuizQuestion: Identifiable, Codable {
     var difficultyLevel: String? = nil
     var referenceCode: String? = nil
     var certificationLevel: String? = nil
+    var jurisdictionScope: String? = nil
+    var examProvider: String? = nil
+    var licenseType: String? = nil
+    var codeCycle: String? = nil
+    var sourceUrls: [String] = []
+    var sourceAccessedOn: String? = nil
+    var examBlueprintTags: [String] = []
+    var isCalculation: Bool = false
+    var isCodeLookup: Bool = false
+    var stateCode: String? = nil
+    var isStateSpecific: Bool = false
+}
+
+struct QuizSessionMetadata: Codable {
+    var examBlueprintId: String?
+    var examTitle: String?
+    var timingMinutes: Int?
+    var jurisdictionCode: String?
+    var codeCycle: String?
+    var examProvider: String?
+    var licenseType: String?
+    var passingScore: Int?
 }
 
 struct QuizAnswer: Codable {
@@ -339,6 +367,11 @@ struct QuizResult: Identifiable, Codable {
     var completedAt: Date = Date()
     var totalElapsedSeconds: Double? = nil         // overall session time
     var questionTimesSeconds: [String: Double]? = nil  // questionId.uuidString → seconds
+    var examBlueprintId: String? = nil
+    var examTitle: String? = nil
+    var examTimingMinutes: Int? = nil
+    var jurisdictionCode: String? = nil
+    var codeCycle: String? = nil
 
     var xpEarned: Int = 0
     var passed: Bool { score >= 0.7 }

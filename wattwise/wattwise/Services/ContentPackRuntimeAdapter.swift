@@ -331,7 +331,16 @@ enum WattWiseContentRuntimeAdapter {
                 topicTitles: [record.topicCategory],
                 difficultyLevel: record.difficultyLevel,
                 referenceCode: record.necReference,
-                certificationLevel: record.certificationLevel
+                certificationLevel: record.certificationLevel,
+                jurisdictionScope: record.jurisdictionScope,
+                examProvider: record.examProvider,
+                licenseType: record.licenseType,
+                codeCycle: record.codeCycle,
+                sourceUrls: record.sourceUrls,
+                sourceAccessedOn: record.sourceAccessedOn,
+                examBlueprintTags: record.examBlueprintTags,
+                isCalculation: record.isCalculation,
+                isCodeLookup: record.isCodeLookup
             )
         }
     }

@@ -193,8 +193,8 @@ function collectLessonAudit(pack) {
       if (!(verification.source_urls || []).length) {
         issues.push("Published lesson is missing source_urls.");
       }
-      if ((verification.verification_confidence || 0) < 80) {
-        issues.push("Published lesson confidence is below 80.");
+      if ((verification.verification_confidence || 0) < 90) {
+        issues.push("Published lesson confidence is below 90.");
       }
       if (verification.freshness_status !== "fresh") {
         issues.push(`Published lesson freshness_status is ${verification.freshness_status}.`);
@@ -244,6 +244,15 @@ function collectQuestionAudit(pack) {
     if (!String(question.necReference || "").trim()) {
       issues.push("Question is missing a reference code.");
     }
+    if (!String(question.jurisdictionScope || "").trim()) {
+      issues.push("Question is missing jurisdictionScope metadata.");
+    }
+    if (!Array.isArray(question.examBlueprintTags) || question.examBlueprintTags.length === 0) {
+      issues.push("Question is missing examBlueprintTags metadata.");
+    }
+    if (!Array.isArray(question.sourceUrls) || question.sourceUrls.length === 0) {
+      issues.push("Question is missing sourceUrls metadata.");
+    }
     if (duplicatedQuestions.has(normalizeText(question.question))) {
       issues.push("Question stem is duplicated elsewhere in the pack.");
     }
@@ -258,8 +267,8 @@ function collectQuestionAudit(pack) {
       if (!(verification.source_urls || []).length) {
         issues.push("Published question is missing source_urls.");
       }
-      if ((verification.verification_confidence || 0) < 80) {
-        issues.push("Published question confidence is below 80.");
+      if ((verification.verification_confidence || 0) < 90) {
+        issues.push("Published question confidence is below 90.");
       }
       if (verification.freshness_status !== "fresh") {
         issues.push(`Published question freshness_status is ${verification.freshness_status}.`);
@@ -281,6 +290,9 @@ function collectQuestionAudit(pack) {
 function buildReadinessReport(pack) {
   const lessons = pack.fullLessons || [];
   const questions = pack.practiceQuestions || [];
+  const practiceExams = pack.practiceExams || [];
+  const jurisdictionProfiles = pack.jurisdictionProfiles || [];
+  const stateSpecificQuestions = pack.stateSpecificQuestions || [];
   const flashcards = pack.flashcards || [];
   const glossary = pack.glossary || [];
   const quickReferenceGuides = pack.quickReferenceGuides || [];
@@ -296,6 +308,11 @@ function buildReadinessReport(pack) {
   const repeatedLessonCopyWarnings = lessonAudit.flatMap((lesson) =>
     lesson.issues.filter((issue) => issue.includes("reuses body copy"))
   ).length;
+  const questionsByLevel = countBy(questions, (q) => String(q.certificationLevel || "").toLowerCase());
+  const examsByLevel = countBy(practiceExams, (e) => String(e.certificationLevel || "").toLowerCase());
+  const stateQuestionsByState = countBy(stateSpecificQuestions, (q) => String(q.stateCode || "").toUpperCase());
+  const lowStateCoverage = Object.entries(stateQuestionsByState).filter(([, count]) => count < 15).length;
+  const missingJurisdictions = Math.max(0, 51 - jurisdictionProfiles.length);
 
   const score = Math.max(
     0,
@@ -305,11 +322,15 @@ function buildReadinessReport(pack) {
         - questionFailures * 0.12
         - repeatedLessonCopyWarnings * 0.03
         - Math.max(0, 92 - lessons.length) * 0.4
-        - Math.max(0, 460 - questions.length) * 0.05
+        - Math.max(0, 1200 - questions.length) * 0.05
+        - Math.max(0, 15 - practiceExams.length) * 2.5
+        - missingJurisdictions * 0.8
+        - Math.max(0, 1000 - stateSpecificQuestions.length) * 0.02
+        - lowStateCoverage * 1.5
         - (glossary.length === 0 ? 6 : 0)
         - (quickReferenceGuides.length === 0 ? 6 : 0)
         - (studyPlans.length === 0 ? 5 : 0)
-        - (sources.length < 10 ? 10 : 0)
+        - (sources.length < 12 ? 10 : 0)
     )
   );
 
@@ -321,6 +342,9 @@ function buildReadinessReport(pack) {
     totals: {
       lessons: lessons.length,
       practice_questions: questions.length,
+      practice_exams: practiceExams.length,
+      jurisdiction_profiles: jurisdictionProfiles.length,
+      state_specific_questions: stateSpecificQuestions.length,
       flashcards: flashcards.length,
       glossary: glossary.length,
       quick_reference_guides: quickReferenceGuides.length,
@@ -330,20 +354,34 @@ function buildReadinessReport(pack) {
       published_questions: questionAudit.filter((question) => question.publish_status === "published").length,
     },
     grade_breakdown: {
-      curriculum_coverage: lessons.length === 92 ? 8 : 4,
+      curriculum_coverage: lessons.length === 92 ? 10 : 4,
       lesson_quality: Number((Math.max(0, 10 - lessonFailures / 18)).toFixed(1)),
-      quiz_quality: Number((Math.max(0, 10 - questionFailures / 35)).toFixed(1)),
-      source_provenance: sources.length >= 10 ? 7 : 2,
+      quiz_quality: Number((Math.max(0, 10 - questionFailures / 60)).toFixed(1)),
+      source_provenance: sources.length >= 12 ? 10 : 2,
+      exam_readiness: practiceExams.length >= 15 ? 10 : Number((practiceExams.length / 15 * 10).toFixed(1)),
+      state_readiness: jurisdictionProfiles.length >= 51 && stateSpecificQuestions.length >= 1000
+        ? 10
+        : Number((Math.min(jurisdictionProfiles.length / 51, stateSpecificQuestions.length / 1000) * 10).toFixed(1)),
       customer_readiness:
         lessonAudit.some((lesson) => lesson.publish_status === "published") ||
         questionAudit.some((question) => question.publish_status === "published")
-          ? 5
+          ? 8
           : 2,
     },
     critical_findings: [
       lessonFailures === 92 ? "All 92 lessons still fail production validation." : null,
       questionFailures > 0 ? `${questionFailures} practice questions fail production validation.` : null,
-      sources.length < 10 ? "Source coverage is too thin for customer-ready claims." : null,
+      questions.length < 1200 ? `Question bank is below target: ${questions.length}/1200.` : null,
+      practiceExams.length < 15 ? `Practice exam coverage is below target: ${practiceExams.length}/15.` : null,
+      jurisdictionProfiles.length < 51 ? `Jurisdiction profile coverage is below target: ${jurisdictionProfiles.length}/51.` : null,
+      stateSpecificQuestions.length < 1000 ? `State-specific question coverage is below target: ${stateSpecificQuestions.length}/1000.` : null,
+      (questionsByLevel.apprentice || 0) < 400 ? `Apprentice questions below target: ${questionsByLevel.apprentice || 0}/400.` : null,
+      (questionsByLevel.journeyman || 0) < 400 ? `Journeyman questions below target: ${questionsByLevel.journeyman || 0}/400.` : null,
+      (questionsByLevel.master || 0) < 400 ? `Master questions below target: ${questionsByLevel.master || 0}/400.` : null,
+      (examsByLevel.apprentice || 0) < 5 ? `Apprentice exams below target: ${examsByLevel.apprentice || 0}/5.` : null,
+      (examsByLevel.journeyman || 0) < 5 ? `Journeyman exams below target: ${examsByLevel.journeyman || 0}/5.` : null,
+      (examsByLevel.master || 0) < 5 ? `Master exams below target: ${examsByLevel.master || 0}/5.` : null,
+      sources.length < 12 ? "Source coverage is too thin for customer-ready claims." : null,
       repeatedLessonCopyWarnings > 0 ? `${repeatedLessonCopyWarnings} lesson sections still reuse body copy from elsewhere in the pack.` : null,
       glossary.length === 0 ? "Glossary is missing." : null,
       quickReferenceGuides.length === 0 ? "Quick-reference guides are missing." : null,
@@ -361,6 +399,9 @@ function buildReadinessReport(pack) {
     asset_coverage: {
       flashcards_per_lesson: Number((flashcards.length / Math.max(lessons.length, 1)).toFixed(2)),
       questions_per_lesson: Number((questions.length / Math.max(lessons.length, 1)).toFixed(2)),
+      practice_exams: practiceExams.length,
+      jurisdiction_profiles: jurisdictionProfiles.length,
+      state_specific_questions: stateSpecificQuestions.length,
       glossary_entries: glossary.length,
       quick_reference_guides: quickReferenceGuides.length,
       study_plans: studyPlans.length,

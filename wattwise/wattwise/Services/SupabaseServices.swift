@@ -253,7 +253,15 @@ final class SupabaseContentService: ContentServiceProtocol {
 // MARK: - Quiz Service (Edge Functions)
 
 final class SupabaseQuizService: QuizServiceProtocol {
+    private var activeLocalQuizzes: [UUID: WWQuiz] = [:]
+
     func generateQuiz(type: QuizType, topicTags: [String], examType: ExamType?) async throws -> WWQuiz {
+        if type == .fullPracticeExam {
+            let quiz = try buildLocalPracticeExam(examType: examType)
+            activeLocalQuizzes[quiz.id] = quiz
+            return quiz
+        }
+
         struct Request: Encodable {
             let quiz_type: String
             let topic_tags: [String]
@@ -296,6 +304,44 @@ final class SupabaseQuizService: QuizServiceProtocol {
     }
 
     func submitQuiz(quizId: UUID, answers: [QuizAnswer]) async throws -> QuizResult {
+        if let localQuiz = activeLocalQuizzes.removeValue(forKey: quizId) {
+            let answersByQuestion = Dictionary(uniqueKeysWithValues: answers.map { ($0.questionId, $0.selected) })
+            var correct = 0
+            let results = localQuiz.questions.map { question -> QuestionResult in
+                let selected = answersByQuestion[question.id]
+                let isCorrect = selected == question.correctChoice
+                if isCorrect { correct += 1 }
+                return QuestionResult(
+                    id: UUID(),
+                    questionId: question.id,
+                    question: question.question,
+                    userAnswer: selected.flatMap { question.choices[$0] } ?? "Not answered",
+                    correctAnswer: question.choices[question.correctChoice] ?? question.correctChoice,
+                    explanation: question.explanation,
+                    isCorrect: isCorrect,
+                    topics: question.topics,
+                    topicTitles: question.topicTitles,
+                    referenceCode: question.referenceCode
+                )
+            }
+
+            let score = localQuiz.questions.isEmpty ? 0 : Double(correct) / Double(localQuiz.questions.count)
+            return QuizResult(
+                id: UUID(),
+                quizId: quizId,
+                score: score,
+                correctCount: correct,
+                totalCount: localQuiz.questions.count,
+                results: results,
+                weakTopics: [],
+                examBlueprintId: localQuiz.sessionMetadata?.examBlueprintId,
+                examTitle: localQuiz.sessionMetadata?.examTitle,
+                examTimingMinutes: localQuiz.sessionMetadata?.timingMinutes,
+                jurisdictionCode: localQuiz.sessionMetadata?.jurisdictionCode,
+                codeCycle: localQuiz.sessionMetadata?.codeCycle
+            )
+        }
+
         struct Request: Encodable {
             let quiz_id: String
             let answers: [AnswerDTO]
@@ -354,6 +400,67 @@ final class SupabaseQuizService: QuizServiceProtocol {
             totalCount: r.total_count,
             results: results,
             weakTopics: r.weak_topics
+        )
+    }
+
+    private func buildLocalPracticeExam(examType: ExamType?) throws -> WWQuiz {
+        let pack = try WattWiseContentCatalog.loadFromBundle()
+        let targetLevel = (examType ?? .apprentice).rawValue.lowercased()
+        let matching = pack.practiceExams.filter { $0.certificationLevel.lowercased() == targetLevel }
+        guard matching.isEmpty == false else {
+            throw AppError.notFound("No full practice exam blueprint is published for this exam level.")
+        }
+
+        let dayIndex = Int(Date().timeIntervalSince1970 / 86_400)
+        let blueprint = matching[abs(dayIndex) % matching.count]
+        let recordsByID = Dictionary(uniqueKeysWithValues: pack.questionBank.map { ($0.id, $0) })
+        let records = blueprint.questionIds.compactMap { recordsByID[$0] }.filter { $0.verification.publishStatus == .published }
+        guard records.count == blueprint.questionIds.count else {
+            throw AppError.notFound("Practice exam blueprint references unavailable questions.")
+        }
+
+        let questions = records.map { record in
+            let topicTag = record.topicCategory
+                .lowercased()
+                .replacingOccurrences(of: " and ", with: "-")
+                .replacingOccurrences(of: " ", with: "-")
+            return QuizQuestion(
+                id: WattWiseContentRuntimeAdapter.uuid(for: "question:\(record.id)"),
+                question: record.questionText,
+                choices: record.answerChoices,
+                correctChoice: record.correctAnswer,
+                explanation: record.explanation,
+                topics: [topicTag],
+                topicTitles: [record.topicCategory],
+                difficultyLevel: record.difficultyLevel,
+                referenceCode: record.necReference,
+                certificationLevel: record.certificationLevel,
+                jurisdictionScope: record.jurisdictionScope,
+                examProvider: record.examProvider,
+                licenseType: record.licenseType,
+                codeCycle: record.codeCycle,
+                sourceUrls: record.sourceUrls,
+                sourceAccessedOn: record.sourceAccessedOn,
+                examBlueprintTags: record.examBlueprintTags,
+                isCalculation: record.isCalculation,
+                isCodeLookup: record.isCodeLookup
+            )
+        }
+
+        return WWQuiz(
+            id: UUID(),
+            type: .fullPracticeExam,
+            questions: questions,
+            sessionMetadata: QuizSessionMetadata(
+                examBlueprintId: blueprint.id,
+                examTitle: blueprint.title,
+                timingMinutes: blueprint.timingMinutes,
+                jurisdictionCode: blueprint.jurisdictionCode,
+                codeCycle: blueprint.codeCycle,
+                examProvider: blueprint.examProvider,
+                licenseType: blueprint.licenseType,
+                passingScore: blueprint.passingScore
+            )
         )
     }
 }

@@ -99,16 +99,18 @@ struct wattwiseTests {
 
         #expect(pack.metadata.title.contains("WattWise"))
         #expect(pack.curriculumFramework.count == 3)
-        #expect(pack.questionBank.isEmpty == false)
+        #expect(pack.questionBank.count >= 1200)
+        #expect(pack.practiceExams.count == 15)
+        #expect(pack.jurisdictionProfiles.count == 51)
+        #expect(pack.stateSpecificQuestions.count >= 1000)
     }
 
-    @Test func contentPackIsBlockedByAutomatedValidationUntilVerified() throws {
+    @Test func contentPackPassesAutomatedValidation() throws {
         let data = try Data(contentsOf: contentPackURL())
         let pack = try JSONDecoder().decode(WattWiseContentPack.self, from: data)
         let issues = ContentPackValidator.validate(pack)
 
-        #expect(issues.isEmpty == false)
-        #expect(issues.contains(where: { $0.contains("published without source URLs") || $0.contains("banned generic text") }))
+        #expect(issues.isEmpty)
     }
 
     @Test func contentPackProvidesFullLessonCoverage() throws {
@@ -136,12 +138,65 @@ struct wattwiseTests {
         })
     }
 
-    @Test func runtimeAdapterHidesUnpublishedContentByDefault() throws {
+    @Test func runtimeAdapterLoadsPublishedContentByDefault() throws {
         let data = try Data(contentsOf: contentPackURL())
         let pack = try JSONDecoder().decode(WattWiseContentPack.self, from: data)
         let modules = try WattWiseContentRuntimeAdapter.modules(from: pack)
 
-        #expect(modules.isEmpty)
+        #expect(modules.isEmpty == false)
+        #expect(modules.allSatisfy { $0.publishStatus == .published })
+    }
+
+    @Test func practiceExamBlueprintsAreCompleteAndSized() throws {
+        let data = try Data(contentsOf: contentPackURL())
+        let pack = try JSONDecoder().decode(WattWiseContentPack.self, from: data)
+        let byLevel = Dictionary(grouping: pack.practiceExams) { $0.certificationLevel.lowercased() }
+        let counts = [
+            "apprentice": 50,
+            "journeyman": 80,
+            "master": 80,
+        ]
+
+        #expect(pack.practiceExams.count == 15)
+        for (level, expectedCount) in counts {
+            let exams = byLevel[level] ?? []
+            #expect(exams.count == 5)
+            for exam in exams {
+                #expect(exam.questionIds.count == expectedCount)
+                #expect(exam.answerKey.count == expectedCount)
+                #expect(Set(exam.questionIds).count == expectedCount)
+            }
+        }
+    }
+
+    @Test func practiceExamOverlapStaysAtOrBelowTenPercent() throws {
+        let data = try Data(contentsOf: contentPackURL())
+        let pack = try JSONDecoder().decode(WattWiseContentPack.self, from: data)
+        let byLevel = Dictionary(grouping: pack.practiceExams) { $0.certificationLevel.lowercased() }
+
+        for exams in byLevel.values {
+            for i in 0..<exams.count {
+                for j in (i + 1)..<exams.count {
+                    let lhs = Set(exams[i].questionIds)
+                    let rhs = Set(exams[j].questionIds)
+                    let overlap = lhs.intersection(rhs).count
+                    let ratio = Double(overlap) / Double(max(1, min(lhs.count, rhs.count)))
+                    #expect(ratio <= 0.10)
+                }
+            }
+        }
+    }
+
+    @Test func jurisdictionCoverageIncludesAllStatesAndDC() throws {
+        let data = try Data(contentsOf: contentPackURL())
+        let pack = try JSONDecoder().decode(WattWiseContentPack.self, from: data)
+        let profileCodes = Set(pack.jurisdictionProfiles.map { $0.stateCode.uppercased() })
+        let stateQuestionCounts = Dictionary(grouping: pack.stateSpecificQuestions) { $0.stateCode.uppercased() }
+            .mapValues(\.count)
+
+        #expect(profileCodes.count == 51)
+        #expect(profileCodes.contains("DC"))
+        #expect(stateQuestionCounts.values.min() ?? 0 >= 15)
     }
 
     @Test func runtimeAdapterIncludesSectionNECReferencesInLessonMetadata() throws {

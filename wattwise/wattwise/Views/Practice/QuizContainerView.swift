@@ -102,6 +102,7 @@ private struct ActiveQuizView: View {
     @Environment(AppViewModel.self) private var appVM
     @State private var elapsedSeconds: Int = 0
     @State private var timer: Timer? = nil
+    @State private var hasAutoSubmitted: Bool = false
     @State private var showXPFloat: Bool = false
     @State private var lastRevealedCorrect: Bool = false
 
@@ -115,7 +116,10 @@ private struct ActiveQuizView: View {
                         .wwCaption()
                     Spacer()
                     if quizType.isTimedSession {
-                        TimerBadge(seconds: elapsedSeconds)
+                        TimerBadge(
+                            elapsedSeconds: elapsedSeconds,
+                            totalSeconds: vm.quiz?.timeLimitSeconds
+                        )
                     } else if let q = vm.currentQuestion {
                         QuestionMetaBadges(question: q)
                     }
@@ -128,8 +132,15 @@ private struct ActiveQuizView: View {
             .padding(.top, WWSpacing.s)
             .onAppear {
                 guard quizType.isTimedSession else { return }
+                let limit = vm.quiz?.timeLimitSeconds
                 timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                     elapsedSeconds += 1
+                    if let limit,
+                       elapsedSeconds >= limit,
+                       hasAutoSubmitted == false {
+                        hasAutoSubmitted = true
+                        Task { await vm.submit(services: services, appVM: appVM) }
+                    }
                 }
             }
             .onDisappear {
@@ -257,15 +268,27 @@ private struct ActiveQuizView: View {
 // MARK: - Timer Badge
 
 private struct TimerBadge: View {
-    let seconds: Int
+    let elapsedSeconds: Int
+    let totalSeconds: Int?
+
+    private var displaySeconds: Int {
+        if let totalSeconds {
+            return max(0, totalSeconds - elapsedSeconds)
+        }
+        return elapsedSeconds
+    }
 
     private var formatted: String {
-        let m = seconds / 60
-        let s = seconds % 60
+        let m = displaySeconds / 60
+        let s = displaySeconds % 60
         return String(format: "%d:%02d", m, s)
     }
 
-    private var isWarning: Bool { seconds >= 3600 } // over an hour, something's wrong
+    private var isWarning: Bool {
+        guard let totalSeconds else { return elapsedSeconds >= 3600 }
+        let remaining = max(0, totalSeconds - elapsedSeconds)
+        return remaining <= 600
+    }
 
     var body: some View {
         HStack(spacing: 4) {

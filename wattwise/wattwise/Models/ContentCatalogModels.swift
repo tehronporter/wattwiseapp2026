@@ -99,6 +99,8 @@ struct WattWiseContentPack: Codable {
     var fullLessons: [LessonContentRecord]
     var questionBank: [QuestionBankRecord]
     var practiceExams: [PracticeExamBlueprint]
+    var jurisdictionProfiles: [JurisdictionProfile]
+    var stateSpecificQuestions: [StateSpecificQuestionRecord]
     var flashcards: [FlashcardRecord]
     var quickReferenceGuides: [QuickReferenceGuide]
     var studyPlans: [StudyPlanRecord]
@@ -113,6 +115,8 @@ struct WattWiseContentPack: Codable {
         case fullLessons
         case questionBank = "practiceQuestions"
         case practiceExams
+        case jurisdictionProfiles
+        case stateSpecificQuestions
         case flashcards
         case quickReferenceGuides
         case studyPlans
@@ -128,6 +132,8 @@ struct WattWiseContentPack: Codable {
         fullLessons = try container.decode([LessonContentRecord].self, forKey: .fullLessons)
         questionBank = (try? container.decode([QuestionBankRecord].self, forKey: .questionBank)) ?? []
         practiceExams = (try? container.decode([PracticeExamBlueprint].self, forKey: .practiceExams)) ?? []
+        jurisdictionProfiles = (try? container.decode([JurisdictionProfile].self, forKey: .jurisdictionProfiles)) ?? []
+        stateSpecificQuestions = (try? container.decode([StateSpecificQuestionRecord].self, forKey: .stateSpecificQuestions)) ?? []
         flashcards = (try? container.decode([FlashcardRecord].self, forKey: .flashcards)) ?? []
         quickReferenceGuides = (try? container.decode([QuickReferenceGuide].self, forKey: .quickReferenceGuides)) ?? []
         studyPlans = (try? container.decode([StudyPlanRecord].self, forKey: .studyPlans)) ?? []
@@ -144,6 +150,8 @@ struct WattWiseContentPack: Codable {
         try container.encode(fullLessons, forKey: .fullLessons)
         try container.encode(questionBank, forKey: .questionBank)
         try container.encode(practiceExams, forKey: .practiceExams)
+        try container.encode(jurisdictionProfiles, forKey: .jurisdictionProfiles)
+        try container.encode(stateSpecificQuestions, forKey: .stateSpecificQuestions)
         try container.encode(flashcards, forKey: .flashcards)
         try container.encode(quickReferenceGuides, forKey: .quickReferenceGuides)
         try container.encode(studyPlans, forKey: .studyPlans)
@@ -334,6 +342,15 @@ struct QuestionBankRecord: Codable, Identifiable {
     var explanation: String
     var necReference: String
     var difficultyLevel: String
+    var jurisdictionScope: String
+    var examProvider: String?
+    var licenseType: String?
+    var codeCycle: String?
+    var sourceUrls: [String]
+    var sourceAccessedOn: String?
+    var examBlueprintTags: [String]
+    var isCalculation: Bool
+    var isCodeLookup: Bool
     var verification: ContentVerificationMetadata
 
     private enum CodingKeys: String, CodingKey {
@@ -346,6 +363,15 @@ struct QuestionBankRecord: Codable, Identifiable {
         case explanation
         case necReference
         case difficultyLevel = "difficulty"
+        case jurisdictionScope
+        case examProvider
+        case licenseType
+        case codeCycle
+        case sourceUrls
+        case sourceAccessedOn
+        case examBlueprintTags
+        case isCalculation
+        case isCodeLookup
         case verification
     }
 
@@ -360,6 +386,16 @@ struct QuestionBankRecord: Codable, Identifiable {
         necReference = (try? container.decode(String.self, forKey: .necReference)) ?? ""
         difficultyLevel = (try? container.decode(String.self, forKey: .difficultyLevel)) ?? "intermediate"
         verification = (try? container.decode(ContentVerificationMetadata.self, forKey: .verification)) ?? .draft
+        jurisdictionScope = (try? container.decode(String.self, forKey: .jurisdictionScope))
+            ?? verification.jurisdictionScope
+        examProvider = try container.decodeIfPresent(String.self, forKey: .examProvider)
+        licenseType = try container.decodeIfPresent(String.self, forKey: .licenseType)
+        codeCycle = try container.decodeIfPresent(String.self, forKey: .codeCycle)
+        sourceUrls = (try? container.decode([String].self, forKey: .sourceUrls)) ?? verification.sourceURLs
+        sourceAccessedOn = try container.decodeIfPresent(String.self, forKey: .sourceAccessedOn)
+        examBlueprintTags = (try? container.decode([String].self, forKey: .examBlueprintTags)) ?? []
+        isCalculation = (try? container.decode(Bool.self, forKey: .isCalculation)) ?? false
+        isCodeLookup = (try? container.decode(Bool.self, forKey: .isCodeLookup)) ?? false
 
         // Build answerChoices dict from individual optionA/B/C/D fields
         var choices: [String: String] = [:]
@@ -380,6 +416,15 @@ struct QuestionBankRecord: Codable, Identifiable {
         try container.encode(explanation, forKey: .explanation)
         try container.encode(necReference, forKey: .necReference)
         try container.encode(difficultyLevel, forKey: .difficultyLevel)
+        try container.encode(jurisdictionScope, forKey: .jurisdictionScope)
+        try container.encodeIfPresent(examProvider, forKey: .examProvider)
+        try container.encodeIfPresent(licenseType, forKey: .licenseType)
+        try container.encodeIfPresent(codeCycle, forKey: .codeCycle)
+        try container.encode(sourceUrls, forKey: .sourceUrls)
+        try container.encodeIfPresent(sourceAccessedOn, forKey: .sourceAccessedOn)
+        try container.encode(examBlueprintTags, forKey: .examBlueprintTags)
+        try container.encode(isCalculation, forKey: .isCalculation)
+        try container.encode(isCodeLookup, forKey: .isCodeLookup)
         try container.encode(verification, forKey: .verification)
         try container.encodeIfPresent(answerChoices["A"], forKey: .optionA)
         try container.encodeIfPresent(answerChoices["B"], forKey: .optionB)
@@ -396,8 +441,72 @@ struct PracticeExamBlueprint: Codable, Identifiable {
     var certificationLevel: String
     var structureNotes: String
     var timingMinutes: Int
+    var questionCount: Int?
+    var examProvider: String?
+    var licenseType: String?
+    var jurisdictionCode: String?
+    var codeCycle: String?
+    var passingScore: Int?
+    var blueprintTags: [String]
     var questionIds: [String]
     var answerKey: [String: String]
+    var verification: ContentVerificationMetadata?
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case certificationLevel
+        case structureNotes
+        case timingMinutes
+        case questionCount
+        case examProvider
+        case licenseType
+        case jurisdictionCode
+        case codeCycle
+        case passingScore
+        case blueprintTags
+        case questionIds
+        case answerKey
+        case verification
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        certificationLevel = try container.decode(String.self, forKey: .certificationLevel)
+        structureNotes = (try? container.decode(String.self, forKey: .structureNotes)) ?? ""
+        timingMinutes = (try? container.decode(Int.self, forKey: .timingMinutes)) ?? 0
+        questionCount = try container.decodeIfPresent(Int.self, forKey: .questionCount)
+        examProvider = try container.decodeIfPresent(String.self, forKey: .examProvider)
+        licenseType = try container.decodeIfPresent(String.self, forKey: .licenseType)
+        jurisdictionCode = try container.decodeIfPresent(String.self, forKey: .jurisdictionCode)
+        codeCycle = try container.decodeIfPresent(String.self, forKey: .codeCycle)
+        passingScore = try container.decodeIfPresent(Int.self, forKey: .passingScore)
+        blueprintTags = (try? container.decode([String].self, forKey: .blueprintTags)) ?? []
+        questionIds = (try? container.decode([String].self, forKey: .questionIds)) ?? []
+        answerKey = (try? container.decode([String: String].self, forKey: .answerKey)) ?? [:]
+        verification = try container.decodeIfPresent(ContentVerificationMetadata.self, forKey: .verification)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(title, forKey: .title)
+        try container.encode(certificationLevel, forKey: .certificationLevel)
+        try container.encode(structureNotes, forKey: .structureNotes)
+        try container.encode(timingMinutes, forKey: .timingMinutes)
+        try container.encodeIfPresent(questionCount, forKey: .questionCount)
+        try container.encodeIfPresent(examProvider, forKey: .examProvider)
+        try container.encodeIfPresent(licenseType, forKey: .licenseType)
+        try container.encodeIfPresent(jurisdictionCode, forKey: .jurisdictionCode)
+        try container.encodeIfPresent(codeCycle, forKey: .codeCycle)
+        try container.encodeIfPresent(passingScore, forKey: .passingScore)
+        try container.encode(blueprintTags, forKey: .blueprintTags)
+        try container.encode(questionIds, forKey: .questionIds)
+        try container.encode(answerKey, forKey: .answerKey)
+        try container.encodeIfPresent(verification, forKey: .verification)
+    }
 }
 
 // MARK: - Flashcards
@@ -452,6 +561,118 @@ struct JurisdictionResearchNote: Codable, Identifiable {
     var jurisdiction: String
     var summary: String
     var officialSource: String
+}
+
+struct JurisdictionProfile: Codable, Identifiable {
+    var id: String
+    var state: String
+    var stateCode: String
+    var examProvider: String
+    var licenseAuthority: String
+    var adoptedNECCycle: String
+    var stateAmendments: [String]
+    var examFormat: JurisdictionExamFormat
+    var licenseTypeMap: [String: String]
+    var referencesAllowed: String
+    var reciprocityNotes: String
+    var sourceUrls: [String]
+    var sourceAccessedOn: String
+    var lastVerifiedAt: String
+    var verification: ContentVerificationMetadata?
+}
+
+struct JurisdictionExamFormat: Codable {
+    var questionCount: Int
+    var timeLimitMinutes: Int
+    var passingScore: Int
+    var openBook: Bool
+}
+
+struct StateSpecificQuestionRecord: Codable, Identifiable {
+    var id: String
+    var stateCode: String
+    var state: String
+    var certificationLevel: String
+    var questionText: String
+    var answerChoices: [String: String]
+    var correctAnswer: String
+    var explanation: String
+    var questionType: String
+    var topicCategory: String
+    var examProvider: String?
+    var licenseType: String?
+    var codeCycle: String?
+    var sourceUrls: [String]
+    var sourceAccessedOn: String?
+    var verification: ContentVerificationMetadata
+
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case stateCode
+        case state
+        case certificationLevel
+        case questionText = "question"
+        case optionA, optionB, optionC, optionD
+        case correctAnswer
+        case explanation
+        case questionType
+        case topicCategory = "topic"
+        case examProvider
+        case licenseType
+        case codeCycle
+        case sourceUrls
+        case sourceAccessedOn
+        case verification
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        stateCode = try container.decode(String.self, forKey: .stateCode)
+        state = try container.decode(String.self, forKey: .state)
+        certificationLevel = try container.decode(String.self, forKey: .certificationLevel)
+        questionText = try container.decode(String.self, forKey: .questionText)
+        correctAnswer = try container.decode(String.self, forKey: .correctAnswer)
+        explanation = try container.decode(String.self, forKey: .explanation)
+        questionType = try container.decode(String.self, forKey: .questionType)
+        topicCategory = try container.decode(String.self, forKey: .topicCategory)
+        examProvider = try container.decodeIfPresent(String.self, forKey: .examProvider)
+        licenseType = try container.decodeIfPresent(String.self, forKey: .licenseType)
+        codeCycle = try container.decodeIfPresent(String.self, forKey: .codeCycle)
+        sourceUrls = (try? container.decode([String].self, forKey: .sourceUrls)) ?? []
+        sourceAccessedOn = try container.decodeIfPresent(String.self, forKey: .sourceAccessedOn)
+        verification = (try? container.decode(ContentVerificationMetadata.self, forKey: .verification)) ?? .draft
+
+        var choices: [String: String] = [:]
+        if let a = try? container.decode(String.self, forKey: .optionA) { choices["A"] = a }
+        if let b = try? container.decode(String.self, forKey: .optionB) { choices["B"] = b }
+        if let c = try? container.decode(String.self, forKey: .optionC) { choices["C"] = c }
+        if let d = try? container.decode(String.self, forKey: .optionD) { choices["D"] = d }
+        answerChoices = choices
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(stateCode, forKey: .stateCode)
+        try container.encode(state, forKey: .state)
+        try container.encode(certificationLevel, forKey: .certificationLevel)
+        try container.encode(questionText, forKey: .questionText)
+        try container.encode(correctAnswer, forKey: .correctAnswer)
+        try container.encode(explanation, forKey: .explanation)
+        try container.encode(questionType, forKey: .questionType)
+        try container.encode(topicCategory, forKey: .topicCategory)
+        try container.encodeIfPresent(examProvider, forKey: .examProvider)
+        try container.encodeIfPresent(licenseType, forKey: .licenseType)
+        try container.encodeIfPresent(codeCycle, forKey: .codeCycle)
+        try container.encode(sourceUrls, forKey: .sourceUrls)
+        try container.encodeIfPresent(sourceAccessedOn, forKey: .sourceAccessedOn)
+        try container.encode(verification, forKey: .verification)
+        try container.encodeIfPresent(answerChoices["A"], forKey: .optionA)
+        try container.encodeIfPresent(answerChoices["B"], forKey: .optionB)
+        try container.encodeIfPresent(answerChoices["C"], forKey: .optionC)
+        try container.encodeIfPresent(answerChoices["D"], forKey: .optionD)
+    }
 }
 
 // MARK: - Sources

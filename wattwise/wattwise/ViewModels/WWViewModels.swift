@@ -723,6 +723,11 @@ final class QuizViewModel {
 
         do {
             var fetchedResult = try await services.quiz.submitQuiz(quizId: quiz.id, answers: answerList)
+            fetchedResult.examBlueprintId = fetchedResult.examBlueprintId ?? quiz.sessionMetadata?.examBlueprintId
+            fetchedResult.examTitle = fetchedResult.examTitle ?? quiz.sessionMetadata?.examTitle
+            fetchedResult.examTimingMinutes = fetchedResult.examTimingMinutes ?? quiz.sessionMetadata?.timingMinutes
+            fetchedResult.jurisdictionCode = fetchedResult.jurisdictionCode ?? quiz.sessionMetadata?.jurisdictionCode
+            fetchedResult.codeCycle = fetchedResult.codeCycle ?? quiz.sessionMetadata?.codeCycle
             // Attach timing data if this was a timed session
             if quiz.type.isTimedSession {
                 fetchedResult.totalElapsedSeconds = totalElapsed
