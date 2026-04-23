@@ -11,7 +11,7 @@ private func uniqueLessonReferenceCodes(for record: LessonContentRecord) -> [Str
 }
 
 enum WattWiseContentRuntimeAdapter {
-    private static let supportedCertificationLevels: Set<String> = ["apprentice", "master"]
+    private static let supportedCertificationLevels: Set<String> = ["apprentice", "journeyman", "master"]
 
     private struct StoredLessonProgress: Codable {
         var completion: Double
@@ -76,27 +76,31 @@ enum WattWiseContentRuntimeAdapter {
         "Article 100": ("Definitions", "Holds defined terms used throughout the NEC and is a frequent starting point for code lookup.")
     ]
 
-    static func loadModules() throws -> [WWModule] {
-        try modules(from: WattWiseContentCatalog.loadFromBundle())
+    static func loadModules(includeDraftContent: Bool = false) throws -> [WWModule] {
+        try modules(from: WattWiseContentCatalog.loadFromBundle(), includeDraftContent: includeDraftContent)
     }
 
-    static func loadLesson(id: UUID) throws -> WWLesson {
+    static func loadLesson(id: UUID, includeDraftContent: Bool = false) throws -> WWLesson {
         let pack = try WattWiseContentCatalog.loadFromBundle()
-        let lessons = lessonMap(from: pack)
+        let lessons = lessonMap(from: pack, includeDraftContent: includeDraftContent)
         guard let lesson = lessons[id] else {
             throw AppError.notFound("Lesson not found in the content pack.")
         }
         return lesson
     }
 
-    static func previewLessonID() throws -> UUID? {
-        try loadModules().first?.lessons.first?.id
+    static func previewLessonID(includeDraftContent: Bool = false) throws -> UUID? {
+        try loadModules(includeDraftContent: includeDraftContent)
+            .flatMap(\.lessons)
+            .first(where: { $0.isPreviewIncluded == true })?
+            .id
     }
 
-    static func modules(from pack: WattWiseContentPack) throws -> [WWModule] {
+    static func modules(from pack: WattWiseContentPack, includeDraftContent: Bool = false) throws -> [WWModule] {
         // Build module structure directly from lesson records (JSON has no curriculumFramework)
         let supportedRecords = pack.fullLessonContent.filter {
-            supportedCertificationLevels.contains($0.certificationLevel.lowercased())
+            supportedCertificationLevels.contains($0.certificationLevel.lowercased()) &&
+                (includeDraftContent || $0.verification.publishStatus == .published)
         }
 
         // Group lessons by (certificationLevel + moduleName), preserving insertion order
@@ -116,8 +120,11 @@ enum WattWiseContentRuntimeAdapter {
             let first = records[0]
             let moduleId = "module:\(first.certificationLevel.lowercased())-\(first.moduleName.lowercased().replacingOccurrences(of: " ", with: "-"))"
 
-            let lessonModels = try records.map { record in
-                try makeLessonFromRecord(record: record, moduleId: moduleId)
+            let lessonModels = try records.flatMap { record -> [WWLesson] in
+                let totalParts = partCountForLesson(record)
+                return try (1...totalParts).map { partNumber in
+                    try makeLessonFromRecord(record: record, moduleId: moduleId, partNumber: partNumber, totalParts: totalParts)
+                }
             }
 
             let estimatedMinutes = lessonModels.reduce(0) { $0 + $1.estimatedMinutes }
@@ -142,7 +149,12 @@ enum WattWiseContentRuntimeAdapter {
                 estimatedMinutes: estimatedMinutes,
                 topicTags: tags,
                 progress: progress,
-                lessons: lessonModels
+                lessons: lessonModels,
+                examType: ExamType(rawValue: certLevel),
+                publishStatus: includeDraftContent ? nil : .published,
+                freshnessStatus: aggregateFreshness(for: records),
+                jurisdictionScope: records.map(\.verification.jurisdictionScope).first(where: { !$0.isEmpty }) ?? "national",
+                lastVerifiedAt: records.compactMap(\.verification.lastVerifiedAt).max()
             )
         }
     }
@@ -180,7 +192,7 @@ enum WattWiseContentRuntimeAdapter {
     }
 
     static func loadProgressSummary() throws -> ProgressSummary {
-        let modules = try loadModules()
+        let modules = try loadModules(includeDraftContent: true)
         let lessons = modules.flatMap(\.lessons)
         let progressByLesson = storedProgressByLesson()
         let moduleTitleByLessonID = Dictionary(
@@ -300,9 +312,11 @@ enum WattWiseContentRuntimeAdapter {
         return reference
     }
 
-    static func loadQuestionBank() -> [QuizQuestion] {
+    static func loadQuestionBank(includeDraftContent: Bool = false) -> [QuizQuestion] {
         guard let pack = try? WattWiseContentCatalog.loadFromBundle() else { return [] }
-        return pack.questionBank.map { record in
+        return pack.questionBank
+            .filter { includeDraftContent || $0.verification.publishStatus == .published }
+            .map { record in
             let topicTag = record.topicCategory
                 .lowercased()
                 .replacingOccurrences(of: " and ", with: "-")
@@ -336,21 +350,56 @@ enum WattWiseContentRuntimeAdapter {
         return UUID(uuidString: uuidString) ?? UUID()
     }
 
-    private static func lessonMap(from pack: WattWiseContentPack) -> [UUID: WWLesson] {
-        let lessons: [WWLesson] = pack.fullLessonContent.compactMap { record in
+    private static func lessonMap(from pack: WattWiseContentPack, includeDraftContent: Bool) -> [UUID: WWLesson] {
+        let lessons: [WWLesson] = pack.fullLessonContent.flatMap { record in
+            guard includeDraftContent || record.verification.publishStatus == .published else { return [] }
             let moduleId = "module:\(record.certificationLevel.lowercased())-\(record.moduleName.lowercased().replacingOccurrences(of: " ", with: "-"))"
-            return try? makeLessonFromRecord(record: record, moduleId: moduleId)
+            let totalParts = partCountForLesson(record)
+            return (1...totalParts).compactMap { partNumber in
+                try? makeLessonFromRecord(record: record, moduleId: moduleId, partNumber: partNumber, totalParts: totalParts)
+            }
         }
         return Dictionary(uniqueKeysWithValues: lessons.map { ($0.id, $0) })
     }
 
+    // Determine how many parts to split a lesson into (1 = no split, 2-3 = mini-lessons)
+    private static func partCountForLesson(_ record: LessonContentRecord) -> Int {
+        let contentParagraphs = record.lessonContent.count
+        // Split into 2-3 parts based on content length: <5 paragraphs = 1 part, 5-10 = 2 parts, >10 = 3 parts
+        if contentParagraphs <= 4 {
+            return 1
+        } else if contentParagraphs <= 10 {
+            return 2
+        } else {
+            return 3
+        }
+    }
+
+    // Split lesson content into parts for mini-lessons
+    private static func partitionContent(from record: LessonContentRecord, partNumber: Int, totalParts: Int) -> [LessonParagraph] {
+        guard totalParts > 1 else { return record.lessonContent }
+
+        let contentCount = record.lessonContent.count
+        let itemsPerPart = max(1, contentCount / totalParts)
+        let startIndex = (partNumber - 1) * itemsPerPart
+        let endIndex = partNumber == totalParts ? contentCount : min(partNumber * itemsPerPart, contentCount)
+
+        return Array(record.lessonContent[startIndex..<endIndex])
+    }
+
     // Primary lesson builder — derives all info directly from the lesson record.
-    private static func makeLessonFromRecord(record: LessonContentRecord, moduleId: String) throws -> WWLesson {
+    // If totalParts > 1, creates a mini-lesson for the specified partNumber.
+    private static func makeLessonFromRecord(record: LessonContentRecord, moduleId: String, partNumber: Int = 1, totalParts: Int = 1) throws -> WWLesson {
         let moduleUUID = uuid(for: moduleId)
-        let lessonId = uuid(for: "lesson:\(record.id)")
+        let lessonId = totalParts > 1
+            ? uuid(for: "lesson:\(record.id):part-\(partNumber)")
+            : uuid(for: "lesson:\(record.id)")
         let progress = progressState(for: record.id)
 
-        var sections = record.lessonContent.enumerated().map { index, paragraph in
+        let partitionedContent = partitionContent(from: record, partNumber: partNumber, totalParts: totalParts)
+        let displayTitle = totalParts > 1 ? "\(record.lessonTitle) — Part \(partNumber) of \(totalParts)" : record.lessonTitle
+
+        var sections = partitionedContent.enumerated().map { index, paragraph in
             LessonSection(
                 id: uuid(for: "section:\(record.id):core:\(index)"),
                 heading: paragraph.heading,
@@ -406,28 +455,38 @@ enum WattWiseContentRuntimeAdapter {
                 code: code,
                 title: entry.title,
                 summary: entry.summary,
-                expanded: MockData.necExpandedText[code]
+                expanded: MockData.necExpandedText[code],
+                edition: record.verification.baseCodeCycle
             )
         }
 
         return WWLesson(
             id: lessonId,
             moduleId: moduleUUID,
-            title: record.lessonTitle,
+            title: displayTitle,
             topic: record.moduleName,
-            estimatedMinutes: estimateMinutes(for: record),
+            estimatedMinutes: totalParts > 1 ? max(5, estimateMinutes(for: record) / totalParts) : estimateMinutes(for: record),
             status: progress.status,
             completionPercentage: progress.completion,
             sections: sections,
-            necReferences: necReferences
+            necReferences: necReferences,
+            publishStatus: record.verification.publishStatus,
+            freshnessStatus: record.verification.freshnessStatus,
+            baseCodeCycle: record.verification.baseCodeCycle,
+            jurisdictionScope: record.verification.jurisdictionScope,
+            lastVerifiedAt: record.verification.lastVerifiedAt,
+            disclaimer: record.verification.disclaimer,
+            isLocked: nil,
+            isPreviewIncluded: record.verification.publishStatus == .published && record.id == "ap-les-001",
+            requiresPaidAccess: record.verification.publishStatus == .published && record.id != "ap-les-001",
+            partNumber: totalParts > 1 ? partNumber : nil,
+            totalParts: totalParts > 1 ? totalParts : nil,
+            canonicalLessonID: totalParts > 1 ? record.id : nil
         )
     }
 
-    // Estimate reading time from content length since JSON has no estimatedMinutes field.
     private static func estimateMinutes(for record: LessonContentRecord) -> Int {
-        let wordCount = record.lessonContent.reduce(0) { $0 + $1.body.split(separator: " ").count }
-        let readingMinutes = max(5, wordCount / 200) // ~200 words/min
-        return min(readingMinutes, 30)
+        record.estimatedMinutes
     }
 
     private static func allNECReferences(from pack: WattWiseContentPack) throws -> [NECReference] {
@@ -443,15 +502,24 @@ enum WattWiseContentRuntimeAdapter {
                 code: code,
                 title: entry.title,
                 summary: entry.summary,
-                expanded: MockData.necExpandedText[code]
+                expanded: MockData.necExpandedText[code],
+                edition: pack.fullLessonContent.first(where: { uniqueLessonReferenceCodes(for: $0).contains(code) })?.verification.baseCodeCycle
             )
         }
     }
 
     private static func uniqueNECReferences(from pack: WattWiseContentPack) throws -> [NECSearchResult] {
         try allNECReferences(from: pack).map {
-            NECSearchResult(id: $0.id, code: $0.code, title: $0.title, summary: $0.summary)
+            NECSearchResult(id: $0.id, code: $0.code, title: $0.title, summary: $0.summary, edition: $0.edition)
         }
+    }
+
+    private static func aggregateFreshness(for records: [LessonContentRecord]) -> ContentFreshnessStatus {
+        let statuses = Set(records.map(\.verification.freshnessStatus))
+        if statuses.contains(.conflicted) { return .conflicted }
+        if statuses.contains(.stale) { return .stale }
+        if statuses == [.fresh] { return .fresh }
+        return .unknown
     }
 
     private static func inferredSectionType(for heading: String) -> LessonSection.SectionType {

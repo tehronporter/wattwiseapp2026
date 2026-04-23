@@ -1,4 +1,5 @@
 import Foundation
+import StoreKit
 import SwiftUI
 
 // MARK: - App ViewModel (root state)
@@ -22,12 +23,15 @@ final class AppViewModel {
         case awaitingEmailConfirmation(PendingEmailConfirmation)
         case onboarding(WWUser)
         case authenticated(WWUser)
+        case passwordReset(accessToken: String)
     }
 
     struct AuthEntryPrefill: Equatable {
         let email: String
         let isSignIn: Bool
     }
+
+    private let cachedSubscriptionKey = "ww_cached_subscription_state"
 
     var currentUser: WWUser? {
         switch authState {
@@ -68,12 +72,31 @@ final class AppViewModel {
         if user.isOnboardingComplete {
             authState = .authenticated(user)
             Analytics.shared.identify(userId: user.id.uuidString, examType: user.examType.rawValue, state: user.state)
+            // Crashlytics.crashlytics().setUserID(user.id.uuidString)  ← Uncomment after Firebase setup
         } else {
             authState = .onboarding(user)
         }
-        subscriptionState = (try? await services.subscription.fetchState()) ?? .preview
-        // Request notification permission and schedule reminders now that we have user context.
+        if let fetched = try? await services.subscription.fetchState() {
+            subscriptionState = fetched
+            cacheSubscriptionState(fetched)
+        } else {
+            subscriptionState = loadCachedSubscriptionState() ?? .preview
+        }
+    }
+
+    func requestNotificationsIfNeeded(user: WWUser) async {
         await StudyNotificationScheduler.shared.requestPermissionAndSchedule(user: user)
+    }
+
+    private func cacheSubscriptionState(_ state: SubscriptionState) {
+        if let data = try? JSONEncoder().encode(state) {
+            UserDefaults.standard.set(data, forKey: cachedSubscriptionKey)
+        }
+    }
+
+    private func loadCachedSubscriptionState() -> SubscriptionState? {
+        guard let data = UserDefaults.standard.data(forKey: cachedSubscriptionKey) else { return nil }
+        return try? JSONDecoder().decode(SubscriptionState.self, from: data)
     }
 
     func enterAwaitingEmailConfirmation(_ pending: PendingEmailConfirmation) {
@@ -109,6 +132,14 @@ final class AppViewModel {
             return
         }
 
+        // Check for password recovery link — route to SetNewPasswordView
+        if let payload = AuthCallbackPayload.from(url: url),
+           payload.type == "recovery",
+           let accessToken = payload.accessToken, !accessToken.isEmpty {
+            authState = .passwordReset(accessToken: accessToken)
+            return
+        }
+
         isHandlingAuthLink = true
         authErrorMessage = nil
         defer { isHandlingAuthLink = false }
@@ -141,6 +172,7 @@ final class AppViewModel {
     func signOut(services: ServiceContainer) {
         try? services.auth.signOut()
         clearLocalSessionArtifacts()
+        Analytics.track(.userSignedOut)
         authEntryPrefill = nil
         authStatusMessage = nil
         authErrorMessage = nil
@@ -155,6 +187,7 @@ final class AppViewModel {
         defaults.removeObject(forKey: "ww_access_token")
         defaults.removeObject(forKey: "ww_refresh_token")
         defaults.removeObject(forKey: "ww_user_data")
+        defaults.removeObject(forKey: cachedSubscriptionKey)
         PendingEmailConfirmationStore.clear()
 
         defaults.dictionaryRepresentation().keys
@@ -202,6 +235,7 @@ final class OnboardingViewModel {
 
     var isLoading: Bool = false
     var errorMessage: String? = nil
+    var isSigningInWithApple: Bool = false
 
     private var isEmailValid: Bool {
         let pattern = #"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"#
@@ -240,6 +274,7 @@ final class OnboardingViewModel {
         do {
             if isSignIn {
                 let user = try await services.auth.signIn(email: email, password: password)
+                Analytics.track(.userSignedIn)
                 await appVM.applyAuthenticatedUser(user, services: services)
             } else {
                 let pending = PendingEmailConfirmation(
@@ -252,10 +287,12 @@ final class OnboardingViewModel {
 
                 switch try await services.auth.signUp(email: email, password: password, pending: pending) {
                 case .authenticated(let user):
+                    Analytics.track(.userSignedUp)
                     await appVM.applyAuthenticatedUser(user, services: services)
                 case .awaitingEmailConfirmation(let pending):
                     password = ""
                     confirmPassword = ""
+                    Analytics.track(.userSignedUp)
                     appVM.enterAwaitingEmailConfirmation(pending)
                 }
             }
@@ -297,6 +334,41 @@ final class OnboardingViewModel {
     private func isEmailConfirmationRequired(_ error: Error) -> Bool {
         let raw = error.localizedDescription
         return raw.contains("Email not confirmed") || raw.contains("email_not_confirmed")
+    }
+
+    func signInWithApple(services: ServiceContainer, appVM: AppViewModel) async {
+        isSigningInWithApple = true
+        errorMessage = nil
+        defer { isSigningInWithApple = false }
+
+        do {
+            let credential = try await AppleSignInCoordinator.start()
+            var user = try await services.auth.signInWithApple(
+                identityToken: credential.identityToken,
+                nonce: credential.nonce,
+                fullName: credential.fullName
+            )
+
+            if isSignIn == false && selectedState.isEmpty == false {
+                var updatedUser = user
+                updatedUser.examType = selectedExamType
+                updatedUser.state = selectedState
+                updatedUser.studyGoal = selectedGoal
+                updatedUser.isOnboardingComplete = true
+                try await services.auth.updateProfile(updatedUser)
+                user = updatedUser
+                Analytics.track(.onboardingCompleted(
+                    examType: selectedExamType.rawValue,
+                    state: selectedState,
+                    studyGoal: selectedGoal.rawValue
+                ))
+            }
+
+            Analytics.track(.userSignedIn)
+            await appVM.applyAuthenticatedUser(user, services: services)
+        } catch {
+            errorMessage = mapAuthError(error)
+        }
     }
 }
 
@@ -451,6 +523,22 @@ final class LessonViewModel {
     func tapNEC(_ ref: NECReference) {
         selectedNEC = ref
     }
+
+    /// Returns the ID of the next part if this is a mini-lesson, otherwise nil.
+    func nextPartLessonId() -> UUID? {
+        guard let lesson,
+              let partNumber = lesson.partNumber,
+              let totalParts = lesson.totalParts,
+              partNumber < totalParts,
+              let flowContext else { return nil }
+
+        // Find the next part in the module's lessons
+        let nextPartNumber = partNumber + 1
+        let canonicalId = lesson.canonicalLessonID ?? ""
+        return flowContext.module.lessons.first(where: {
+            $0.partNumber == nextPartNumber && ($0.canonicalLessonID ?? "") == canonicalId
+        })?.id
+    }
 }
 
 // MARK: - Practice ViewModel
@@ -535,9 +623,9 @@ final class QuizViewModel {
         isLoading || (quiz == nil && result == nil && errorMessage == nil)
     }
 
-    func loadIfNeeded(type: QuizType, examType: ExamType?, services: ServiceContainer) async {
+    func loadIfNeeded(type: QuizType, examType: ExamType?, topicTags: [String] = [], services: ServiceContainer) async {
         guard quiz == nil, result == nil, errorMessage == nil, accessRestriction == nil, isLoading == false else { return }
-        await load(type: type, examType: examType, services: services)
+        await load(type: type, examType: examType, topicTags: topicTags, services: services)
     }
 
     var currentQuestion: QuizQuestion? {
@@ -555,17 +643,23 @@ final class QuizViewModel {
         return Double(currentIndex + 1) / Double(max(1, quiz.questions.count))
     }
 
-    func load(type: QuizType, examType: ExamType?, services: ServiceContainer) async {
+    func load(type: QuizType, examType: ExamType?, topicTags: [String] = [], services: ServiceContainer) async {
         isLoading = true
         errorMessage = nil
         accessRestriction = nil
         defer { isLoading = false }
         Analytics.track(.quizStarted(quizType: type.rawValue))
         do {
-            let topicTags = type == .weakAreaReview
-                ? PracticeHistoryStore.shared.suggestedWeakTopicKeys()
-                : []
-            let generatedQuiz = try await services.quiz.generateQuiz(type: type, topicTags: topicTags, examType: examType)
+            // Caller-supplied tags take precedence; fall back to weak-area history for weakAreaReview
+            let resolvedTopicTags: [String]
+            if !topicTags.isEmpty {
+                resolvedTopicTags = topicTags
+            } else if type == .weakAreaReview {
+                resolvedTopicTags = PracticeHistoryStore.shared.suggestedWeakTopicKeys()
+            } else {
+                resolvedTopicTags = []
+            }
+            let generatedQuiz = try await services.quiz.generateQuiz(type: type, topicTags: resolvedTopicTags, examType: examType)
             guard generatedQuiz.questions.isEmpty == false else {
                 throw AppError.notFound("No quiz questions are available right now. Please try another quiz.")
             }
@@ -649,6 +743,10 @@ final class QuizViewModel {
                     totalCount: result.totalCount
                 )
                 Analytics.track(.quizCompleted(quizType: quiz.type.rawValue, score: result.score, passed: result.passed))
+                // Request notifications after first completed quiz — user has now seen product value
+                if let user = appVM.currentUser {
+                    await appVM.requestNotificationsIfNeeded(user: user)
+                }
             }
             if appVM.subscriptionState.hasPaidAccess == false {
                 appVM.subscriptionState.markPreviewQuizUsedIfNeeded()
@@ -1022,8 +1120,10 @@ final class NECViewModel {
 final class ProfileViewModel {
     var showSignOutAlert: Bool = false
     var showResetAlert: Bool = false
+    var showDeleteAccountAlert: Bool = false
     var isSigningOut: Bool = false
     var isUpdatingProfile: Bool = false
+    var isDeletingAccount: Bool = false
     var profileUpdateErrorMessage: String?
 
     func signOut(services: ServiceContainer, appVM: AppViewModel) async {
@@ -1053,6 +1153,11 @@ final class ProfileViewModel {
             updatedUser.examDate = examDate
             try await services.auth.updateProfile(updatedUser)
             appVM.authState = .authenticated(updatedUser)
+            Analytics.track(.onboardingCompleted(
+                examType: examType.rawValue,
+                state: state,
+                studyGoal: goal.rawValue
+            ))
             return true
         } catch {
             profileUpdateErrorMessage = error.localizedDescription
@@ -1079,6 +1184,26 @@ final class ProfileViewModel {
         // Sign out so the user starts fresh on next launch
         appVM.signOut(services: services)
     }
+
+    func deleteAccount(services: ServiceContainer, appVM: AppViewModel) async -> Bool {
+        isDeletingAccount = true
+        profileUpdateErrorMessage = nil
+        defer { isDeletingAccount = false }
+
+        do {
+            Analytics.track(.accountDeletionRequested)
+            try await services.auth.deleteAccount()
+            appVM.clearLocalSessionArtifacts()
+            appVM.authState = .unauthenticated
+            appVM.subscriptionState = .preview
+            appVM.authStatusMessage = "Your WattWise account has been deleted."
+            return true
+        } catch {
+            profileUpdateErrorMessage = error.localizedDescription
+            Analytics.trackError(surface: "delete_account", message: error.localizedDescription)
+            return false
+        }
+    }
 }
 
 // MARK: - Paywall ViewModel
@@ -1092,9 +1217,27 @@ final class PaywallViewModel {
     var errorMessage: String?
     var successMessage: String?
     var restoreMessage: String?
+    var trialDescriptions: [String: String] = [:]
 
     func isPurchasing(_ productID: String) -> Bool {
         activeProductID == productID
+    }
+
+    func loadTrialInfo() async {
+        guard let products = try? await Product.products(for: AccessProductID.allCases.map(\.rawValue)) else { return }
+        for product in products {
+            guard let introOffer = product.subscription?.introductoryOffer else { continue }
+            let period = introOffer.period
+            let unitStr: String
+            switch period.unit {
+            case .day:   unitStr = period.value == 1 ? "day" : "\(period.value) days"
+            case .week:  unitStr = period.value == 1 ? "week" : "\(period.value) weeks"
+            case .month: unitStr = period.value == 1 ? "month" : "\(period.value) months"
+            case .year:  unitStr = period.value == 1 ? "year" : "\(period.value) years"
+            @unknown default: unitStr = "\(period.value) \(period.unit)"
+            }
+            trialDescriptions[product.id] = "Try free for \(unitStr)"
+        }
     }
 
     func purchase(productID: String, services: ServiceContainer, appVM: AppViewModel) async {

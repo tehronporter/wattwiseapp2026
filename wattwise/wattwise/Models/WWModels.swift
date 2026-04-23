@@ -123,6 +123,11 @@ struct WWModule: Identifiable, Codable {
     var topicTags: [String]
     var progress: Double         // 0.0–1.0
     var lessons: [WWLesson]
+    var examType: ExamType? = nil
+    var publishStatus: ContentPublishStatus? = nil
+    var freshnessStatus: ContentFreshnessStatus? = nil
+    var jurisdictionScope: String? = nil
+    var lastVerifiedAt: String? = nil
 
     var completedLessons: Int {
         lessons.filter { $0.status == .completed }.count
@@ -139,6 +144,18 @@ struct WWLesson: Identifiable, Codable {
     var completionPercentage: Double
     var sections: [LessonSection]
     var necReferences: [NECReference]
+    var publishStatus: ContentPublishStatus? = nil
+    var freshnessStatus: ContentFreshnessStatus? = nil
+    var baseCodeCycle: String? = nil
+    var jurisdictionScope: String? = nil
+    var lastVerifiedAt: String? = nil
+    var disclaimer: String? = nil
+    var isLocked: Bool? = nil
+    var isPreviewIncluded: Bool? = nil
+    var requiresPaidAccess: Bool? = nil
+    var partNumber: Int? = nil         // 1-indexed part number for mini-lessons (e.g., 1 of 3)
+    var totalParts: Int? = nil         // Total number of parts (e.g., 3)
+    var canonicalLessonID: String? = nil  // Original lesson ID for grouping mini-lessons
 
     enum LessonStatus: String, Codable {
         case notStarted = "not_started"
