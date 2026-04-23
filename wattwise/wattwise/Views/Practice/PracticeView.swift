@@ -7,11 +7,21 @@ struct PracticeView: View {
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
 
+    private var recommendedQuizType: QuizType {
+        guard vm.dashboard.attemptCount > 0 else { return .quickQuiz }
+        if !vm.dashboard.weakTopics.isEmpty && appVM.subscriptionState.hasPaidAccess {
+            return .weakAreaReview
+        }
+        return vm.dashboard.attemptCount >= 3 ? .fullPracticeExam : .quickQuiz
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: WWSpacing.l) {
-                Text("Choose the kind of practice that fits your time and what you need right now.")
+                Text("Drill questions, track accuracy, and close your weak areas before exam day.")
                     .wwBody(color: .wwTextSecondary)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
 
                 if appVM.subscriptionState.hasPaidAccess == false {
                     WWCard {
@@ -25,6 +35,8 @@ struct PracticeView: View {
                                 : "Preview includes one full quick quiz. Use it when you're ready for a meaningful score and review."
                             )
                             .wwBody(color: .wwTextSecondary)
+                            .lineLimit(4)
+                            .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                 }
@@ -33,34 +45,44 @@ struct PracticeView: View {
                     PracticeSummaryCard(dashboard: vm.dashboard)
                 }
 
-                // Standard quiz types (exclude calculationDrill — it gets its own section below)
-                ForEach(QuizType.allCases.filter { $0 != .calculationDrill }, id: \.self) { type in
-                    QuizOptionCard(
-                        type: type,
-                        hasPaidAccess: appVM.subscriptionState.hasPaidAccess,
-                        previewQuizUsed: appVM.subscriptionState.previewQuickQuizLimitReached,
-                        dashboard: vm.dashboard
-                    ) {
-                        switch vm.startQuiz(type, subscription: appVM.subscriptionState) {
-                        case .start(let type):
-                            route = type
-                        case .paywall:
-                            break
-                        case .unavailable(let title, let message, let suggestedQuiz):
-                            unavailableState = PracticeUnavailableState(
-                                title: title,
-                                message: message,
-                                suggestedQuiz: suggestedQuiz
-                            )
+                // Practice modes section
+                VStack(alignment: .leading, spacing: WWSpacing.s) {
+                    Text("Practice Modes")
+                        .wwLabel()
+                        .textCase(.uppercase)
+                        .foregroundColor(.wwTextMuted)
+
+                    ForEach(QuizType.allCases.filter { $0 != .calculationDrill }, id: \.self) { type in
+                        QuizOptionCard(
+                            type: type,
+                            hasPaidAccess: appVM.subscriptionState.hasPaidAccess,
+                            previewQuizUsed: appVM.subscriptionState.previewQuickQuizLimitReached,
+                            isRecommended: type == recommendedQuizType,
+                            dashboard: vm.dashboard
+                        ) {
+                            switch vm.startQuiz(type, subscription: appVM.subscriptionState) {
+                            case .start(let type):
+                                route = type
+                            case .paywall:
+                                break
+                            case .unavailable(let title, let message, let suggestedQuiz):
+                                unavailableState = PracticeUnavailableState(
+                                    title: title,
+                                    message: message,
+                                    suggestedQuiz: suggestedQuiz
+                                )
+                            }
                         }
                     }
                 }
 
-                // Calculation Drill — dedicated math practice section
+                // Specialty drills section
                 VStack(alignment: .leading, spacing: WWSpacing.s) {
-                    Text("Math & Formula Drills")
+                    Text("Specialty Drills")
                         .wwLabel()
                         .textCase(.uppercase)
+                        .foregroundColor(.wwTextMuted)
+
                     CalculationDrillCard(hasPaidAccess: appVM.subscriptionState.hasPaidAccess) {
                         switch vm.startQuiz(.calculationDrill, subscription: appVM.subscriptionState) {
                         case .start(let type):
@@ -75,17 +97,16 @@ struct PracticeView: View {
                             )
                         }
                     }
-                }
 
-                // Flashcards
-                NavigationLink {
-                    FlashcardView()
-                        .environment(services)
-                        .environment(appVM)
-                } label: {
-                    FlashcardOptionCard()
+                    NavigationLink {
+                        FlashcardView()
+                            .environment(services)
+                            .environment(appVM)
+                    } label: {
+                        FlashcardOptionCard()
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
             }
             .wwScreenPadding()
             .padding(.vertical, WWSpacing.m)
@@ -152,6 +173,7 @@ private struct QuizOptionCard: View {
     let type: QuizType
     let hasPaidAccess: Bool
     let previewQuizUsed: Bool
+    var isRecommended: Bool = false
     let dashboard: PracticeDashboardSnapshot
     let action: () -> Void
 
@@ -220,11 +242,23 @@ private struct QuizOptionCard: View {
                                     .font(.system(size: 12))
                                     .foregroundColor(.wwTextMuted)
                             }
+                            if isRecommended && !isLocked {
+                                Text("Recommended")
+                                    .font(WWFont.label(.semibold))
+                                    .foregroundColor(.wwBlue)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(Color.wwBlueDim)
+                                    .clipShape(Capsule())
+                            }
                         }
                         Text(detailText)
                             .wwBody(color: .wwTextSecondary)
+                            .lineLimit(3)
+                            .fixedSize(horizontal: false, vertical: true)
                         Text(type.bestFor)
                             .wwCaption()
+                            .lineLimit(2)
                         Text("\(type.questionCount) questions")
                             .wwCaption()
                     }
@@ -245,26 +279,106 @@ private struct QuizOptionCard: View {
 private struct PracticeSummaryCard: View {
     let dashboard: PracticeDashboardSnapshot
 
+    private let allAttempts = PracticeHistoryStore.shared.allAttempts()
+
+    private var overallAccuracy: Int {
+        guard !allAttempts.isEmpty else { return 0 }
+        let totalCorrect = allAttempts.reduce(0) { $0 + $1.correctCount }
+        let totalQuestions = allAttempts.reduce(0) { $0 + $1.totalCount }
+        return totalQuestions > 0 ? (totalCorrect * 100) / totalQuestions : 0
+    }
+
+    private var bestScore: Int {
+        guard !allAttempts.isEmpty else { return 0 }
+        return Int((allAttempts.map(\.score).max() ?? 0) * 100)
+    }
+
+    private var trendIndicator: String {
+        guard allAttempts.count >= 3 else { return "" }
+        let recent = Array(allAttempts.prefix(3))
+        let older = Array(allAttempts.dropFirst(3).prefix(3))
+        guard !older.isEmpty else { return "" }
+
+        let recentAvg = recent.map(\.score).reduce(0, +) / Double(recent.count)
+        let olderAvg = older.map(\.score).reduce(0, +) / Double(older.count)
+
+        if recentAvg > olderAvg + 0.05 { return "📈" }
+        if recentAvg < olderAvg - 0.05 { return "📉" }
+        return "→"
+    }
+
+    private var accuracyColor: Color {
+        if overallAccuracy >= 80 { return .wwSuccess }
+        if overallAccuracy >= 70 { return .wwBlue }
+        return .wwError
+    }
+
     var body: some View {
         WWCard {
-            VStack(alignment: .leading, spacing: WWSpacing.s) {
-                Text("Practice Snapshot")
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                Text("Your Performance")
                     .wwSectionTitle()
 
-                if let latestScorePercentage = dashboard.latestScorePercentage {
-                    Text("Most recent score: \(latestScorePercentage)%")
-                        .wwBody()
+                HStack(spacing: WWSpacing.s) {
+                    PerformanceMetricPill(
+                        value: "\(dashboard.attemptCount)",
+                        label: "Quizzes\nCompleted",
+                        color: .wwBlue
+                    )
+                    PerformanceMetricPill(
+                        value: "\(overallAccuracy)%",
+                        label: "Avg\nAccuracy",
+                        color: accuracyColor
+                    )
+                    PerformanceMetricPill(
+                        value: "\(dashboard.weakTopics.count)",
+                        label: "Areas\nIdentified",
+                        color: dashboard.weakTopics.isEmpty ? .wwSuccess : .wwBlue
+                    )
                 }
 
-                if let firstWeakTopic = dashboard.weakTopics.first {
-                    Text("Next focus: \(firstWeakTopic.title)")
-                        .wwBody(color: .wwTextSecondary)
-                } else {
-                    Text("No active weak areas right now. A full practice test is the best way to pressure-test your readiness.")
-                        .wwBody(color: .wwTextSecondary)
+                VStack(alignment: .leading, spacing: WWSpacing.xs) {
+                    if !trendIndicator.isEmpty {
+                        HStack(spacing: 4) {
+                            Text(trendIndicator)
+                                .font(.system(size: 14))
+                            Text(trendIndicator == "📈" ? "Trending up" : trendIndicator == "📉" ? "Room to improve" : "Consistent performance")
+                                .wwCaption(color: .wwTextSecondary)
+                        }
+                    }
+
+                    if bestScore >= 80 {
+                        HStack(spacing: 4) {
+                            Text("🏆")
+                            Text("Best: \(bestScore)%")
+                                .wwCaption(color: .wwTextSecondary)
+                        }
+                    }
                 }
             }
         }
+    }
+}
+
+private struct PerformanceMetricPill: View {
+    let value: String
+    let label: String
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: WWSpacing.xs) {
+            Text(value)
+                .font(WWFont.heading(.semibold))
+                .foregroundColor(color)
+            Text(label)
+                .wwCaption(color: .wwTextSecondary)
+                .lineLimit(2)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, WWSpacing.m)
+        .background(Color.wwSurface)
+        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
     }
 }
 

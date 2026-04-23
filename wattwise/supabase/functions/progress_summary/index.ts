@@ -121,6 +121,7 @@ Deno.serve(async (req: Request) => {
           .from("lessons")
           .select("id, title")
           .eq("is_published", true)
+          .eq("publish_status", "published")
           .eq("module_id", firstModule.id)
           .order("sort_order", { ascending: true })
           .limit(1)

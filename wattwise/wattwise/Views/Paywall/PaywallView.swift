@@ -133,6 +133,7 @@ struct PaywallView: View {
                 ForEach(vm.offers) { offer in
                     AccessOfferCard(
                         offer: offer,
+                        trialDescription: vm.trialDescriptions[offer.productID],
                         isPurchasing: vm.isPurchasing(offer.productID),
                         action: {
                             Task {
@@ -146,6 +147,7 @@ struct PaywallView: View {
                     )
                 }
             }
+            .task { await vm.loadTrialInfo() }
 
             if let errorMessage = vm.errorMessage {
                 Text(errorMessage)
@@ -177,8 +179,14 @@ struct PaywallView: View {
 
 private struct AccessOfferCard: View {
     let offer: AccessOffer
+    var trialDescription: String? = nil
     let isPurchasing: Bool
     let action: () -> Void
+
+    private var callToAction: String {
+        if let trial = trialDescription { return trial }
+        return offer.callToAction
+    }
 
     var body: some View {
         WWCard {
@@ -203,18 +211,24 @@ private struct AccessOfferCard: View {
                     }
                 }
 
-                Text(offer.price)
-                    .font(WWFont.display(.bold))
-                    .foregroundColor(.wwTextPrimary)
+                HStack(alignment: .firstTextBaseline, spacing: WWSpacing.xs) {
+                    Text(offer.price)
+                        .font(WWFont.display(.bold))
+                        .foregroundColor(.wwTextPrimary)
+                    if trialDescription != nil {
+                        Text("after trial")
+                            .wwCaption(color: .wwTextSecondary)
+                    }
+                }
 
                 Text(offer.description)
                     .wwBody(color: .wwTextSecondary)
                     .fixedSize(horizontal: false, vertical: true)
 
                 if offer.isRecommended {
-                    WWPrimaryButton(title: offer.callToAction, isLoading: isPurchasing, action: action)
+                    WWPrimaryButton(title: callToAction, isLoading: isPurchasing, action: action)
                 } else {
-                    WWSecondaryButton(title: offer.callToAction, isLoading: isPurchasing, action: action)
+                    WWSecondaryButton(title: callToAction, isLoading: isPurchasing, action: action)
                 }
             }
         }

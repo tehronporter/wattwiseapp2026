@@ -3,10 +3,12 @@
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
+const { isPublished } = require("./content_pipeline_utils.cjs");
 
 const root = path.resolve(__dirname, "..");
 const packPath = path.join(root, "wattwise", "Resources", "WattWiseContentPack.json");
 const outputPath = path.join(root, "supabase", "seed.sql");
+const includeDrafts = process.argv.includes("--include-drafts");
 
 const referenceCatalog = {
   "90.1": ["Purpose", "Explains the practical purpose of the NEC and its role in safeguarding people and property."],
@@ -81,10 +83,47 @@ function jsonValue(value) {
   return sqlValue(JSON.stringify(value));
 }
 
-function collectLessons(pack) {
-  const lessons = [];
+function collectLessons(pack, includeDraftContent) {
+  const records = (pack.fullLessons || []).filter((lesson) => includeDraftContent || isPublished(lesson));
+  const grouped = new Map();
 
-  for (const course of pack.curriculumFramework) {
+  for (const record of records) {
+    const courseKey = `${record.certificationLevel}|${record.courseTitle}`;
+    if (!grouped.has(courseKey)) {
+      grouped.set(courseKey, {
+        courseTitle: record.courseTitle,
+        certificationLevel: record.certificationLevel,
+        modules: []
+      });
+    }
+
+    const course = grouped.get(courseKey);
+    let module = course.modules.find((entry) => entry.moduleName === record.moduleName);
+    if (!module) {
+      module = {
+        id: slugify(`${record.certificationLevel}-${record.moduleName}`),
+        moduleName: record.moduleName,
+        learningObjectives: record.learningObjectives,
+        lessons: []
+      };
+      course.modules.push(module);
+    }
+
+    module.lessons.push({
+      id: record.id,
+      lessonTitle: record.lessonTitle,
+      estimatedMinutes: Math.min(
+        Math.max(
+          Math.round((record.lessonContent || []).reduce((count, section) => count + String(section.body || "").split(/\s+/).filter(Boolean).length, 0) / 180),
+          10
+        ),
+        45
+      )
+    });
+  }
+
+  const lessons = [];
+  for (const course of grouped.values()) {
     for (const module of course.modules) {
       const moduleId = deterministicUuid(`module:${module.id}`);
       const moduleTags = [
@@ -94,7 +133,7 @@ function collectLessons(pack) {
       ].filter(Boolean);
 
       for (const lesson of module.lessons) {
-        const record = pack.fullLessonContent.find((entry) => entry.id === lesson.id);
+        const record = records.find((entry) => entry.id === lesson.id);
         if (!record) {
           throw new Error(`Missing authored lesson content for ${lesson.id}`);
         }
@@ -115,21 +154,17 @@ function collectLessons(pack) {
   return lessons;
 }
 
-function validate(pack) {
-  const blueprintIds = new Set(pack.curriculumFramework.flatMap((course) => course.modules).flatMap((module) => module.lessons).map((lesson) => lesson.id));
-  const authoredIds = new Set(pack.fullLessonContent.map((lesson) => lesson.id));
+function validate(pack, includeDraftContent) {
+  const authoredIds = new Set((pack.fullLessons || []).map((lesson) => lesson.id));
 
-  if (blueprintIds.size !== 24) {
-    throw new Error(`Expected 24 curriculum lessons, found ${blueprintIds.size}.`);
+  if (includeDraftContent && authoredIds.size !== 92) {
+    throw new Error(`Expected 92 authored lessons in draft mode, found ${authoredIds.size}.`);
   }
 
-  if (authoredIds.size !== blueprintIds.size) {
-    throw new Error(`Expected ${blueprintIds.size} authored lessons, found ${authoredIds.size}.`);
-  }
-
-  for (const id of blueprintIds) {
-    if (!authoredIds.has(id)) {
-      throw new Error(`Missing authored lesson for ${id}.`);
+  if (!includeDraftContent) {
+    const publishedCount = (pack.fullLessons || []).filter(isPublished).length;
+    if (publishedCount === 0) {
+      console.warn("No published lessons found. Seed output will be empty unless you pass --include-drafts.");
     }
   }
 }
@@ -204,9 +239,9 @@ function buildSections(lessonRecord) {
 
 function main() {
   const pack = JSON.parse(fs.readFileSync(packPath, "utf8"));
-  validate(pack);
+  validate(pack, includeDrafts);
 
-  const lessons = collectLessons(pack);
+  const lessons = collectLessons(pack, includeDrafts);
   const modules = [];
   const moduleSeen = new Set();
   const sections = [];
@@ -283,14 +318,15 @@ function main() {
     });
   }
 
-  for (const record of pack.questionBank) {
-    const topicSlug = slugify(record.topicCategory);
+  for (const record of (pack.practiceQuestions || []).filter((question) => includeDrafts || isPublished(question))) {
+    const topicTitle = record.topic || "General";
+    const topicSlug = slugify(topicTitle);
     if (!topicTags.has(topicSlug)) {
       topicTags.set(topicSlug, {
         id: deterministicUuid(`topic:${topicSlug}`),
         slug: topicSlug,
-        name: record.topicCategory,
-        description: `Auto-generated tag for ${record.topicCategory.toLowerCase()}.`
+        name: topicTitle,
+        description: `Auto-generated tag for ${topicTitle.toLowerCase()}.`
       });
     }
 
@@ -299,16 +335,21 @@ function main() {
       sourceKey: record.id,
       certificationLevel: record.certificationLevel.toLowerCase(),
       topicSlug,
-      topicTitle: record.topicCategory,
-      questionText: record.questionText,
-      choices: record.answerChoices,
+      topicTitle,
+      questionText: record.question,
+      choices: {
+        A: record.optionA,
+        B: record.optionB,
+        C: record.optionC,
+        D: record.optionD,
+      },
       correctChoice: record.correctAnswer,
       explanation: record.explanation,
-      necReference: record.necReference,
+      necReference: record.necReference || "",
       difficulty:
-        record.difficultyLevel.toLowerCase() === "easy"
+        record.difficulty.toLowerCase() === "easy"
           ? "beginner"
-          : record.difficultyLevel.toLowerCase() === "hard"
+          : record.difficulty.toLowerCase() === "hard" || record.difficulty.toLowerCase() === "difficult"
             ? "advanced"
             : "intermediate"
     });
@@ -336,7 +377,7 @@ function main() {
   }));
 
   const lessonRows = lessons.map((item, index) => {
-    const whyThisMatters = item.record.lessonContent.find((section) => section.heading === "Why this matters");
+    const whyThisMatters = item.record.lessonContent.find((section) => String(section.heading || "").toLowerCase() === "why this matters");
     return {
       id: item.lessonId,
       moduleId: item.moduleId,

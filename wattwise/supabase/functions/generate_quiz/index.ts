@@ -41,6 +41,7 @@ async function fetchQuestions(
     .from("practice_questions")
     .select("id, source_key, certification_level, topic_slug, topic_title, question_text, choices")
     .eq("is_active", true)
+    .eq("publish_status", "published")
     .order("source_key", { ascending: true });
 
   if (examType) {

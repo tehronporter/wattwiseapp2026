@@ -1,5 +1,6 @@
 import Foundation
 import StoreKit
+import AuthenticationServices
 
 // MARK: - Real Supabase Service Implementations
 //
@@ -56,11 +57,27 @@ final class SupabaseAuthService: AuthServiceProtocol {
         return .awaitingEmailConfirmation(pending)
     }
 
-    func signInWithApple(token: String) async throws -> WWUser {
-        // Apple Sign-In calls Supabase Auth with the Apple identity token
-        // Full implementation requires AuthorizationController setup in the View layer
-        // For now, uses the same signIn flow via the token exchange
-        throw AppError.invalidInput("Apple Sign-In not yet configured.")
+    func signInWithApple(identityToken: String, nonce: String?, fullName: PersonNameComponents?) async throws -> WWUser {
+        guard !identityToken.isEmpty else {
+            throw AppError.invalidInput("Apple Sign-In did not return an identity token.")
+        }
+
+        let session = try await SupabaseAuthClient.shared.signInWithApple(identityToken: identityToken, nonce: nonce)
+        await SupabaseAuthClient.shared.saveSession(session)
+        await APIClient.shared.setAccessToken(session.accessToken)
+
+        var user = await reconcileSignedInUser(from: session)
+        let displayName = [fullName?.givenName, fullName?.familyName]
+            .compactMap { $0 }
+            .joined(separator: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if !displayName.isEmpty && (user.displayName?.isEmpty ?? true) {
+            user.displayName = displayName
+            try? await updateProfile(user)
+        }
+
+        return user
     }
 
     func signOut() throws {
@@ -92,6 +109,17 @@ final class SupabaseAuthService: AuthServiceProtocol {
         currentUser = user
     }
 
+    func deleteAccount() async throws {
+        struct Response: Decodable { let deleted: Bool }
+
+        _ = try await APIClient.shared.post(endpoint: "delete_account", responseType: Response.self)
+        await SupabaseAuthClient.shared.clearSession()
+        await APIClient.shared.setAccessToken(nil)
+        UserDefaults.standard.removeObject(forKey: profileKey)
+        PendingEmailConfirmationStore.clear()
+        currentUser = nil
+    }
+
     func resendConfirmation(email: String) async throws {
         try await SupabaseAuthClient.shared.resendSignUpConfirmation(
             email: email,
@@ -117,6 +145,14 @@ final class SupabaseAuthService: AuthServiceProtocol {
         await SupabaseAuthClient.shared.saveSession(session)
         await APIClient.shared.setAccessToken(session.accessToken)
         return await reconcileSignedInUser(from: session)
+    }
+
+    func resetPassword(email: String) async throws {
+        try await SupabaseAuthClient.shared.resetPassword(email: email)
+    }
+
+    func updatePassword(accessToken: String, newPassword: String) async throws {
+        try await SupabaseAuthClient.shared.updatePassword(accessToken: accessToken, newPassword: newPassword)
     }
 
     // MARK: - Private

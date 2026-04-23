@@ -3,6 +3,7 @@ import SwiftUI
 struct WelcomeView: View {
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
+    @Environment(\.openURL) private var openURL
     @State private var onboardingVM = OnboardingViewModel()
 
     var body: some View {
@@ -41,7 +42,7 @@ struct WelcomeView: View {
                     VStack(alignment: .leading, spacing: WWSpacing.m) {
                         FeatureRow(icon: "brain.head.profile", text: "AI tutor that knows the NEC")
                         FeatureRow(icon: "chart.bar", text: "Adaptive quizzes based on your weaknesses")
-                        FeatureRow(icon: "checkmark.seal", text: "State-specific exam preparation")
+                        FeatureRow(icon: "checkmark.seal", text: "Verified state-aware guidance where available")
                     }
                     .wwScreenPadding()
 
@@ -80,6 +81,17 @@ struct WelcomeView: View {
                         }
                     }
                     .wwScreenPadding()
+
+                    HStack(spacing: WWSpacing.m) {
+                        Button("Privacy") {
+                            openURL(URL(string: "https://wattwiseapp.com/privacy")!)
+                        }
+                        Button("Terms") {
+                            openURL(URL(string: "https://wattwiseapp.com/terms")!)
+                        }
+                    }
+                    .font(WWFont.caption(.medium))
+                    .foregroundColor(.wwTextMuted)
                     .padding(.bottom, WWSpacing.xxl)
                 }
             }

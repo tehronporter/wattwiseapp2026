@@ -20,6 +20,20 @@ struct LessonView: View {
         try? WattWiseContentRuntimeAdapter.previewLessonID(includeDraftContent: false)
     }
 
+    /// Title shown in the completion bar's "Next" button.
+    private var nextCompletionTitle: String? {
+        if vm.nextPartLessonId() != nil {
+            if let partNumber = vm.lesson?.partNumber, let totalParts = vm.lesson?.totalParts {
+                return "Part \(partNumber + 1) of \(totalParts)"
+            }
+            return "Next Part"
+        }
+        if let context = vm.flowContext, context.nextLessonId != nil {
+            return context.module.lessons.first(where: { $0.id == context.nextLessonId })?.title
+        }
+        return nil
+    }
+
     private var isLockedForPreview: Bool {
         guard appVM.subscriptionState.hasPaidAccess == false else { return false }
         if let locked = vm.lesson?.isLocked {
@@ -113,9 +127,14 @@ struct LessonView: View {
             }
         }
         .sheet(isPresented: $showTutorSheet) {
-            TutorSheet(context: vm.lesson.map { TutorContextBuilder.lesson($0, user: appVM.currentUser) })
-            .environment(services)
-            .environment(appVM)
+            if let lesson = vm.lesson {
+                TutorSheetView(
+                    context: TutorContextBuilder.lesson(lesson, user: appVM.currentUser),
+                    contextTitle: "Asking about: \(lesson.title)"
+                )
+                .environment(services)
+                .environment(appVM)
+            }
         }
         .sheet(isPresented: $showPaywall) {
             PaywallView(context: .lessonLocked)
@@ -129,6 +148,37 @@ struct LessonView: View {
         }
         .sheet(item: $vm.selectedNEC) { nec in
             NECReferenceSheet(reference: nec)
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            let isComplete = (vm.scrollProgress >= 1.0 || (vm.lesson?.completionPercentage ?? 0) >= 1.0) && !showCelebration
+            if isComplete {
+                LessonCompletionBar(
+                    nextLessonTitle: nextCompletionTitle,
+                    onNext: {
+                        if let nextPartId = vm.nextPartLessonId() {
+                            vm.markComplete()
+                            nextLessonTarget = LessonNavigationTarget(id: nextPartId)
+                        } else if let nextId = vm.flowContext?.nextLessonId {
+                            if appVM.subscriptionState.hasPaidAccess == false {
+                                showPaywall = true
+                            } else {
+                                vm.markComplete()
+                                nextLessonTarget = LessonNavigationTarget(id: nextId)
+                            }
+                        } else {
+                            showModuleDetail = true
+                        }
+                    },
+                    onPractice: {
+                        if let topic = vm.lesson?.topic, !topic.isEmpty {
+                            practiceTopicTags = [topic]
+                        }
+                        showTopicQuiz = true
+                    }
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .animation(.spring(response: 0.45, dampingFraction: 0.8), value: isComplete)
+            }
         }
         .navigationDestination(item: $nextLessonTarget) { destination in
             LessonView(lessonId: destination.id)
@@ -203,6 +253,22 @@ private struct LessonContentView: View {
         max(vm.scrollProgress, lesson.completionPercentage)
     }
 
+    /// Indices of bullet sections that immediately follow a "Key Takeaways" heading.
+    private var takeawayIndices: Set<Int> {
+        var result = Set<Int>()
+        var inTakeaways = false
+        for (i, section) in lesson.sections.enumerated() {
+            if section.type == .heading && section.body == "Key Takeaways" {
+                inTakeaways = true
+            } else if section.type == .heading {
+                inTakeaways = false
+            } else if inTakeaways && section.type == .bullet {
+                result.insert(i)
+            }
+        }
+        return result
+    }
+
     var body: some View {
         GeometryReader { proxy in
             ScrollView {
@@ -216,23 +282,35 @@ private struct LessonContentView: View {
 
                     ForEach(Array(lesson.sections.enumerated()), id: \.element.id) { index, section in
                         let isHeadingBreak = section.type == .heading && index > 0
+                        let isTakeaway = takeawayIndices.contains(index)
                         Group {
                             if isHeadingBreak {
                                 VStack(alignment: .leading, spacing: WWSpacing.m) {
-                                    WWDivider()
-                                    LessonSectionView(section: section) { necCode in
-                                        if let ref = lesson.necReferences.first(where: { $0.code == necCode }) {
-                                            vm.tapNEC(ref)
-                                        }
+                                    // Skip divider before Key Takeaways — it gets its own styled header
+                                    if section.body != "Key Takeaways" {
+                                        WWDivider()
                                     }
+                                    LessonSectionView(
+                                        section: section,
+                                        onNECTap: { necCode in
+                                            if let ref = lesson.necReferences.first(where: { $0.code == necCode }) {
+                                                vm.tapNEC(ref)
+                                            }
+                                        },
+                                        isKeyTakeaway: isTakeaway
+                                    )
                                 }
                                 .padding(.top, WWSpacing.s)
                             } else {
-                                LessonSectionView(section: section) { necCode in
-                                    if let ref = lesson.necReferences.first(where: { $0.code == necCode }) {
-                                        vm.tapNEC(ref)
-                                    }
-                                }
+                                LessonSectionView(
+                                    section: section,
+                                    onNECTap: { necCode in
+                                        if let ref = lesson.necReferences.first(where: { $0.code == necCode }) {
+                                            vm.tapNEC(ref)
+                                        }
+                                    },
+                                    isKeyTakeaway: isTakeaway
+                                )
                             }
                         }
                     }
@@ -528,35 +606,81 @@ private struct PreviewLessonLockView: View {
 private struct LessonSectionView: View {
     let section: LessonSection
     let onNECTap: (String) -> Void
+    var isKeyTakeaway: Bool = false
+
+    private var isPracticalExample: Bool {
+        guard section.type == .paragraph else { return false }
+        let heading = (section.heading ?? "").lowercased()
+        return heading.contains("practical") || heading.contains("on the job")
+    }
 
     var body: some View {
         switch section.type {
         case .heading:
-            VStack(alignment: .leading, spacing: WWSpacing.xs) {
-                Text(section.heading ?? section.body)
-                    .wwSubheading()
+            // "Key Takeaways" heading gets its own styled header
+            if section.body == "Key Takeaways" {
+                HStack(spacing: WWSpacing.s) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.wwBlue)
+                    Text("Key Takeaways")
+                        .font(WWFont.label(.semibold))
+                        .textCase(.uppercase)
+                        .foregroundColor(.wwBlue)
+                        .tracking(0.4)
+                }
+                .padding(.top, WWSpacing.xs)
+            } else {
+                VStack(alignment: .leading, spacing: WWSpacing.xs) {
+                    Text(section.heading ?? section.body)
+                        .wwSubheading()
+                }
             }
 
         case .paragraph:
-            VStack(alignment: .leading, spacing: WWSpacing.s) {
-                if let heading = section.heading {
-                    Text(heading).wwSectionTitle()
+            if isPracticalExample {
+                // "On the Job" scenario card — styled differently
+                PracticalExampleCard(heading: section.heading, text: section.body)
+            } else {
+                VStack(alignment: .leading, spacing: WWSpacing.s) {
+                    if let heading = section.heading {
+                        Text(heading).wwSectionTitle()
+                    }
+                    Text(section.body)
+                        .wwBodyLarge(color: .wwTextPrimary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineSpacing(4)
                 }
-                Text(section.body)
-                    .wwBodyLarge(color: .wwTextPrimary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .lineSpacing(4)
             }
 
         case .bullet:
-            HStack(alignment: .top, spacing: WWSpacing.s) {
-                Circle()
-                    .fill(Color.wwBlue)
-                    .frame(width: 5, height: 5)
-                    .padding(.top, 8)
-                Text(section.body)
-                    .wwBody()
-                    .fixedSize(horizontal: false, vertical: true)
+            if isKeyTakeaway {
+                // Key takeaway bullet — styled with checkmark
+                HStack(alignment: .top, spacing: WWSpacing.s) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 15))
+                        .foregroundColor(.wwBlue)
+                        .padding(.top, 1)
+                    Text(section.body)
+                        .wwBody()
+                        .fixedSize(horizontal: false, vertical: true)
+                        .lineSpacing(3)
+                }
+                .padding(.horizontal, WWSpacing.m)
+                .padding(.vertical, WWSpacing.s)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.wwBlueDim)
+                .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
+            } else {
+                HStack(alignment: .top, spacing: WWSpacing.s) {
+                    Circle()
+                        .fill(Color.wwBlue)
+                        .frame(width: 5, height: 5)
+                        .padding(.top, 8)
+                    Text(section.body)
+                        .wwBody()
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
 
         case .callout:
@@ -568,6 +692,40 @@ private struct LessonSectionView: View {
         case .examTrap:
             ExamTrapCalloutCard(heading: section.heading, text: section.body)
         }
+    }
+}
+
+// MARK: - Practical Example Card
+
+private struct PracticalExampleCard: View {
+    let heading: String?
+    let text: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: WWSpacing.s) {
+            HStack(spacing: WWSpacing.s) {
+                Image(systemName: "wrench.and.screwdriver")
+                    .font(.system(size: 13))
+                    .foregroundColor(.wwTextSecondary)
+                Text(heading ?? "On the Job")
+                    .font(WWFont.body(.semibold))
+                    .foregroundColor(.wwTextSecondary)
+                    .lineLimit(1)
+            }
+            Text(text)
+                .wwBody(color: .wwTextPrimary)
+                .fixedSize(horizontal: false, vertical: true)
+                .lineSpacing(4)
+                .italic()
+        }
+        .padding(WWSpacing.m)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.wwSurface)
+        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous)
+                .strokeBorder(Color.wwDivider, lineWidth: 1)
+        )
     }
 }
 
@@ -594,38 +752,45 @@ private struct CalloutCard: View {
     var isNEC: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: WWSpacing.s) {
-            if let heading {
-                Text(heading)
-                    .font(WWFont.body(.semibold))
-                    .foregroundColor(.wwBlue)
-            }
-            Text(text)
-                .wwBody()
-                .fixedSize(horizontal: false, vertical: true)
-                .lineSpacing(4)
+        HStack(alignment: .top, spacing: 0) {
+            // Blue left accent bar
+            Rectangle()
+                .fill(Color.wwBlue.opacity(0.6))
+                .frame(width: 2.5)
 
-            if let necCode {
-                Button {
-                    onNECTap(necCode)
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "book.pages")
-                            .font(.system(size: 12))
-                        Text("NEC \(necCode)")
-                            .font(WWFont.caption(.semibold))
+            VStack(alignment: .leading, spacing: WWSpacing.s) {
+                if let heading {
+                    Text(heading)
+                        .font(WWFont.body(.semibold))
+                        .foregroundColor(.wwBlue)
+                }
+                Text(text)
+                    .wwBody()
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineSpacing(4)
+
+                if let necCode {
+                    Button {
+                        onNECTap(necCode)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "book.pages")
+                                .font(.system(size: 12))
+                            Text("NEC \(necCode)")
+                                .font(WWFont.caption(.semibold))
+                        }
+                        .foregroundColor(.wwBlue)
                     }
-                    .foregroundColor(.wwBlue)
                 }
             }
+            .padding(WWSpacing.m)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(WWSpacing.m)
-        .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.wwBlueDim)
         .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous)
-                .strokeBorder(Color.wwBlue.opacity(0.3), lineWidth: 1)
+                .strokeBorder(Color.wwBlue.opacity(0.25), lineWidth: 1)
         )
     }
 }
@@ -637,27 +802,34 @@ private struct ExamTrapCalloutCard: View {
     let text: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: WWSpacing.s) {
-            HStack(spacing: WWSpacing.s) {
-                Image(systemName: "exclamationmark.triangle")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.wwTextSecondary)
-                Text(heading ?? "Exam Trap")
-                    .font(WWFont.body(.semibold))
-                    .foregroundColor(.wwTextPrimary)
+        HStack(alignment: .top, spacing: 0) {
+            // Vivid left accent bar
+            Rectangle()
+                .fill(Color.wwWarning)
+                .frame(width: 3)
+
+            VStack(alignment: .leading, spacing: WWSpacing.s) {
+                HStack(spacing: WWSpacing.s) {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(.wwWarning)
+                    Text(heading ?? "Exam Trap")
+                        .font(WWFont.body(.semibold))
+                        .foregroundColor(.wwWarning)
+                }
+                Text(text)
+                    .wwBody()
+                    .fixedSize(horizontal: false, vertical: true)
+                    .lineSpacing(4)
             }
-            Text(text)
-                .wwBody()
-                .fixedSize(horizontal: false, vertical: true)
-                .lineSpacing(4)
+            .padding(WWSpacing.m)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(WWSpacing.m)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.wwSurface)
+        .background(Color.wwWarning.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: WWSpacing.Radius.s, style: .continuous)
-                .strokeBorder(Color.wwDivider, lineWidth: 1)
+                .strokeBorder(Color.wwWarning.opacity(0.25), lineWidth: 1)
         )
     }
 }
@@ -740,6 +912,60 @@ struct NECReferenceSheet: View {
                         .foregroundColor(.wwBlue)
                 }
             }
+        }
+    }
+}
+
+// MARK: - Lesson Completion Bar (Duolingo-style sticky bottom bar)
+
+private struct LessonCompletionBar: View {
+    let nextLessonTitle: String?
+    let onNext: () -> Void
+    let onPractice: () -> Void
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: WWSpacing.m) {
+                // Left: completion status
+                HStack(spacing: WWSpacing.s) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 16))
+                        .foregroundColor(.wwSuccess)
+                    Text("Complete")
+                        .font(WWFont.caption(.semibold))
+                        .foregroundColor(.wwSuccess)
+                }
+
+                Spacer()
+
+                // Right: primary next action
+                Button(action: onNext) {
+                    HStack(spacing: 4) {
+                        if let title = nextLessonTitle {
+                            Text(title)
+                                .font(WWFont.caption(.semibold))
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                                .frame(maxWidth: 140, alignment: .trailing)
+                        } else {
+                            Text("Browse Modules")
+                                .font(WWFont.caption(.semibold))
+                        }
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 12, weight: .semibold))
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal, WWSpacing.m)
+                    .padding(.vertical, 10)
+                    .background(Color.wwBlue)
+                    .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.horizontal, WWSpacing.m)
+            .padding(.vertical, WWSpacing.s + 2)
+            .background(Color.wwBackground)
         }
     }
 }

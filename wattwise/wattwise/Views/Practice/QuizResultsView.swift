@@ -1,4 +1,5 @@
 import SwiftUI
+import StoreKit
 import UniformTypeIdentifiers
 
 struct QuizResultsView: View {
@@ -8,135 +9,119 @@ struct QuizResultsView: View {
     @State private var expandedQuestion: UUID? = nil
     @Environment(AppViewModel.self) private var appVM
     @Environment(ServiceContainer.self) private var services
+    @Environment(\.requestReview) private var requestReview
+    @Environment(\.dismiss) private var dismiss
     @State private var showTutor = false
     @State private var tutorContext: TutorContext? = nil
     @State private var showPaywall = false
     @State private var paywallContext: PaywallContext = .previewQuizComplete
+
+    private let completedQuizzesKey = "ww_completed_quiz_count"
 
     private var isPreviewResultsGate: Bool {
         appVM.subscriptionState.hasPaidAccess == false && quizType == .quickQuiz
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: WWSpacing.l) {
-                // Score Hero
-                ScoreHeroView(result: result)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: WWSpacing.l) {
+                    // Score Hero
+                    ScoreHeroView(result: result)
 
-                // Time analytics — shown for timed sessions (full practice exam, calculation drill)
-                if result.totalElapsedSeconds != nil || result.questionTimesSeconds != nil {
-                    TimeAnalyticsCard(result: result, quizType: quizType)
-                }
-
-                if isPreviewResultsGate {
-                    WWCard {
-                        VStack(alignment: .leading, spacing: WWSpacing.m) {
-                            Text("Your preview quiz is complete")
-                                .wwSectionTitle()
-                            Text("Keep the momentum going with full lesson access, more practice, NEC help, and tutor support when you get stuck.")
-                                .wwBody(color: .wwTextSecondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                            WWPrimaryButton(title: "Start Full Prep") {
-                                paywallContext = .previewQuizComplete
-                                showPaywall = true
-                            }
-                        }
+                    // Time analytics — shown for timed sessions (full practice exam, calculation drill)
+                    if result.totalElapsedSeconds != nil || result.questionTimesSeconds != nil {
+                        TimeAnalyticsCard(result: result, quizType: quizType)
                     }
-                }
 
-                // Action Buttons
-                VStack(spacing: WWSpacing.m) {
                     if isPreviewResultsGate {
-                        WWSecondaryButton(title: "See Access Options") {
-                            paywallContext = .previewQuizComplete
-                            showPaywall = true
-                        }
-                    } else {
-                        WWPrimaryButton(title: "Retake Quiz", action: onRetry)
-                    }
-
-                    ShareLink(
-                        item: ScoreShareImage(result: result, quizType: quizType),
-                        preview: SharePreview(
-                            "My WattWise Score",
-                            image: ScoreShareImage(result: result, quizType: quizType)
-                        )
-                    ) {
-                        Label("Share My Score", systemImage: "square.and.arrow.up")
-                            .font(WWFont.body(.semibold))
-                            .foregroundColor(.wwBlue)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: WWSpacing.minTapTarget + 4)
-                            .overlay(
-                                Capsule().strokeBorder(Color.wwBlue, lineWidth: 1.5)
-                            )
-                    }
-                    .buttonStyle(.plain)
-
-                    if result.weakTopicDetails.isEmpty == false && appVM.subscriptionState.hasPaidAccess {
-                        NavigationLink {
-                            QuizContainerView(quizType: .weakAreaReview)
-                        } label: {
-                            ActionLinkLabel(title: "Review Weak Areas", style: .secondary)
-                        }
-                        .buttonStyle(.plain)
-                    } else if result.weakTopicDetails.isEmpty == false {
-                        Button {
-                            paywallContext = .weakAreaLocked
-                            showPaywall = true
-                        } label: {
-                            ActionLinkLabel(title: "Review Weak Areas", style: .secondary)
-                        }
-                        .buttonStyle(.plain)
-                    }
-
-                    NavigationLink {
-                        LearnView()
-                    } label: {
-                        ActionLinkLabel(title: "Continue Learning", style: .secondary)
-                    }
-                    .buttonStyle(.plain)
-
-                    WWGhostButton(title: "Ask Tutor About Results") {
-                        tutorContext = TutorContextBuilder.quizReview(result, user: appVM.currentUser)
-                        showTutor = true
-                    }
-                }
-
-                // Weak Topics (if any)
-                if result.weakTopicDetails.isEmpty == false {
-                    WeakTopicsCard(topics: result.weakTopicDetails) { topic in
-                        tutorContext = TutorContextBuilder.weakTopicStudy(topic, user: appVM.currentUser)
-                        showTutor = true
-                    }
-                }
-
-                // Question Breakdown
-                VStack(alignment: .leading, spacing: WWSpacing.m) {
-                    Text("Question Breakdown")
-                        .wwSectionTitle()
-
-                    ForEach(result.results) { qResult in
-                        QuestionResultCard(
-                            result: qResult,
-                            isExpanded: expandedQuestion == qResult.id
-                        ) {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                expandedQuestion = expandedQuestion == qResult.id ? nil : qResult.id
+                        WWCard {
+                            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                                Text("Your preview quiz is complete")
+                                    .wwSectionTitle()
+                                Text("Keep the momentum going with full lesson access, more practice, NEC help, and tutor support when you get stuck.")
+                                    .wwBody(color: .wwTextSecondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                WWPrimaryButton(title: "Start Full Prep") {
+                                    paywallContext = .previewQuizComplete
+                                    showPaywall = true
+                                }
                             }
-                        } onAskTutor: {
-                            tutorContext = TutorContextBuilder.quizReview(
-                                result,
-                                focusedQuestion: qResult,
-                                user: appVM.currentUser
-                            )
+                        }
+                    }
+
+                    // Action Buttons — max 3, Duolingo-style priority order
+                    VStack(spacing: WWSpacing.m) {
+                        if isPreviewResultsGate {
+                            // Preview gate: upsell is already shown above; offer retry
+                            WWGhostButton(title: "Try Again", action: onRetry)
+                        } else {
+                            // 1. Primary: Continue Learning (dismisses quiz flow)
+                            WWPrimaryButton(title: "Continue Learning") {
+                                dismiss()
+                            }
+
+                            // 2. Secondary: Review Mistakes (scrolls to breakdown) — only if not 100%
+                            if result.percentage < 100 {
+                                Button {
+                                    withAnimation { proxy.scrollTo("questionBreakdown", anchor: .top) }
+                                } label: {
+                                    ActionLinkLabel(title: "Review Mistakes", style: .secondary)
+                                }
+                                .buttonStyle(.plain)
+                            }
+
+                            // 3. Ghost: Try Again
+                            WWGhostButton(title: "Try Again", action: onRetry)
+                        }
+
+                        // Ask Tutor — demoted to small text link
+                        Button {
+                            tutorContext = TutorContextBuilder.quizReview(result, user: appVM.currentUser)
+                            showTutor = true
+                        } label: {
+                            Text("Ask Tutor About Results")
+                                .font(WWFont.caption(.medium))
+                                .foregroundColor(.wwTextMuted)
+                        }
+                    }
+
+                    // Weak Topics (if any)
+                    if result.weakTopicDetails.isEmpty == false {
+                        WeakTopicsCard(topics: result.weakTopicDetails) { topic in
+                            tutorContext = TutorContextBuilder.weakTopicStudy(topic, user: appVM.currentUser)
                             showTutor = true
                         }
                     }
+
+                    // Question Breakdown
+                    VStack(alignment: .leading, spacing: WWSpacing.m) {
+                        Text("Question Breakdown")
+                            .wwSectionTitle()
+
+                        ForEach(result.results) { qResult in
+                            QuestionResultCard(
+                                result: qResult,
+                                isExpanded: expandedQuestion == qResult.id
+                            ) {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    expandedQuestion = expandedQuestion == qResult.id ? nil : qResult.id
+                                }
+                            } onAskTutor: {
+                                tutorContext = TutorContextBuilder.quizReview(
+                                    result,
+                                    focusedQuestion: qResult,
+                                    user: appVM.currentUser
+                                )
+                                showTutor = true
+                            }
+                        }
+                    }
+                    .id("questionBreakdown")
                 }
+                .wwScreenPadding()
+                .padding(.vertical, WWSpacing.m)
             }
-            .wwScreenPadding()
-            .padding(.vertical, WWSpacing.m)
         }
         .background(Color.wwBackground)
         .sheet(isPresented: $showTutor) {
@@ -149,6 +134,17 @@ struct QuizResultsView: View {
                 .environment(services)
                 .environment(appVM)
         }
+        .onAppear {
+            maybeRequestReview()
+        }
+    }
+
+    private func maybeRequestReview() {
+        guard result.passed else { return }
+        let count = UserDefaults.standard.integer(forKey: completedQuizzesKey) + 1
+        UserDefaults.standard.set(count, forKey: completedQuizzesKey)
+        guard count >= 3 else { return }
+        Task { @MainActor in requestReview() }
     }
 }
 

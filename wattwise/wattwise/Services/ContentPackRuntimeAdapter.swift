@@ -352,7 +352,7 @@ enum WattWiseContentRuntimeAdapter {
 
     private static func lessonMap(from pack: WattWiseContentPack, includeDraftContent: Bool) -> [UUID: WWLesson] {
         let lessons: [WWLesson] = pack.fullLessonContent.flatMap { record in
-            guard includeDraftContent || record.verification.publishStatus == .published else { return [] }
+            guard includeDraftContent || record.verification.publishStatus == .published else { return [WWLesson]() }
             let moduleId = "module:\(record.certificationLevel.lowercased())-\(record.moduleName.lowercased().replacingOccurrences(of: " ", with: "-"))"
             let totalParts = partCountForLesson(record)
             return (1...totalParts).compactMap { partNumber in
@@ -572,6 +572,12 @@ enum WattWiseContentRuntimeAdapter {
     private static func persistProgress(_ progressByLesson: [String: StoredLessonProgress]) {
         guard let data = try? JSONEncoder().encode(progressByLesson) else { return }
         UserDefaults.standard.set(data, forKey: progressStorageKey)
+    }
+
+    /// Returns a dictionary of ISO-8601 date strings ("YYYY-MM-DD") to minutes studied.
+    /// Used by ProfileView to render the study activity calendar.
+    static func studyActivityByDate() -> [String: Int] {
+        storedStudyActivity()
     }
 
     private static func storedStudyActivity() -> [String: Int] {

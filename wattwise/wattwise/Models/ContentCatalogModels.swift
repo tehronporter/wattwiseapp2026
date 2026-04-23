@@ -1,5 +1,96 @@
 import Foundation
 
+enum ContentPublishStatus: String, Codable, CaseIterable {
+    case draft
+    case researched
+    case autoApproved = "auto_approved"
+    case published
+}
+
+enum ContentFreshnessStatus: String, Codable, CaseIterable {
+    case fresh
+    case stale
+    case unknown
+    case conflicted
+}
+
+struct ContentVerificationMetadata: Codable, Equatable {
+    var baseCodeCycle: String?
+    var jurisdictionScope: String
+    var lastVerifiedAt: String?
+    var sourceURLs: [String]
+    var sourceHashes: [String]
+    var verificationConfidence: Double
+    var freshnessStatus: ContentFreshnessStatus
+    var publishStatus: ContentPublishStatus
+    var stalenessReason: String?
+    var disclaimer: String?
+
+    static let draft = ContentVerificationMetadata(
+        baseCodeCycle: nil,
+        jurisdictionScope: "national",
+        lastVerifiedAt: nil,
+        sourceURLs: [],
+        sourceHashes: [],
+        verificationConfidence: 0,
+        freshnessStatus: .unknown,
+        publishStatus: .draft,
+        stalenessReason: "Content has not passed the automated verification pipeline yet.",
+        disclaimer: nil
+    )
+
+    private enum CodingKeys: String, CodingKey {
+        case baseCodeCycle = "base_code_cycle"
+        case jurisdictionScope = "jurisdiction_scope"
+        case lastVerifiedAt = "last_verified_at"
+        case sourceURLs = "source_urls"
+        case sourceHashes = "source_hashes"
+        case verificationConfidence = "verification_confidence"
+        case freshnessStatus = "freshness_status"
+        case publishStatus = "publish_status"
+        case stalenessReason = "staleness_reason"
+        case disclaimer
+    }
+
+    init(
+        baseCodeCycle: String?,
+        jurisdictionScope: String,
+        lastVerifiedAt: String?,
+        sourceURLs: [String],
+        sourceHashes: [String],
+        verificationConfidence: Double,
+        freshnessStatus: ContentFreshnessStatus,
+        publishStatus: ContentPublishStatus,
+        stalenessReason: String?,
+        disclaimer: String?
+    ) {
+        self.baseCodeCycle = baseCodeCycle
+        self.jurisdictionScope = jurisdictionScope
+        self.lastVerifiedAt = lastVerifiedAt
+        self.sourceURLs = sourceURLs
+        self.sourceHashes = sourceHashes
+        self.verificationConfidence = verificationConfidence
+        self.freshnessStatus = freshnessStatus
+        self.publishStatus = publishStatus
+        self.stalenessReason = stalenessReason
+        self.disclaimer = disclaimer
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        baseCodeCycle = try container.decodeIfPresent(String.self, forKey: .baseCodeCycle)
+        jurisdictionScope = (try? container.decode(String.self, forKey: .jurisdictionScope)) ?? "national"
+        lastVerifiedAt = try container.decodeIfPresent(String.self, forKey: .lastVerifiedAt)
+        sourceURLs = (try? container.decode([String].self, forKey: .sourceURLs)) ?? []
+        sourceHashes = (try? container.decode([String].self, forKey: .sourceHashes)) ?? []
+        verificationConfidence = (try? container.decode(Double.self, forKey: .verificationConfidence)) ?? 0
+        freshnessStatus = (try? container.decode(ContentFreshnessStatus.self, forKey: .freshnessStatus)) ?? .unknown
+        publishStatus = (try? container.decode(ContentPublishStatus.self, forKey: .publishStatus)) ?? .draft
+        stalenessReason = try container.decodeIfPresent(String.self, forKey: .stalenessReason)
+        disclaimer = try container.decodeIfPresent(String.self, forKey: .disclaimer)
+    }
+}
+
 // MARK: - Content Pack (top-level JSON structure)
 
 struct WattWiseContentPack: Codable {
@@ -61,9 +152,75 @@ struct WattWiseContentPack: Codable {
         try container.encode(sourceList, forKey: .sourceList)
     }
 
+    var publishedLessons: [LessonContentRecord] {
+        fullLessons.filter { $0.verification.publishStatus == .published }
+    }
+
+    var publishedQuestionBank: [QuestionBankRecord] {
+        questionBank.filter { $0.verification.publishStatus == .published }
+    }
+
     // Backwards-compat accessor used by WattWiseContentRuntimeAdapter
     var fullLessonContent: [LessonContentRecord] { fullLessons }
-    var curriculumFramework: [CourseBlueprint] { [] }
+    var curriculumFramework: [CourseBlueprint] { synthesizedCurriculumFramework() }
+
+    private func synthesizedCurriculumFramework() -> [CourseBlueprint] {
+        let groupedByCourse = Dictionary(grouping: fullLessons) { "\($0.certificationLevel)|\($0.courseTitle)" }
+
+        return groupedByCourse.values
+            .sorted {
+                courseRank(for: $0.first?.certificationLevel ?? "") < courseRank(for: $1.first?.certificationLevel ?? "")
+            }
+            .map { lessonRecords in
+                let first = lessonRecords[0]
+                let modules = Dictionary(grouping: lessonRecords) { $0.moduleName }
+                    .values
+                    .sorted { lhs, rhs in
+                        moduleSortOrder(for: lhs[0].moduleName) < moduleSortOrder(for: rhs[0].moduleName)
+                    }
+                    .map { moduleLessons in
+                        let sample = moduleLessons[0]
+                        let lessonBlueprints = moduleLessons
+                            .sorted { lhs, rhs in lhs.id.localizedStandardCompare(rhs.id) == .orderedAscending }
+                            .map { lesson in
+                                LessonBlueprint(
+                                    id: lesson.id,
+                                    lessonTitle: lesson.lessonTitle,
+                                    necReferences: lesson.references,
+                                    estimatedMinutes: lesson.estimatedMinutes
+                                )
+                            }
+
+                        return ModuleBlueprint(
+                            id: "module:\(sample.certificationLevel.lowercased())-\(sample.moduleName)",
+                            moduleName: sample.moduleName,
+                            learningObjectives: sample.learningObjectives,
+                            lessons: lessonBlueprints
+                        )
+                    }
+
+                return CourseBlueprint(
+                    id: "course:\(first.certificationLevel.lowercased())",
+                    courseTitle: first.courseTitle,
+                    certificationLevel: first.certificationLevel,
+                    courseDescription: first.learningObjectives.first ?? first.courseTitle,
+                    modules: modules
+                )
+            }
+    }
+
+    private func courseRank(for certificationLevel: String) -> Int {
+        switch certificationLevel.lowercased() {
+        case "apprentice": return 1
+        case "journeyman": return 2
+        case "master": return 3
+        default: return 99
+        }
+    }
+
+    private func moduleSortOrder(for moduleName: String) -> Int {
+        fullLessons.firstIndex(where: { $0.moduleName == moduleName }) ?? .max
+    }
 }
 
 // MARK: - Metadata
@@ -131,6 +288,31 @@ struct LessonContentRecord: Codable, Identifiable {
     var keyTakeaways: [String]
     var practiceQuestions: [String]
     var references: [String]
+    var verification: ContentVerificationMetadata
+    var estimatedMinutes: Int {
+        let bodyWords = lessonContent.reduce(0) { $0 + $1.body.split(separator: " ").count }
+        return min(max(bodyWords / 180, 10), 45)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, courseTitle, moduleName, lessonTitle, certificationLevel, learningObjectives, lessonContent, keyTakeaways, practiceQuestions, references
+        case verification
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        courseTitle = try container.decode(String.self, forKey: .courseTitle)
+        moduleName = try container.decode(String.self, forKey: .moduleName)
+        lessonTitle = try container.decode(String.self, forKey: .lessonTitle)
+        certificationLevel = try container.decode(String.self, forKey: .certificationLevel)
+        learningObjectives = (try? container.decode([String].self, forKey: .learningObjectives)) ?? []
+        lessonContent = (try? container.decode([LessonParagraph].self, forKey: .lessonContent)) ?? []
+        keyTakeaways = (try? container.decode([String].self, forKey: .keyTakeaways)) ?? []
+        practiceQuestions = (try? container.decode([String].self, forKey: .practiceQuestions)) ?? []
+        references = (try? container.decode([String].self, forKey: .references)) ?? []
+        verification = (try? container.decode(ContentVerificationMetadata.self, forKey: .verification)) ?? .draft
+    }
 }
 
 struct LessonParagraph: Codable, Identifiable {
@@ -152,6 +334,7 @@ struct QuestionBankRecord: Codable, Identifiable {
     var explanation: String
     var necReference: String
     var difficultyLevel: String
+    var verification: ContentVerificationMetadata
 
     private enum CodingKeys: String, CodingKey {
         case id
@@ -163,6 +346,7 @@ struct QuestionBankRecord: Codable, Identifiable {
         case explanation
         case necReference
         case difficultyLevel = "difficulty"
+        case verification
     }
 
     init(from decoder: Decoder) throws {
@@ -175,6 +359,7 @@ struct QuestionBankRecord: Codable, Identifiable {
         explanation = (try? container.decode(String.self, forKey: .explanation)) ?? ""
         necReference = (try? container.decode(String.self, forKey: .necReference)) ?? ""
         difficultyLevel = (try? container.decode(String.self, forKey: .difficultyLevel)) ?? "intermediate"
+        verification = (try? container.decode(ContentVerificationMetadata.self, forKey: .verification)) ?? .draft
 
         // Build answerChoices dict from individual optionA/B/C/D fields
         var choices: [String: String] = [:]
@@ -195,6 +380,7 @@ struct QuestionBankRecord: Codable, Identifiable {
         try container.encode(explanation, forKey: .explanation)
         try container.encode(necReference, forKey: .necReference)
         try container.encode(difficultyLevel, forKey: .difficultyLevel)
+        try container.encode(verification, forKey: .verification)
         try container.encodeIfPresent(answerChoices["A"], forKey: .optionA)
         try container.encodeIfPresent(answerChoices["B"], forKey: .optionB)
         try container.encodeIfPresent(answerChoices["C"], forKey: .optionC)
@@ -222,9 +408,10 @@ struct FlashcardRecord: Codable, Identifiable {
     var back: String
     var necReference: String
     var certificationLevel: String
+    var verification: ContentVerificationMetadata?
 
     private enum CodingKeys: String, CodingKey {
-        case id, front, back, certificationLevel
+        case id, front, back, certificationLevel, verification
         case necReference = "topic"
     }
 }
@@ -237,6 +424,7 @@ struct QuickReferenceGuide: Codable, Identifiable {
     var certificationLevel: String
     var bullets: [String]
     var references: [String]
+    var verification: ContentVerificationMetadata?
 }
 
 struct StudyPlanRecord: Codable, Identifiable {
@@ -245,6 +433,7 @@ struct StudyPlanRecord: Codable, Identifiable {
     var certificationLevel: String
     var durationWeeks: Int
     var weeklyFocus: [String]
+    var verification: ContentVerificationMetadata?
 }
 
 struct GlossaryEntryRecord: Codable, Identifiable {
@@ -253,6 +442,7 @@ struct GlossaryEntryRecord: Codable, Identifiable {
     var definition: String
     var necReference: String
     var certificationLevel: String
+    var verification: ContentVerificationMetadata?
 }
 
 // MARK: - Jurisdiction Notes

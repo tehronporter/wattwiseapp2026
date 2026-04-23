@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import AuthenticationServices
 
 // MARK: - Auth Service
 
@@ -8,12 +9,15 @@ protocol AuthServiceProtocol: AnyObject {
     var pendingEmailConfirmation: PendingEmailConfirmation? { get }
     func signIn(email: String, password: String) async throws -> WWUser
     func signUp(email: String, password: String, pending: PendingEmailConfirmation) async throws -> AuthSignUpResult
-    func signInWithApple(token: String) async throws -> WWUser
+    func signInWithApple(identityToken: String, nonce: String?, fullName: PersonNameComponents?) async throws -> WWUser
     func signOut() throws
     func restoreSession() async -> WWUser?
     func updateProfile(_ user: WWUser) async throws
+    func deleteAccount() async throws
     func resendConfirmation(email: String) async throws
     func handleAuthCallback(url: URL) async throws -> WWUser
+    func resetPassword(email: String) async throws
+    func updatePassword(accessToken: String, newPassword: String) async throws
 }
 
 @MainActor
@@ -72,12 +76,15 @@ final class MockAuthService: AuthServiceProtocol {
         return .authenticated(user)
     }
 
-    func signInWithApple(token: String) async throws -> WWUser {
+    func signInWithApple(identityToken: String, nonce: String?, fullName: PersonNameComponents?) async throws -> WWUser {
         try await Task.sleep(for: .milliseconds(500))
+        let displayName = [fullName?.givenName, fullName?.familyName]
+            .compactMap { $0 }
+            .joined(separator: " ")
         let user = WWUser(
             id: UUID(),
             email: "apple-user@privaterelay.com",
-            displayName: "Apple User",
+            displayName: displayName.isEmpty ? "Apple User" : displayName,
             examType: .apprentice,
             state: "",
             studyGoal: .moderate,
@@ -99,6 +106,11 @@ final class MockAuthService: AuthServiceProtocol {
     func updateProfile(_ user: WWUser) async throws {
         persist(user)
         currentUser = user
+    }
+
+    func deleteAccount() async throws {
+        try await Task.sleep(for: .milliseconds(300))
+        try signOut()
     }
 
     func resendConfirmation(email: String) async throws {
@@ -136,6 +148,14 @@ final class MockAuthService: AuthServiceProtocol {
         return user
     }
 
+    func resetPassword(email: String) async throws {
+        try await Task.sleep(for: .milliseconds(500))
+    }
+
+    func updatePassword(accessToken: String, newPassword: String) async throws {
+        try await Task.sleep(for: .milliseconds(500))
+    }
+
     private func persist(_ user: WWUser) {
         if let data = try? JSONEncoder().encode(user) {
             UserDefaults.standard.set(data, forKey: userKey)
@@ -154,7 +174,7 @@ protocol ContentServiceProtocol: AnyObject {
 final class MockContentService: ContentServiceProtocol {
     func fetchModules() async throws -> [WWModule] {
         try await Task.sleep(for: .milliseconds(600))
-        var modules = try WattWiseContentRuntimeAdapter.loadModules()
+        var modules = try WattWiseContentRuntimeAdapter.loadModules(includeDraftContent: true)
         // Append the Exam Strategy module (Code Navigation Engine)
         modules.append(MockData.examStrategyModule)
         return modules
@@ -166,7 +186,7 @@ final class MockContentService: ContentServiceProtocol {
         if let lesson = MockData.examStrategyModule.lessons.first(where: { $0.id == id }) {
             return lesson
         }
-        return try WattWiseContentRuntimeAdapter.loadLesson(id: id)
+        return try WattWiseContentRuntimeAdapter.loadLesson(id: id, includeDraftContent: true)
     }
 
     func saveProgress(lessonId: UUID, completion: Double) async throws {

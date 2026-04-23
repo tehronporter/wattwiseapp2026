@@ -3,88 +3,170 @@ import SwiftUI
 // MARK: - Learn Path Node View
 
 /// A circular node representing a module on the winding learn path.
-/// Shows completion state, topic theme color, and a pulsing animation for in-progress modules.
+/// Four visual states: locked, available, inProgress, completed.
 struct LearnPathNodeView: View {
     let module: WWModule
     let index: Int
     let theme: WWTopicTheme
+    var isLocked: Bool = false          // true = sequentially locked (prev not started)
+    var isCurrentNode: Bool = false     // true = the active "next up" node to pulse
 
     @State private var isPulsing = false
 
-    private var nodeState: NodeState {
+    var nodeState: NodeState {
+        if isLocked { return .locked }
         if module.progress >= 1.0 { return .completed }
         if module.progress > 0    { return .inProgress }
-        return .locked
+        return .available
     }
 
-    private enum NodeState {
-        case completed, inProgress, locked
+    enum NodeState {
+        case locked, available, inProgress, completed
     }
+
+    // MARK: Computed Style
+
+    private var nodeSize: CGFloat {
+        switch nodeState {
+        case .inProgress: return 80
+        case .available:  return 76
+        case .completed:  return 74
+        case .locked:     return 68
+        }
+    }
+
+    private var nodeFill: Color {
+        switch nodeState {
+        case .locked:     return Color.wwSurface
+        case .available:  return Color.wwBlueDim
+        case .inProgress: return Color.wwBlue
+        case .completed:  return Color.wwSuccess
+        }
+    }
+
+    private var nodeBorder: Color {
+        switch nodeState {
+        case .locked:     return Color.wwDivider
+        case .available:  return Color.wwBlue.opacity(0.5)
+        case .inProgress: return Color.wwBlue
+        case .completed:  return Color.wwSuccess
+        }
+    }
+
+    private var nodeBorderWidth: CGFloat {
+        nodeState == .inProgress ? 2.5 : 1.5
+    }
+
+    private var iconName: String {
+        switch nodeState {
+        case .locked:     return "lock"
+        case .completed:  return "checkmark"
+        default:          return theme.icon
+        }
+    }
+
+    private var iconColor: Color {
+        switch nodeState {
+        case .locked:     return .wwTextMuted
+        case .available:  return .wwBlue
+        case .inProgress: return .white
+        case .completed:  return .white
+        }
+    }
+
+    private var iconSize: CGFloat {
+        switch nodeState {
+        case .locked:     return 18
+        case .completed:  return 22
+        case .inProgress: return 22
+        case .available:  return 22
+        }
+    }
+
+    private var nodeOpacity: Double {
+        nodeState == .locked ? 0.45 : 1.0
+    }
+
+    // MARK: Progress badge text
+
+    private var badgeText: String? {
+        switch nodeState {
+        case .completed:
+            return "\(module.lessonCount)/\(module.lessonCount)"
+        case .inProgress:
+            let done = module.completedLessons
+            return "\(done)/\(module.lessonCount)"
+        case .available:
+            return "\(module.lessonCount) lessons"
+        case .locked:
+            return "\(module.lessonCount) lessons"
+        }
+    }
+
+    private var badgeForeground: Color {
+        switch nodeState {
+        case .completed:  return .wwSuccess
+        case .inProgress: return .wwBlue
+        default:          return .wwTextMuted
+        }
+    }
+
+    private var badgeBackground: Color {
+        switch nodeState {
+        case .completed:  return Color.wwSuccess.opacity(0.12)
+        case .inProgress: return Color.wwBlueDim
+        default:          return Color.clear
+        }
+    }
+
+    // MARK: Body
 
     var body: some View {
         VStack(spacing: WWSpacing.s) {
             ZStack {
-                // Outer pulse ring (in-progress only)
-                if nodeState == .inProgress {
+                // Pulse ring — available or in-progress current node
+                if isCurrentNode || nodeState == .inProgress {
                     Circle()
-                        .stroke(theme.color.opacity(0.25), lineWidth: 6)
-                        .frame(width: 88, height: 88)
-                        .scaleEffect(isPulsing ? 1.12 : 1.0)
-                        .opacity(isPulsing ? 0 : 0.6)
+                        .stroke(Color.wwBlue.opacity(isPulsing ? 0.25 : 0.04), lineWidth: 8)
+                        .frame(width: nodeSize + 16, height: nodeSize + 16)
+                        .scaleEffect(isPulsing ? 1.06 : 0.96)
                         .animation(
-                            .easeInOut(duration: 1.2).repeatForever(autoreverses: false),
+                            .easeInOut(duration: 1.3).repeatForever(autoreverses: true),
                             value: isPulsing
                         )
                 }
 
-                // Base circle
+                // Base circle fill
                 Circle()
-                    .fill(theme.color.opacity(nodeState == .locked ? 0.06 : 0.14))
-                    .frame(width: 72, height: 72)
+                    .fill(nodeFill)
+                    .frame(width: nodeSize, height: nodeSize)
                     .overlay(
                         Circle()
-                            .strokeBorder(
-                                nodeState == .locked ? Color.wwDivider : theme.color,
-                                lineWidth: nodeState == .inProgress ? 2.5 : 2
-                            )
+                            .strokeBorder(nodeBorder, lineWidth: nodeBorderWidth)
                     )
 
-                // Icon / lock overlay
-                if nodeState == .locked {
-                    Image(systemName: "lock.fill")
-                        .font(.system(size: 22, weight: .medium))
-                        .foregroundColor(.wwTextMuted)
-                } else {
-                    Image(systemName: theme.icon)
-                        .font(.system(size: 26, weight: .medium))
-                        .foregroundColor(theme.color)
-                }
-
-                // Completed badge (top-right)
-                if nodeState == .completed {
-                    Circle()
-                        .fill(Color.wwSuccess)
-                        .frame(width: 22, height: 22)
-                        .overlay(
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(.white)
-                        )
-                        .offset(x: 26, y: -26)
-                }
-
-                // In-progress ring badge (bottom-right arc)
-                if nodeState == .inProgress {
+                // In-progress arc overlay on top of base circle
+                if nodeState == .inProgress && module.progress > 0 {
                     Circle()
                         .trim(from: 0, to: module.progress)
-                        .stroke(theme.color, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                        .frame(width: 72, height: 72)
+                        .stroke(
+                            Color.white.opacity(0.4),
+                            style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                        )
+                        .frame(width: nodeSize - 6, height: nodeSize - 6)
                         .rotationEffect(.degrees(-90))
                 }
+
+                // Icon
+                Image(systemName: iconName)
+                    .font(.system(size: iconSize, weight: nodeState == .completed ? .bold : .regular))
+                    .foregroundColor(iconColor)
             }
-            .frame(width: 90, height: 90)
-            .scaleEffect(nodeState == .inProgress ? (isPulsing ? 1.03 : 1.0) : 1.0)
-            .animation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true), value: isPulsing)
+            .frame(width: nodeSize + 20, height: nodeSize + 20)
+            .opacity(nodeOpacity)
+            .onAppear {
+                if nodeState == .inProgress || isCurrentNode { isPulsing = true }
+            }
 
             // Module title
             Text(module.title)
@@ -92,16 +174,33 @@ struct LearnPathNodeView: View {
                 .foregroundColor(nodeState == .locked ? .wwTextMuted : .wwTextPrimary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
-                .frame(width: 100)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(width: 108)
 
-            // Lesson count
-            Text("\(module.lessonCount) lessons")
-                .font(WWFont.label())
-                .foregroundColor(.wwTextMuted)
-        }
-        .onAppear {
+            // State badge
             if nodeState == .inProgress {
-                isPulsing = true
+                Text("Continue →")
+                    .font(WWFont.label(.semibold))
+                    .foregroundColor(.wwBlue)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Color.wwBlueDim)
+                    .clipShape(Capsule())
+            } else if let badge = badgeText {
+                HStack(spacing: 3) {
+                    if nodeState == .completed {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundColor(.wwSuccess)
+                    }
+                    Text(badge)
+                        .font(WWFont.label(nodeState == .completed ? .semibold : .regular))
+                        .foregroundColor(badgeForeground)
+                }
+                .padding(.horizontal, nodeState == .completed ? 8 : 0)
+                .padding(.vertical, nodeState == .completed ? 3 : 0)
+                .background(badgeBackground)
+                .clipShape(Capsule())
             }
         }
     }

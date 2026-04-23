@@ -63,7 +63,7 @@ struct HomeView: View {
             case .lesson(let lessonId):
                 LessonView(lessonId: lessonId)
             case .learn:
-                LearnView()
+                LearnHubView()
             case .quiz(let type):
                 QuizContainerView(quizType: type)
             case .tutor:
@@ -120,6 +120,8 @@ private struct HomeContentView: View {
     let onRoute: (HomeRoute) -> Void
     let onOpenPaywall: () -> Void
 
+    @State private var weakAreas: [WeakTopicDetail] = []
+
     private enum PresentationState {
         case newUser(ProgressSummary.ContinueLearning?)
         case active(ProgressSummary.ContinueLearning?)
@@ -137,25 +139,7 @@ private struct HomeContentView: View {
 
     var body: some View {
         VStack(spacing: WWSpacing.l) {
-            if subscription.hasPaidAccess == false {
-                WWCard {
-                    VStack(alignment: .leading, spacing: WWSpacing.s) {
-                        Text("Preview Access")
-                            .wwLabel()
-                            .textCase(.uppercase)
-                        Text(subscription.previewSummary)
-                            .wwBody(color: .wwTextSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                        WWGhostButton(title: "See Full Access Options", color: .wwBlue, action: onOpenPaywall)
-                    }
-                }
-            }
-
-            // Exam track roadmap — always visible once user has a track set
-            if let examType = currentUser?.examType {
-                ExamTrackRoadmapCard(examType: examType, stateCode: currentUser?.state, onRoute: onRoute)
-            }
-
+            // Primary action — dominant card, content varies by state
             switch state {
             case .newUser(let lesson):
                 if let lesson {
@@ -171,23 +155,19 @@ private struct HomeContentView: View {
                     } onSecondary: {
                         onRoute(.learn)
                     }
-                }
-                TodaysFocusCard(
-                    title: "Today's Focus",
-                    message: lesson.map {
-                        "Start with \($0.lessonTitle) in \($0.moduleTitle) so your next step is clear from the first session."
-                    } ?? "Browse Learn and start with your first lesson.",
-                    actionTitle: lesson == nil ? "Browse Modules" : "Open Lesson",
-                    icon: "bolt"
-                ) {
-                    if let lesson {
-                        onRoute(.lesson(lesson.lessonId))
-                    } else {
+                } else {
+                    PrimaryActionCard(
+                        eyebrow: "Get Started",
+                        title: "Begin your study path",
+                        message: "Browse modules and start your first lesson when you're ready.",
+                        primaryTitle: "Open Learn",
+                        secondaryTitle: nil,
+                        icon: "book"
+                    ) {
                         onRoute(.learn)
                     }
                 }
-                DailyGoalCard(goal: summary.dailyGoal)
-                QuickActionsSection(onRoute: onRoute)
+                QuickActionsSection(onRoute: onRoute, showLearnBrowse: true)
 
             case .active(let lesson):
                 if let lesson {
@@ -198,29 +178,28 @@ private struct HomeContentView: View {
                     ) {
                         onRoute(.lesson(lesson.lessonId))
                     }
+                } else {
+                    PrimaryActionCard(
+                        eyebrow: "Keep Going",
+                        title: "Continue Learning",
+                        message: "Your study path is waiting — pick up from where you left off.",
+                        primaryTitle: "Open Learn",
+                        secondaryTitle: nil,
+                        icon: "arrow.right.circle"
+                    ) {
+                        onRoute(.learn)
+                    }
                 }
-
-                TodaysFocusCard(
-                    title: "Today's Focus",
-                    message: summary.recommendedAction ?? "Keep moving through your study path.",
-                    actionTitle: summary.hasInProgressLesson ? "Start Quick Quiz" : "Open Learn",
-                    icon: summary.hasInProgressLesson ? "bolt" : "lightbulb"
-                ) {
-                    onRoute(summary.hasInProgressLesson ? .quiz(.quickQuiz) : .learn)
-                }
-
-                DailyGoalCard(goal: summary.dailyGoal)
-                QuickActionsSection(onRoute: onRoute)
 
             case .returning(let lesson):
                 PrimaryActionCard(
                     eyebrow: "Welcome Back",
-                    title: lesson?.progress ?? 0 > 0 ? "Resume where you left off" : "Restart with a clear next step",
+                    title: (lesson?.progress ?? 0) > 0 ? "Resume where you left off" : "Ready to keep going?",
                     message: lesson.map {
-                        "Return to \($0.lessonTitle) in \($0.moduleTitle) or take a short refresher quiz to get back into rhythm."
+                        "Return to \($0.lessonTitle) in \($0.moduleTitle) — or take a quick quiz to get back into rhythm."
                     } ?? "Open Learn and jump into the next lesson when you're ready.",
                     primaryTitle: lesson == nil ? "Open Learn" : "Resume Lesson",
-                    secondaryTitle: "Start Quick Quiz",
+                    secondaryTitle: "Quick Quiz",
                     icon: "clock.arrow.circlepath"
                 ) {
                     if let lesson {
@@ -231,21 +210,33 @@ private struct HomeContentView: View {
                 } onSecondary: {
                     onRoute(.quiz(.quickQuiz))
                 }
+            }
 
-                TodaysFocusCard(
-                    title: "Re-entry Focus",
-                    message: "A short quiz is the fastest way to rebuild confidence and remember what needs attention.",
-                    actionTitle: "Review with Quiz",
-                    icon: "list.bullet.clipboard"
-                ) {
-                    onRoute(.quiz(.quickQuiz))
+            // Daily goal — always visible
+            DailyGoalCard(goal: summary.dailyGoal)
+
+            // Weak areas — only when they exist
+            if !weakAreas.isEmpty {
+                WeakAreasCard(weakAreas: weakAreas) {
+                    onRoute(.quiz(.weakAreaReview))
                 }
+            }
 
-                DailyGoalCard(goal: summary.dailyGoal)
-                QuickActionsSection(onRoute: onRoute)
+            // Preview notice — subtle, at the bottom
+            if subscription.hasPaidAccess == false {
+                PreviewAccessNotice(summary: subscription.previewSummary, onOpenPaywall: onOpenPaywall)
             }
         }
+        .onAppear {
+            loadWeakAreas()
+        }
     }
+
+    private func loadWeakAreas() {
+        let keys = PracticeHistoryStore.shared.suggestedWeakTopicKeys(limit: 3)
+        weakAreas = PracticeHistoryStore.shared.topicDetails(for: keys)
+    }
+
 }
 
 private struct PrimaryActionCard: View {
@@ -259,12 +250,12 @@ private struct PrimaryActionCard: View {
     var onSecondary: (() -> Void)? = nil
 
     var body: some View {
-        WWCard {
+        WWCard(padding: WWSpacing.l) {
             VStack(alignment: .leading, spacing: WWSpacing.m) {
                 HStack(alignment: .top, spacing: WWSpacing.m) {
                     ZStack {
                         Circle()
-                            .stroke(Color.wwBlue.opacity(0.18), lineWidth: 1)
+                            .fill(Color.wwBlueDim)
                             .frame(width: 44, height: 44)
                         Image(systemName: icon)
                             .font(.system(size: 18, weight: .regular))
@@ -291,6 +282,10 @@ private struct PrimaryActionCard: View {
                 }
             }
         }
+        .overlay(
+            RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous)
+                .strokeBorder(Color.wwBlue.opacity(0.2), lineWidth: 1.5)
+        )
     }
 }
 
@@ -301,7 +296,7 @@ private struct ContinueLearningCard: View {
     let action: () -> Void
 
     var body: some View {
-        WWCard {
+        WWCard(padding: WWSpacing.l) {
             VStack(alignment: .leading, spacing: WWSpacing.m) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
@@ -314,9 +309,14 @@ private struct ContinueLearningCard: View {
                             .wwCaption()
                     }
                     Spacer()
-                    Image(systemName: "play.circle")
-                        .font(.system(size: 34, weight: .regular))
-                        .foregroundColor(.wwBlue)
+                    ZStack {
+                        Circle()
+                            .fill(Color.wwBlueDim)
+                            .frame(width: 44, height: 44)
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 16, weight: .regular))
+                            .foregroundColor(.wwBlue)
+                    }
                 }
 
                 VStack(alignment: .leading, spacing: WWSpacing.xs) {
@@ -325,92 +325,59 @@ private struct ContinueLearningCard: View {
                             .wwCaption()
                         Spacer()
                     }
-                    WWProgressBar(value: lesson.progress)
+                    WWProgressBar(value: lesson.progress, height: 6)
                 }
 
                 WWPrimaryButton(title: actionTitle, action: action)
             }
         }
+        .overlay(
+            RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous)
+                .strokeBorder(Color.wwBlue.opacity(0.2), lineWidth: 1.5)
+        )
     }
 }
 
-private struct TodaysFocusCard: View {
-    let title: String
-    let message: String
-    let actionTitle: String
-    let icon: String
-    let action: () -> Void
-
-    var body: some View {
-        WWCard {
-            VStack(alignment: .leading, spacing: WWSpacing.m) {
-                HStack(spacing: WWSpacing.m) {
-                    ZStack {
-                        Circle()
-                            .stroke(Color.wwBlue.opacity(0.16), lineWidth: 1)
-                            .frame(width: 40, height: 40)
-                        Image(systemName: icon)
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundColor(.wwBlue)
-                    }
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(title)
-                            .wwLabel()
-                            .textCase(.uppercase)
-                        Text(message)
-                            .wwBody()
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-
-                WWSecondaryButton(title: actionTitle, action: action)
-            }
-        }
-    }
-}
 
 private struct DailyGoalCard: View {
     let goal: ProgressSummary.DailyGoal
 
+    private var isGoalReached: Bool { goal.minutesCompleted >= goal.targetMinutes }
+
     var body: some View {
-        WWCard {
-            VStack(alignment: .leading, spacing: WWSpacing.m) {
-                HStack {
-                    Text("Daily Goal")
-                        .wwLabel()
-                        .textCase(.uppercase)
-                    Spacer()
-                    Text("\(goal.minutesCompleted) / \(goal.targetMinutes) min")
-                        .wwCaption()
-                }
-                WWProgressBar(value: goal.progress, height: 6)
-                Text(goal.minutesCompleted >= goal.targetMinutes
-                     ? "Goal reached. Keep going only if you have the energy."
-                     : "\(goal.targetMinutes - goal.minutesCompleted) minutes left to reach your goal")
-                    .wwCaption(color: .wwTextSecondary)
+        VStack(spacing: WWSpacing.s) {
+            HStack {
+                Label("Today", systemImage: isGoalReached ? "checkmark.circle.fill" : "clock")
+                    .font(WWFont.label(.semibold))
+                    .foregroundColor(isGoalReached ? .wwSuccess : .wwTextMuted)
+                Spacer()
+                Text("\(goal.minutesCompleted) / \(goal.targetMinutes) min")
+                    .font(WWFont.caption(.semibold))
+                    .foregroundColor(isGoalReached ? .wwSuccess : .wwTextSecondary)
             }
+            WWProgressBar(value: goal.progress, height: 5, color: isGoalReached ? .wwSuccess : .wwBlue)
         }
+        .padding(.horizontal, WWSpacing.m)
+        .padding(.vertical, WWSpacing.m)
+        .background(Color.wwSurface)
+        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
     }
 }
 
 private struct QuickActionsSection: View {
     let onRoute: (HomeRoute) -> Void
+    var showLearnBrowse: Bool = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: WWSpacing.m) {
-            Text("More Options")
-                .wwLabel()
-                .textCase(.uppercase)
-
-            HStack(spacing: WWSpacing.m) {
-                CompactActionCard(icon: "bolt", label: "Quick Quiz") {
-                    onRoute(.quiz(.quickQuiz))
-                }
-                CompactActionCard(icon: "bubble.left", label: "Ask Tutor") {
-                    onRoute(.tutor)
-                }
-                CompactActionCard(icon: "book", label: "Browse Modules") {
+        HStack(spacing: WWSpacing.m) {
+            CompactActionCard(icon: "bolt", label: "Quick Quiz") {
+                onRoute(.quiz(.quickQuiz))
+            }
+            CompactActionCard(icon: "bubble.left", label: "Ask Tutor") {
+                onRoute(.tutor)
+            }
+            if showLearnBrowse {
+                CompactActionCard(icon: "book", label: "Browse") {
                     onRoute(.learn)
                 }
             }
@@ -443,29 +410,6 @@ private struct CompactActionCard: View {
     }
 }
 
-private struct StreakBadge: View {
-    let days: Int
-
-    var body: some View {
-        HStack(spacing: 4) {
-            Image(systemName: "flame")
-                .font(.system(size: 14))
-                .foregroundColor(.wwBlue)
-            Text("\(days) day\(days == 1 ? "" : "s")")
-                .font(WWFont.caption(.semibold))
-                .foregroundColor(.wwTextPrimary)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 7)
-        .background(Color.wwBlueDim)
-        .clipShape(Capsule())
-        .overlay(
-            Capsule()
-                .strokeBorder(Color.wwBlue.opacity(0.18), lineWidth: 1)
-        )
-    }
-}
-
 // MARK: - Exam Countdown Banner
 
 private struct ExamCountdownBanner: View {
@@ -473,11 +417,7 @@ private struct ExamCountdownBanner: View {
     let examType: ExamType
 
     private var urgencyColor: Color {
-        switch daysRemaining {
-        case 0...7:   return .wwError
-        case 8...30:  return .wwBlue
-        default:      return .wwSuccess
-        }
+        daysRemaining <= 7 ? .wwError : .wwBlue
     }
 
     private var urgencyMessage: String {
@@ -502,8 +442,11 @@ private struct ExamCountdownBanner: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("\(daysRemaining) day\(daysRemaining == 1 ? "" : "s") until your \(examType.displayName) exam")
                         .wwSectionTitle()
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                     Text(urgencyMessage)
                         .wwCaption(color: .wwTextSecondary)
+                        .lineLimit(2)
                 }
                 Spacer()
             }
@@ -511,160 +454,30 @@ private struct ExamCountdownBanner: View {
     }
 }
 
-// MARK: - Exam Track Roadmap Card
+// MARK: - Preview Access Notice (subtle, appears at bottom)
 
-private struct ExamTrackRoadmapCard: View {
-    let examType: ExamType
-    var stateCode: String? = nil
-    let onRoute: (HomeRoute) -> Void
-
-    private static let copperColor = Color(red: 0.72, green: 0.45, blue: 0.2)
-    private static let greenColor  = Color(red: 0.13, green: 0.69, blue: 0.37)
-
-    private var pillars: [RoadmapPillar] {
-        switch examType {
-        case .apprentice:
-            return [
-                RoadmapPillar(label: "Comprehension", icon: "book.closed", color: .wwBlue,
-                              items: ["Electrical theory", "Basic NEC structure", "Safety rules"]),
-                RoadmapPillar(label: "Application", icon: "hammer", color: Self.copperColor,
-                              items: ["Branch circuits", "Grounding basics", "Wiring methods"]),
-                RoadmapPillar(label: "Execution", icon: "checkmark.seal", color: Self.greenColor,
-                              items: ["Exam strategy", "Code navigation", "Time management"])
-            ]
-        case .journeyman:
-            return [
-                RoadmapPillar(label: "Comprehension", icon: "book.closed", color: .wwBlue,
-                              items: ["NEC article mastery", "Load calc theory", "Conductor rules"]),
-                RoadmapPillar(label: "Application", icon: "hammer", color: Self.copperColor,
-                              items: ["Load calcs", "Box fill & conduit", "Motor circuits"]),
-                RoadmapPillar(label: "Execution", icon: "checkmark.seal", color: Self.greenColor,
-                              items: ["Question decoding", "NEC index speed", "Timed practice"])
-            ]
-        case .master:
-            return [
-                RoadmapPillar(label: "Comprehension", icon: "book.closed", color: .wwBlue,
-                              items: ["Advanced theory", "Code hierarchy", "Special occupancies"]),
-                RoadmapPillar(label: "Application", icon: "hammer", color: Self.copperColor,
-                              items: ["Multi-family calcs", "Voltage drop", "Motor feeders"]),
-                RoadmapPillar(label: "Execution", icon: "checkmark.seal", color: Self.greenColor,
-                              items: ["Complex analysis", "Table mastery", "Calc drills"])
-            ]
-        }
-    }
-
-    var body: some View {
-        WWCard {
-            VStack(alignment: .leading, spacing: WWSpacing.m) {
-                HStack(spacing: WWSpacing.s) {
-                    Image(systemName: "map")
-                        .font(.system(size: 14))
-                        .foregroundColor(.wwBlue)
-                    Text("\(examType.displayName) Exam Roadmap")
-                        .wwLabel()
-                        .textCase(.uppercase)
-                    Spacer()
-                    if let state = stateCode, !state.isEmpty {
-                        Text(state.uppercased())
-                            .font(WWFont.caption(.semibold))
-                            .foregroundColor(.wwBlue)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .background(Color.wwBlueDim)
-                            .clipShape(Capsule())
-                    }
-                }
-
-                Text("Three pillars every passing candidate masters.")
-                    .wwCaption(color: .wwTextSecondary)
-
-                HStack(alignment: .top, spacing: WWSpacing.s) {
-                    ForEach(pillars.indices, id: \.self) { i in
-                        PillarColumn(pillar: pillars[i])
-                    }
-                }
-
-                // CTA row
-                HStack(spacing: WWSpacing.m) {
-                    Button {
-                        onRoute(.learn)
-                    } label: {
-                        Label("Study", systemImage: "book")
-                            .font(WWFont.caption(.semibold))
-                            .foregroundColor(.wwBlue)
-                    }
-                    .buttonStyle(.plain)
-
-                    Divider().frame(height: 14)
-
-                    Button {
-                        onRoute(.quiz(.quickQuiz))
-                    } label: {
-                        Label("Practice", systemImage: "bolt")
-                            .font(WWFont.caption(.semibold))
-                            .foregroundColor(.wwBlue)
-                    }
-                    .buttonStyle(.plain)
-
-                    Divider().frame(height: 14)
-
-                    Button {
-                        onRoute(.tutor)
-                    } label: {
-                        Label("Ask Tutor", systemImage: "bubble.left")
-                            .font(WWFont.caption(.semibold))
-                            .foregroundColor(.wwBlue)
-                    }
-                    .buttonStyle(.plain)
-
-                    Spacer()
-                }
-            }
-        }
-    }
-}
-
-private struct RoadmapPillar {
-    let label: String
-    let icon: String
-    let color: Color
-    let items: [String]
-}
-
-private struct PillarColumn: View {
-    let pillar: RoadmapPillar
+private struct PreviewAccessNotice: View {
+    let summary: String
+    let onOpenPaywall: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: WWSpacing.s) {
-            HStack(spacing: 4) {
-                Image(systemName: pillar.icon)
-                    .font(.system(size: 11))
-                    .foregroundColor(pillar.color)
-                Text(pillar.label)
+            HStack {
+                Text("Preview Access")
+                    .wwLabel()
+                    .textCase(.uppercase)
+                Spacer()
+                Button("See Options", action: onOpenPaywall)
                     .font(WWFont.caption(.semibold))
-                    .foregroundColor(pillar.color)
+                    .foregroundColor(.wwBlue)
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(pillar.color.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
-
-            VStack(alignment: .leading, spacing: 4) {
-                ForEach(pillar.items, id: \.self) { item in
-                    HStack(alignment: .top, spacing: 4) {
-                        Circle()
-                            .fill(pillar.color.opacity(0.5))
-                            .frame(width: 4, height: 4)
-                            .padding(.top, 4)
-                        Text(item)
-                            .font(.system(size: 10, weight: .regular))
-                            .foregroundColor(.wwTextSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-            }
+            Text(summary)
+                .wwCaption(color: .wwTextSecondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(WWSpacing.m)
+        .background(Color.wwSurface)
+        .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
     }
 }
 
@@ -709,6 +522,61 @@ private struct ShimmerModifier: ViewModifier {
                     phase = 1.5
                 }
             }
+    }
+}
+
+private struct WeakAreasCard: View {
+    let weakAreas: [WeakTopicDetail]
+    let onReview: () -> Void
+
+    var body: some View {
+        WWCard {
+            VStack(alignment: .leading, spacing: WWSpacing.m) {
+                HStack(spacing: WWSpacing.s) {
+                    Image(systemName: "target")
+                        .font(.system(size: 14))
+                        .foregroundColor(.wwBlue)
+                    Text("Weak Areas")
+                        .wwLabel()
+                        .textCase(.uppercase)
+                    Spacer()
+                    Text("From recent practice")
+                        .wwLabel()
+                        .foregroundColor(.wwTextMuted)
+                }
+
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(Array(weakAreas.prefix(3).enumerated()), id: \.element.id) { index, topic in
+                        HStack(spacing: WWSpacing.m) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(topic.title)
+                                    .font(WWFont.body(.medium))
+                                    .foregroundColor(.wwTextPrimary)
+                                    .lineLimit(1)
+                                Text("\(topic.incorrectCount) missed")
+                                    .wwCaption(color: .wwTextSecondary)
+                            }
+                            Spacer()
+                            Text("\(Int((1.0 - topic.accuracy) * 100))%")
+                                .font(WWFont.caption(.semibold))
+                                .foregroundColor(.wwError)
+                        }
+                        .padding(.vertical, WWSpacing.s)
+                        if index < weakAreas.prefix(3).count - 1 {
+                            Divider()
+                        }
+                    }
+                }
+
+                WWPrimaryButton(title: "Review Weak Areas", action: onReview)
+            }
+        }
+    }
+}
+
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        indices.contains(index) ? self[index] : nil
     }
 }
 

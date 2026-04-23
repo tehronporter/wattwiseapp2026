@@ -4,7 +4,7 @@ import Foundation
 // Posted by APIClient when a 401 cannot be recovered via token refresh.
 // AppRootView observes this and transitions the user back to the sign-in screen.
 extension Notification.Name {
-    static let wwSessionExpired = Notification.Name("WattWise.SessionExpired")
+    nonisolated static let wwSessionExpired = Notification.Name("WattWise.SessionExpired")
 }
 
 // MARK: - API Client (Supabase Edge Functions)
@@ -49,6 +49,7 @@ actor APIClient {
                 accessToken = nil
                 // Notify the app shell to force the user back to sign-in.
                 NotificationCenter.default.post(name: .wwSessionExpired, object: nil)
+                Analytics.trackError(surface: "api_\(endpoint)", message: "Unauthorized after session restore failed")
                 throw APIError.unauthorized
             }
 
@@ -62,6 +63,7 @@ actor APIClient {
                 // Force sign-out so the user is never stuck in a broken authenticated state.
                 accessToken = nil
                 NotificationCenter.default.post(name: .wwSessionExpired, object: nil)
+                Analytics.trackError(surface: "api_\(endpoint)", message: "Unauthorized after retried request")
                 throw APIError.unauthorized
             }
         }
@@ -118,22 +120,28 @@ actor APIClient {
                 // Provide detailed decoding error with raw response for debugging
                 let rawResponse = String(data: data, encoding: .utf8) ?? "Could not decode response"
                 let fullError = "Decoding failed: \(decodeError.localizedDescription). Response: \(rawResponse.prefix(500))"
+                Analytics.trackError(surface: "api_decode_\(request.url?.lastPathComponent ?? "unknown")", message: fullError)
                 throw APIError.decodingError(fullError)
             } catch {
                 // Re-throw any other errors
                 throw error
             }
         case 401:
+            Analytics.trackError(surface: "api_\(request.url?.lastPathComponent ?? "unknown")", message: "401 unauthorized")
             throw APIError.unauthorized
         case 403:
             let wrapper = try? JSONDecoder().decode(SupabaseResponse<EmptyDecodable>.self, from: data)
+            Analytics.trackError(surface: "api_\(request.url?.lastPathComponent ?? "unknown")", message: wrapper?.error?.message ?? "403 forbidden")
             throw APIError.forbidden(wrapper?.error?.message ?? "Access unavailable.")
         case 429:
+            Analytics.trackError(surface: "api_\(request.url?.lastPathComponent ?? "unknown")", message: "429 rate limited")
             throw APIError.rateLimited
         case 404:
+            Analytics.trackError(surface: "api_\(request.url?.lastPathComponent ?? "unknown")", message: "404 not found")
             throw APIError.notFound
         default:
             let msg = String(data: data, encoding: .utf8) ?? "Unknown error"
+            Analytics.trackError(surface: "api_\(request.url?.lastPathComponent ?? "unknown")", message: "HTTP \(http.statusCode): \(msg)")
             throw APIError.serverError("HTTP \(http.statusCode): \(msg)")
         }
     }

@@ -97,6 +97,12 @@ Deno.serve(async (req: Request) => {
         title,
         estimated_minutes,
         is_published,
+        publish_status,
+        freshness_status,
+        base_code_cycle,
+        jurisdiction_scope,
+        last_verified_at,
+        disclaimer,
         modules (
           title
         )
@@ -105,7 +111,7 @@ Deno.serve(async (req: Request) => {
       .maybeSingle();
 
     if (lessonError) throw lessonError;
-    if (!lesson || lesson.is_published === false) {
+    if (!lesson || lesson.is_published === false || lesson.publish_status !== "published") {
       return json({ success: false, error: { message: "Lesson not found" } }, 404);
     }
 
@@ -168,6 +174,15 @@ Deno.serve(async (req: Request) => {
 
     const moduleRecord = firstRelation(lesson.modules);
 
+    const { data: previewLesson } = await supabase
+      .from("lessons")
+      .select("id")
+      .eq("is_published", true)
+      .eq("publish_status", "published")
+      .order("sort_order", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
     return json({
       success: true,
       data: {
@@ -181,6 +196,15 @@ Deno.serve(async (req: Request) => {
           completionPercentage: completion,
           sections,
           necReferences,
+          publishStatus: lesson.publish_status ?? null,
+          freshnessStatus: lesson.freshness_status ?? null,
+          baseCodeCycle: lesson.base_code_cycle ?? null,
+          jurisdictionScope: lesson.jurisdiction_scope ?? "national",
+          lastVerifiedAt: lesson.last_verified_at ?? null,
+          disclaimer: lesson.disclaimer ?? null,
+          isLocked: previewLesson ? previewLesson.id !== lesson.id : false,
+          isPreviewIncluded: previewLesson ? previewLesson.id === lesson.id : false,
+          requiresPaidAccess: previewLesson ? previewLesson.id !== lesson.id : false,
         },
       },
     });

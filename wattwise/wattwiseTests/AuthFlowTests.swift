@@ -1,4 +1,5 @@
 import Foundation
+import AuthenticationServices
 import Testing
 @testable import wattwise
 
@@ -31,7 +32,7 @@ private final class ScenarioAuthService: AuthServiceProtocol {
         return signUpResult
     }
 
-    func signInWithApple(token: String) async throws -> WWUser {
+    func signInWithApple(identityToken: String, nonce: String?, fullName: PersonNameComponents?) async throws -> WWUser {
         throw AppError.invalidInput("Unsupported in tests.")
     }
 
@@ -46,6 +47,10 @@ private final class ScenarioAuthService: AuthServiceProtocol {
 
     func updateProfile(_ user: WWUser) async throws {
         currentUser = user
+    }
+
+    func deleteAccount() async throws {
+        currentUser = nil
     }
 
     func resendConfirmation(email: String) async throws {
@@ -64,6 +69,10 @@ private final class ScenarioAuthService: AuthServiceProtocol {
     func handleAuthCallback(url: URL) async throws -> WWUser {
         try callbackResult.get()
     }
+
+    func resetPassword(email: String) async throws {}
+
+    func updatePassword(accessToken: String, newPassword: String) async throws {}
 }
 
 struct AuthFlowTests {

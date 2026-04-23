@@ -1048,7 +1048,7 @@ enum MockData {
                     LessonSection(id: UUID(uuidString: "EAAA0004-0010-0000-0000-000000000001")!, heading: nil, body: "Chapter 5–7 rules modify Chapter 1–4 rules. Always check if a special condition applies.", type: .bullet)
                 ],
                 necReferences: [
-                    NECReference(id: UUID(uuidString: "EAAA0004-NEC1-0000-0000-000000000001")!, code: "90.3", title: "Code Arrangement", summary: "Chapters 1–4 are general; Chapters 5–7 supplement or modify them for special conditions.", expanded: nil, edition: "2023")
+                    NECReference(id: UUID(), code: "90.3", title: "Code Arrangement", summary: "Chapters 1–4 are general; Chapters 5–7 supplement or modify them for special conditions.", expanded: nil, edition: "2023")
                 ]
             ),
             WWLesson(

@@ -39,6 +39,7 @@ Deno.serve(async (req: Request) => {
         id,
         title,
         description,
+        exam_type,
         estimated_minutes,
         sort_order,
         module_topic_tags (
@@ -58,14 +59,23 @@ Deno.serve(async (req: Request) => {
         id,
         module_id,
         title,
+        exam_type,
         estimated_minutes,
+        publish_status,
+        freshness_status,
+        base_code_cycle,
+        jurisdiction_scope,
+        last_verified_at,
+        disclaimer,
         sort_order
       `)
       .eq("is_published", true)
+      .eq("publish_status", "published")
       .order("sort_order", { ascending: true });
 
     if (lessonsError) throw lessonsError;
 
+    const previewLessonId = (lessons ?? [])[0]?.id ?? null;
     const lessonIds = (lessons ?? []).map((lesson: any) => lesson.id);
     const { data: progressRows, error: progressError } = lessonIds.length === 0
       ? { data: [], error: null }
@@ -98,6 +108,15 @@ Deno.serve(async (req: Request) => {
         completionPercentage: completion,
         sections: [],
         necReferences: [],
+        publishStatus: lesson.publish_status ?? null,
+        freshnessStatus: lesson.freshness_status ?? null,
+        baseCodeCycle: lesson.base_code_cycle ?? null,
+        jurisdictionScope: lesson.jurisdiction_scope ?? "national",
+        lastVerifiedAt: lesson.last_verified_at ?? null,
+        disclaimer: lesson.disclaimer ?? null,
+        isLocked: previewLessonId ? lesson.id !== previewLessonId : false,
+        isPreviewIncluded: previewLessonId ? lesson.id === previewLessonId : false,
+        requiresPaidAccess: previewLessonId ? lesson.id !== previewLessonId : false,
       };
 
       if (!lessonsByModule.has(lesson.module_id)) {
@@ -132,6 +151,23 @@ Deno.serve(async (req: Request) => {
         ).filter(Boolean),
         progress: averageProgress,
         lessons: moduleLessons,
+        examType: module.exam_type ?? null,
+        publishStatus: moduleLessons.every((lesson: any) => lesson.publishStatus === "published")
+          ? "published"
+          : "draft",
+        freshnessStatus: moduleLessons.some((lesson: any) => lesson.freshnessStatus === "conflicted")
+          ? "conflicted"
+          : moduleLessons.some((lesson: any) => lesson.freshnessStatus === "stale")
+            ? "stale"
+            : moduleLessons.every((lesson: any) => lesson.freshnessStatus === "fresh")
+              ? "fresh"
+              : "unknown",
+        jurisdictionScope: moduleLessons[0]?.jurisdictionScope ?? "national",
+        lastVerifiedAt: moduleLessons
+          .map((lesson: any) => lesson.lastVerifiedAt)
+          .filter(Boolean)
+          .sort()
+          .at(-1) ?? null,
       };
     });
 

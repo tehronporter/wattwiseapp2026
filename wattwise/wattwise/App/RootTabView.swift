@@ -59,8 +59,8 @@ struct RootTabView: View {
     @ViewBuilder
     private func tabContent(_ tab: WWTab) -> some View {
         switch tab {
-        case .home:     LearningHubView()
-        case .learn:    LearningHubView()  // Consolidated: same as home
+        case .home:     HomeView()
+        case .learn:    LearnHubView()
         case .practice: PracticeView()
         case .tutor:    TutorView()
         case .profile:  ProfileView()

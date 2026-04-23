@@ -7,11 +7,15 @@ struct ModuleDetailView: View {
     @State private var showPaywall = false
 
     private var previewLessonID: UUID? {
-        try? WattWiseContentRuntimeAdapter.previewLessonID()
+        module.lessons.first(where: { $0.isPreviewIncluded == true })?.id
+            ?? (try? WattWiseContentRuntimeAdapter.previewLessonID(includeDraftContent: false))
     }
 
     private func isLocked(_ lesson: WWLesson) -> Bool {
         guard appVM.subscriptionState.hasPaidAccess == false else { return false }
+        if let locked = lesson.isLocked {
+            return locked
+        }
         return lesson.id != previewLessonID
     }
 
@@ -78,7 +82,7 @@ struct ModuleDetailView: View {
                                     index: index + 1,
                                     lesson: lesson,
                                     isLocked: false,
-                                    isPreviewLesson: appVM.subscriptionState.hasPaidAccess == false && lesson.id == previewLessonID
+                                    isPreviewLesson: appVM.subscriptionState.hasPaidAccess == false && (lesson.isPreviewIncluded == true || lesson.id == previewLessonID)
                                 )
                             }
                             .buttonStyle(.plain)
@@ -154,6 +158,8 @@ private struct LessonRow: View {
                     Text(lesson.title)
                         .font(WWFont.body(.medium))
                         .foregroundColor(.wwTextPrimary)
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
                     if isPreviewLesson {
                         Text("Preview")
                             .wwLabel(color: .wwBlue)
@@ -219,7 +225,7 @@ private struct StatPill: View {
 
 #Preview {
     NavigationStack {
-        ModuleDetailView(module: ((try? WattWiseContentRuntimeAdapter.loadModules())?.first) ?? WWModule(
+        ModuleDetailView(module: ((try? WattWiseContentRuntimeAdapter.loadModules(includeDraftContent: true))?.first) ?? WWModule(
             id: UUID(),
             title: "Preview Module",
             description: "Preview data unavailable.",
@@ -227,7 +233,12 @@ private struct StatPill: View {
             estimatedMinutes: 0,
             topicTags: [],
             progress: 0,
-            lessons: []
+            lessons: [],
+            examType: nil,
+            publishStatus: nil,
+            freshnessStatus: nil,
+            jurisdictionScope: nil,
+            lastVerifiedAt: nil
         ))
     }
 }

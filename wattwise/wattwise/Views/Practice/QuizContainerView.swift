@@ -3,6 +3,7 @@ import SwiftUI
 // Container that manages the quiz flow: Loading → Active Quiz → Celebration → Results
 struct QuizContainerView: View {
     let quizType: QuizType
+    var topicTags: [String] = []
     @State private var vm = QuizViewModel()
     @State private var showPaywall = false
     @State private var showCelebration = false
@@ -27,14 +28,14 @@ struct QuizContainerView: View {
             } else if let result = vm.result, !showCelebration {
                 QuizResultsView(result: result, quizType: quizType) {
                     vm.reset()
-                    Task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
+                    Task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, topicTags: topicTags, services: services) }
                 }
             } else if let quiz = vm.quiz, quiz.questions.isEmpty == false {
                 ActiveQuizView(vm: vm, quizType: quizType)
             } else if let error = vm.errorMessage {
                 WWEmptyState(icon: "exclamationmark.triangle", title: "Couldn't load quiz", message: error, actionTitle: "Retry") {
                     vm.reset()
-                    Task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
+                    Task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, topicTags: topicTags, services: services) }
                 }
             } else {
                 WWEmptyState(
@@ -73,9 +74,9 @@ struct QuizContainerView: View {
                 .environment(services)
                 .environment(appVM)
         }
-        .task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, services: services) }
-        .onChange(of: vm.result) { _, newResult in
-            guard newResult != nil else { return }
+        .task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, topicTags: topicTags, services: services) }
+        .onChange(of: vm.result?.id) { _, newResultID in
+            guard newResultID != nil else { return }
             showCelebration = true
         }
         .fullScreenCover(isPresented: $showCelebration) {
@@ -175,7 +176,7 @@ private struct ActiveQuizView: View {
                                                 UINotificationFeedbackGenerator().notificationOccurred(.error)
                                             }
                                             withAnimation(.easeInOut(duration: 0.25)) {
-                                                vm.revealedQuestions.insert(question.id)
+                                                _ = vm.revealedQuestions.insert(question.id)
                                             }
                                         }
                                     }
@@ -226,7 +227,7 @@ private struct ActiveQuizView: View {
                             Task { await vm.submit(services: services, appVM: appVM) }
                         } else if let q = vm.currentQuestion, vm.answers[q.id] != nil {
                             withAnimation(.easeInOut(duration: 0.25)) {
-                                vm.revealedQuestions.insert(q.id)
+                                _ = vm.revealedQuestions.insert(q.id)
                             }
                         }
                     }
@@ -240,7 +241,7 @@ private struct ActiveQuizView: View {
                         ) {
                             if let q = vm.currentQuestion, vm.answers[q.id] != nil {
                                 withAnimation(.easeInOut(duration: 0.25)) {
-                                    vm.revealedQuestions.insert(q.id)
+                                    _ = vm.revealedQuestions.insert(q.id)
                                 }
                             }
                         }
@@ -288,9 +289,9 @@ private struct QuestionMetaBadges: View {
 
     private var difficultyColor: Color {
         switch question.difficultyLevel?.lowercased() {
-        case "hard": return .wwError
-        case "medium": return Color(red: 0.82, green: 0.52, blue: 0.0)
-        default: return .wwSuccess
+        case "hard":   return .wwError
+        case "medium": return .wwWarning
+        default:       return .wwTextMuted
         }
     }
 

@@ -41,6 +41,23 @@ actor SupabaseAuthClient {
         return try await post(path: "/token?grant_type=password", body: body, responseType: AuthSession.self)
     }
 
+    func signInWithApple(identityToken: String, nonce: String?) async throws -> AuthSession {
+        struct AppleTokenRequest: Encodable, Sendable {
+            let provider: String
+            let idToken: String
+            let nonce: String?
+
+            private enum CodingKeys: String, CodingKey {
+                case provider
+                case idToken = "id_token"
+                case nonce
+            }
+        }
+
+        let body = AppleTokenRequest(provider: "apple", idToken: identityToken, nonce: nonce)
+        return try await post(path: "/token?grant_type=id_token", body: body, responseType: AuthSession.self)
+    }
+
     // MARK: - Sign Out
 
     func signOut(accessToken: String) async throws {
@@ -54,6 +71,39 @@ actor SupabaseAuthClient {
     func refreshSession(refreshToken: String) async throws -> AuthSession {
         let body = ["refresh_token": refreshToken]
         return try await post(path: "/token?grant_type=refresh_token", body: body, responseType: AuthSession.self)
+    }
+
+    // MARK: - Password Reset
+
+    func resetPassword(email: String) async throws {
+        struct ResetRequest: Encodable, Sendable {
+            let email: String
+            let redirectTo: String
+
+            private enum CodingKeys: String, CodingKey {
+                case email
+                case redirectTo = "redirect_to"
+            }
+        }
+        let _: EmptyResponse = try await post(
+            path: "/recover",
+            body: ResetRequest(email: email, redirectTo: AuthRedirectConfiguration.appCallbackURL.absoluteString),
+            responseType: EmptyResponse.self
+        )
+    }
+
+    func updatePassword(accessToken: String, newPassword: String) async throws {
+        struct UpdateRequest: Encodable, Sendable { let password: String }
+        var request = makeRequest(path: "/user", accessToken: accessToken)
+        request.httpMethod = "PUT"
+        request.httpBody = try JSONEncoder().encode(UpdateRequest(password: newPassword))
+        let (data, response) = try await session.data(for: request)
+        if let status = (response as? HTTPURLResponse)?.statusCode, status >= 400 {
+            if let errBody = try? JSONDecoder().decode(AuthErrorBody.self, from: data) {
+                throw AuthError.server(errBody.msg ?? errBody.error_description ?? "Auth error")
+            }
+            throw AuthError.server("HTTP \(status)")
+        }
     }
 
     func resendSignUpConfirmation(email: String, redirectTo: URL?) async throws {

@@ -1,117 +1,93 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
 const path = require("path");
+const {
+  buildReadinessReport,
+  collectLessonAudit,
+  collectQuestionAudit,
+  defaultContentPackPath,
+  loadJson,
+  verificationOf,
+  writeJson,
+} = require("./content_pipeline_utils.cjs");
 
-const root = path.resolve(__dirname, "..");
-const packPath = path.join(root, "wattwise", "Resources", "WattWiseContentPack.json");
-const seedPath = path.join(root, "supabase", "seed.sql");
-const schemaPaths = [
-  path.join(root, "supabase", "migrations", "20260330000000_wattwise_schema.sql"),
-  path.join(root, "supabase", "migrations", "20260401010000_content_pipeline_hardening.sql"),
-];
+const contentPackPath = process.argv[2]
+  ? path.resolve(process.argv[2])
+  : defaultContentPackPath();
+const outputPath = process.argv[3] ? path.resolve(process.argv[3]) : null;
 
-const edgeFunctions = [
-  "get_modules",
-  "get_lesson",
-  "save_progress",
-  "progress_summary",
-  "nec_search",
-  "nec_detail",
-  "nec_explain",
-];
+const pack = loadJson(contentPackPath);
+const readinessReport = buildReadinessReport(pack);
+const lessonAudit = readinessReport.lesson_audit;
+const questionAudit = readinessReport.question_audit;
 
-const requiredHeadings = [
-  "Learning objective",
-  "Why this matters",
-  "Core explanation",
-  "Key concepts",
-  "NEC / code relevance",
-  "Practical example",
-  "Common mistakes",
-  "Exam insight",
-];
+const publishedLessons = lessonAudit.filter((entry) => entry.publish_status === "published");
+const publishedQuestions = questionAudit.filter((entry) => entry.publish_status === "published");
 
-function fail(message) {
-  console.error(`FAIL: ${message}`);
-  process.exitCode = 1;
+const report = {
+  ...readinessReport,
+  generated_at: new Date().toISOString(),
+  content_pack_path: contentPackPath,
+  lessons: lessonAudit,
+  questions: questionAudit,
+  summary: {
+    lesson_issues: lessonAudit.reduce((count, lesson) => count + lesson.issues.length, 0),
+    question_issues: questionAudit.reduce((count, question) => count + question.issues.length, 0),
+    published_content_ready:
+      publishedLessons.length > 0 &&
+      publishedQuestions.length > 0 &&
+      lessonAudit.every((lesson) => lesson.publish_status !== "published" || lesson.issues.length === 0) &&
+      questionAudit.every((question) => question.publish_status !== "published" || question.issues.length === 0),
+    draft_content_ready:
+      lessonAudit.length === 92 &&
+      lessonAudit.every((lesson) => lesson.issues.length === 0) &&
+      questionAudit.every((question) => question.issues.length === 0),
+  },
+};
+
+if (outputPath) {
+  writeJson(outputPath, report);
 }
 
-function expect(condition, message) {
-  if (!condition) fail(message);
+const errors = [];
+
+if (lessonAudit.length !== 92) {
+  errors.push(`Expected 92 lessons, found ${lessonAudit.length}.`);
 }
 
-function countOccurrences(haystack, needle) {
-  return (haystack.match(new RegExp(needle, "g")) || []).length;
+const lessonFailures = lessonAudit.filter((lesson) => lesson.issues.length > 0);
+const questionFailures = questionAudit.filter((question) => question.issues.length > 0);
+
+if (lessonFailures.length > 0) {
+  errors.push(`${lessonFailures.length} lessons have validation issues.`);
 }
 
-const pack = JSON.parse(fs.readFileSync(packPath, "utf8"));
-const seed = fs.readFileSync(seedPath, "utf8");
-const schemas = schemaPaths.map((filePath) => fs.readFileSync(filePath, "utf8")).join("\n");
+if (questionFailures.length > 0) {
+  errors.push(`${questionFailures.length} practice questions have validation issues.`);
+}
 
-const blueprintIds = pack.curriculumFramework.flatMap((course) =>
-  course.modules.flatMap((module) => module.lessons.map((lesson) => lesson.id))
-);
-const authoredIds = pack.fullLessonContent.map((lesson) => lesson.id);
-
-expect(new Set(blueprintIds).size === 24, "Curriculum should define exactly 24 lesson IDs.");
-expect(
-  JSON.stringify([...new Set(blueprintIds)].sort()) === JSON.stringify([...new Set(authoredIds)].sort()),
-  "Authored lesson IDs must match curriculum lesson IDs exactly."
-);
-
-for (const lesson of pack.fullLessonContent) {
-  expect(
-    JSON.stringify(lesson.lessonContent.map((section) => section.heading)) === JSON.stringify(requiredHeadings),
-    `Lesson ${lesson.id} must follow the required heading order.`
+for (const lesson of publishedLessons) {
+  const verification = verificationOf(
+    (pack.fullLessons || []).find((entry) => entry.id === lesson.id)
   );
-  expect(lesson.keyTakeaways.length >= 4, `Lesson ${lesson.id} must have at least 4 takeaways.`);
-  expect(lesson.practiceQuestions.length >= 3, `Lesson ${lesson.id} must have at least 3 practice questions.`);
-  expect(lesson.references.length > 0, `Lesson ${lesson.id} must have references.`);
-
-  const sectionRefs = new Set(lesson.lessonContent.flatMap((section) => section.necReferences));
-  for (const code of sectionRefs) {
-    expect(
-      lesson.references.includes(code),
-      `Lesson ${lesson.id} is missing ${code} from top-level references.`
-    );
+  if ((verification.source_hashes || []).length === 0) {
+    errors.push(`Published lesson ${lesson.id} is missing source_hashes.`);
   }
 }
 
-expect(countOccurrences(seed, "INSERT INTO modules ") === 12, "Seed must insert 12 modules.");
-expect(countOccurrences(seed, "INSERT INTO lessons ") === 24, "Seed must insert 24 lessons.");
-expect(countOccurrences(seed, "INSERT INTO lesson_sections ") === 408, "Seed must insert 408 lesson sections.");
-expect(countOccurrences(seed, "INSERT INTO lesson_nec_references ") > 0, "Seed must insert lesson NEC references.");
-
-const requiredSchemaFragments = [
-  "CREATE TABLE IF NOT EXISTS modules",
-  "CREATE TABLE IF NOT EXISTS lessons",
-  "CREATE TABLE IF NOT EXISTS lesson_sections",
-  "CREATE TABLE IF NOT EXISTS topic_tags",
-  "CREATE TABLE IF NOT EXISTS lesson_topic_tags",
-  "CREATE TABLE IF NOT EXISTS nec_entries",
-  "CREATE TABLE IF NOT EXISTS nec_search_index",
-  "CREATE TABLE IF NOT EXISTS lesson_nec_references",
-  "CREATE TABLE IF NOT EXISTS lesson_progress",
-  "CREATE OR REPLACE FUNCTION public.handle_new_user_profile()",
-  "CREATE UNIQUE INDEX IF NOT EXISTS idx_lesson_sections_lesson_sort_unique",
-];
-
-for (const fragment of requiredSchemaFragments) {
-  expect(schemas.includes(fragment), `Schema is missing required fragment: ${fragment}`);
+if (errors.length > 0) {
+  console.error("Automated content validation failed.");
+  for (const error of errors) {
+    console.error(`- ${error}`);
+  }
+  process.exitCode = 1;
+} else {
+  console.log("Automated content validation passed.");
 }
 
-for (const functionName of edgeFunctions) {
-  const filePath = path.join(root, "supabase", "functions", functionName, "index.ts");
-  const source = fs.readFileSync(filePath, "utf8");
-  expect(source.includes("success: true"), `${functionName} must return success responses.`);
-  expect(source.includes("data:"), `${functionName} must wrap payloads in a data envelope.`);
-}
-
-if (process.exitCode !== 1) {
-  console.log("Content pipeline validation passed.");
-  console.log("Lessons: 24");
-  console.log("Modules: 12");
-  console.log("Seed lesson sections: 408");
-  console.log(`Edge functions checked: ${edgeFunctions.length}`);
+console.log(`Lessons: ${lessonAudit.length} (${publishedLessons.length} published)`);
+console.log(`Practice questions: ${questionAudit.length} (${publishedQuestions.length} published)`);
+console.log(`Readiness score: ${readinessReport.score_out_of_10}/10`);
+if (outputPath) {
+  console.log(`Audit report: ${outputPath}`);
 }

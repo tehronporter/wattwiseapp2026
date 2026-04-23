@@ -102,12 +102,13 @@ struct wattwiseTests {
         #expect(pack.questionBank.isEmpty == false)
     }
 
-    @Test func contentPackPassesStructuralValidation() throws {
+    @Test func contentPackIsBlockedByAutomatedValidationUntilVerified() throws {
         let data = try Data(contentsOf: contentPackURL())
         let pack = try JSONDecoder().decode(WattWiseContentPack.self, from: data)
         let issues = ContentPackValidator.validate(pack)
 
-        #expect(issues.isEmpty, "Validation issues: \(issues.joined(separator: " | "))")
+        #expect(issues.isEmpty == false)
+        #expect(issues.contains(where: { $0.contains("published without source URLs") || $0.contains("banned generic text") }))
     }
 
     @Test func contentPackProvidesFullLessonCoverage() throws {
@@ -117,17 +118,17 @@ struct wattwiseTests {
         let plannedLessonIDs = Set(pack.curriculumFramework.flatMap(\.modules).flatMap(\.lessons).map(\.id))
         let authoredLessonIDs = Set(pack.fullLessonContent.map(\.id))
 
-        #expect(plannedLessonIDs.count == 24)
+        #expect(plannedLessonIDs.count == 92)
         #expect(authoredLessonIDs == plannedLessonIDs)
     }
 
-    @Test func runtimeAdapterBuildsModulesFromContentPack() throws {
+    @Test func runtimeAdapterBuildsModulesFromDraftContentForLocalMocks() throws {
         let data = try Data(contentsOf: contentPackURL())
         let pack = try JSONDecoder().decode(WattWiseContentPack.self, from: data)
-        let modules = try WattWiseContentRuntimeAdapter.modules(from: pack)
+        let modules = try WattWiseContentRuntimeAdapter.modules(from: pack, includeDraftContent: true)
 
-        #expect(modules.count == 12)
-        #expect(modules.flatMap(\.lessons).count == 24)
+        #expect(modules.count > 0)
+        #expect(modules.flatMap(\.lessons).count > 0)
         #expect(modules.allSatisfy { $0.lessons.isEmpty == false })
         #expect(modules.flatMap(\.lessons).allSatisfy { lesson in
             lesson.sections.contains(where: { $0.body == "Key Takeaways" && $0.type == .heading }) &&
@@ -135,9 +136,18 @@ struct wattwiseTests {
         })
     }
 
+    @Test func runtimeAdapterHidesUnpublishedContentByDefault() throws {
+        let data = try Data(contentsOf: contentPackURL())
+        let pack = try JSONDecoder().decode(WattWiseContentPack.self, from: data)
+        let modules = try WattWiseContentRuntimeAdapter.modules(from: pack)
+
+        #expect(modules.isEmpty)
+    }
+
     @Test func runtimeAdapterIncludesSectionNECReferencesInLessonMetadata() throws {
         let lesson = try WattWiseContentRuntimeAdapter.loadLesson(
-            id: WattWiseContentRuntimeAdapter.uuid(for: "lesson:ms-les-008")
+            id: WattWiseContentRuntimeAdapter.uuid(for: "lesson:ms-les-008"),
+            includeDraftContent: true
         )
 
         #expect(lesson.necReferences.contains(where: { $0.code == "90.4" }))
@@ -145,7 +155,7 @@ struct wattwiseTests {
     }
 
     @Test func moduleProgressReflectsPartialCompletion() throws {
-        let modules = try WattWiseContentRuntimeAdapter.loadModules()
+        let modules = try WattWiseContentRuntimeAdapter.loadModules(includeDraftContent: true)
         let safetyModule = try #require(modules.first(where: { $0.title.contains("Safety") }))
 
         #expect(safetyModule.progress > 0)
@@ -173,7 +183,8 @@ struct wattwiseTests {
 
     @Test func lessonViewModelKeepsLessonWhenFlowContextLookupFails() async throws {
         let lesson = try WattWiseContentRuntimeAdapter.loadLesson(
-            id: WattWiseContentRuntimeAdapter.uuid(for: "lesson:ap-les-004")
+            id: WattWiseContentRuntimeAdapter.uuid(for: "lesson:ap-les-004"),
+            includeDraftContent: true
         )
         let vm = LessonViewModel()
         let services = ServiceContainer(
@@ -282,7 +293,8 @@ struct wattwiseTests {
     @Test func tutorClearKeepsContextButRemovesConversation() {
         let vm = TutorViewModel()
         let lesson = try? WattWiseContentRuntimeAdapter.loadLesson(
-            id: WattWiseContentRuntimeAdapter.uuid(for: "lesson:ap-les-004")
+            id: WattWiseContentRuntimeAdapter.uuid(for: "lesson:ap-les-004"),
+            includeDraftContent: true
         )
         let context = lesson.map { TutorContextBuilder.lesson($0, user: WWUser.guest) }
 

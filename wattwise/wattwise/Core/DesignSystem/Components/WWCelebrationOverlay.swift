@@ -8,8 +8,10 @@ struct WWCelebrationOverlay: View {
     let headline: String
     let xpEarned: Int
     let streakDays: Int
-    let accuracyPercent: Int?      // nil for lesson completions
+    let accuracyPercent: Int?          // nil for lesson completions
     let onContinue: () -> Void
+    var secondaryActionTitle: String? = nil
+    var onSecondaryAction: (() -> Void)? = nil
 
     @State private var appeared = false
 
@@ -85,11 +87,17 @@ struct WWCelebrationOverlay: View {
                 Spacer()
 
                 // Continue button
-                WWPrimaryButton(title: "Continue", action: onContinue)
-                    .wwScreenPadding()
-                    .opacity(appeared ? 1 : 0)
-                    .offset(y: appeared ? 0 : 20)
-                    .animation(.easeOut(duration: 0.35).delay(0.45), value: appeared)
+                VStack(spacing: WWSpacing.s) {
+                    WWPrimaryButton(title: "Continue", action: onContinue)
+
+                    if let secondaryTitle = secondaryActionTitle, let onSecondary = onSecondaryAction {
+                        WWGhostButton(title: secondaryTitle, color: .wwBlue, action: onSecondary)
+                    }
+                }
+                .wwScreenPadding()
+                .opacity(appeared ? 1 : 0)
+                .offset(y: appeared ? 0 : 20)
+                .animation(.easeOut(duration: 0.35).delay(0.45), value: appeared)
             }
         }
         .onAppear {

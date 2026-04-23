@@ -1,4 +1,11 @@
 import SwiftUI
+import StoreKit
+// Firebase Crashlytics — activate by:
+// 1. In Xcode: File > Add Package Dependency > https://github.com/firebase/firebase-ios-sdk
+//    Add: FirebaseCrashlytics, FirebaseAnalytics
+// 2. Add your GoogleService-Info.plist to the wattwise target
+// 3. Uncomment the import and configure() call below
+// import FirebaseCore
 
 @main
 struct WattWiseApp: App {
@@ -6,6 +13,7 @@ struct WattWiseApp: App {
     @State private var appVM = AppViewModel()
 
     init() {
+        // FirebaseApp.configure()   // ← Uncomment after step 1-2 above
         WWFontRegistrar.registerIfNeeded()
         UITestBootstrap.configureIfNeeded()
     }
@@ -51,6 +59,10 @@ struct AppRootView: View {
 
             case .authenticated:
                 RootTabView()
+                    .transition(.opacity)
+
+            case .passwordReset(let accessToken):
+                SetNewPasswordView(accessToken: accessToken)
                     .transition(.opacity)
             }
         }
@@ -105,6 +117,87 @@ struct OnboardingFlowRoot: View {
                 vm.selectedExamType = user.examType
                 vm.selectedState = user.state
             }
+        }
+    }
+}
+
+// MARK: - Set New Password (after recovery link)
+
+struct SetNewPasswordView: View {
+    let accessToken: String
+    @State private var password = ""
+    @State private var confirmPassword = ""
+    @State private var isLoading = false
+    @State private var errorMessage: String?
+    @Environment(ServiceContainer.self) private var services
+    @Environment(AppViewModel.self) private var appVM
+
+    private var canSubmit: Bool {
+        password.count >= 8 && password == confirmPassword && !isLoading
+    }
+
+    var body: some View {
+        ZStack {
+            Color.wwBackground.ignoresSafeArea()
+            VStack(alignment: .leading, spacing: WWSpacing.xl) {
+                Spacer().frame(height: WWSpacing.xl)
+
+                VStack(alignment: .leading, spacing: WWSpacing.s) {
+                    Text("Set a new password")
+                        .wwHeading()
+                    Text("Choose a strong password for your account.")
+                        .wwBody(color: .wwTextSecondary)
+                }
+
+                VStack(spacing: WWSpacing.m) {
+                    WWLabeledField(
+                        label: "New Password",
+                        placeholder: "8+ characters",
+                        text: $password,
+                        isSecure: true,
+                        textContentType: .newPassword,
+                        submitLabel: .next
+                    )
+                    WWLabeledField(
+                        label: "Confirm Password",
+                        placeholder: "Re-enter password",
+                        text: $confirmPassword,
+                        isSecure: true,
+                        textContentType: .newPassword,
+                        submitLabel: .go
+                    )
+                }
+
+                if let error = errorMessage {
+                    Text(error)
+                        .font(WWFont.caption(.medium))
+                        .foregroundColor(.wwError)
+                }
+
+                WWPrimaryButton(
+                    title: "Update Password",
+                    isLoading: isLoading,
+                    isDisabled: !canSubmit
+                ) {
+                    Task { await submit() }
+                }
+
+                Spacer()
+            }
+            .wwScreenPadding()
+        }
+    }
+
+    private func submit() async {
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        do {
+            try await services.auth.updatePassword(accessToken: accessToken, newPassword: password)
+            appVM.signOut(services: services)
+            appVM.authStatusMessage = "Password updated. Sign in with your new password."
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 }

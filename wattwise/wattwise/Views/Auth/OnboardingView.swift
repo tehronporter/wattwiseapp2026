@@ -150,12 +150,12 @@ private struct StateSelectionStep: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            VStack(alignment: .leading, spacing: WWSpacing.s) {
-                Text("Which state are you in?")
-                    .wwHeading()
-                Text("Exam requirements vary by jurisdiction.")
-                    .wwBody(color: .wwTextSecondary)
-            }
+                VStack(alignment: .leading, spacing: WWSpacing.s) {
+                    Text("Which state are you in?")
+                        .wwHeading()
+                    Text("We use your state to surface verified adoption guidance where available while keeping your lessons grounded in the national NEC baseline.")
+                        .wwBody(color: .wwTextSecondary)
+                }
             .wwScreenPadding()
             .padding(.top, WWSpacing.xl)
 
@@ -295,6 +295,7 @@ private struct AccountStep: View {
     @Bindable var vm: OnboardingViewModel
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
+    @State private var showForgotPassword = false
 
     var body: some View {
         ScrollView {
@@ -340,6 +341,17 @@ private struct AccountStep: View {
                     }
                 }
 
+                if vm.isSignIn {
+                    Button {
+                        showForgotPassword = true
+                    } label: {
+                        Text("Forgot password?")
+                            .font(WWFont.caption(.medium))
+                            .foregroundColor(.wwBlue)
+                    }
+                    .padding(.top, WWSpacing.s)
+                }
+
                 if let error = vm.errorMessage {
                     Text(error)
                         .font(WWFont.caption(.medium))
@@ -355,6 +367,21 @@ private struct AccountStep: View {
                     isDisabled: !vm.canProceedFromStep
                 ) {
                     Task { await vm.proceed(services: services, appVM: appVM) }
+                }
+
+                HStack {
+                    WWDivider()
+                    Text("or")
+                        .wwCaption(color: .wwTextMuted)
+                    WWDivider()
+                }
+                .padding(.vertical, WWSpacing.s)
+
+                WWAppleSignInButton(
+                    title: vm.isSignIn ? "Continue with Apple" : "Sign up with Apple",
+                    isLoading: vm.isSigningInWithApple
+                ) {
+                    Task { await vm.signInWithApple(services: services, appVM: appVM) }
                 }
 
                 Spacer().frame(height: WWSpacing.m)
@@ -376,6 +403,124 @@ private struct AccountStep: View {
                 Spacer().frame(height: WWSpacing.xxl)
             }
             .wwScreenPadding()
+        }
+        .sheet(isPresented: $showForgotPassword) {
+            ForgotPasswordSheet(services: services)
+        }
+    }
+}
+
+private struct WWAppleSignInButton: View {
+    let title: String
+    let isLoading: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: WWSpacing.s) {
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .tint(.white)
+                } else {
+                    Image(systemName: "applelogo")
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                Text(isLoading ? "Connecting…" : title)
+                    .font(WWFont.body(.semibold))
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: WWSpacing.minTapTarget)
+            .background(Color.black)
+            .clipShape(RoundedRectangle(cornerRadius: WWSpacing.Radius.m, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .disabled(isLoading)
+    }
+}
+
+// MARK: - Forgot Password Sheet
+
+private struct ForgotPasswordSheet: View {
+    let services: ServiceContainer
+    @State private var email: String = ""
+    @State private var isLoading = false
+    @State private var successMessage: String?
+    @State private var errorMessage: String?
+    @Environment(\.dismiss) private var dismiss
+
+    private var isEmailValid: Bool {
+        let pattern = #"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"#
+        return email.range(of: pattern, options: .regularExpression) != nil
+    }
+
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: WWSpacing.xl) {
+                VStack(alignment: .leading, spacing: WWSpacing.s) {
+                    Text("Reset your password")
+                        .wwHeading()
+                    Text("Enter your email and we'll send a reset link.")
+                        .wwBody(color: .wwTextSecondary)
+                }
+
+                WWLabeledField(
+                    label: "Email",
+                    placeholder: "you@example.com",
+                    text: $email,
+                    keyboardType: .emailAddress,
+                    textContentType: .emailAddress,
+                    submitLabel: .go
+                )
+
+                if let success = successMessage {
+                    Text(success)
+                        .font(WWFont.body(.medium))
+                        .foregroundColor(.wwSuccess)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                if let error = errorMessage {
+                    Text(error)
+                        .font(WWFont.caption(.medium))
+                        .foregroundColor(.wwError)
+                }
+
+                WWPrimaryButton(
+                    title: successMessage != nil ? "Sent!" : "Send Reset Link",
+                    isLoading: isLoading,
+                    isDisabled: !isEmailValid || successMessage != nil
+                ) {
+                    Task { await sendReset() }
+                }
+
+                Spacer()
+            }
+            .wwScreenPadding()
+            .padding(.top, WWSpacing.xl)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.wwTextSecondary)
+                    }
+                }
+            }
+        }
+    }
+
+    private func sendReset() async {
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        do {
+            try await services.auth.resetPassword(email: email.trimmingCharacters(in: .whitespacesAndNewlines))
+            successMessage = "Check \(email) for a password reset link."
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 }

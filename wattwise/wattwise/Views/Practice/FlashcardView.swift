@@ -7,9 +7,16 @@ struct FlashcardView: View {
     @Environment(ServiceContainer.self) private var services
     @Environment(AppViewModel.self) private var appVM
     @Environment(\.dismiss) private var dismiss
+    @State private var showPaywall = false
+
+    private let freeCardLimit = 10
 
     init(certificationLevel: String? = nil) {
         _vm = State(initialValue: FlashcardViewModel(certificationLevel: certificationLevel))
+    }
+
+    private var isLockedCard: Bool {
+        !appVM.subscriptionState.hasPaidAccess && vm.currentIndex >= freeCardLimit
     }
 
     var body: some View {
@@ -57,29 +64,47 @@ struct FlashcardView: View {
                             HStack {
                                 Text("\(vm.currentIndex + 1) of \(vm.cards.count)")
                                     .wwCaption(color: .wwTextMuted)
+                                if !appVM.subscriptionState.hasPaidAccess {
+                                    Text("· \(freeCardLimit) free")
+                                        .wwCaption(color: .wwTextMuted)
+                                }
                                 Spacer()
-                                Button("Shuffle") { vm.shuffle() }
-                                    .font(WWFont.caption(.medium))
-                                    .foregroundColor(.wwBlue)
+                                if !isLockedCard {
+                                    Button("Shuffle") { vm.shuffle() }
+                                        .font(WWFont.caption(.medium))
+                                        .foregroundColor(.wwBlue)
+                                }
                             }
-                            ProgressView(value: Double(vm.currentIndex + 1), total: Double(vm.cards.count))
-                                .tint(.wwBlue)
+                            ProgressView(value: Double(min(vm.currentIndex + 1, freeCardLimit)), total: Double(vm.cards.count))
+                                .tint(isLockedCard ? Color.wwDivider : .wwBlue)
                         }
 
-                        // Card
-                        FlipCardView(
-                            front: vm.currentCard.front,
-                            back: vm.currentCard.back,
-                            necReference: vm.currentCard.necReference,
-                            isFlipped: $vm.isFlipped
-                        )
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 260)
+                        if isLockedCard {
+                            // Lock card — paywall upsell
+                            FlashcardLockedCard(
+                                freeCount: freeCardLimit,
+                                totalCount: vm.cards.count,
+                                onUnlock: { showPaywall = true },
+                                onGoBack: { vm.currentIndex = freeCardLimit - 1 }
+                            )
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 260)
+                        } else {
+                            // Flip card
+                            FlipCardView(
+                                front: vm.currentCard.front,
+                                back: vm.currentCard.back,
+                                necReference: vm.currentCard.necReference,
+                                isFlipped: $vm.isFlipped
+                            )
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 260)
 
-                        // Tap hint
-                        if !vm.isFlipped {
-                            Text("Tap card to reveal answer")
-                                .wwCaption(color: .wwTextMuted)
+                            // Tap hint
+                            if !vm.isFlipped {
+                                Text("Tap card to reveal answer")
+                                    .wwCaption(color: .wwTextMuted)
+                            }
                         }
 
                         // Navigation
@@ -102,16 +127,20 @@ struct FlashcardView: View {
                             .buttonStyle(.plain)
                             .disabled(vm.currentIndex == 0)
 
-                            if vm.isLastCard {
+                            if vm.isLastCard || isLockedCard {
                                 Button {
-                                    vm.restart()
+                                    if isLockedCard {
+                                        showPaywall = true
+                                    } else {
+                                        vm.restart()
+                                    }
                                 } label: {
-                                    Text("Restart")
+                                    Text(isLockedCard ? "Unlock All" : "Restart")
                                         .font(WWFont.body(.semibold))
                                         .foregroundColor(.white)
                                         .frame(maxWidth: .infinity)
                                         .frame(height: WWSpacing.minTapTarget)
-                                        .background(Color.wwSuccess)
+                                        .background(isLockedCard ? Color.wwBlue : Color.wwSuccess)
                                         .clipShape(Capsule())
                                 }
                                 .buttonStyle(.plain)
@@ -144,6 +173,55 @@ struct FlashcardView: View {
         .navigationTitle("Flashcards")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { vm.load(services: services, appVM: appVM) }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(context: .general)
+                .environment(services)
+                .environment(appVM)
+        }
+    }
+}
+
+// MARK: - Flashcard Locked Card
+
+private struct FlashcardLockedCard: View {
+    let freeCount: Int
+    let totalCount: Int
+    let onUnlock: () -> Void
+    let onGoBack: () -> Void
+
+    var body: some View {
+        WWCard(padding: WWSpacing.l) {
+            VStack(spacing: WWSpacing.m) {
+                Spacer()
+
+                ZStack {
+                    Circle()
+                        .fill(Color.wwBlueDim)
+                        .frame(width: 60, height: 60)
+                    Image(systemName: "lock.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(.wwBlue)
+                }
+
+                VStack(spacing: WWSpacing.s) {
+                    Text("Preview Complete")
+                        .wwSectionTitle()
+                    Text("You've seen \(freeCount) free flashcards. Unlock all \(totalCount) to master every topic.")
+                        .wwBody(color: .wwTextSecondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                WWPrimaryButton(title: "Unlock All \(totalCount) Flashcards", action: onUnlock)
+
+                Button("Go back to free cards", action: onGoBack)
+                    .font(WWFont.caption(.medium))
+                    .foregroundColor(.wwTextMuted)
+
+                Spacer()
+            }
+        }
     }
 }
 
