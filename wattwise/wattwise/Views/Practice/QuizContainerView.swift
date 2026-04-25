@@ -4,6 +4,7 @@ import SwiftUI
 struct QuizContainerView: View {
     let quizType: QuizType
     var topicTags: [String] = []
+    var onQuizCompleted: ((QuizResult) -> Void)? = nil
     @State private var vm = QuizViewModel()
     @State private var showPaywall = false
     @State private var showCelebration = false
@@ -76,8 +77,9 @@ struct QuizContainerView: View {
         }
         .task { await vm.loadIfNeeded(type: quizType, examType: appVM.currentUser?.examType, topicTags: topicTags, services: services) }
         .onChange(of: vm.result?.id) { _, newResultID in
-            guard newResultID != nil else { return }
+            guard newResultID != nil, let result = vm.result else { return }
             showCelebration = true
+            onQuizCompleted?(result)
         }
         .fullScreenCover(isPresented: $showCelebration) {
             if let result = vm.result {

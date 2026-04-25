@@ -188,6 +188,7 @@ final class AppViewModel {
         defaults.removeObject(forKey: "ww_refresh_token")
         defaults.removeObject(forKey: "ww_user_data")
         defaults.removeObject(forKey: cachedSubscriptionKey)
+        defaults.removeObject(forKey: "ww_path_progress_v1")
         PendingEmailConfirmationStore.clear()
 
         defaults.dictionaryRepresentation().keys
@@ -1180,7 +1181,8 @@ final class ProfileViewModel {
             "ww_user_data",
             "ww_content_progress_v2",
             "ww_content_study_activity_v1",
-            "ww_practice_history_v1"
+            "ww_practice_history_v1",
+            "ww_path_progress_v1"
         ]
         keys.forEach { UserDefaults.standard.removeObject(forKey: $0) }
         UserDefaults.standard.dictionaryRepresentation().keys

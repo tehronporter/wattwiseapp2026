@@ -17,6 +17,7 @@ struct QuizResultsView: View {
     @State private var paywallContext: PaywallContext = .previewQuizComplete
 
     private let completedQuizzesKey = "ww_completed_quiz_count"
+    private let lastReviewRequestKey = "ww_last_review_request_date"
 
     private var isPreviewResultsGate: Bool {
         appVM.subscriptionState.hasPaidAccess == false && quizType == .quickQuiz
@@ -75,14 +76,30 @@ struct QuizResultsView: View {
                             WWGhostButton(title: "Try Again", action: onRetry)
                         }
 
-                        // Ask Tutor — demoted to small text link
-                        Button {
-                            tutorContext = TutorContextBuilder.quizReview(result, user: appVM.currentUser)
-                            showTutor = true
-                        } label: {
-                            Text("Ask Tutor About Results")
-                                .font(WWFont.caption(.medium))
-                                .foregroundColor(.wwTextMuted)
+                        // Utility links row
+                        HStack(spacing: WWSpacing.l) {
+                            Button {
+                                tutorContext = TutorContextBuilder.quizReview(result, user: appVM.currentUser)
+                                showTutor = true
+                            } label: {
+                                Text("Ask Tutor About Results")
+                                    .font(WWFont.caption(.medium))
+                                    .foregroundColor(.wwTextMuted)
+                            }
+
+                            if !isPreviewResultsGate {
+                                ShareLink(
+                                    item: ScoreShareImage(result: result, quizType: quizType),
+                                    preview: SharePreview(
+                                        "WattWise — \(result.percentage)%",
+                                        image: Image(systemName: "bolt.fill")
+                                    )
+                                ) {
+                                    Text("Share Result")
+                                        .font(WWFont.caption(.medium))
+                                        .foregroundColor(.wwTextMuted)
+                                }
+                            }
                         }
                     }
 
@@ -144,6 +161,11 @@ struct QuizResultsView: View {
         let count = UserDefaults.standard.integer(forKey: completedQuizzesKey) + 1
         UserDefaults.standard.set(count, forKey: completedQuizzesKey)
         guard count >= 3 else { return }
+        // Rate-limit: don't re-prompt within 60 days of the last request
+        let sixtyDays: TimeInterval = 60 * 24 * 60 * 60
+        if let last = UserDefaults.standard.object(forKey: lastReviewRequestKey) as? Date,
+           Date().timeIntervalSince(last) < sixtyDays { return }
+        UserDefaults.standard.set(Date(), forKey: lastReviewRequestKey)
         Task { @MainActor in requestReview() }
     }
 }

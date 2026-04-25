@@ -33,8 +33,20 @@ import anthropic
 CONTENT_PACK_PATH = Path(__file__).parent / "wattwise" / "wattwise" / "Resources" / "WattWiseContentPack.json"
 BACKUP_PATH = CONTENT_PACK_PATH.with_suffix(".backup.json")
 
-MODEL = "claude-opus-4-7"   # Best quality for exam prep content
+# Use the latest Claude Opus model available in your Anthropic account.
+# Check https://docs.anthropic.com/en/docs/about-claude/models for current model IDs.
+# claude-opus-4-5 is the recommended high-quality choice for production content.
+MODEL = "claude-opus-4-5"
 DELAY_BETWEEN_CALLS = 0.5   # seconds — stay within rate limits
+
+# NOTE ON QUESTION GENERATION (--questions-only / default behavior):
+# 500 hand-crafted, NEC-verified practice questions are now bundled in:
+#   Resources/question_bank_001.json through question_bank_005.json
+# The --questions-only pass is still useful for replacing any remaining
+# "Option A" placeholder questions in WattWiseContentPack.json, but those
+# placeholders appear to already have real content (verification_confidence ~93%).
+# Run with --lessons-only to focus exclusively on the 92 lesson stubs,
+# which is the highest-value remaining content generation task.
 
 # ── Prompts ─────────────────────────────────────────────────────────────────
 

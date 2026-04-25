@@ -19,12 +19,6 @@ enum WattWiseContentRuntimeAdapter {
         var completedAt: Date?
     }
 
-    private static let seededProgress: [String: Double] = [
-        "ap-les-001": 1.0,
-        "ap-les-002": 1.0,
-        "ap-les-004": 0.55
-    ]
-
     private static let progressStorageKey = "ww_content_progress_v2"
     private static let studyActivityStorageKey = "ww_content_study_activity_v1"
     private static let defaultDailyGoalMinutes = 30
@@ -314,35 +308,64 @@ enum WattWiseContentRuntimeAdapter {
 
     static func loadQuestionBank(includeDraftContent: Bool = false) -> [QuizQuestion] {
         guard let pack = try? WattWiseContentCatalog.loadFromBundle() else { return [] }
-        return pack.questionBank
+
+        // Merge main-pack questions with any standalone question_bank_*.json files.
+        // Standalone files take precedence for content freshness; main-pack draft
+        // placeholders are naturally excluded by the publishStatus filter below.
+        let allRecords = pack.questionBank + recordsFromStandaloneQuestionBanks()
+
+        return allRecords
             .filter { includeDraftContent || $0.verification.publishStatus == .published }
             .map { record in
-            let topicTag = record.topicCategory
-                .lowercased()
-                .replacingOccurrences(of: " and ", with: "-")
-                .replacingOccurrences(of: " ", with: "-")
-            return QuizQuestion(
-                id: uuid(for: "question:\(record.id)"),
-                question: record.questionText,
-                choices: record.answerChoices,
-                correctChoice: record.correctAnswer,
-                explanation: record.explanation,
-                topics: [topicTag],
-                topicTitles: [record.topicCategory],
-                difficultyLevel: record.difficultyLevel,
-                referenceCode: record.necReference,
-                certificationLevel: record.certificationLevel,
-                jurisdictionScope: record.jurisdictionScope,
-                examProvider: record.examProvider,
-                licenseType: record.licenseType,
-                codeCycle: record.codeCycle,
-                sourceUrls: record.sourceUrls,
-                sourceAccessedOn: record.sourceAccessedOn,
-                examBlueprintTags: record.examBlueprintTags,
-                isCalculation: record.isCalculation,
-                isCodeLookup: record.isCodeLookup
-            )
+                let topicTag = record.topicCategory
+                    .lowercased()
+                    .replacingOccurrences(of: " and ", with: "-")
+                    .replacingOccurrences(of: " ", with: "-")
+                return QuizQuestion(
+                    id: uuid(for: "question:\(record.id)"),
+                    question: record.questionText,
+                    choices: record.answerChoices,
+                    correctChoice: record.correctAnswer,
+                    explanation: record.explanation,
+                    topics: [topicTag],
+                    topicTitles: [record.topicCategory],
+                    difficultyLevel: record.difficultyLevel,
+                    referenceCode: record.necReference,
+                    certificationLevel: record.certificationLevel,
+                    jurisdictionScope: record.jurisdictionScope,
+                    examProvider: record.examProvider,
+                    licenseType: record.licenseType,
+                    codeCycle: record.codeCycle,
+                    sourceUrls: record.sourceUrls,
+                    sourceAccessedOn: record.sourceAccessedOn,
+                    examBlueprintTags: record.examBlueprintTags,
+                    isCalculation: record.isCalculation,
+                    isCodeLookup: record.isCodeLookup
+                )
+            }
+    }
+
+    /// Loads all standalone `question_bank_*.json` files from the app bundle.
+    /// Each file is a plain JSON array of question objects using the same field
+    /// schema as the `practiceQuestions` array in WattWiseContentPack.json.
+    /// Files are loaded in alphabetical name order so question_bank_001 always
+    /// precedes question_bank_002, etc. Malformed or missing files are skipped
+    /// silently so a single bad file never breaks the entire question pool.
+    private static func recordsFromStandaloneQuestionBanks() -> [QuestionBankRecord] {
+        guard let allBundleURLs = Bundle.main.urls(forResourcesWithExtension: "json", subdirectory: nil) else {
+            return []
         }
+        let decoder = JSONDecoder()
+        return allBundleURLs
+            .filter { $0.deletingPathExtension().lastPathComponent.hasPrefix("question_bank_") }
+            .sorted { $0.lastPathComponent < $1.lastPathComponent }
+            .flatMap { url -> [QuestionBankRecord] in
+                guard let data = try? Data(contentsOf: url),
+                      let records = try? decoder.decode([QuestionBankRecord].self, from: data) else {
+                    return []
+                }
+                return records
+            }
     }
 
     static func uuid(for key: String) -> UUID {
@@ -564,18 +587,9 @@ enum WattWiseContentRuntimeAdapter {
     private static func storedProgressByLesson() -> [String: StoredLessonProgress] {
         guard let data = UserDefaults.standard.data(forKey: progressStorageKey),
               let decoded = try? JSONDecoder().decode([String: StoredLessonProgress].self, from: data) else {
-            let now = Date()
-            return Dictionary(uniqueKeysWithValues: seededProgress.map {
-                ($0.key, defaultStoredProgress(for: $0.key, completion: $0.value, now: now))
-            })
+            return [:]
         }
-
-        var merged = decoded
-        let now = Date()
-        for (lessonID, completion) in seededProgress where merged[lessonID] == nil {
-            merged[lessonID] = defaultStoredProgress(for: lessonID, completion: completion, now: now)
-        }
-        return merged
+        return decoded
     }
 
     private static func persistProgress(_ progressByLesson: [String: StoredLessonProgress]) {
@@ -603,7 +617,7 @@ enum WattWiseContentRuntimeAdapter {
     }
 
     private static func defaultStoredProgress(for canonicalLessonID: String, completion: Double? = nil, now: Date) -> StoredLessonProgress {
-        let value = max(0, min(1, completion ?? seededProgress[canonicalLessonID] ?? 0))
+        let value = max(0, min(1, completion ?? 0))
         return StoredLessonProgress(
             completion: value,
             lastAccessedAt: now,

@@ -1,0 +1,4277 @@
+[
+  {
+    "id": "qb5-001",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "For a standard method residential load calculation per NEC 220.82, the general lighting load for a 2,000 sq ft dwelling is calculated at what VA per square foot?",
+    "optionA": "1.5 VA/sq ft",
+    "optionB": "2 VA/sq ft",
+    "optionC": "3 VA/sq ft",
+    "optionD": "3.5 VA/sq ft",
+    "correctAnswer": "C",
+    "explanation": "NEC 220.82(B)(1): The general lighting load for a dwelling unit using the optional calculation method is 3 VA per square foot. For 2,000 sq ft: 3 \u00d7 2,000 = 6,000 VA.",
+    "necReference": "NEC 220.82(B)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "lighting"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-002",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "Using the standard residential load calculation method (NEC Article 220, Part III), how many small appliance branch circuits must be included in a dwelling unit calculation?",
+    "optionA": "One 20 A circuit",
+    "optionB": "As many as needed",
+    "optionC": "Three 20 A circuits",
+    "optionD": "Two 20 A circuits at 1,500 VA each",
+    "correctAnswer": "D",
+    "explanation": "NEC 210.11(C)(1) and 220.52(A): At least two 20 A small appliance branch circuits are required for the kitchen, dining room, and pantry areas of a dwelling, each calculated at 1,500 VA per circuit.",
+    "necReference": "NEC 220.52(A)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "branch-circuits"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-003",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "For a residential load calculation, the laundry circuit is added at what fixed VA value per NEC 220.52(B)?",
+    "optionA": "1,000 VA",
+    "optionB": "1,500 VA",
+    "optionC": "2,000 VA",
+    "optionD": "3,000 VA",
+    "correctAnswer": "B",
+    "explanation": "NEC 220.52(B): The laundry branch circuit load is calculated at 1,500 VA. This is in addition to the two small appliance branch circuits.",
+    "necReference": "NEC 220.52(B)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "laundry"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-004",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "What demand factor applies to the first 3,000 VA of a residential general lighting and receptacle load per NEC Table 220.42?",
+    "optionA": "100%",
+    "optionB": "35%",
+    "optionC": "70%",
+    "optionD": "50%",
+    "correctAnswer": "A",
+    "explanation": "NEC Table 220.42: The first 3,000 VA of general lighting and general-use receptacle load in a dwelling unit is subject to 100% demand factor.",
+    "necReference": "NEC Table 220.42",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "demand-factor"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-005",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "For a 1,800 sq ft home using the standard method, what is the total general lighting/receptacle load BEFORE applying demand factors?",
+    "optionA": "3,600 VA",
+    "optionB": "5,400 VA",
+    "optionC": "6,000 VA",
+    "optionD": "7,200 VA",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 220.12: 3 VA/sq ft \u00d7 1,800 sq ft = 5,400 VA general lighting load.",
+    "necReference": "NEC 220.12",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-006",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "A 12,000 VA electric range in a single dwelling unit is subject to what demand factor per NEC Table 220.55?",
+    "optionA": "100%",
+    "optionB": "80%",
+    "optionC": "70%",
+    "optionD": "The Table 220.55 Column C value",
+    "correctAnswer": "D",
+    "explanation": "NEC 220.55 and Table 220.55, Note 1: For a single household electric range rated 8 3/4 kW or more, use Column C of Table 220.55. For a 12 kW range, Column C gives a demand of 8 kW.",
+    "necReference": "NEC Table 220.55",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "ranges"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-007",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "What is the calculated load for a 5 kW electric dryer in a single-family dwelling per NEC 220.54?",
+    "optionA": "5,000 VA",
+    "optionB": "5,000 W at 100% demand",
+    "optionC": "5,000 W or 5,000 W per Table 220.54 Column A \u2014 whichever is greater",
+    "optionD": "The NEC minimum of 5,000 W",
+    "correctAnswer": "D",
+    "explanation": "NEC 220.54 and Table 220.54: Household electric clothes dryers must be calculated at the nameplate rating OR 5,000 W per dryer (minimum), whichever is larger. A 5 kW dryer = 5,000 W, equal to the minimum, so use 5,000 W.",
+    "necReference": "NEC 220.54",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "dryers"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-008",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "A 2,400 sq ft dwelling has: 2 small appliance circuits (1,500 VA each), 1 laundry circuit (1,500 VA), and a 12 kW range. After applying NEC Table 220.42 demand factors to lighting + small appliance + laundry, what is the result for the first 3,000 VA?",
+    "optionA": "100% \u00d7 3,000 = 3,000 VA",
+    "optionB": "35% \u00d7 3,000 = 1,050 VA",
+    "optionC": "25% \u00d7 3,000 = 750 VA",
+    "optionD": "70% \u00d7 3,000 = 2,100 VA",
+    "correctAnswer": "A",
+    "explanation": "NEC Table 220.42: The first 3,000 VA of general lighting + receptacle + small appliance + laundry load is calculated at 100% demand factor.",
+    "necReference": "NEC Table 220.42",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "demand-factor"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-009",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "After the first 3,000 VA at 100%, NEC Table 220.42 applies what demand factor to the portion of the general lighting load from 3,001 VA to 120,000 VA in a dwelling unit?",
+    "optionA": "100%",
+    "optionB": "50%",
+    "optionC": "35%",
+    "optionD": "25%",
+    "correctAnswer": "C",
+    "explanation": "NEC Table 220.42: For dwelling units, the demand factor for the load from 3,001 VA to 120,000 VA is 35%. Amounts over 120,000 VA are at 25%.",
+    "necReference": "NEC Table 220.42",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "demand-factor"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-010",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "For a residential service calculation, a 10 kW, 240 V electric water heater is included at what demand factor?",
+    "optionA": "75%",
+    "optionB": "80%",
+    "optionC": "100%",
+    "optionD": "65%",
+    "correctAnswer": "C",
+    "explanation": "NEC 220.53 provides an optional 75% demand factor for four or more appliances fastened in place. For fewer than four, they are calculated at 100%. A single water heater in a standard residential calculation is at 100% demand.",
+    "necReference": "NEC 220.53",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "water-heater"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-011",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "A residential service calculation results in a total load of 23,500 VA on a 240/120 V single-phase service. What is the minimum service conductor ampacity (before rounding to a standard size)?",
+    "optionA": "98 A",
+    "optionB": "108 A",
+    "optionC": "117 A",
+    "optionD": "125 A",
+    "correctAnswer": "A",
+    "explanation": "Service ampacity = Total VA \u00f7 Service Voltage. 23,500 VA \u00f7 240 V = 97.9 A \u2248 98 A minimum. A 100 A service (next standard size) would be selected.",
+    "necReference": "NEC 230.42",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "service-sizing"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-012",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "What is the minimum service size for a dwelling unit per NEC 230.79(C)?",
+    "optionA": "60 A",
+    "optionB": "100 A",
+    "optionC": "150 A",
+    "optionD": "200 A",
+    "correctAnswer": "B",
+    "explanation": "NEC 230.79(C): For a one-family dwelling, the service disconnecting means must have a rating of not less than 100 A, 3-wire.",
+    "necReference": "NEC 230.79(C)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "service-sizing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-013",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "When sizing a residential service using the optional calculation method (NEC 220.82), air conditioning and heating loads use what demand factor for the larger of the two systems?",
+    "optionA": "100% of the larger load only",
+    "optionB": "100% of AC + 65% of heat, add whichever total is larger",
+    "optionC": "65% of the larger load",
+    "optionD": "The entire AC + heating load at 100%",
+    "correctAnswer": "A",
+    "explanation": "NEC 220.82(C): In the optional calculation method, use 100% of the largest motor or HVAC load. NEC 220.60 (non-coincident loads) allows omitting the smaller of heating vs. cooling since they don't operate simultaneously.",
+    "necReference": "NEC 220.82(C)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "hvac"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-014",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "For a 3,200 sq ft dwelling using the standard calculation method, the general lighting load is calculated as:",
+    "optionA": "3,200 VA",
+    "optionB": "6,400 VA",
+    "optionC": "9,600 VA",
+    "optionD": "4,800 VA",
+    "correctAnswer": "C",
+    "explanation": "NEC 220.12: 3 VA/sq ft \u00d7 3,200 sq ft = 9,600 VA general lighting load before demand factors.",
+    "necReference": "NEC 220.12",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-015",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "Using NEC Table 220.42, the general lighting load from 3,001 VA to 120,000 VA is at 35% demand. A dwelling has 15,500 VA total (lighting + small appliance + laundry). How much falls in the 35% tier?",
+    "optionA": "12,500 VA",
+    "optionB": "3,000 VA",
+    "optionC": "12,500 VA at 35% = 4,375 VA",
+    "optionD": "15,500 VA",
+    "correctAnswer": "A",
+    "explanation": "Total = 15,500 VA. First 3,000 VA is at 100%. Remainder = 15,500 \u2212 3,000 = 12,500 VA at 35% demand. So 12,500 VA falls in the 35% tier.",
+    "necReference": "NEC Table 220.42",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "residential",
+      "demand-factor"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-016",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "A commercial building has a calculated lighting load of 60 kVA and a receptacle load of 18 kVA. Per NEC 220.44, what demand factor applies to the first 10,000 VA of receptacle load?",
+    "optionA": "100%",
+    "optionB": "50%",
+    "optionC": "35%",
+    "optionD": "25%",
+    "correctAnswer": "A",
+    "explanation": "NEC 220.44: The demand factor for general-purpose receptacle loads in other than dwelling units is 100% for the first 10 kVA, and 50% for the remainder.",
+    "necReference": "NEC 220.44",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "commercial",
+      "receptacles"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-017",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "For a commercial office building with 45,000 sq ft, the general lighting load at 3.5 VA/sq ft is:",
+    "optionA": "135,000 VA",
+    "optionB": "157,500 VA",
+    "optionC": "45,000 VA",
+    "optionD": "180,000 VA",
+    "correctAnswer": "B",
+    "explanation": "NEC Table 220.12: Office buildings use 3.5 VA/sq ft for general lighting. 3.5 \u00d7 45,000 = 157,500 VA.",
+    "necReference": "NEC Table 220.12",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "commercial",
+      "lighting"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-018",
+    "certificationLevel": "Journeyman",
+    "topic": "Load Calculations",
+    "question": "A 240 V, single-phase, 10 kW resistance heating unit draws how many amperes at full load?",
+    "optionA": "41.7 A",
+    "optionB": "50 A",
+    "optionC": "83.3 A",
+    "optionD": "100 A",
+    "correctAnswer": "A",
+    "explanation": "I = P \u00f7 E = 10,000 W \u00f7 240 V = 41.67 A \u2248 41.7 A.",
+    "necReference": "NEC 220.51",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "load-calculations",
+      "heating",
+      "ohms-law"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-019",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 480 V to 120/240 V single-phase transformer is rated 25 kVA. What is the full-load secondary current on the 240 V winding?",
+    "optionA": "52 A",
+    "optionB": "208 A",
+    "optionC": "25 A",
+    "optionD": "104 A",
+    "correctAnswer": "D",
+    "explanation": "I_secondary = kVA \u00d7 1,000 \u00f7 E_secondary = 25,000 \u00f7 240 = 104.2 A \u2248 104 A.",
+    "necReference": "NEC 450.3",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-020",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 480 V to 208Y/120 V, 3-phase, 75 kVA transformer. What is the full-load secondary current (line current on 208 V side)?",
+    "optionA": "208 A",
+    "optionB": "360 A",
+    "optionC": "180 A",
+    "optionD": "312 A",
+    "correctAnswer": "A",
+    "explanation": "I = kVA \u00d7 1,000 \u00f7 (\u221a3 \u00d7 V_L) = 75,000 \u00f7 (1.732 \u00d7 208) = 75,000 \u00f7 360.3 = 208.2 A \u2248 208 A.",
+    "necReference": "NEC 450.3",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-021",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "What is the turns ratio of a transformer with a primary voltage of 7,200 V and a secondary voltage of 240 V?",
+    "optionA": "30:1",
+    "optionB": "60:1",
+    "optionC": "120:1",
+    "optionD": "3:1",
+    "correctAnswer": "A",
+    "explanation": "Turns ratio = V_primary \u00f7 V_secondary = 7,200 \u00f7 240 = 30. So the turns ratio is 30:1 (primary to secondary).",
+    "necReference": "NEC 450.1",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-022",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A transformer primary is 480 V and draws 10 A. Assuming 100% efficiency, what is the secondary current if the secondary voltage is 120 V?",
+    "optionA": "2.5 A",
+    "optionB": "10 A",
+    "optionC": "40 A",
+    "optionD": "80 A",
+    "correctAnswer": "C",
+    "explanation": "By power conservation (100% efficiency): P_primary = P_secondary. V_p \u00d7 I_p = V_s \u00d7 I_s. 480 \u00d7 10 = 120 \u00d7 I_s. I_s = 4,800 \u00f7 120 = 40 A.",
+    "necReference": "NEC 450.1",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-023",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "NEC 450.3(B) governs overcurrent protection for transformers 600 V and under. What is the maximum primary protection rating for a transformer with a primary current of 9 A (where the 125% value doesn't correspond to a standard size)?",
+    "optionA": "15 A",
+    "optionB": "12 A",
+    "optionC": "20 A",
+    "optionD": "10 A",
+    "correctAnswer": "A",
+    "explanation": "NEC 450.3(B) and Table 450.3(B): For transformers with primary current under 9 A, primary protection can be up to 167% of primary FLC. For primary current 9 A or more, maximum primary protection = 125% \u00d7 9 A = 11.25 A \u2014 next standard size = 15 A.",
+    "necReference": "NEC Table 450.3(B)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "transformers",
+      "overcurrent-protection"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-024",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 480 V primary, 120/240 V secondary transformer is rated 37.5 kVA. What is the maximum primary OCPD per NEC Table 450.3(B) at 125% of primary FLC?",
+    "optionA": "100 A",
+    "optionB": "125 A",
+    "optionC": "90 A",
+    "optionD": "50 A",
+    "correctAnswer": "A",
+    "explanation": "Primary FLC = 37,500 \u00f7 480 = 78.1 A. 125% \u00d7 78.1 = 97.7 A \u2192 next standard size = 100 A.",
+    "necReference": "NEC Table 450.3(B)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "transformers",
+      "overcurrent-protection"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-025",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "What is the impedance voltage (percent impedance) of a transformer primarily used for?",
+    "optionA": "Setting the turns ratio",
+    "optionB": "Determining fault current available on the secondary",
+    "optionC": "Setting the tap changer position",
+    "optionD": "Calculating efficiency",
+    "correctAnswer": "B",
+    "explanation": "Percent impedance (%Z) is used to calculate the maximum available short-circuit current (fault current) on the transformer secondary. Lower %Z = higher available fault current. Formula: I_fault = I_FLC \u00f7 %Z.",
+    "necReference": "NEC 450.11",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "transformers",
+      "fault-current"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-026",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A dry-type transformer rated over 112.5 kVA must be installed in a transformer vault or fire-rated room. What is the minimum fire rating of the enclosure per NEC 450.21(B)?",
+    "optionA": "30 minutes",
+    "optionB": "3 hours",
+    "optionC": "2 hours",
+    "optionD": "1 hour",
+    "correctAnswer": "D",
+    "explanation": "NEC 450.21(B): Dry-type transformers rated over 112.5 kVA shall not be installed within 12 inches of combustible materials and shall be installed in a transformer room of 1-hour fire-resistant construction.",
+    "necReference": "NEC 450.21(B)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "transformers",
+      "installation"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-027",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 3-phase, 480 V delta primary to 208Y/120 V transformer bank has three single-phase transformers, each rated 25 kVA. What is the total bank kVA?",
+    "optionA": "25 kVA",
+    "optionB": "50 kVA",
+    "optionC": "75 kVA",
+    "optionD": "100 kVA",
+    "correctAnswer": "C",
+    "explanation": "For a 3-phase bank of single-phase transformers: Total kVA = 3 \u00d7 individual kVA = 3 \u00d7 25 = 75 kVA.",
+    "necReference": "NEC 450.3",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "transformers",
+      "3-phase"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-028",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "What is the secondary current for a 480/208 V, 3-phase, 150 kVA transformer?",
+    "optionA": "416 A",
+    "optionB": "208 A",
+    "optionC": "180 A",
+    "optionD": "360 A",
+    "correctAnswer": "A",
+    "explanation": "I_secondary = (kVA \u00d7 1,000) \u00f7 (\u221a3 \u00d7 V) = 150,000 \u00f7 (1.732 \u00d7 208) = 150,000 \u00f7 360.3 = 416.3 A \u2248 416 A.",
+    "necReference": "NEC 450.3",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-029",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 120/240 V single-phase transformer secondary circuit has two 120 V circuits drawing 15 A each. What is the neutral current?",
+    "optionA": "30 A",
+    "optionB": "7.5 A",
+    "optionC": "15 A",
+    "optionD": "0 A",
+    "correctAnswer": "D",
+    "explanation": "In a balanced 120/240 V 3-wire system, if both 120 V circuits draw equal currents (15 A each), the neutral current is zero. The neutral carries only the unbalanced current: 15 A \u2212 15 A = 0 A.",
+    "necReference": "NEC 220.61",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers",
+      "neutral"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-030",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 480 V 3-phase delta to 240/120 V single-phase transformer supplies a 24 kW electric oven. What primary current does this transformer draw (assume 100% efficiency)?",
+    "optionA": "50 A",
+    "optionB": "57.7 A",
+    "optionC": "100 A",
+    "optionD": "28.9 A",
+    "correctAnswer": "D",
+    "explanation": "Primary apparent power = 24,000 VA. For a single-phase primary (or single transformer): I_primary = VA \u00f7 V. But this is delta-wye: for 3-phase, I = VA \u00f7 (\u221a3 \u00d7 V) = 24,000 \u00f7 (1.732 \u00d7 480) = 24,000 \u00f7 831.4 = 28.9 A.",
+    "necReference": "NEC 450.3",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-031",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A transformer's nameplate reads 480V\u2013120/240V, 10 kVA. A load of 8 A at 240 V is connected to the secondary. What is the load in VA?",
+    "optionA": "960 VA",
+    "optionB": "1,920 VA",
+    "optionC": "8,000 VA",
+    "optionD": "4,800 VA",
+    "correctAnswer": "B",
+    "explanation": "VA = V \u00d7 I = 240 V \u00d7 8 A = 1,920 VA.",
+    "necReference": "NEC 450.1",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-032",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 75 kVA, 480 V to 208Y/120 V transformer has a nameplate %Z of 5.75%. What is the maximum available fault current on the secondary?",
+    "optionA": "2,607 A",
+    "optionB": "3,604 A",
+    "optionC": "36,100 A",
+    "optionD": "4,500 A",
+    "correctAnswer": "B",
+    "explanation": "Step 1: Secondary FLC = 75,000 \u00f7 (1.732 \u00d7 208) = 208.2 A. Step 2: I_fault = I_FLC \u00f7 %Z = 208.2 \u00f7 0.0575 = 3,621 A \u2248 3,604 A (using exact calculation with 1.732).",
+    "necReference": "NEC 110.9",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers",
+      "fault-current"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-033",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "What is the purpose of a tap changer on a transformer?",
+    "optionA": "To change the turns ratio and adjust secondary voltage",
+    "optionB": "To protect the transformer from overload",
+    "optionC": "To disconnect the secondary circuit",
+    "optionD": "To change the impedance of the transformer",
+    "correctAnswer": "A",
+    "explanation": "A tap changer allows adjustment of the transformer's turns ratio in small increments (typically \u00b12.5% and \u00b15%) to compensate for voltage variations in the primary supply or feeder impedance drops.",
+    "necReference": "NEC 450.11",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "transformers",
+      "voltage"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-034",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 480Y/277 V to 120/208 V transformer supplies a load. The secondary neutral current on a balanced 3-phase system is:",
+    "optionA": "Equal to phase current",
+    "optionB": "1.732 times phase current",
+    "optionC": "Twice the phase current",
+    "optionD": "Zero on a balanced 3-phase load",
+    "correctAnswer": "D",
+    "explanation": "On a balanced 3-phase 4-wire wye system with balanced linear loads, the three phase currents cancel vectorially, resulting in zero neutral current. The neutral only carries unbalanced or harmonic currents.",
+    "necReference": "NEC 220.61",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers",
+      "neutral"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-035",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "For a 25 kVA, 480 V primary transformer (single-phase), what is the primary full-load current?",
+    "optionA": "52 A",
+    "optionB": "48 A",
+    "optionC": "104 A",
+    "optionD": "26 A",
+    "correctAnswer": "A",
+    "explanation": "I_primary = kVA \u00d7 1,000 \u00f7 V_primary = 25,000 \u00f7 480 = 52.08 A \u2248 52 A.",
+    "necReference": "NEC 450.3",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "transformers"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-036",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "NEC 90.2(B) lists items NOT covered by the NEC. Which of the following is NOT covered?",
+    "optionA": "Residential wiring",
+    "optionB": "Electrical installations in ships and watercraft",
+    "optionC": "Commercial office wiring",
+    "optionD": "Hazardous classified locations",
+    "correctAnswer": "B",
+    "explanation": "NEC 90.2(B): The NEC does not apply to installations in ships, watercraft, railway rolling stock, aircraft, or automotive vehicles. These are covered by other standards (ABYC, AAR, etc.).",
+    "necReference": "NEC 90.2(B)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "nec-fundamentals",
+      "nec-scope"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-037",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "NEC 110.26(A)(1) requires a minimum working clearance of 3 ft in front of electrical equipment rated 120\u2013250 V to ground in Condition 1. What constitutes 'Condition 1'?",
+    "optionA": "Exposed live parts on one side, grounded surfaces on the other side",
+    "optionB": "Exposed live parts on one side and no grounded or live parts on the other side",
+    "optionC": "Exposed live parts on both sides",
+    "optionD": "Enclosed in a dead-front panel",
+    "correctAnswer": "B",
+    "explanation": "NEC Table 110.26(A)(1), Condition 1: Exposed live parts on one side and no live or grounded parts on the other side. Condition 2 has grounded surfaces on the other side. Condition 3 has exposed live parts on both sides.",
+    "necReference": "NEC 110.26",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "working-clearance"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-038",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "What is the minimum headroom in electrical equipment rooms with switchboards or panelboards per NEC 110.26(E)?",
+    "optionA": "6 ft",
+    "optionB": "8 ft",
+    "optionC": "7 ft",
+    "optionD": "6.5 ft",
+    "correctAnswer": "D",
+    "explanation": "NEC 110.26(E)(1): The minimum headroom in working spaces for service equipment, switchboards, switchgear, panelboards, and motor control centers shall be not less than 6.5 ft (2.0 m).",
+    "necReference": "NEC 110.26(E)(1)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "working-clearance",
+      "equipment-rooms"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-039",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "When must arc flash labeling be provided on electrical equipment per NEC 110.16?",
+    "optionA": "Only on equipment over 600 V",
+    "optionB": "On service equipment only",
+    "optionC": "On switchboards, panelboards, industrial control panels, meter socket enclosures, and motor control centers likely to be examined while energized",
+    "optionD": "On all electrical equipment regardless of voltage",
+    "correctAnswer": "C",
+    "explanation": "NEC 110.16(A): Arc flash warning labels are required on service equipment, switchboards, switchgear, panelboards, industrial control panels, meter socket enclosures, and motor control centers installed in other than dwelling units that are likely to require examination, adjustment, servicing, or maintenance while the equipment is energized.",
+    "necReference": "NEC 110.16(A)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "arc-flash",
+      "safety"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-040",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "What is the maximum voltage allowed for dwelling unit branch circuits per NEC 210.6(A)?",
+    "optionA": "120 V to ground",
+    "optionB": "277 V",
+    "optionC": "240 V",
+    "optionD": "150 V to ground",
+    "correctAnswer": "D",
+    "explanation": "NEC 210.6(A): Branch circuits in dwelling units and similar locations are limited to a voltage not exceeding 150 V to ground for the general branch circuit outlets \u2014 lampholders, fixtures, and standard receptacles.",
+    "necReference": "NEC 210.6",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "branch-circuits",
+      "residential"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-041",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "AFCI protection is required for which locations in a dwelling unit per NEC 210.12(A)?",
+    "optionA": "Bathrooms only",
+    "optionB": "All 120 V, 15 A and 20 A branch circuits in kitchens and bathrooms",
+    "optionC": "All 120 V, 15 A and 20 A branch circuits serving all areas of a dwelling unit",
+    "optionD": "Only bedrooms",
+    "correctAnswer": "C",
+    "explanation": "NEC 210.12(A): AFCI protection is required for all 120 V, 15 A and 20 A branch circuits supplying outlets or devices in ALL areas of the dwelling unit (living rooms, bedrooms, hallways, closets, kitchens, etc.).",
+    "necReference": "NEC 210.12(A)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "afci",
+      "residential"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-042",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "Where must GFCI protection be provided for receptacles installed outdoors at residential dwelling units?",
+    "optionA": "Only at the service panel",
+    "optionB": "For all 15 A and 20 A, 125 V receptacles",
+    "optionC": "Only when within 6 ft of water",
+    "optionD": "Only on the load side of the first outlet",
+    "correctAnswer": "B",
+    "explanation": "NEC 210.8(A)(3): All 15 A and 20 A, 125 V receptacles installed in outdoor areas of dwelling units require GFCI protection.",
+    "necReference": "NEC 210.8(A)(3)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "gfci",
+      "residential",
+      "receptacles"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-043",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "NEC 210.52(A) requires receptacles to be spaced in rooms so no point on a wall is more than how far from a receptacle?",
+    "optionA": "6 ft",
+    "optionB": "8 ft",
+    "optionC": "12 ft",
+    "optionD": "10 ft",
+    "correctAnswer": "A",
+    "explanation": "NEC 210.52(A)(1): In dwelling unit living rooms, bedrooms, and other habitable rooms, receptacles must be placed so no point along the floor line is more than 6 ft from a receptacle outlet.",
+    "necReference": "NEC 210.52(A)(1)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "receptacles",
+      "residential"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-044",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "How many kitchen countertop receptacle circuits (small appliance branch circuits) are required per NEC 210.52(B)?",
+    "optionA": "One 15 A circuit",
+    "optionB": "Three 15 A circuits",
+    "optionC": "One 20 A circuit",
+    "optionD": "Two 20 A circuits",
+    "correctAnswer": "D",
+    "explanation": "NEC 210.52(B)(1): At least two 20 A small appliance branch circuits are required to serve the countertop receptacle outlets in a kitchen, pantry, breakfast room, and dining room of a dwelling unit.",
+    "necReference": "NEC 210.52(B)(1)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "receptacles",
+      "residential",
+      "kitchen"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-045",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "Per NEC 230.46, how must underground service conductors be spliced or tapped?",
+    "optionA": "Splices are not permitted in underground services",
+    "optionB": "Only at a junction box",
+    "optionC": "By using splicing methods listed for direct burial or within a listed splice kit",
+    "optionD": "At the meter base only",
+    "correctAnswer": "C",
+    "explanation": "NEC 230.46: Underground service conductors may be spliced or tapped using listed underground splice kits or listed direct burial splicing methods. The splice must be listed for the application.",
+    "necReference": "NEC 230.46",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "service-entrance",
+      "underground"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-046",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "What is the maximum number of service disconnecting means permitted at a single service location per NEC 230.71(A)?",
+    "optionA": "One",
+    "optionB": "Two",
+    "optionC": "Four",
+    "optionD": "Six",
+    "correctAnswer": "D",
+    "explanation": "NEC 230.71(A): The service disconnecting means shall consist of not more than six switches or six circuit breakers mounted in a single enclosure, in a group of separate enclosures, or in or on a switchboard or switchgear.",
+    "necReference": "NEC 230.71(A)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "service-entrance",
+      "disconnect"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-047",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "NEC 408.36 requires main overcurrent protection in panelboards for panelboards containing more than how many overcurrent devices (two-pole circuits count as two)?",
+    "optionA": "42",
+    "optionB": "36",
+    "optionC": "24",
+    "optionD": "20",
+    "correctAnswer": "A",
+    "explanation": "NEC 408.36: A panelboard shall be provided with overcurrent protection when there are more than 42 overcurrent devices (single-pole circuit spaces). Most residential panels are limited to 40 or 42 circuits.",
+    "necReference": "NEC 408.36",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "panelboards",
+      "overcurrent-protection"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-048",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "When a panelboard is used as a service equipment panelboard, the grounded (neutral) conductor connects to the neutral bus. What prevents this in sub-panels?",
+    "optionA": "The neutral bus is bonded in sub-panels",
+    "optionB": "The main bonding jumper is installed in sub-panels",
+    "optionC": "In sub-panels, the neutral bus must be isolated (not bonded to the enclosure), and the equipment grounding conductor is separate",
+    "optionD": "Sub-panels are not permitted",
+    "correctAnswer": "C",
+    "explanation": "In sub-panels (distribution panels downstream from the service), the neutral bus must be isolated (floating) from the metal enclosure. The equipment grounding conductor (EGC) connects separately to the enclosure and back to the service. This prevents neutral current from flowing on metal conduit/enclosures.",
+    "necReference": "NEC 250.24(A)(5)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "panelboards",
+      "grounding",
+      "neutral"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-049",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "A 277/480 V system is common in commercial buildings. What is the nominal phase-to-neutral voltage?",
+    "optionA": "120 V",
+    "optionB": "208 V",
+    "optionC": "277 V",
+    "optionD": "480 V",
+    "correctAnswer": "C",
+    "explanation": "In a 480Y/277 V wye system: Phase-to-neutral = 480 V \u00f7 \u221a3 = 277.1 V \u2248 277 V. This voltage is used for fluorescent lighting and other commercial loads.",
+    "necReference": "NEC 210.6",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "commercial",
+      "voltage-systems"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-050",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "On a 120/240 V, 3-phase 4-wire delta system (high-leg delta), what is the voltage of the high leg to neutral?",
+    "optionA": "120 V",
+    "optionB": "208 V",
+    "optionC": "240 V",
+    "optionD": "277 V",
+    "correctAnswer": "B",
+    "explanation": "In a 120/240 V 3-phase 4-wire delta (open delta or closed delta with center tap), the high leg (B phase, orange) reads approximately 208 V to neutral (120 V \u00d7 \u221a3 = 207.8 V). This is why high-leg delta phases are identified with orange tape.",
+    "necReference": "NEC 110.15",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "voltage-systems",
+      "delta"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-051",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "NEC 310.15(B) provides conductor ampacity tables based on ambient temperature and conduit fill. The base temperature for most conductor ampacity tables (Table 310.16) is:",
+    "optionA": "40\u00b0C",
+    "optionB": "25\u00b0C",
+    "optionC": "30\u00b0C",
+    "optionD": "60\u00b0C",
+    "correctAnswer": "C",
+    "explanation": "NEC Table 310.16 is based on an ambient temperature of 30\u00b0C (86\u00b0F). When the actual ambient temperature differs, correction factors from NEC Table 310.15(B)(1) must be applied.",
+    "necReference": "NEC 310.15(B)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "conductor-sizing",
+      "ampacity"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-052",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "When more than 3 current-carrying conductors are installed in a conduit, NEC Table 310.15(C)(1) requires derating. What is the derating factor for 4\u20136 conductors?",
+    "optionA": "80%",
+    "optionB": "70%",
+    "optionC": "60%",
+    "optionD": "50%",
+    "correctAnswer": "A",
+    "explanation": "NEC Table 310.15(C)(1) (conduit fill adjustment factors): For 4\u20136 current-carrying conductors in a conduit, the derating factor is 80% (multiply the base ampacity by 0.80).",
+    "necReference": "NEC Table 310.15(C)(1)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "conductor-sizing",
+      "derating"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-053",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrical Theory",
+    "question": "In a purely resistive AC circuit, what is the power factor?",
+    "optionA": "0",
+    "optionB": "0.5",
+    "optionC": "1.0",
+    "optionD": "0.707",
+    "correctAnswer": "C",
+    "explanation": "In a purely resistive AC circuit, voltage and current are in phase (0\u00b0 phase angle). Power factor = cos(0\u00b0) = 1.0. All power consumed is real power (watts). No reactive power exists.",
+    "necReference": "NEC 220.1",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrical-theory",
+      "power-factor",
+      "ac-circuits"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-054",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrical Theory",
+    "question": "An AC circuit has a true power of 8,000 W and an apparent power of 10,000 VA. What is the power factor?",
+    "optionA": "0.75",
+    "optionB": "0.90",
+    "optionC": "0.65",
+    "optionD": "0.80",
+    "correctAnswer": "D",
+    "explanation": "Power factor = True Power (W) \u00f7 Apparent Power (VA) = 8,000 \u00f7 10,000 = 0.80 (or 80%).",
+    "necReference": "NEC 220.1",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrical-theory",
+      "power-factor"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-055",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrical Theory",
+    "question": "In a series RL circuit, as the inductance increases (at constant frequency), what happens to the inductive reactance?",
+    "optionA": "It decreases",
+    "optionB": "It remains constant",
+    "optionC": "It increases",
+    "optionD": "It becomes negative",
+    "correctAnswer": "C",
+    "explanation": "Inductive reactance XL = 2\u03c0fL. As inductance (L) increases at constant frequency (f), XL increases proportionally. Higher XL means greater opposition to AC current flow.",
+    "necReference": "NEC 220.1",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrical-theory",
+      "inductive-reactance",
+      "ac-circuits"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-056",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrical Theory",
+    "question": "What is the impedance of a series circuit with R = 30 \u03a9 and XL = 40 \u03a9?",
+    "optionA": "70 \u03a9",
+    "optionB": "10 \u03a9",
+    "optionC": "50 \u03a9",
+    "optionD": "35 \u03a9",
+    "correctAnswer": "C",
+    "explanation": "Impedance Z = \u221a(R\u00b2 + XL\u00b2) = \u221a(30\u00b2 + 40\u00b2) = \u221a(900 + 1,600) = \u221a2,500 = 50 \u03a9.",
+    "necReference": "NEC 220.1",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrical-theory",
+      "impedance"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-057",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrical Theory",
+    "question": "A 480 V, 3-phase circuit has a power factor of 0.85 and draws 100 A. What is the true power in kW?",
+    "optionA": "48 kW",
+    "optionB": "70.6 kW",
+    "optionC": "56.4 kW",
+    "optionD": "80 kW",
+    "correctAnswer": "B",
+    "explanation": "True Power = \u221a3 \u00d7 V \u00d7 I \u00d7 PF = 1.732 \u00d7 480 \u00d7 100 \u00d7 0.85 = 70,618 W \u2248 70.6 kW.",
+    "necReference": "NEC 220.1",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrical-theory",
+      "3-phase",
+      "power-factor"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-058",
+    "certificationLevel": "Journeyman",
+    "topic": "Safety",
+    "question": "When working on or near energized electrical equipment, NFPA 70E requires PPE based on which method?",
+    "optionA": "Voltage rating of the equipment only",
+    "optionB": "Either the incident energy analysis method or the PPE category method",
+    "optionC": "OSHA voltage tables only",
+    "optionD": "Manufacturer's recommendation alone",
+    "correctAnswer": "B",
+    "explanation": "NFPA 70E Table 130.5(C) and 130.5(G): Arc flash PPE selection must be based on either an incident energy analysis (engineering study) or use of the arc flash PPE category tables in NFPA 70E.",
+    "necReference": "NFPA 70E 130.5",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "safety",
+      "arc-flash",
+      "ppe"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-059",
+    "certificationLevel": "Journeyman",
+    "topic": "Safety",
+    "question": "What is 'lockout/tagout' (LOTO) designed to protect against?",
+    "optionA": "Electrical fires",
+    "optionB": "Accidental energization of equipment during maintenance",
+    "optionC": "Short circuits during normal operation",
+    "optionD": "Voltage spikes",
+    "correctAnswer": "B",
+    "explanation": "LOTO procedures (OSHA 29 CFR 1910.147, NFPA 70E) protect workers from accidental energization, startup, or release of stored energy while equipment is being serviced or maintained. This is one of the most critical electrical safety practices.",
+    "necReference": "NFPA 70E 120.2",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "safety",
+      "lockout-tagout",
+      "osha"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-060",
+    "certificationLevel": "Journeyman",
+    "topic": "Safety",
+    "question": "The 'flash protection boundary' (arc flash boundary) is defined as the distance at which a worker without arc-rated PPE could receive a second-degree burn. What incident energy value defines this boundary?",
+    "optionA": "4 cal/cm\u00b2",
+    "optionB": "8 cal/cm\u00b2",
+    "optionC": "1.2 cal/cm\u00b2",
+    "optionD": "5 cal/cm\u00b2",
+    "correctAnswer": "C",
+    "explanation": "The arc flash boundary is the distance where incident energy equals 1.2 cal/cm\u00b2 \u2014 the level at which bare skin would receive a just-curable second-degree burn. Personnel within this boundary must wear arc-rated PPE.",
+    "necReference": "NFPA 70E 130.5",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "safety",
+      "arc-flash",
+      "boundaries"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-061",
+    "certificationLevel": "Journeyman",
+    "topic": "Safety",
+    "question": "What minimum clearance from overhead power lines is required for employees working from the ground or a platform, for lines 50 kV and under, per OSHA 1910.333?",
+    "optionA": "3 ft",
+    "optionB": "10 ft",
+    "optionC": "6 ft",
+    "optionD": "15 ft",
+    "correctAnswer": "B",
+    "explanation": "OSHA 1910.333(c)(3)(i) and NFPA 70E: For voltages up to 50 kV, the minimum approach distance for unqualified persons working near overhead lines is 10 ft.",
+    "necReference": "OSHA 1910.333",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "safety",
+      "overhead-lines",
+      "clearances"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-062",
+    "certificationLevel": "Journeyman",
+    "topic": "Safety",
+    "question": "What is the primary cause of electrical shock deaths?",
+    "optionA": "Burns from the arc flash",
+    "optionB": "Ventricular fibrillation caused by current passing through the heart",
+    "optionC": "Muscle paralysis",
+    "optionD": "Brain damage",
+    "correctAnswer": "B",
+    "explanation": "The most common cause of death from electrical shock is ventricular fibrillation \u2014 a disruption of the heart's normal rhythm caused by even small amounts of current (as little as 10\u201320 mA) passing through the heart. The threshold for fibrillation is much lower than for pain.",
+    "necReference": "NFPA 70E 130.1",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "safety",
+      "electrical-shock"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-063",
+    "certificationLevel": "Journeyman",
+    "topic": "Safety",
+    "question": "Class C fire extinguishers are rated for which type of fire?",
+    "optionA": "Wood and paper fires",
+    "optionB": "Flammable liquid fires",
+    "optionC": "Energized electrical equipment fires",
+    "optionD": "Chemical fires",
+    "correctAnswer": "C",
+    "explanation": "Class C extinguishers use non-conductive extinguishing agents (CO\u2082, dry chemical, halon) suitable for fires involving energized electrical equipment. Using water (Class A) on electrical fires creates shock hazards.",
+    "necReference": "OSHA 1910.157",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "safety",
+      "fire-protection"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-064",
+    "certificationLevel": "Journeyman",
+    "topic": "Safety",
+    "question": "Which type of conductor insulation is rated for both wet and dry locations?",
+    "optionA": "TW",
+    "optionB": "FEP",
+    "optionC": "RHH",
+    "optionD": "THWN-2",
+    "correctAnswer": "D",
+    "explanation": "THWN-2 insulation is rated for 90\u00b0C in both wet and dry locations (T=thermoplastic, H=heat resistant to 75\u00b0C, H=second H means 90\u00b0C, W=wet locations, N=nylon jacket). This is one of the most versatile conductor types.",
+    "necReference": "NEC 310.1",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "safety",
+      "conductor-insulation",
+      "wiring-methods"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-065",
+    "certificationLevel": "Journeyman",
+    "topic": "Safety",
+    "question": "Before working on electrical equipment, which step must ALWAYS be performed first?",
+    "optionA": "Put on rubber gloves",
+    "optionB": "Install grounding cables",
+    "optionC": "Turn off the breaker",
+    "optionD": "Test for absence of voltage",
+    "correctAnswer": "D",
+    "explanation": "The first step in any electrical safety procedure after de-energizing is to VERIFY absence of voltage with a properly rated test instrument. Never assume equipment is de-energized just because you turned off a breaker \u2014 always test before touch.",
+    "necReference": "NFPA 70E 120.5",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "safety",
+      "voltage-testing",
+      "lockout-tagout"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-066",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "NEC Article 100 provides definitions. What is the definition of 'dwelling unit'?",
+    "optionA": "Any building used for residential purposes",
+    "optionB": "A single unit, providing complete and independent living facilities for one or more persons, including permanent provisions for living, sleeping, eating, cooking, and sanitation",
+    "optionC": "Any structure with sleeping accommodations",
+    "optionD": "A building with fewer than five units",
+    "correctAnswer": "B",
+    "explanation": "NEC Article 100 definition: A dwelling unit is a single unit, providing complete and independent living facilities for one or more persons, including permanent provisions for living, sleeping, eating, cooking, and sanitation.",
+    "necReference": "NEC Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "definitions"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-067",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "What is the definition of 'ampacity' per NEC Article 100?",
+    "optionA": "The maximum current rating of a fuse or circuit breaker",
+    "optionB": "The maximum current, in amperes, that a conductor can carry continuously under the conditions of use without exceeding its temperature rating",
+    "optionC": "The current that causes a conductor to fail",
+    "optionD": "The rated current at 75\u00b0C ambient",
+    "correctAnswer": "B",
+    "explanation": "NEC Article 100 defines ampacity as: 'The maximum current, in amperes, that a conductor can carry continuously under the conditions of use without exceeding its temperature rating.'",
+    "necReference": "NEC Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "definitions",
+      "ampacity"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-068",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "What does 'listed' mean as defined in NEC Article 100?",
+    "optionA": "Approved by the AHJ for a specific installation",
+    "optionB": "Equipment installed per NEC requirements",
+    "optionC": "Equipment tested by the manufacturer",
+    "optionD": "Equipment, materials, or services included in a list published by an organization that maintains periodic inspection of production of listed equipment and whose listing states that the equipment complies with applicable standards",
+    "correctAnswer": "D",
+    "explanation": "NEC Article 100 definition of 'listed': Equipment, materials, or services included in a list published by an organization that maintains periodic inspection of production and whose listing states that the equipment complies with applicable standards or has been tested and found suitable for a specified purpose.",
+    "necReference": "NEC Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "definitions",
+      "listing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-069",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "Under NEC 100, what distinguishes 'grounded' from 'grounding'?",
+    "optionA": "They mean the same thing",
+    "optionB": "Grounded means connected to earth; grounding means the conductor used to make that connection",
+    "optionC": "Grounded refers to the neutral conductor; grounding refers to the EGC",
+    "optionD": "Grounded means intentionally connected to earth; grounding refers to the act of connecting to earth",
+    "correctAnswer": "D",
+    "explanation": "NEC Article 100: 'Grounded' means connected to ground or to a conductive body that extends the ground connection. 'Grounding' is the act or process of establishing the ground connection. The grounded conductor (neutral) IS connected to ground; the grounding conductor makes the connection.",
+    "necReference": "NEC Article 100",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "definitions",
+      "grounding"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-070",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "NEC 90.9 requires the use of the International System of Units (SI) units. What unit system does the NEC primarily use?",
+    "optionA": "Imperial units only",
+    "optionB": "Metric units only",
+    "optionC": "Both SI and inch-pound units with SI primary",
+    "optionD": "Both inch-pound and SI units with inch-pound primary",
+    "correctAnswer": "C",
+    "explanation": "NEC 90.9: The NEC provides measurements in both SI (metric) and inch-pound units, with SI first, followed by inch-pound in parentheses. Both are acceptable.",
+    "necReference": "NEC 90.9",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "units"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-071",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 120 V, 20 A circuit feeds a series of receptacles. At 80% loading (NEC 210.23), what is the maximum continuous load?",
+    "optionA": "16 A",
+    "optionB": "20 A",
+    "optionC": "24 A",
+    "optionD": "12 A",
+    "correctAnswer": "A",
+    "explanation": "NEC 210.23 and 210.19: Continuous loads must not exceed 80% of the circuit rating. 80% \u00d7 20 A = 16 A maximum continuous load.",
+    "necReference": "NEC 210.23",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "branch-circuits",
+      "continuous-load"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-072",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "What is the voltage drop percentage in a 120 V circuit that drops 4.2 V?",
+    "optionA": "3.5%",
+    "optionB": "4.2%",
+    "optionC": "2.5%",
+    "optionD": "5%",
+    "correctAnswer": "A",
+    "explanation": "Voltage drop % = (VD \u00f7 Source Voltage) \u00d7 100 = (4.2 \u00f7 120) \u00d7 100 = 3.5%.",
+    "necReference": "NEC 210.19",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "voltage-drop"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-073",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "Three 120 V branch circuits, each drawing 15 A, are installed in a conduit. All three are current-carrying. What derate factor applies per NEC Table 310.15(C)(1)?",
+    "optionA": "100%",
+    "optionB": "80%",
+    "optionC": "70%",
+    "optionD": "60%",
+    "correctAnswer": "A",
+    "explanation": "NEC Table 310.15(C)(1): For 3 current-carrying conductors (the threshold is MORE THAN 3), no derating is required. Three conductors = no derating, factor remains 100%.",
+    "necReference": "NEC Table 310.15(C)(1)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "derating",
+      "ampacity"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-074",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 2 AWG THWN copper conductor has a base ampacity of 130 A at 75\u00b0C. The ambient temperature is 40\u00b0C. What is the correction factor per NEC Table 310.15(B)(1) for 75\u00b0C rated conductors?",
+    "optionA": "0.82",
+    "optionB": "0.88",
+    "optionC": "0.75",
+    "optionD": "0.94",
+    "correctAnswer": "A",
+    "explanation": "NEC Table 310.15(B)(1): For 75\u00b0C rated conductors in an ambient of 40\u00b0C, the correction factor is 0.82. Corrected ampacity = 130 A \u00d7 0.82 = 106.6 A.",
+    "necReference": "NEC Table 310.15(B)(1)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "ampacity",
+      "temperature-correction"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-075",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 3-phase, 208 V, 10 kW heater draws how many amperes (PF = 1.0)?",
+    "optionA": "48.1 A",
+    "optionB": "16.7 A",
+    "optionC": "83.3 A",
+    "optionD": "27.8 A",
+    "correctAnswer": "D",
+    "explanation": "I = P \u00f7 (\u221a3 \u00d7 V \u00d7 PF) = 10,000 \u00f7 (1.732 \u00d7 208 \u00d7 1.0) = 10,000 \u00f7 360.3 = 27.8 A.",
+    "necReference": "NEC 220.51",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "3-phase",
+      "load-calculations"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-076",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 120 V circuit uses 12 AWG THWN copper conductors (ampacity = 20 A). The load is 18 A continuous. What size circuit breaker is required?",
+    "optionA": "20 A",
+    "optionB": "15 A",
+    "optionC": "30 A",
+    "optionD": "25 A",
+    "correctAnswer": "D",
+    "explanation": "NEC 210.20(A): Overcurrent protection for continuous loads must be not less than 125% of the continuous load. 125% \u00d7 18 A = 22.5 A \u2192 next standard size = 25 A. The conductor (20 A) must also meet 125% of continuous load: 20 A \u00d7 80% = 16 A usable, which is less than 18 A. So both 12 AWG is undersized here \u2014 but the breaker question: 125% \u00d7 18 = 22.5 A \u2192 25 A breaker.",
+    "necReference": "NEC 210.20(A)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "continuous-load",
+      "overcurrent-protection"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-077",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 480 V, 3-phase motor runs at 85% power factor and draws 50 A. What is the actual power consumed in kW?",
+    "optionA": "35.2 kW",
+    "optionB": "41.4 kW",
+    "optionC": "70.4 kW",
+    "optionD": "24.9 kW",
+    "correctAnswer": "A",
+    "explanation": "True Power = \u221a3 \u00d7 V \u00d7 I \u00d7 PF = 1.732 \u00d7 480 \u00d7 50 \u00d7 0.85 = 35,296 W \u2248 35.3 kW.",
+    "necReference": "NEC 430.24",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "motors",
+      "power-factor",
+      "3-phase"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-078",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "Using the formula VD = (2 \u00d7 K \u00d7 I \u00d7 D) \u00f7 CM for a single-phase circuit, what does 'K' represent?",
+    "optionA": "Wire length in feet",
+    "optionB": "Resistivity constant (12.9 for copper, 21.2 for aluminum)",
+    "optionC": "Number of conductors",
+    "optionD": "Circular mils of the conductor",
+    "correctAnswer": "B",
+    "explanation": "In the voltage drop formula for copper conductors, K = 12.9 (\u03a9\u00b7circular mil per foot), which represents the resistivity of copper. For aluminum, K = 21.2. D is the one-way distance in feet, I is current in amperes, CM is the conductor's circular mil area.",
+    "necReference": "NEC 210.19",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "voltage-drop"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-079",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A single-phase 240 V circuit runs 250 ft (one-way) at 30 A using 10 AWG copper (10,380 CM). Using VD = 2KID \u00f7 CM, what is the approximate voltage drop?",
+    "optionA": "5.8 V",
+    "optionB": "11.6 V",
+    "optionC": "18.9 V",
+    "optionD": "3.7 V",
+    "correctAnswer": "C",
+    "explanation": "VD = (2 \u00d7 12.9 \u00d7 30 \u00d7 250) \u00f7 10,380 = (193,500) \u00f7 10,380 = 18.64 V \u2248 18.9 V. This is 7.75% VD \u2014 far exceeds the 3% guideline. A larger conductor is needed.",
+    "necReference": "NEC 210.19",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "voltage-drop"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-080",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A conduit has 3 conductors each with an area of 0.0973 sq in. The conduit has an internal area of 0.5307 sq in. (1/2\" EMT). What is the fill percentage?",
+    "optionA": "55%",
+    "optionB": "45%",
+    "optionC": "40%",
+    "optionD": "38%",
+    "correctAnswer": "A",
+    "explanation": "Fill = (3 \u00d7 0.0973) \u00f7 0.5307 \u00d7 100 = 0.2919 \u00f7 0.5307 \u00d7 100 = 55%. This exceeds the 40% maximum fill for 3+ conductors per NEC Chapter 9, Table 1. A larger conduit is required.",
+    "necReference": "NEC Chapter 9, Table 1",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "conduit-fill"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-081",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "How many 12 AWG THWN conductors (area = 0.0133 sq in each) can be installed in a 3/4\" EMT conduit (internal area = 0.533 sq in) using a 40% fill?",
+    "optionA": "16",
+    "optionB": "15",
+    "optionC": "12",
+    "optionD": "20",
+    "correctAnswer": "A",
+    "explanation": "Maximum fill area = 0.40 \u00d7 0.533 = 0.2132 sq in. Number of conductors = 0.2132 \u00f7 0.0133 = 16.02 \u2192 16 conductors maximum.",
+    "necReference": "NEC Chapter 9, Table 1",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "conduit-fill"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-082",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A dwelling unit has the following loads: general lighting 6,000 VA, small appliance/laundry 4,500 VA, range 8,000 VA (after demand), dryer 5,000 VA, and AC 5,500 VA. What is the approximate minimum service ampacity at 240 V?",
+    "optionA": "87 A",
+    "optionB": "175 A",
+    "optionC": "139 A",
+    "optionD": "120 A",
+    "correctAnswer": "D",
+    "explanation": "Apply NEC Table 220.42 to lighting + small appliance + laundry (6,000 + 4,500 = 10,500 VA): first 3,000 VA @ 100% = 3,000; remaining 7,500 VA @ 35% = 2,625 VA; subtotal = 5,625 VA. Fixed appliances: range 8,000 + dryer 5,000 = 13,000 VA. Largest of heating/cooling = 5,500 VA at 100% (NEC 220.82). Total = 5,625 + 13,000 + 5,500 = 24,125 VA. Service amps = 24,125 \u00f7 240 = 100.5 A \u2192 100 A (minimum) or next standard 125 A service. Closest here: 120 A (some calculations round to 125 A service).",
+    "necReference": "NEC Table 220.42",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "load-calculations",
+      "service-sizing"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-083",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "When sizing a motor branch circuit for a 20 HP, 460 V, 3-phase motor (FLC = 27 A per Table 430.250), the minimum conductor ampacity is:",
+    "optionA": "27 A",
+    "optionB": "33.75 A",
+    "optionC": "40 A",
+    "optionD": "30 A",
+    "correctAnswer": "B",
+    "explanation": "NEC 430.22(A): Conductor ampacity = 125% \u00d7 FLC = 1.25 \u00d7 27 A = 33.75 A.",
+    "necReference": "NEC 430.22(A)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "motors",
+      "conductor-sizing"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-084",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "A 3-phase, 4-wire feeder serves three equal single-phase loads of 20 A each between phases A-N, B-N, and C-N. What is the neutral current?",
+    "optionA": "60 A",
+    "optionB": "20 A",
+    "optionC": "0 A",
+    "optionD": "34.6 A",
+    "correctAnswer": "C",
+    "explanation": "For balanced 3-phase 4-wire wye loads (equal current on each phase), the neutral current is zero because the three phase currents cancel vectorially. 20 A \u00d7 (1 + 1\u2220120\u00b0 + 1\u2220240\u00b0) = 0.",
+    "necReference": "NEC 220.61",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "neutral",
+      "3-phase"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-085",
+    "certificationLevel": "Journeyman",
+    "topic": "Electrician Math",
+    "question": "Two 120 V, single-phase loads are connected to a 120/240 V, 3-wire panel: Phase A = 30 A, Phase B = 18 A. What is the neutral current?",
+    "optionA": "48 A",
+    "optionB": "12 A",
+    "optionC": "24 A",
+    "optionD": "30 A",
+    "correctAnswer": "B",
+    "explanation": "For a single-phase 3-wire system, neutral current = difference between the two phase currents = 30 A \u2212 18 A = 12 A.",
+    "necReference": "NEC 220.61",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "electrician-math",
+      "neutral",
+      "load-calculations"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-086",
+    "certificationLevel": "Journeyman",
+    "topic": "Trade Knowledge",
+    "question": "What does the term 'power factor correction' refer to in industrial electrical systems?",
+    "optionA": "Adding resistance to reduce current draw",
+    "optionB": "Adding capacitors to offset inductive reactance and bring PF closer to 1.0",
+    "optionC": "Increasing the transformer kVA rating",
+    "optionD": "Reducing the supply voltage",
+    "correctAnswer": "B",
+    "explanation": "Power factor correction involves adding capacitive reactive power (capacitor banks) to offset inductive reactive power (from motors, transformers). This reduces the current demand and total kVA while maintaining the same real power (kW), improving system efficiency.",
+    "necReference": "NEC 460.1",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "power-factor",
+      "capacitors"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-087",
+    "certificationLevel": "Journeyman",
+    "topic": "Trade Knowledge",
+    "question": "What minimum clearance above a residential driveway is required for a service drop conductor per NEC 230.24(B)?",
+    "optionA": "10 ft",
+    "optionB": "12 ft",
+    "optionC": "15 ft",
+    "optionD": "18 ft",
+    "correctAnswer": "D",
+    "explanation": "NEC 230.24(B)(2): Service drop conductors over residential driveways accessible to vehicles but not trucks must have a minimum clearance of 18 ft (5.49 m).",
+    "necReference": "NEC 230.24(B)(2)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "service-entrance",
+      "clearances"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-088",
+    "certificationLevel": "Journeyman",
+    "topic": "Trade Knowledge",
+    "question": "A 20 A, 120 V receptacle outlet is required to be installed in a bathroom of a dwelling unit per NEC 210.52(D). It must be located how close to each basin?",
+    "optionA": "Within 1 ft",
+    "optionB": "Within 2 ft",
+    "optionC": "Within 3 ft",
+    "optionD": "Within 6 ft",
+    "correctAnswer": "C",
+    "explanation": "NEC 210.52(D): At least one 20 A, 125 V receptacle outlet must be installed within 3 ft of each bathroom basin edge in a dwelling unit.",
+    "necReference": "NEC 210.52(D)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "receptacles",
+      "residential",
+      "bathroom"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-089",
+    "certificationLevel": "Journeyman",
+    "topic": "Trade Knowledge",
+    "question": "How many general-purpose branch circuit outlets are required in a dwelling unit hallway per NEC 210.52(H)?",
+    "optionA": "None",
+    "optionB": "One if the hallway is 10 ft or more in length",
+    "optionC": "One per 10 linear feet",
+    "optionD": "Two outlets minimum",
+    "correctAnswer": "B",
+    "explanation": "NEC 210.52(H): Hallways of 10 ft or more in length in a dwelling unit must have at least one receptacle outlet.",
+    "necReference": "NEC 210.52(H)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "receptacles",
+      "residential"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-090",
+    "certificationLevel": "Journeyman",
+    "topic": "Grounding and Bonding",
+    "question": "A metal water pipe used as a grounding electrode must be in contact with the earth for at least what length?",
+    "optionA": "5 ft",
+    "optionB": "6 ft",
+    "optionC": "20 ft",
+    "optionD": "10 ft",
+    "correctAnswer": "D",
+    "explanation": "NEC 250.52(A)(1): A metal underground water pipe grounding electrode must be in direct contact with the earth for a minimum of 10 ft (3.0 m). Interior piping does not qualify.",
+    "necReference": "NEC 250.52(A)(1)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "grounding-and-bonding",
+      "grounding-electrodes"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-091",
+    "certificationLevel": "Journeyman",
+    "topic": "Grounding and Bonding",
+    "question": "What is the purpose of the equipment grounding conductor (EGC) in a branch circuit?",
+    "optionA": "To carry the neutral (return) current",
+    "optionB": "To reduce electrical noise",
+    "optionC": "To bond the raceway to ground only",
+    "optionD": "To provide a low-impedance fault current path back to the source to operate the overcurrent device",
+    "correctAnswer": "D",
+    "explanation": "The EGC provides a low-impedance path for fault current to flow from equipment enclosures back to the source (service panel neutral/grounding point) so that the overcurrent protective device will operate quickly and clear the fault.",
+    "necReference": "NEC 250.2",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "grounding-and-bonding",
+      "egc",
+      "fault-current"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-092",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "What is the maximum load in VA permitted on a 20 A, 120 V branch circuit serving non-continuous loads only?",
+    "optionA": "1,800 VA",
+    "optionB": "2,000 VA",
+    "optionC": "2,400 VA",
+    "optionD": "1,600 VA",
+    "correctAnswer": "C",
+    "explanation": "For non-continuous loads: Maximum VA = V \u00d7 A = 120 \u00d7 20 = 2,400 VA. For continuous loads, the limit is 80% = 1,920 VA. Non-continuous loads can use the full 100% of the circuit rating.",
+    "necReference": "NEC 210.23",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "load-calculations"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-093",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "What is required for all outdoor receptacles on a commercial building's rooftop per NEC 210.63?",
+    "optionA": "A 20 A, 125 V receptacle must be installed on the rooftop for HVAC servicing",
+    "optionB": "Only receptacles for specific equipment are required",
+    "optionC": "Only GFCI-protected receptacles",
+    "optionD": "No receptacles are required on rooftops",
+    "correctAnswer": "A",
+    "explanation": "NEC 210.63: At least one 125 V, 15 A or 20 A receptacle outlet must be installed within 25 ft of heating, air conditioning, and refrigeration (HVAC) equipment on rooftops and in crawl spaces and attics for servicing.",
+    "necReference": "NEC 210.63",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "receptacles",
+      "commercial"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-094",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "What is the color code for the high leg (wild leg) of a 120/240 V, 3-phase, 4-wire delta system per NEC 110.15?",
+    "optionA": "Red",
+    "optionB": "Blue",
+    "optionC": "Orange",
+    "optionD": "Yellow",
+    "correctAnswer": "C",
+    "explanation": "NEC 110.15: The high leg (phase with highest voltage to neutral, approximately 208 V to neutral) of a 4-wire delta system must be permanently marked with orange color or other effective means to distinguish it.",
+    "necReference": "NEC 110.15",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "delta",
+      "color-coding"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-095",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "NEC 200.6 specifies identification of grounded conductors. A grounded conductor larger than 6 AWG must be identified by which method?",
+    "optionA": "White or gray insulation only",
+    "optionB": "Three white stripes along its entire length on other than green insulation",
+    "optionC": "White tape, white paint, or other white marking at its terminations",
+    "optionD": "Either white/gray insulation, white marking at terminations, or three white stripes",
+    "correctAnswer": "D",
+    "explanation": "NEC 200.6(B): For conductors larger than 6 AWG, the grounded conductor may be identified by: (1) continuous white or gray outer finish, (2) three continuous white or gray stripes along the length, or (3) white marking at the point of termination.",
+    "necReference": "NEC 200.6(B)",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "color-coding",
+      "grounded-conductor"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-096",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "Which color insulation is reserved exclusively for equipment grounding conductors per NEC 250.119?",
+    "optionA": "White",
+    "optionB": "Gray",
+    "optionC": "Green",
+    "optionD": "Black with yellow stripes only",
+    "correctAnswer": "C",
+    "explanation": "NEC 250.119: Equipment grounding conductors must be identified by green insulation, green with yellow stripes, or bare. No other conductor may use green insulation.",
+    "necReference": "NEC 250.119",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "color-coding",
+      "egc"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-097",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "GFCI protection is required for all 125 V through 250 V receptacles on a construction site. What NEC article covers temporary wiring?",
+    "optionA": "Article 527",
+    "optionB": "Article 590",
+    "optionC": "Article 406",
+    "optionD": "Article 210",
+    "correctAnswer": "B",
+    "explanation": "NEC Article 590 covers temporary wiring for construction, remodeling, maintenance, and other purposes. NEC 590.6(A)(1) requires GFCI protection for all 125 V through 250 V, 15 A, 20 A, and 30 A receptacles on construction sites.",
+    "necReference": "NEC Article 590",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "temporary-wiring",
+      "gfci"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-098",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "Under NEC 90.1(A), what is the primary purpose of the National Electrical Code?",
+    "optionA": "To improve electrician productivity",
+    "optionB": "To provide the practical safeguarding of persons and property from hazards arising from the use of electricity",
+    "optionC": "To establish minimum design standards for electrical systems",
+    "optionD": "To provide guidelines for electrical engineering design",
+    "correctAnswer": "B",
+    "explanation": "NEC 90.1(A): The purpose of this Code is the practical safeguarding of persons and property from hazards arising from the use of electricity.",
+    "necReference": "NEC 90.1(A)",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "nec-fundamentals",
+      "nec-purpose"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-099",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "A 480 V service has an available short circuit current of 42,000 A. A new panelboard is being installed at the end of a 100 ft run of 4/0 AWG copper conductors in conduit. The impedance of the conductors reduces the available fault current. This check is called a:",
+    "optionA": "Load flow study",
+    "optionB": "Arc flash study",
+    "optionC": "Voltage drop study",
+    "optionD": "Short-circuit study",
+    "correctAnswer": "D",
+    "explanation": "A short-circuit (fault current) study calculates the maximum available fault current at every point in the electrical distribution system. This ensures all equipment has sufficient interrupting ratings (AIC). The conductor impedance reduces fault current downstream from the source.",
+    "necReference": "NEC 110.9",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "fault-current",
+      "system-design"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb5-100",
+    "certificationLevel": "Master",
+    "topic": "Advanced NEC",
+    "question": "Per NEC 310.15(B)(3)(a) and the note to Table 310.15(C)(1), a neutral conductor carrying only the unbalanced current of a 4-wire, 3-phase wye system is NOT counted as a current-carrying conductor for derating purposes, UNLESS it carries which type of current?",
+    "optionA": "Charging current",
+    "optionB": "Fault current",
+    "optionC": "Major portions of harmonic currents \u2014 such as the third harmonic \u2014 which add in the neutral",
+    "optionD": "Capacitive reactive current",
+    "correctAnswer": "C",
+    "explanation": "NEC 310.15(B)(5)(c): In 4-wire, 3-phase wye circuits where the major portion of load consists of nonlinear loads (such as electronic ballasts, computers, VFDs), the neutral conductor carries significant third-harmonic current that ADDS (rather than cancels) in the neutral. In this case, the neutral is counted as a current-carrying conductor for derating purposes.",
+    "necReference": "NEC 310.15(B)(5)(c)",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "advanced-nec",
+      "harmonics",
+      "neutral",
+      "ampacity"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  }
+]

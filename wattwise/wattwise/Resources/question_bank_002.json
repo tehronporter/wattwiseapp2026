@@ -1,0 +1,4300 @@
+[
+  {
+    "id": "qb2-001",
+    "certificationLevel": "Apprentice",
+    "topic": "Wiring Methods and Installation",
+    "question": "What color is used to identify the grounded (neutral) conductor per NEC 200.6?",
+    "optionA": "Black",
+    "optionB": "Green or bare",
+    "optionC": "White or gray",
+    "optionD": "Red or orange",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 200.6, grounded conductors (neutral) shall be identified by white or gray insulation, or by three continuous white or gray stripes along the conductor's length. Green identifies EGC; black/red are ungrounded (hot) conductors. Never use a white conductor as a hot without re-identifying it with colored tape at all accessible points.",
+    "necReference": "200.6",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "color-code",
+      "neutral"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-002",
+    "certificationLevel": "Apprentice",
+    "topic": "Wiring Methods and Installation",
+    "question": "What does 'EMT' stand for?",
+    "optionA": "Electrical Metallic Tubing",
+    "optionB": "Electrical Metallic Terminal",
+    "optionC": "Equipment Metal Track",
+    "optionD": "Electrical Maintenance Terminal",
+    "correctAnswer": "A",
+    "explanation": "EMT stands for Electrical Metallic Tubing (NEC Article 358). EMT is a lightweight metal raceway with thin walls \u2014 it cannot be threaded. Connections use set-screw or compression fittings. EMT is permitted in most above-ground, dry installations and is one of the most common conduit types in commercial wiring.",
+    "necReference": "Article 358",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "EMT",
+      "conduit"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-003",
+    "certificationLevel": "Apprentice",
+    "topic": "Wiring Methods and Installation",
+    "question": "Type NM cable (Romex) is permitted for use in which location?",
+    "optionA": "Wet or damp locations",
+    "optionB": "Embedded in poured concrete",
+    "optionC": "Dry locations in residential buildings up to 3 stories above grade",
+    "optionD": "Exposed in commercial kitchens",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 334.10 and 334.12, NM cable (Type NM) is permitted in one- and two-family dwellings and multifamily dwellings up to 3 stories above grade, in dry locations only. NM is NOT permitted in wet or damp locations, in concrete, in air-handling spaces, or where exposed to physical damage.",
+    "necReference": "334.10",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "NM-cable",
+      "residential"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-004",
+    "certificationLevel": "Apprentice",
+    "topic": "Wiring Methods and Installation",
+    "question": "A cable labeled '12/2 with ground' contains how many conductors?",
+    "optionA": "Two 12 AWG conductors, no ground",
+    "optionB": "Two 12 AWG conductors plus one bare ground",
+    "optionC": "Three 12 AWG conductors plus ground",
+    "optionD": "Two 12 AWG conductors and one 14 AWG ground",
+    "correctAnswer": "B",
+    "explanation": "12/2 NM cable contains two 12 AWG insulated conductors (one black, one white) plus one bare copper equipment grounding conductor. The '12' is the wire size; the '2' is the count of insulated conductors. The ground is listed separately. 12/3 would add a red third insulated conductor for switch loops or 240V circuits.",
+    "necReference": "Article 334",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "NM-cable",
+      "conductors"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-005",
+    "certificationLevel": "Apprentice",
+    "topic": "Wiring Methods and Installation",
+    "question": "Type UF cable is specifically designed for:",
+    "optionA": "Direct burial underground",
+    "optionB": "High-temperature appliance wiring",
+    "optionC": "Panel-to-panel feeder use only",
+    "optionD": "Indoor use only, in dry locations",
+    "correctAnswer": "A",
+    "explanation": "Type UF (Underground Feeder) cable is rated for direct burial in the ground without additional conduit protection. Per NEC Article 340, UF cable is moisture-, fungus-, and corrosion-resistant. It can serve as branch circuit or feeder wiring to outdoor structures. Unlike NM cable, UF may be used in wet and damp locations.",
+    "necReference": "Article 340",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "UF-cable",
+      "burial"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-006",
+    "certificationLevel": "Apprentice",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC Chapter 9, Table 1, what is the maximum conduit fill percentage for 3 or more conductors?",
+    "optionA": "53%",
+    "optionB": "60%",
+    "optionC": "31%",
+    "optionD": "40%",
+    "correctAnswer": "D",
+    "explanation": "NEC Chapter 9, Table 1 limits: 1 conductor = 53% fill; 2 conductors = 31% fill; 3 or more conductors = 40% fill. The 40% limit for multiple conductors provides space for heat dissipation and allows easy conductor pulling. Exceeding fill limits makes pulling difficult and can damage insulation.",
+    "necReference": "Chapter 9",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "conduit-fill",
+      "calculation"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-007",
+    "certificationLevel": "Apprentice",
+    "topic": "Wiring Methods and Installation",
+    "question": "When installing PVC conduit underground for a branch circuit at 120V, the minimum cover depth per NEC Table 300.5 is:",
+    "optionA": "6 inches",
+    "optionB": "12 inches",
+    "optionC": "24 inches",
+    "optionD": "18 inches",
+    "correctAnswer": "D",
+    "explanation": "Per NEC Table 300.5, the minimum cover for direct-buried conduit (Schedule 80 PVC or RMC) under general conditions is 6 inches; for all other raceways the minimum is 18 inches. For residential branch circuits not exceeding 120V rated 20A or less, GFCI-protected, there are reduced-depth exceptions (12 inches). Default for PVC in most conditions = 18 inches.",
+    "necReference": "300.5",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "burial-depth",
+      "underground"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-008",
+    "certificationLevel": "Apprentice",
+    "topic": "Wiring Methods and Installation",
+    "question": "What is the maximum conduit fill for 2 conductors in a raceway per NEC Chapter 9, Table 1?",
+    "optionA": "40%",
+    "optionB": "53%",
+    "optionC": "60%",
+    "optionD": "31%",
+    "correctAnswer": "D",
+    "explanation": "Per NEC Chapter 9, Table 1: 1 conductor = 53%, 2 conductors = 31%, 3 or more conductors = 40%. The restrictive 31% for two conductors ensures the two cables have room to move and heat to dissipate. This limit frequently appears on conduit fill calculation questions.",
+    "necReference": "Chapter 9",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "conduit-fill"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-009",
+    "certificationLevel": "Journeyman",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC 358.30(A), EMT shall be secured at intervals not exceeding _____ and within _____ of each box, cabinet, or fitting.",
+    "optionA": "10 feet; 3 feet",
+    "optionB": "10 feet; 6 feet",
+    "optionC": "6 feet; 12 inches",
+    "optionD": "8 feet; 3 feet",
+    "correctAnswer": "A",
+    "explanation": "NEC 358.30(A): EMT shall be supported at intervals not exceeding 10 feet, and within 3 feet of each outlet box, junction box, device box, cabinet, conduit body, or other conduit termination. Both conditions must be satisfied. These support rules prevent sagging and protect conductor insulation.",
+    "necReference": "358.30",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "EMT",
+      "support"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-010",
+    "certificationLevel": "Journeyman",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC 310.15(C)(1), when more than 3 current-carrying conductors are in a conduit, ampacity must be adjusted. For 4\u20136 conductors, the adjustment factor is:",
+    "optionA": "70%",
+    "optionB": "80%",
+    "optionC": "50%",
+    "optionD": "90%",
+    "correctAnswer": "B",
+    "explanation": "NEC Table 310.15(C)(1) adjustment factors: 4\u20136 conductors = 80%; 7\u20139 = 70%; 10\u201320 = 50%; 21\u201330 = 45%; 31\u201340 = 40%; 41+ = 35%. These factors account for reduced heat dissipation when multiple current-carrying conductors share a raceway. Note: equipment grounding conductors and neutral conductors meeting 310.15(E) conditions are not counted.",
+    "necReference": "310.15",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "ampacity",
+      "conduit-fill"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-011",
+    "certificationLevel": "Journeyman",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC 300.14, at each outlet, junction, or switch point, free conductor length shall be at least:",
+    "optionA": "6 inches",
+    "optionB": "3 inches",
+    "optionC": "8 inches",
+    "optionD": "12 inches",
+    "correctAnswer": "A",
+    "explanation": "NEC 300.14: At least 6 inches of free conductor, measured from the point it emerges from the raceway or cable sheath, shall be left at each outlet, junction, and switch point for splices or connections to luminaires or devices. If the opening is less than 8 inches in any dimension, each conductor must be long enough to extend 3 inches outside the opening.",
+    "necReference": "300.14",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "conductors",
+      "boxes"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-012",
+    "certificationLevel": "Journeyman",
+    "topic": "Wiring Methods and Installation",
+    "question": "Which NEC article governs Type MC (Metal-Clad) cable installation?",
+    "optionA": "Article 334",
+    "optionB": "Article 330",
+    "optionC": "Article 338",
+    "optionD": "Article 344",
+    "correctAnswer": "B",
+    "explanation": "Article 330 covers Type MC (Metal-Clad) cable. Article 334 = Type NM cable. Article 338 = Service Entrance (SE) and Underground Service Entrance (USE) cable. Article 344 = Rigid Metal Conduit (RMC). Type MC cable has a metal armor (interlocked, corrugated, or smooth) protecting conductors and includes an EGC.",
+    "necReference": "Article 330",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "MC-cable",
+      "article"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-013",
+    "certificationLevel": "Journeyman",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC 300.5(D), where underground conductors emerge from the ground and are subject to physical damage, protection must extend from the required burial depth to:",
+    "optionA": "At least 8 feet above finished grade",
+    "optionB": "The first connection point",
+    "optionC": "The service entrance",
+    "optionD": "At least 4 feet above grade",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 300.5(D)(1), where subject to physical damage, conductors emerging from grade shall be protected in an approved raceway (RMC, IMC, Schedule 80 PVC, RTRC) from the required cover depth to a point at least 8 feet above finished grade. This prevents damage from vehicles, lawn mowers, and other hazards.",
+    "necReference": "300.5",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "underground",
+      "protection"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-014",
+    "certificationLevel": "Journeyman",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC 430.245(B), flexible metal conduit used as a motor connection shall not exceed _____ in length.",
+    "optionA": "3 feet",
+    "optionB": "6 feet",
+    "optionC": "10 feet",
+    "optionD": "18 inches",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 430.245(B), flexible metal conduit, liquidtight flexible metal conduit, or liquidtight flexible nonmetallic conduit used for motor terminations shall not exceed 6 feet in length. This short-flex rule allows vibration isolation while maintaining adequate grounding continuity. The flex also counts as the EGC when properly connected with listed fittings.",
+    "necReference": "430.245",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "flexible-conduit",
+      "motors"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-015",
+    "certificationLevel": "Journeyman",
+    "topic": "Wiring Methods and Installation",
+    "question": "The minimum bending radius for conductors at terminations per NEC 300.34 for 600V conductors is _____ times the overall diameter of the conductor:",
+    "optionA": "4 times",
+    "optionB": "6 times",
+    "optionC": "8 times",
+    "optionD": "10 times",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 300.34, conductors at terminations in enclosures shall not be bent to a radius less than 6 times the overall diameter of the conductor (for conductors without lead sheath). Tighter bends can crack or compress insulation, increasing resistance at the bend and potentially causing premature failure. The rule is especially important for large-AWG conductors.",
+    "necReference": "300.34",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "bending",
+      "conductors"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-016",
+    "certificationLevel": "Journeyman",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC 210.19(A)(1), the ampacity of branch circuit conductors shall not be less than:",
+    "optionA": "The OCPD rating",
+    "optionB": "100% of the continuous load",
+    "optionC": "125% of the continuous load plus 100% of the noncontinuous load",
+    "optionD": "80% of the OCPD rating",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 210.19(A)(1), branch circuit conductor ampacity shall not be less than the maximum load to be served, and shall not be less than 125% of the continuous load plus 100% of the noncontinuous load. This mirrors the OCPD rule in 210.20(A) \u2014 both the conductor and the OCPD must be sized for 125% of continuous loads.",
+    "necReference": "210.19",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "conductors",
+      "continuous-load"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-017",
+    "certificationLevel": "Master",
+    "topic": "Wiring Methods and Installation",
+    "question": "Six 12 AWG THHN conductors (each 0.0133 in\u00b2) are installed in \u00be\" EMT (internal area 0.533 in\u00b2). What is the actual fill percentage, and is it within the 40% limit?",
+    "optionA": "15%; within limit",
+    "optionB": "25%; within limit",
+    "optionC": "45%; exceeds limit",
+    "optionD": "31%; within limit",
+    "correctAnswer": "A",
+    "explanation": "Fill calculation: 6 \u00d7 0.0133 in\u00b2 = 0.0798 in\u00b2. Fill percentage: 0.0798 \u00f7 0.533 = 14.97% \u2248 15%. The 40% maximum for 3+ conductors allows up to 0.533 \u00d7 0.40 = 0.213 in\u00b2. With only 0.0798 in\u00b2 used, this is well within the limit \u2014 the conduit could actually accommodate up to 16 conductors of 12 AWG THHN (16 \u00d7 0.0133 = 0.213 in\u00b2).",
+    "necReference": "Chapter 9",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "conduit-fill",
+      "calculation"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-018",
+    "certificationLevel": "Master",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC Table 310.15(C)(1), a conduit contains 9 current-carrying conductors. A 10 AWG THHN copper conductor has a base ampacity of 40A per Table 310.16(B)(16). What is the adjusted ampacity?",
+    "optionA": "28 A",
+    "optionB": "20 A",
+    "optionC": "32 A",
+    "optionD": "36 A",
+    "correctAnswer": "A",
+    "explanation": "For 7\u20139 current-carrying conductors, the adjustment factor is 70%. Adjusted ampacity = 40A \u00d7 0.70 = 28A. This 28A adjusted value is then used for circuit design. If the circuit is protected by a 20A breaker, the conductor still meets the requirement (28A > 20A). Always apply both the ambient temperature correction and conductor bundling adjustments when both conditions exist.",
+    "necReference": "310.15",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "ampacity",
+      "adjustment"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-019",
+    "certificationLevel": "Master",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC Table 300.19(A), conductors 18 AWG through 8 AWG in a vertical raceway shall be supported at intervals not exceeding:",
+    "optionA": "50 feet",
+    "optionB": "75 feet",
+    "optionC": "100 feet",
+    "optionD": "120 feet",
+    "correctAnswer": "C",
+    "explanation": "Per NEC Table 300.19(A), for conductors 18 AWG through 8 AWG (copper), supports in vertical raceways are required at intervals not exceeding 100 feet. Larger conductors require more frequent support: 2/0 and 3/0 AWG = 80 feet; 4/0 through 350 kcmil = 60 feet; 400\u2013500 kcmil = 50 feet; over 500 kcmil = 40 feet. Supports prevent conductor weight from damaging insulation and connectors.",
+    "necReference": "300.19",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "vertical",
+      "support"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-020",
+    "certificationLevel": "Master",
+    "topic": "Wiring Methods and Installation",
+    "question": "Per NEC 300.22(C), wiring installed in other spaces used for environmental air (plenum spaces) must:",
+    "optionA": "Use Type NM cable, which is permitted anywhere",
+    "optionB": "Have no restrictions beyond normal requirements",
+    "optionC": "Use Schedule 80 PVC only",
+    "optionD": "Use raceways, Type AC or MC cable, or other listed plenum-rated wiring methods",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 300.22(C), wiring in other air-handling spaces (plenums) must use Type AC or MC cable without nonmetallic covering, or other listed plenum-rated cable or raceways. NM cable is specifically prohibited in plenum spaces. Low-smoke, flame-retardant materials are required because HVAC air can spread toxic combustion products throughout a building. Plenum-rated cables are labeled CMP, CMR, etc.",
+    "necReference": "300.22",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "wiring",
+      "plenum",
+      "HVAC"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-021",
+    "certificationLevel": "Apprentice",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.8(A), GFCI protection is required for all 125V, 15A and 20A receptacles in a dwelling unit installed in which location?",
+    "optionA": "Bedrooms only",
+    "optionB": "All rooms throughout the dwelling",
+    "optionC": "Bathrooms, garages, outdoors, crawl spaces, unfinished basements, kitchens, boathouses, and laundry areas",
+    "optionD": "Only wet bar areas",
+    "correctAnswer": "C",
+    "explanation": "NEC 210.8(A) lists specific dwelling unit locations requiring GFCI: bathrooms, garages, outdoors, crawl spaces at or below grade, unfinished basements, kitchens (within 6 feet of sink), boathouses, laundry areas, and others. Bedrooms require AFCI, not GFCI. Living rooms and dining rooms require neither (but AFCI applies for all areas in newer code editions).",
+    "necReference": "210.8",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "GFCI",
+      "dwelling"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-022",
+    "certificationLevel": "Apprentice",
+    "topic": "Branch Circuits",
+    "question": "An AFCI (Arc Fault Circuit Interrupter) is designed to protect against:",
+    "optionA": "Ground faults that cause electric shock",
+    "optionB": "Voltage surges from lightning",
+    "optionC": "Arcing faults that can ignite fires",
+    "optionD": "Overload conditions on the circuit",
+    "correctAnswer": "C",
+    "explanation": "An AFCI detects arcing faults \u2014 unintended electrical arcs caused by damaged, deteriorated, or pinched wiring \u2014 that can ignite nearby combustible materials and cause fires. Standard breakers don't detect these low-level arcing faults. GFCIs protect against shock; surge protectors handle voltage spikes; overload protection is the standard breaker function.",
+    "necReference": "210.12",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "AFCI",
+      "safety"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-023",
+    "certificationLevel": "Apprentice",
+    "topic": "Branch Circuits",
+    "question": "A NEMA 5-15 receptacle is rated for:",
+    "optionA": "20A, 240V",
+    "optionB": "15A, 125V",
+    "optionC": "20A, 125V",
+    "optionD": "30A, 125V",
+    "correctAnswer": "B",
+    "explanation": "NEMA 5-15 = 15A, 125V, 2-pole, 3-wire grounding. The '5' series indicates 125V. The '15' is the ampere rating. NEMA 5-20 (T-slot) = 20A, 125V. NEMA 6-20 = 20A, 250V. NEMA 14-30 = 30A, 125/250V (4-wire dryer outlet). Knowing NEMA configurations is critical for matching circuits to loads.",
+    "necReference": "Article 406",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "receptacles",
+      "NEMA"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-024",
+    "certificationLevel": "Apprentice",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.11(C)(3), at least one 20A branch circuit shall be installed to serve:",
+    "optionA": "Each bedroom",
+    "optionB": "Outdoor receptacles",
+    "optionC": "Bathroom receptacle outlets",
+    "optionD": "The laundry room",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 210.11(C)(3), at least one 20A branch circuit shall serve bathroom receptacle outlet(s). The bathroom circuit may serve only bathroom receptacles \u2014 it shall not supply other outlets. The 20A rating accommodates hair dryers, shavers, and other bathroom appliances that can approach 1,500\u20131,875W.",
+    "necReference": "210.11",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "bathroom",
+      "dwelling"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-025",
+    "certificationLevel": "Apprentice",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.21(B)(1), a single receptacle installed on a 20A branch circuit must be rated:",
+    "optionA": "15A",
+    "optionB": "Either 15A or 20A",
+    "optionC": "25A",
+    "optionD": "20A",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 210.21(B)(1), a single receptacle on an individual branch circuit shall have an ampere rating NOT less than the branch circuit rating. So a single 20A receptacle is required on a 20A circuit. However, per 210.21(B)(3), when multiple receptacles are on the same 20A circuit, individual 15A or 20A receptacles are both permitted.",
+    "necReference": "210.21",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "receptacles",
+      "ampacity"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-026",
+    "certificationLevel": "Apprentice",
+    "topic": "Branch Circuits",
+    "question": "Which of the following locations does NOT require GFCI protection in a dwelling per NEC 210.8(A) as of the 2026 NEC?",
+    "optionA": "Attached garage",
+    "optionB": "Bathroom",
+    "optionC": "Living room",
+    "optionD": "Outdoor receptacle",
+    "correctAnswer": "C",
+    "explanation": "Living rooms do NOT require GFCI protection \u2014 they require AFCI protection (combo-type AFCI for all 120V, 15A and 20A circuits). GFCI is required in bathrooms, garages, outdoors, crawl spaces, unfinished basements, kitchen countertop areas, laundry areas, boathouses, and similar damp/wet locations.",
+    "necReference": "210.8",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "GFCI",
+      "dwelling"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-027",
+    "certificationLevel": "Apprentice",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.52(D), at least one receptacle shall be installed in a bathroom within _____ of the outside edge of each basin:",
+    "optionA": "18 inches",
+    "optionB": "2 feet",
+    "optionC": "3 feet",
+    "optionD": "4 feet",
+    "correctAnswer": "C",
+    "explanation": "NEC 210.52(D): at least one receptacle outlet shall be installed in bathrooms within 3 feet of the outside edge of each basin. The receptacle must be on a wall or partition adjacent to the basin or basin counter top. All bathroom receptacles require GFCI protection per 210.8(A)(1).",
+    "necReference": "210.52",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "bathroom",
+      "receptacles"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-028",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.12(A) (2026 NEC), AFCI protection is required for all 120V, 15A and 20A branch circuits that supply receptacle outlets or devices in dwelling unit:",
+    "optionA": "Kitchens only",
+    "optionB": "Bedrooms only (older code editions)",
+    "optionC": "All rooms: living rooms, dining rooms, bedrooms, closets, hallways, laundry areas, and similar",
+    "optionD": "Only unfinished areas and basements",
+    "correctAnswer": "C",
+    "explanation": "Per the 2026 NEC 210.12(A), AFCI protection is required for all 120V, 15A and 20A circuits supplying outlets or devices installed in dwelling units. This expanded scope covers virtually all living spaces. Earlier NEC editions required AFCI only in bedrooms (2008), then expanded room by room in subsequent editions.",
+    "necReference": "210.12",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "AFCI",
+      "dwelling"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-029",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.52(B)(1), countertop receptacles in a kitchen must be supplied by at least how many small appliance circuits?",
+    "optionA": "Two 20A circuits",
+    "optionB": "One 20A circuit",
+    "optionC": "Three 15A circuits",
+    "optionD": "Two 15A circuits",
+    "correctAnswer": "A",
+    "explanation": "NEC 210.52(B)(1) requires at least two 20A small appliance branch circuits to supply all receptacle outlets for countertop spaces. These two circuits serve the kitchen, pantry, breakfast room, and dining room. Each circuit must be 20A to handle appliances like toasters (900W), microwaves (1,200W), and coffee makers (1,000W).",
+    "necReference": "210.52",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "kitchen",
+      "dwelling"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-030",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.52(A)(1), a wall space that is _____ or more wide requires a receptacle outlet in a dwelling living area.",
+    "optionA": "1 foot",
+    "optionB": "2 feet",
+    "optionC": "3 feet",
+    "optionD": "4 feet",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 210.52(A)(1), any wall space 2 feet or wider shall have a receptacle outlet. The maximum spacing rule ensures no point along the floor line is more than 6 feet from a receptacle. Wall spaces of less than 2 feet wide are exempt. This includes the wall space behind doors and the space measured around room corners.",
+    "necReference": "210.52",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "receptacles",
+      "dwelling"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-031",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.63, a 125V, 15A or 20A receptacle for servicing HVAC equipment shall be located within _____ of the equipment.",
+    "optionA": "3 feet",
+    "optionB": "10 feet",
+    "optionC": "25 feet",
+    "optionD": "50 feet",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 210.63, at least one 125V, 15A or 20A receptacle outlet shall be installed within 25 feet of HVAC, refrigeration, or evaporative cooling equipment to provide a maintenance outlet. This prevents the use of extension cords and allows technicians to run tools and test equipment. The outlet must be accessible.",
+    "necReference": "210.63",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "HVAC",
+      "receptacles"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-032",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.8(B), GFCI protection is required for all 125V through 250V, 15A, 20A, and 30A receptacles installed in commercial occupancies in:",
+    "optionA": "Office areas only",
+    "optionB": "Bathrooms, kitchens, rooftops, outdoors, and other specific locations",
+    "optionC": "All locations without exception",
+    "optionD": "Only in food service areas",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 210.8(B), GFCI protection is required in non-dwelling occupancies for receptacles in: bathrooms, kitchens, rooftops, outdoors, indoor wet locations, locker rooms, garages, boathouses, swimming pools/hot tubs areas, and service bays. Commercial GFCI requirements are broader in voltage/amperage scope (up to 250V, 30A) compared to dwelling requirements.",
+    "necReference": "210.8",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "GFCI",
+      "commercial"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-033",
+    "certificationLevel": "Journeyman",
+    "topic": "Branch Circuits",
+    "question": "A branch circuit has a continuous load of 14A and a noncontinuous load of 4A. Per NEC 210.20(A), what is the minimum OCPD rating?",
+    "optionA": "18A (100% of all loads)",
+    "optionB": "20A (next standard above 17.5A + 4A = 21.5A? No \u2014 14\u00d71.25 + 4 = 21.5A \u2192 25A)",
+    "optionC": "30A",
+    "optionD": "25A",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 210.20(A): minimum OCPD = 125% \u00d7 continuous load + 100% \u00d7 noncontinuous load = (14A \u00d7 1.25) + 4A = 17.5A + 4A = 21.5A. Since 21.5A is not a standard OCPD size, per 240.4(B), use the next higher standard: 25A. Note: the conductor must also be rated at least 21.5A per 210.19(A)(1).",
+    "necReference": "210.20",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "OCPD",
+      "continuous-load"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-034",
+    "certificationLevel": "Master",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 210.12(A), where is an arc-fault circuit interrupter (AFCI) permitted to be installed for a bedroom circuit rather than at the main panel?",
+    "optionA": "At the service disconnecting means",
+    "optionB": "At any location in the bedroom",
+    "optionC": "At the first outlet, using a listed outlet branch-circuit AFCI device",
+    "optionD": "Only at the panel breaker; no alternatives are permitted",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 210.12(A), for AFCI compliance a listed combination-type AFCI at the panel is the standard approach. However, a listed outlet branch-circuit (OBC) AFCI device installed at the first outlet of the branch circuit is permitted when the wiring from the panel to the first outlet is entirely metal conduit or MC cable. This option allows AFCI upgrades without rewiring the panel.",
+    "necReference": "210.12",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "AFCI",
+      "installation"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-035",
+    "certificationLevel": "Master",
+    "topic": "Branch Circuits",
+    "question": "Per NEC 225.30, how many branch circuits or feeders may generally supply a separate structure from another building?",
+    "optionA": "No limit \u2014 as many as needed",
+    "optionB": "One feeder or branch circuit",
+    "optionC": "Two circuits maximum",
+    "optionD": "Three circuits for separate structures",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 225.30, only one feeder or branch circuit is permitted to supply a separate building or structure from another building, with specific exceptions (emergency systems, legally required standby, different service characteristics, different ownership, fire pumps). A separate structure typically gets its own subpanel supplied by one feeder \u2014 additional loads are added to that subpanel, not by running multiple feeders.",
+    "necReference": "225.30",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "branch-circuits",
+      "feeders",
+      "separate-structures"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-036",
+    "certificationLevel": "Apprentice",
+    "topic": "Overcurrent Protection",
+    "question": "What is the primary function of an overcurrent protection device (OCPD)?",
+    "optionA": "To detect ground faults",
+    "optionB": "To reduce voltage fluctuations",
+    "optionC": "To open the circuit when current exceeds a safe level for too long",
+    "optionD": "To balance loads across phases",
+    "correctAnswer": "C",
+    "explanation": "An OCPD (circuit breaker or fuse) opens the circuit when the current exceeds the device's rating for a sufficient time to prevent conductor or equipment damage. Breakers also trip on short circuits (magnetic/instantaneous trip). The OCPD protects the wiring, not necessarily the load. GFCI protects against ground faults; voltage regulators handle fluctuations.",
+    "necReference": "Article 240",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "breaker",
+      "fuse"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-037",
+    "certificationLevel": "Apprentice",
+    "topic": "Overcurrent Protection",
+    "question": "Which of the following is NOT a standard overcurrent device ampere rating per NEC 240.6(A)?",
+    "optionA": "15 A",
+    "optionB": "20 A",
+    "optionC": "22 A",
+    "optionD": "30 A",
+    "correctAnswer": "C",
+    "explanation": "NEC 240.6(A) standard ampere ratings: 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 225, 250, 300, 350, 400, 450, 500, 600... 22A is not a standard size. When a calculation yields a non-standard value, round up to the next standard size (except for small conductors per 240.4(D)).",
+    "necReference": "240.6",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "standard-sizes"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-038",
+    "certificationLevel": "Apprentice",
+    "topic": "Overcurrent Protection",
+    "question": "What does 'interrupting rating' (AIC rating) of a circuit breaker or fuse mean?",
+    "optionA": "The maximum continuous current the device can carry",
+    "optionB": "The maximum fault current the device can safely interrupt without being destroyed",
+    "optionC": "The time it takes the device to trip",
+    "optionD": "The voltage rating of the protective device",
+    "correctAnswer": "B",
+    "explanation": "The interrupting rating (ampere interrupting capacity, or AIC) is the maximum fault current a device can safely clear without being destroyed or creating a hazard. Per NEC 110.9, equipment must have an AIC rating not less than the available fault current at the point of installation. If fault current exceeds the AIC, the device may explode rather than safely open the circuit.",
+    "necReference": "110.9",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "AIC",
+      "interrupting-rating"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-039",
+    "certificationLevel": "Apprentice",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 240.4(D), 12 AWG copper conductors shall be protected by an overcurrent device rated no more than:",
+    "optionA": "15 A",
+    "optionB": "30 A",
+    "optionC": "25 A",
+    "optionD": "20 A",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 240.4(D): 14 AWG max = 15A; 12 AWG max = 20A; 10 AWG max = 30A. These limits protect the smaller conductors regardless of their actual ampacity at elevated temperature ratings. A 12 AWG conductor may have a 75\u00b0C ampacity of 25A, but the code limits its OCPD to 20A to prevent overheating under sustained load in typical building wiring.",
+    "necReference": "240.4",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "conductors",
+      "sizing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-040",
+    "certificationLevel": "Apprentice",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 230.90, the rating of the service overcurrent device shall not exceed:",
+    "optionA": "125% of the service conductor ampacity",
+    "optionB": "150% of the connected load",
+    "optionC": "200% of the calculated load",
+    "optionD": "The ampacity of the service entrance conductors",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 230.90(A), the service overcurrent device shall have a rating or setting not exceeding the ampacity of the service conductors. If the 200A service entrance conductors are protected by a 200A main breaker, the OCPD does not exceed the conductor ampacity. Exceptions include where a single OCPD serves the entire load and where fuses and circuit breakers have specific ratings.",
+    "necReference": "230.90",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "service",
+      "sizing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-041",
+    "certificationLevel": "Apprentice",
+    "topic": "Overcurrent Protection",
+    "question": "Type S fuses (rejection-base fuses) are designed to prevent:",
+    "optionA": "Nuisance tripping",
+    "optionB": "Overfusing \u2014 installing a higher-rated fuse than the circuit requires",
+    "optionC": "Overcurrent conditions",
+    "optionD": "Ground faults in the circuit",
+    "correctAnswer": "B",
+    "explanation": "Type S fuses have an adaptor system that prevents installing an oversized fuse in a circuit requiring a lower rating. For example, a 15A Type S fuse cannot be installed in a 30A Type S holder, and vice versa. This rejection feature, required by NEC 240.52, prevents the dangerous practice of 'overfusing' a circuit \u2014 the root cause of many electrical fires.",
+    "necReference": "240.52",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "fuses",
+      "Type-S"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-042",
+    "certificationLevel": "Apprentice",
+    "topic": "Overcurrent Protection",
+    "question": "A 15A circuit breaker trips during normal operation when a 12A heater is running. Which action is CORRECT?",
+    "optionA": "Investigate the cause of tripping before taking action",
+    "optionB": "Replace with a 20A breaker immediately",
+    "optionC": "Add more loads to prove the circuit can handle them",
+    "optionD": "Assume the breaker is faulty and bypass it",
+    "correctAnswer": "A",
+    "explanation": "A 12A load should not trip a 15A breaker unless: (1) there are other loads on the circuit, (2) the conductor has high resistance (loose connection, voltage drop), (3) the breaker is defective or has been tripped multiple times, or (4) the heater has a starting surge. Always investigate before upsizing \u2014 installing a 20A breaker on 14 AWG wire violates NEC 240.4(D) and creates a fire hazard.",
+    "necReference": "Article 240",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "troubleshooting",
+      "safety"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-043",
+    "certificationLevel": "Journeyman",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 240.21(B)(1), a feeder tap conductor may be smaller than the feeder conductor if the tap is not over _____ long and terminates in a single breaker or set of fuses.",
+    "optionA": "6 feet",
+    "optionB": "10 feet",
+    "optionC": "25 feet",
+    "optionD": "50 feet",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 240.21(B)(1), a 10-foot tap rule: conductors can tap a feeder without OCPD at the tap point if: (1) they are not over 10 feet long, (2) their ampacity is at least 10% of the feeder OCPD rating, (3) they are enclosed in a raceway, (4) they terminate in a single breaker or set of fuses. This applies to panelboards and individual loads fed from main feeders.",
+    "necReference": "240.21",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "feeder-taps",
+      "sizing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-044",
+    "certificationLevel": "Journeyman",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 240.21(B)(2), the '25-foot tap rule' allows undersized tap conductors up to 25 feet if they have an ampacity of at least _____ of the upstream feeder overcurrent device.",
+    "optionA": "10%",
+    "optionB": "25%",
+    "optionC": "50%",
+    "optionD": "1/3 (33.3%)",
+    "correctAnswer": "D",
+    "explanation": "Per the 25-foot tap rule (NEC 240.21(B)(2)), tap conductors are permitted up to 25 feet if: (1) ampacity is at least 1/3 of the upstream feeder OCPD rating, (2) they terminate in a single breaker or set of fuses, (3) they are protected from physical damage and not run as part of an open wiring system, and (4) the tap terminates at an OCPD that is accessible. The 10-foot tap rule requires only 10% of feeder ampacity.",
+    "necReference": "240.21",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "feeder-taps",
+      "25-foot-rule"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-045",
+    "certificationLevel": "Journeyman",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 240.85, a circuit breaker with a slash voltage rating (e.g., 120/240V) may be used in a circuit where the line-to-ground voltage does not exceed:",
+    "optionA": "The first number in the slash rating",
+    "optionB": "The second number",
+    "optionC": "The average of both numbers",
+    "optionD": "The sum of both numbers",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 240.85, a circuit breaker with a slash rating (120/240V) is suitable for use in systems where the nominal line-to-ground voltage is equal to or less than the lower number (120V) and the nominal line-to-line voltage is equal to or less than the higher number (240V). Do not use a 120/240V breaker where the line-to-ground voltage exceeds 120V.",
+    "necReference": "240.85",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "breaker",
+      "voltage-rating"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-046",
+    "certificationLevel": "Journeyman",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 215.3, a feeder overcurrent device must be rated not less than:",
+    "optionA": "The sum of all branch circuit loads",
+    "optionB": "80% of conductor ampacity",
+    "optionC": "The total connected load without demand factors",
+    "optionD": "125% of the continuous load plus 100% of the noncontinuous load",
+    "correctAnswer": "D",
+    "explanation": "NEC 215.3 uses the same formula as 210.20(A): feeder OCPD must be rated at least 125% of continuous load + 100% noncontinuous load. This ensures the feeder OCPD can carry continuous loads without operating near its thermal limit. The conductor (NEC 215.2) is also sized at 125% continuous + 100% noncontinuous.",
+    "necReference": "215.3",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "feeder",
+      "continuous-load"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-047",
+    "certificationLevel": "Journeyman",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 240.4(B), when a conductor's ampacity falls between two standard OCPD ratings, the next HIGHER standard size OCPD is permitted as long as the conductor ampacity does not exceed:",
+    "optionA": "80A",
+    "optionB": "100A",
+    "optionC": "800A",
+    "optionD": "600A",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 240.4(B), the next higher standard overcurrent device size is permitted where the conductor ampacity doesn't correspond exactly to a standard OCPD rating \u2014 PROVIDED the conductor ampacity does not exceed 800A. Above 800A, you may not round up; the OCPD must be sized to not exceed the conductor ampacity. This prevents rounding up on very large feeder conductors.",
+    "necReference": "240.4",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "conductor",
+      "rounding"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-048",
+    "certificationLevel": "Journeyman",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 240.50(B), plug fuses (Edison base) are limited to circuits with a voltage not exceeding:",
+    "optionA": "150V",
+    "optionB": "120V",
+    "optionC": "240V",
+    "optionD": "600V",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 240.50(B), plug fuses (Type P and Type S, Edison base) shall not be used in circuits exceeding 150 volts to ground. This limits them to 120V circuits (120V to neutral = within 150V). They are NOT suitable for 240V systems (240V line-to-ground exceeds 150V). Cartridge fuses or circuit breakers are required for higher voltages.",
+    "necReference": "240.50",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "fuses",
+      "voltage-rating"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-049",
+    "certificationLevel": "Master",
+    "topic": "Overcurrent Protection",
+    "question": "A feeder has a continuous load of 70A and a noncontinuous load of 25A. What is the minimum feeder OCPD rating per NEC 215.3?",
+    "optionA": "95 A",
+    "optionB": "100 A",
+    "optionC": "112.5 A \u2192 125 A",
+    "optionD": "87.5 A \u2192 90 A",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 215.3: minimum OCPD = (125% \u00d7 continuous load) + (100% \u00d7 noncontinuous load) = (70A \u00d7 1.25) + 25A = 87.5A + 25A = 112.5A. This is not a standard OCPD size \u2014 per 240.4(B), round up to the next standard size: 125A. The feeder conductor must also be rated at least 112.5A per NEC 215.2(A)(1). A 2 AWG copper conductor at 75\u00b0C (rated 115A) would not be adequate; 1 AWG (rated 130A) would be required.",
+    "necReference": "215.3",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "feeder",
+      "calculation"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-050",
+    "certificationLevel": "Master",
+    "topic": "Overcurrent Protection",
+    "question": "Per NEC 110.9, installed overcurrent protection devices must have an interrupting rating sufficient for the _____ at the terminals of the equipment.",
+    "optionA": "Nominal voltage",
+    "optionB": "Calculated demand load",
+    "optionC": "Full-load current",
+    "optionD": "Maximum available fault current",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 110.9, electrical equipment that interrupts fault current shall have an interrupting rating not less than the nominal circuit voltage and the current that is available at the equipment's terminals. If 40,000A of fault current is available at a panel, all breakers in that panel must have at least a 40,000 AIC (ampere interrupting capacity) rating. Under-rated breakers can catastrophically fail during a fault.",
+    "necReference": "110.9",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "OCPD",
+      "AIC",
+      "fault-current"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-051",
+    "certificationLevel": "Apprentice",
+    "topic": "Motors",
+    "question": "Which NEC article covers installation requirements for motors and motor circuits?",
+    "optionA": "Article 250",
+    "optionB": "Article 410",
+    "optionC": "Article 430",
+    "optionD": "Article 445",
+    "correctAnswer": "C",
+    "explanation": "NEC Article 430 covers motors, motor circuits, and controllers \u2014 including conductor sizing (430.22), overcurrent protection (430.52), overload protection (430.32), disconnecting means (430.102), and motor control centers. Article 440 covers hermetic refrigerant motor-compressors (A/C equipment). Article 445 covers generators.",
+    "necReference": "Article 430",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "NEC",
+      "article"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-052",
+    "certificationLevel": "Apprentice",
+    "topic": "Motors",
+    "question": "Per NEC 430.22, motor branch circuit conductors must have an ampacity of not less than _____ of the motor's full-load current.",
+    "optionA": "100%",
+    "optionB": "110%",
+    "optionC": "125%",
+    "optionD": "150%",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 430.22, the conductors supplying a single motor shall have an ampacity of not less than 125% of the motor's full-load current from Table 430.247, 430.248, 430.249, or 430.250 (NOT the nameplate FLC \u2014 that's used for overload sizing). The 125% factor accommodates the slightly elevated current motors draw during sustained operation and starting cycles.",
+    "necReference": "430.22",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "conductors",
+      "sizing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-053",
+    "certificationLevel": "Apprentice",
+    "topic": "Motors",
+    "question": "Per NEC 430.32(A)(1), what is the maximum overload protection setting for a motor with a service factor (SF) of 1.15 or more?",
+    "optionA": "100% of nameplate FLC",
+    "optionB": "115% of nameplate FLC",
+    "optionC": "140% of nameplate FLC",
+    "optionD": "125% of nameplate FLC",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 430.32(A)(1): for motors with a marked service factor of 1.15 or more, OR a marked temperature rise of 40\u00b0C or less, overload protection shall not exceed 125% of nameplate FLC. For all other motors, the limit is 115%. If the overload device at 125% doesn't allow the motor to run, 430.32(C) permits going up to 140% (SF \u2265 1.15) or 130% (all others).",
+    "necReference": "430.32",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "overload",
+      "protection"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-054",
+    "certificationLevel": "Apprentice",
+    "topic": "Motors",
+    "question": "What is the purpose of motor overload protection (thermal overload relays or overload heaters)?",
+    "optionA": "To protect against short circuits and arcing faults",
+    "optionB": "To protect the motor windings from overheating due to sustained overcurrent",
+    "optionC": "To prevent voltage unbalance",
+    "optionD": "To limit starting current",
+    "correctAnswer": "B",
+    "explanation": "Motor overload protection (required by NEC 430.31) protects the motor from sustained overcurrent that would overheat and damage the windings. Unlike branch circuit OCPDs (which protect conductors), overload relays are set close to the motor's FLC and respond to thermal heating over time. Branch circuit breakers protect wiring; overloads protect the motor.",
+    "necReference": "430.32",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "overload",
+      "protection"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-055",
+    "certificationLevel": "Apprentice",
+    "topic": "Motors",
+    "question": "Per NEC 430.6(A)(1), when sizing motor branch circuit conductors and OCPDs, the full-load current (FLC) values must be taken from:",
+    "optionA": "The motor nameplate",
+    "optionB": "NEC Tables 430.247 through 430.250",
+    "optionC": "The manufacturer's motor data sheet",
+    "optionD": "The largest of nameplate or tables",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 430.6(A)(1), for the purposes of determining conductor and OCPD sizes, motor FLC values shall be taken from the NEC tables (430.247\u2013430.250), NOT the nameplate. The nameplate FLC is used only for overload protection sizing (430.32). This is a critical and frequently tested exam distinction \u2014 always use the tables for conductor and breaker sizing.",
+    "necReference": "430.6",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "FLC",
+      "code"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-056",
+    "certificationLevel": "Apprentice",
+    "topic": "Motors",
+    "question": "Per NEC Table 430.248, what is the full-load current for a 1 HP, 115V, single-phase motor?",
+    "optionA": "10 A",
+    "optionB": "14 A",
+    "optionC": "16 A",
+    "optionD": "20 A",
+    "correctAnswer": "C",
+    "explanation": "Per NEC Table 430.248: 1 HP, 115V, single-phase motor FLC = 16A. Common values to memorize: \u00be HP/115V = 13.8A; 1 HP/115V = 16A; 2 HP/230V = 12A; 3 HP/230V = 17A; 5 HP/230V = 28A. These table values are used for conductor sizing (125% \u00d7 FLC) and OCPD sizing (250% for inverse-time breakers).",
+    "necReference": "430.248",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "FLC",
+      "tables"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-057",
+    "certificationLevel": "Journeyman",
+    "topic": "Motors",
+    "question": "A 5 HP, 230V, single-phase motor has a table FLA of 28A per NEC Table 430.248. What is the minimum branch circuit conductor ampacity?",
+    "optionA": "35 A",
+    "optionB": "28 A",
+    "optionC": "30 A",
+    "optionD": "40 A",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 430.22: conductor ampacity = 125% \u00d7 table FLA = 28A \u00d7 1.25 = 35A. The conductor must be rated at least 35A. Per NEC 310.16 at 75\u00b0C: 8 AWG copper = 50A (adequate). Note: always use the table FLA from 430.248 for this calculation, not the nameplate current, which may differ slightly.",
+    "necReference": "430.22",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "conductors",
+      "calculation"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-058",
+    "certificationLevel": "Journeyman",
+    "topic": "Motors",
+    "question": "Per NEC Table 430.52, the maximum dual-element (time-delay) fuse rating for a Design B squirrel-cage motor branch circuit is _____ of the motor FLA:",
+    "optionA": "125%",
+    "optionB": "150%",
+    "optionC": "175%",
+    "optionD": "250%",
+    "correctAnswer": "C",
+    "explanation": "Per NEC Table 430.52, maximum OCPD ratings for Design B squirrel-cage motors: non-time-delay fuse = 300%; dual-element (time-delay) fuse = 175%; instantaneous trip breaker = 800%; inverse-time breaker = 250%. Dual-element fuses, with their built-in time delay for motor starting, can be sized much lower than instant-trip devices.",
+    "necReference": "430.52",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "OCPD",
+      "fuse"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-059",
+    "certificationLevel": "Journeyman",
+    "topic": "Motors",
+    "question": "Per NEC 430.102(A) and (B), the disconnecting means for a motor shall be located:",
+    "optionA": "Within sight of the controller AND within sight of the motor, or lockable in the open position",
+    "optionB": "At the main service entrance only",
+    "optionC": "On the motor nameplate-rated voltage panel",
+    "optionD": "Within 6 feet of the motor controller",
+    "correctAnswer": "A",
+    "explanation": "NEC 430.102(A): the controller disconnect shall be within sight of the controller location. 430.102(B): the motor disconnect shall be within sight of the motor and the driven machinery, OR capable of being locked in the open position (with a lock that stays on the disconnect during work). 'Within sight' means visible and not more than 50 feet away per NEC 430.102 informational note.",
+    "necReference": "430.102",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "disconnect",
+      "safety"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-060",
+    "certificationLevel": "Journeyman",
+    "topic": "Motors",
+    "question": "Per NEC 430.83(A)(1), a motor controller must have a horsepower rating not less than:",
+    "optionA": "75% of the motor's HP rating",
+    "optionB": "The locked-rotor current",
+    "optionC": "125% of the motor's HP rating",
+    "optionD": "The motor's HP rating",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 430.83(A)(1), motor controllers shall have a horsepower rating at the voltage applied not less than the HP rating of the motor they control. A 5 HP motor needs at least a 5 HP rated controller. The controller rating ensures the device can handle the starting current and switching duty of the motor without damage.",
+    "necReference": "430.83",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "controller",
+      "sizing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-061",
+    "certificationLevel": "Journeyman",
+    "topic": "Motors",
+    "question": "Per NEC 430.24, the minimum ampacity of conductors supplying two or more motors is:",
+    "optionA": "125% of the largest motor FLA plus 100% of the sum of all other motor FLAs",
+    "optionB": "100% of the largest motor FLA plus all others",
+    "optionC": "125% of the sum of all motor FLAs",
+    "optionD": "The sum of all motor nameplate currents",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 430.24: minimum feeder ampacity = 125% \u00d7 (largest motor FLA from table) + 100% \u00d7 (sum of all other motor FLAs from table). Example: motors of 40A, 25A, 15A. Min ampacity = (40 \u00d7 1.25) + 25 + 15 = 50 + 40 = 90A. The extra 25% on the largest motor accounts for its potential starting current impact.",
+    "necReference": "430.24",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "feeder",
+      "calculation"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-062",
+    "certificationLevel": "Journeyman",
+    "topic": "Motors",
+    "question": "Per NEC 440.12(A)(1), the branch circuit conductors and OCPD for room air conditioning equipment shall be sized based on:",
+    "optionA": "The equipment nameplate rated current",
+    "optionB": "Motor FLA from NEC Table 430.248",
+    "optionC": "125% of the nameplate rated current",
+    "optionD": "Locked-rotor current from Table 430.251",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 440.12(A)(1), the branch circuit conductors supplying a single motor-compressor (room A/C) shall have ampacity not less than 125% of the nameplate rated load current or branch circuit selection current (whichever is larger). Note: for hermetic motor-compressors, use NAMEPLATE current, not the NEC motor tables. Article 440 modifies the general motor rules of Article 430.",
+    "necReference": "440.12",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "AC",
+      "sizing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-063",
+    "certificationLevel": "Master",
+    "topic": "Motors",
+    "question": "A 25 HP, 460V, 3-phase motor has a table FLA of 34A per NEC Table 430.250. For an inverse-time breaker (max 250%), the calculated OCPD is 85A. Since 85A is not a standard size, what is the correct OCPD per NEC 240.6(A)?",
+    "optionA": "90 A",
+    "optionB": "80 A",
+    "optionC": "100 A",
+    "optionD": "75 A",
+    "correctAnswer": "A",
+    "explanation": "34A \u00d7 250% = 85A. Since 85A is not a standard OCPD size per NEC 240.6(A) (standard sizes near 85A are 80A and 90A), and per NEC 240.4(B) we round UP to the next higher standard: 90A. Per NEC 430.52(C)(1), if the motor won't start on 90A, the next higher standard (100A) is permitted, up to the maximum of 400% (34 \u00d7 4 = 136A \u2192 next standard = 150A maximum).",
+    "necReference": "430.52",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "OCPD",
+      "calculation"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": true,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-064",
+    "certificationLevel": "Master",
+    "topic": "Motors",
+    "question": "Per NEC 430.32(A)(1), a 40A FLA motor has no service factor marked and no temperature rise marked. What is the maximum overload device rating?",
+    "optionA": "46 A (115%)",
+    "optionB": "40 A (100%)",
+    "optionC": "50 A (125%)",
+    "optionD": "56 A (140%)",
+    "correctAnswer": "A",
+    "explanation": "When a motor has no marked service factor of 1.15 or more AND no marked temperature rise of 40\u00b0C or less, NEC 430.32(A)(1) limits overload protection to 115% of nameplate FLC: 40A \u00d7 1.15 = 46A. For motors WITH SF \u2265 1.15 or temp rise \u2264 40\u00b0C, the limit is 125% (40A \u00d7 1.25 = 50A). If the motor fails to start at these settings, the device may be adjusted up to 130% (no-SF motors) or 140% (SF \u2265 1.15 motors) per 430.32(C).",
+    "necReference": "430.32",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "overload",
+      "calculation"
+    ],
+    "isCalculation": true,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-065",
+    "certificationLevel": "Master",
+    "topic": "Motors",
+    "question": "A motor nameplate shows: HP=10, V=230/460, Phase=3, FLA=28/14, SF=1.15, Code G. 'Code G' refers to:",
+    "optionA": "The motor's insulation class",
+    "optionB": "The NEC Design classification for OCPD sizing",
+    "optionC": "The motor efficiency class",
+    "optionD": "The locked-rotor kVA per HP for starting current calculations",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 430.7(B) and Table 430.7(B), the code letter on a motor nameplate indicates the locked-rotor kVA per HP range. Code G = 5.6 to less than 6.3 kVA/HP. This is used to calculate the locked-rotor current and to size the starting equipment. Code letters range from A (lowest kVA/HP, easiest to start) to V (highest, hardest to start). Higher code letters require larger OCPD for starting.",
+    "necReference": "430.7",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "motors",
+      "code-letter",
+      "nameplate"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-066",
+    "certificationLevel": "Apprentice",
+    "topic": "Trade Knowledge",
+    "question": "A clamp meter (clamp ammeter) measures current by:",
+    "optionA": "Interrupting the circuit to measure current flow",
+    "optionB": "Clamping around a conductor and measuring the magnetic field produced by current flow",
+    "optionC": "Measuring the voltage drop across a known resistance",
+    "optionD": "Reading the conductor's insulation color",
+    "correctAnswer": "B",
+    "explanation": "A clamp meter uses a split-core current transformer (CT) that clamps around a single conductor. The AC current creates a magnetic field proportional to its magnitude, which the CT converts to a readable current value. The circuit is never interrupted. This is essential for measuring current safely on energized conductors without breaking the circuit.",
+    "necReference": "Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "tools",
+      "measurement"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-067",
+    "certificationLevel": "Apprentice",
+    "topic": "Trade Knowledge",
+    "question": "A megohmmeter (insulation resistance tester) is used to measure:",
+    "optionA": "Low resistance in grounding conductors",
+    "optionB": "Insulation resistance of cables, motors, and transformers",
+    "optionC": "Continuity of circuit conductors",
+    "optionD": "Available fault current",
+    "correctAnswer": "B",
+    "explanation": "A megohmmeter applies a high DC voltage (typically 500V, 1000V, or 2500V) to conductor insulation and measures the resulting leakage current to calculate insulation resistance in megaohms. Values in the hundreds of megaohms indicate good insulation; low values indicate moisture infiltration, aging, or damage. Used for motor maintenance, cable testing, and pre-energization verification.",
+    "necReference": "Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "tools",
+      "testing"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-068",
+    "certificationLevel": "Apprentice",
+    "topic": "Trade Knowledge",
+    "question": "On an electrical floor plan, the symbol for a duplex receptacle outlet is typically shown as:",
+    "optionA": "A circle with an X",
+    "optionB": "Two parallel lines perpendicular to a wall line",
+    "optionC": "A triangle pointing upward",
+    "optionD": "A circle with two curved lines (like a half moon)",
+    "correctAnswer": "D",
+    "explanation": "On standard electrical plans, a duplex receptacle is shown as a circle on the wall line with two short parallel arcs (half circles) perpendicular to it. A circle with an X is typically a ceiling-mounted light fixture. A single line perpendicular to the wall may indicate a single receptacle. GFCI receptacles often show 'GFI' next to the symbol.",
+    "necReference": "Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "blueprints",
+      "symbols"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-069",
+    "certificationLevel": "Apprentice",
+    "topic": "Trade Knowledge",
+    "question": "In the American Wire Gauge (AWG) system, which conductor is LARGER?",
+    "optionA": "12 AWG",
+    "optionB": "10 AWG",
+    "optionC": "14 AWG",
+    "optionD": "8 AWG",
+    "correctAnswer": "D",
+    "explanation": "In the AWG system, larger numbers indicate smaller conductors: 14 AWG < 12 AWG < 10 AWG < 8 AWG < 6 AWG... continuing to 2/0, 3/0, 4/0, then kcmil for the largest sizes. 8 AWG is the largest among the choices. The AWG system was originally based on the number of drawing die passes needed to reach a given size \u2014 more passes = smaller wire = higher number.",
+    "necReference": "Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "AWG",
+      "conductors"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-070",
+    "certificationLevel": "Apprentice",
+    "topic": "Trade Knowledge",
+    "question": "When bending EMT conduit for a 90\u00b0 stub-up, the 'take-up' (gain/shrink) for \u00bd\" EMT is approximately:",
+    "optionA": "2 inches",
+    "optionB": "3 inches",
+    "optionC": "5 inches",
+    "optionD": "8 inches",
+    "correctAnswer": "C",
+    "explanation": "The take-up (also called gain or shrink) for conduit benders is the distance from the arrow/star mark to where the bend starts, which must be subtracted from the stub length. For \u00bd\" EMT, take-up \u2248 5 inches. For \u00be\" EMT \u2248 6 inches; 1\" EMT \u2248 8 inches. If you want a 12\" stub-up with \u00bd\" EMT, place the bender mark at 12\" \u2212 5\" = 7\" from the end.",
+    "necReference": "Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "bending",
+      "conduit"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-071",
+    "certificationLevel": "Journeyman",
+    "topic": "Trade Knowledge",
+    "question": "On a motor nameplate, 'SF 1.15' means the motor:",
+    "optionA": "Is rated for 115V operation",
+    "optionB": "Has 15% more insulation than standard",
+    "optionC": "Requires a 15A OCPD",
+    "optionD": "Can operate continuously at 115% of its rated load without overheating",
+    "correctAnswer": "D",
+    "explanation": "Service Factor (SF) indicates how much above its rated load a motor can operate continuously without exceeding its thermal limits. SF 1.15 means the motor can handle 115% of rated HP on a continuous basis. A 10 HP motor with SF 1.15 can run at 11.5 HP without damage. SF also affects overload protection sizing \u2014 motors with SF \u2265 1.15 get 125% overload setting instead of 115%.",
+    "necReference": "430.32",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "motors",
+      "nameplate"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-072",
+    "certificationLevel": "Journeyman",
+    "topic": "Trade Knowledge",
+    "question": "A 3-phase motor nameplate reads '208-230/460V'. This indicates the motor can be wired for:",
+    "optionA": "208V only with no changes",
+    "optionB": "Either low voltage (208-230V, leads connected in parallel) or high voltage (460V, leads connected in series)",
+    "optionC": "460V only; the 208-230V notation is the control voltage",
+    "optionD": "Either 208V delta or 460V wye",
+    "correctAnswer": "B",
+    "explanation": "Dual-voltage motors can be wired for 'low voltage' (208-230V) by connecting the stator windings in parallel (delta or wye), or 'high voltage' (460V) by connecting them in series (delta or wye). The motor lead numbering and connection diagrams on the nameplate specify the exact wiring configuration. Most commercial motors are wired at 460V for efficiency.",
+    "necReference": "Article 430",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "motors",
+      "wiring"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-073",
+    "certificationLevel": "Journeyman",
+    "topic": "Trade Knowledge",
+    "question": "On a phase rotation meter, the purpose is to verify:",
+    "optionA": "The voltage level of a 3-phase system",
+    "optionB": "The sequence of phases (ABC or ACB) to ensure correct motor rotation",
+    "optionC": "That all three phases have equal amperage",
+    "optionD": "That neutral and ground are properly separated",
+    "correctAnswer": "B",
+    "explanation": "A phase rotation (sequence) meter verifies the order in which the three AC phases (L1, L2, L3) reach their peak values. Incorrect phase rotation (ABC vs ACB) causes 3-phase motors to run backward. Before connecting a 3-phase motor, electricians verify phase rotation to ensure the motor runs in the correct direction \u2014 critical for pumps, compressors, and conveyers.",
+    "necReference": "Article 430",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "testing",
+      "3-phase"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-074",
+    "certificationLevel": "Master",
+    "topic": "Trade Knowledge",
+    "question": "A one-line diagram (single-line diagram) is used to show:",
+    "optionA": "The overall power distribution system using a single line to represent all conductors of each circuit",
+    "optionB": "Physical conduit routing dimensions",
+    "optionC": "Ladder logic for motor control",
+    "optionD": "Individual wire-by-wire panel connections",
+    "correctAnswer": "A",
+    "explanation": "A one-line diagram (SLD) uses a single line to represent multi-conductor circuits, showing how power flows from the utility through transformers, main switchgear, distribution panels, and loads. It shows equipment ratings, protection devices, and system topology at a glance. Every electrician should be able to read and understand a one-line diagram for service and system troubleshooting.",
+    "necReference": "Article 100",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "blueprints",
+      "one-line"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-075",
+    "certificationLevel": "Master",
+    "topic": "Trade Knowledge",
+    "question": "A ladder logic diagram for a motor control circuit shows a normally-closed contact labeled 'OL'. What does this contact represent?",
+    "optionA": "An oil level switch",
+    "optionB": "An offline breaker status contact",
+    "optionC": "A thermal overload relay contact that opens on motor overload",
+    "optionD": "An optional load disconnect switch",
+    "correctAnswer": "C",
+    "explanation": "In a motor control circuit ladder diagram, 'OL' contacts are the normally-closed contacts of thermal overload relays connected in series with the motor starter coil. During normal operation, the OL contacts are closed (current flows). When the motor overloads, the OL heaters trip, opening the OL contacts and de-energizing the starter coil \u2014 stopping the motor. Resetting the OL relays allows restarting.",
+    "necReference": "Article 430",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "trade-knowledge",
+      "motor-control",
+      "ladder-logic"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-076",
+    "certificationLevel": "Apprentice",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC Article 100, a 'branch circuit' is defined as the circuit conductors between:",
+    "optionA": "The service entrance and the main panel",
+    "optionB": "The utility transformer and the service entrance",
+    "optionC": "The final overcurrent device and the outlet(s)",
+    "optionD": "Any two electrical panels",
+    "correctAnswer": "C",
+    "explanation": "NEC Article 100: Branch circuit \u2014 the circuit conductors between the final overcurrent device protecting the circuit and the outlet(s). The final OCPD is typically the circuit breaker in the panel. The feeder runs from the service (or source) to the panel. Branch circuits then feed individual outlets, fixtures, and equipment.",
+    "necReference": "Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "definitions",
+      "branch-circuit"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-077",
+    "certificationLevel": "Apprentice",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC Article 100, a 'continuous load' is defined as a load where maximum current is expected to continue for:",
+    "optionA": "1 hour or more",
+    "optionB": "2 hours or more",
+    "optionC": "8 hours or more",
+    "optionD": "3 hours or more",
+    "correctAnswer": "D",
+    "explanation": "Per NEC Article 100, a continuous load is one where the maximum current is expected to continue for 3 hours or more. This definition triggers the 125% requirements in NEC 210.19(A)(1), 210.20(A), 215.2, and 215.3. Examples: lighting in warehouses and office buildings, HVAC equipment, battery chargers, and heating elements running during occupied hours.",
+    "necReference": "Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "definitions",
+      "continuous-load"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-078",
+    "certificationLevel": "Apprentice",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC 90.4, who has the responsibility and authority to interpret the NEC requirements?",
+    "optionA": "The NEC code panel",
+    "optionB": "The equipment manufacturer",
+    "optionC": "The installing contractor",
+    "optionD": "The Authority Having Jurisdiction (AHJ)",
+    "correctAnswer": "D",
+    "explanation": "NEC 90.4 states: 'The authority having jurisdiction has the responsibility for making interpretations of the rules, for deciding upon the approval of equipment and materials, and for granting the special permission contemplated in a number of the rules.' The AHJ is typically the local electrical inspector but can also be an employer, insurance underwriter, or other authority.",
+    "necReference": "90.4",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "AHJ",
+      "authority"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-079",
+    "certificationLevel": "Apprentice",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC 110.3(B), listed or labeled equipment shall be installed and used:",
+    "optionA": "Per the NEC requirements only, regardless of manufacturer instructions",
+    "optionB": "In accordance with any instructions included in the listing or labeling",
+    "optionC": "At the contractor's discretion",
+    "optionD": "Only in the applications specifically listed in NEC articles",
+    "correctAnswer": "B",
+    "explanation": "NEC 110.3(B) is one of the most powerful code sections: it makes manufacturers' installation instructions legally enforceable. If a breaker's instructions say 'rated for 75\u00b0C wire only,' that restriction applies. If a fixture requires a minimum box depth, that's code. The AHJ can enforce compliance with installation instructions through 110.3(B).",
+    "necReference": "110.3",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "listing",
+      "installation"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-080",
+    "certificationLevel": "Apprentice",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC Article 100, 'labeled' equipment means:",
+    "optionA": "Equipment with a manufacturer's brand label",
+    "optionB": "Equipment that has been field inspected",
+    "optionC": "Equipment approved by the AHJ with a signed approval form",
+    "optionD": "Equipment with an attached label from an organization concerned with product evaluation, indicating compliance with specific standards",
+    "correctAnswer": "D",
+    "explanation": "NEC Article 100: Labeled \u2014 equipment to which a label, symbol, or other identifying mark of an organization concerned with product evaluation has been attached, indicating that the equipment complies with applicable standards or has been tested and found suitable for a specific purpose. Common labels: UL, ETL, CSA, MET. 'Listed' and 'labeled' are related but distinct terms.",
+    "necReference": "Article 100",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "definitions",
+      "labeled"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-081",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC Article 100, what is a 'dwelling unit'?",
+    "optionA": "Any building used for residential purposes",
+    "optionB": "A structure with two or more bedrooms",
+    "optionC": "Any room used for sleeping",
+    "optionD": "A single unit providing complete and independent living facilities for one or more persons, including permanent provisions for living, sleeping, eating, cooking, and sanitation",
+    "correctAnswer": "D",
+    "explanation": "NEC Article 100: Dwelling Unit \u2014 a single unit providing complete and independent living facilities for one or more persons, including permanent provisions for living, sleeping, eating, cooking, and sanitation. This definition determines which dwelling-specific NEC rules apply. A hotel room is NOT a dwelling unit (no cooking provisions). A studio apartment IS (has cooking facilities).",
+    "necReference": "Article 100",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "definitions",
+      "dwelling"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-082",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "NEC 90.5(A) states that the word 'shall' in the NEC means a rule is:",
+    "optionA": "Optional guidance",
+    "optionB": "Mandatory",
+    "optionC": "Permissive",
+    "optionD": "An informational note",
+    "correctAnswer": "B",
+    "explanation": "NEC 90.5(A): 'Mandatory rules of this Code are characterized by the use of the word shall.' Permissive rules use 'shall be permitted' or 'shall not be required.' Explanatory material is in informational notes and is not enforceable. Understanding these modal words is crucial for code interpretation \u2014 'shall' is always mandatory.",
+    "necReference": "90.5",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "code-language",
+      "definitions"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-083",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC 90.3, the Code is divided into chapters. Which chapters can supplement or modify the general requirements of Chapters 1\u20134?",
+    "optionA": "Chapter 8 (Communications) only",
+    "optionB": "Chapters 5 (Special Occupancies), 6 (Special Equipment), and 7 (Special Conditions)",
+    "optionC": "Chapter 9 (Tables) only",
+    "optionD": "Chapters 5\u20139 all equally modify Chapters 1\u20134",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 90.3: Chapters 1\u20134 apply generally. Chapters 5, 6, and 7 cover special occupancies, special equipment, and special conditions respectively \u2014 these chapters supplement or amend the general rules in Chapters 1\u20134 for specific situations. Chapter 8 (Communications) is independent and generally NOT subject to Chapters 1\u20137 except where explicitly referenced. Chapter 9 contains tables and informational annexes.",
+    "necReference": "90.3",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "code-structure",
+      "organization"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-084",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC 110.14(C)(1), equipment terminations rated for use with 60\u00b0C conductors (or where not specifically rated) shall be used with conductors rated:",
+    "optionA": "60\u00b0C conductors only, OR 75\u00b0C conductors using the 60\u00b0C column ampacity",
+    "optionB": "Any temperature rating",
+    "optionC": "90\u00b0C conductors using the 90\u00b0C column ampacity",
+    "optionD": "75\u00b0C conductors using the 75\u00b0C column ampacity only",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 110.14(C)(1): For equipment that doesn't specify temperature rating, or is rated 60\u00b0C: use conductors rated 60\u00b0C, OR use conductors rated 75\u00b0C or 90\u00b0C but limit the ampacity to the 60\u00b0C column of Table 310.16. The higher insulation temperature on 75\u00b0C or 90\u00b0C wire provides a safety margin, but the termination is the limiting factor. This is why most electricians install 12 AWG THHN (90\u00b0C rated) but size it at the 60\u00b0C or 75\u00b0C ampacity.",
+    "necReference": "110.14",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "terminations",
+      "temperature"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-085",
+    "certificationLevel": "Journeyman",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC 110.26(C)(1), minimum headroom in front of electrical equipment shall be:",
+    "optionA": "6 feet",
+    "optionB": "6.5 feet",
+    "optionC": "7 feet",
+    "optionD": "8 feet",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 110.26(C)(1), working spaces shall have a minimum headroom of 6.5 feet (1.98m), or the height of the equipment (whichever is greater). This ensures workers can safely access and service equipment without stooping. Electrical rooms and equipment spaces must comply \u2014 drop ceilings cannot be used to reduce the clearance below 6.5 feet over electrical panels.",
+    "necReference": "110.26",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "working-space",
+      "headroom"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-086",
+    "certificationLevel": "Master",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC Article 100, what distinguishes a 'service' from a 'feeder'?",
+    "optionA": "A service consists of the conductors and equipment for delivering energy from the supplying utility to the premises wiring system; a feeder runs from service equipment (or a source) to the final branch circuit OCPD",
+    "optionB": "A service is overhead; a feeder is underground",
+    "optionC": "Services are 240V; feeders are lower voltage",
+    "optionD": "Services are limited to 400A; feeders are larger",
+    "correctAnswer": "A",
+    "explanation": "NEC Article 100: Service \u2014 the conductors and equipment for delivering electric energy from the serving utility to the wiring system of the premises served. Feeder \u2014 all circuit conductors between the service equipment, the source of a separately derived system, or other power supply source and the final branch circuit overcurrent device. The service ends at the service disconnecting means; feeders begin there.",
+    "necReference": "Article 100",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "definitions",
+      "service-feeder"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-087",
+    "certificationLevel": "Master",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC 110.14(C)(2), terminals for conductors 1/0 AWG and larger shall be rated at minimum:",
+    "optionA": "60\u00b0C",
+    "optionB": "The conductor's temperature rating",
+    "optionC": "90\u00b0C",
+    "optionD": "75\u00b0C",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 110.14(C)(2), terminals for conductors 1/0 AWG and larger shall be based on the 75\u00b0C (167\u00b0F) ampacity column of Table 310.16, unless the equipment is listed and marked for use with higher-temperature conductors. This means for large feeder and service conductors, use the 75\u00b0C column ampacity \u2014 not the 90\u00b0C column \u2014 even if THHN (90\u00b0C) wire is installed.",
+    "necReference": "110.14",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "terminations",
+      "large-conductors"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-088",
+    "certificationLevel": "Master",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC 110.2, electrical conductors and equipment shall be:",
+    "optionA": "Listed by a nationally recognized testing laboratory in all cases",
+    "optionB": "Made in the United States",
+    "optionC": "Installed per the manufacturer's instructions only",
+    "optionD": "Acceptable to the Authority Having Jurisdiction",
+    "correctAnswer": "D",
+    "explanation": "NEC 110.2: 'The conductors and equipment required or permitted by this Code shall be acceptable only if approved.' NEC Article 100 defines 'approved' as 'acceptable to the authority having jurisdiction.' While listing/labeling is the most common path to approval, the AHJ may approve unlisted equipment in specific situations. The AHJ has ultimate approval authority.",
+    "necReference": "110.2",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "approval",
+      "AHJ"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-089",
+    "certificationLevel": "Master",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC Article 100, 'accessible (as applied to wiring methods)' means capable of being removed or exposed without damaging the building structure or finish. 'Accessible (as applied to equipment)' means:",
+    "optionA": "Admitting close approach \u2014 not guarded by locked doors, elevation, or other effective means",
+    "optionB": "Visible and within 5 feet of the floor",
+    "optionC": "Within the same room as the electrical system",
+    "optionD": "Capable of being operated without tools",
+    "correctAnswer": "A",
+    "explanation": "NEC Article 100 has two definitions for 'accessible': (1) for equipment \u2014 admitting close approach, not guarded by locked doors, elevation, or other effective means; (2) for wiring methods \u2014 capable of being removed or exposed without damaging the building structure or finish. The distinction matters for service, splice, and junction box access requirements.",
+    "necReference": "Article 100",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "definitions",
+      "accessible"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-090",
+    "certificationLevel": "Master",
+    "topic": "NEC Fundamentals",
+    "question": "Per NEC 110.14(A), electrical connections shall be made using:",
+    "optionA": "Solder only for conductors over 4 AWG",
+    "optionB": "Electrical tape as a primary connection method",
+    "optionC": "Any mechanical connection that is tight",
+    "optionD": "Listed pressure connectors (wirenuts, lugs), listed clamps, or other listed means",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 110.14(A), connections of conductors to terminal parts shall ensure a good connection without damaging the conductors and shall be made by means of pressure connectors (including set-screw type), solder lugs, or splices to flexible leads. Listed wire connectors (twist-on, push-in), compression lugs, and terminal blocks are all acceptable. Tape is only for insulation \u2014 never for making or maintaining an electrical connection.",
+    "necReference": "110.14",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "NEC",
+      "connections",
+      "conductors"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-091",
+    "certificationLevel": "Apprentice",
+    "topic": "Special Occupancies",
+    "question": "Per NEC 406.9(B)(1), outdoor receptacle covers in wet locations must be of the 'in-use' type, meaning they protect the receptacle:",
+    "optionA": "While a cord cap or attachment plug is inserted (while in use)",
+    "optionB": "Only when not in use",
+    "optionC": "Only in extremely wet locations like car washes",
+    "optionD": "When the temperature is below freezing",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 406.9(B)(1), 15A and 20A, 125V and 250V receptacles in wet locations require weatherproof covers that provide protection while the attachment plug cap is inserted (in-use covers). These clamshell-style or swing-arm covers stay closed over the plug when in use. Standard weatherproof covers (flip-lid type) are adequate only when the attachment cap is not inserted.",
+    "necReference": "406.9",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "receptacles",
+      "outdoor"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-092",
+    "certificationLevel": "Apprentice",
+    "topic": "Special Occupancies",
+    "question": "Per NEC 406.4(D)(3), when replacing a receptacle in a location that requires GFCI protection, the replacement receptacle must:",
+    "optionA": "Match the original receptacle exactly",
+    "optionB": "Provide GFCI protection",
+    "optionC": "Be rated at the next higher amperage",
+    "optionD": "Be installed by a licensed electrician only",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 406.4(D)(3), when replacing receptacles in locations that require GFCI protection under the current NEC, GFCI protection must be provided even if it wasn't originally installed. This replacement rule (retroactive requirement) applies to bathrooms, garages, kitchens, and other GFCI-required locations. The replacement can be a GFCI receptacle or GFCI breaker protecting the circuit.",
+    "necReference": "406.4",
+    "difficulty": "Easy",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Apprentice Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "GFCI",
+      "replacement"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-093",
+    "certificationLevel": "Journeyman",
+    "topic": "Special Occupancies",
+    "question": "Per NEC 517.13(A), wiring in patient care spaces of health care facilities shall be run in:",
+    "optionA": "Type NM cable where concealed",
+    "optionB": "Any listed wiring method",
+    "optionC": "PVC conduit only",
+    "optionD": "Metal raceways or listed metal-sheathed cables (Type MC or AC)",
+    "correctAnswer": "D",
+    "explanation": "Per NEC 517.13(A), branch circuit conductors in patient care spaces shall be installed in metal raceways, Type MC cable (listed with an insulated EGC), or Type AC cable. The metal armor provides an additional equipment grounding path for patient safety. The enhanced grounding in patient care areas is critical because patients with invasive devices (catheters, needles) are especially vulnerable to microshock from tiny leakage currents.",
+    "necReference": "517.13",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "healthcare",
+      "wiring"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-094",
+    "certificationLevel": "Journeyman",
+    "topic": "Special Occupancies",
+    "question": "Per NEC Article 500.5(A), a Class I, Division 1 location is one where:",
+    "optionA": "Flammable gases or vapors are present in concentrations capable of ignition under normal operating conditions",
+    "optionB": "Combustible dust clouds may be present",
+    "optionC": "Ignitable fibers or flyings may be present",
+    "optionD": "Flammable liquids only are stored",
+    "correctAnswer": "A",
+    "explanation": "NEC 500.5(A): Class I, Division 1 \u2014 locations where ignitable concentrations of flammable gases, flammable liquid\u2013produced vapors, or combustible liquid\u2013produced vapors exist under normal operating conditions, or where they may exist frequently due to maintenance or leaks, or where equipment breakdown could release ignitable concentrations. Division 2 locations have ignitable concentrations only in abnormal conditions.",
+    "necReference": "500.5",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "hazardous",
+      "Class-I"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-095",
+    "certificationLevel": "Journeyman",
+    "topic": "Special Occupancies",
+    "question": "Per NEC 501.10(A), in Class I, Division 1 locations, the permitted wiring methods are:",
+    "optionA": "Type NM cable in sealed conduit",
+    "optionB": "Threaded rigid metal conduit (RMC), threaded IMC, or Type MI cable",
+    "optionC": "EMT with listed explosion-proof fittings",
+    "optionD": "Any wiring method in a sealed enclosure",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 501.10(A)(1), in Class I, Division 1 locations, wiring shall be in threaded rigid metal conduit (RMC), threaded intermediate metal conduit (IMC), or Type MI cable with listed termination fittings. The threaded conduit system creates an explosion-proof path where conduit seals (poured with sealing compound) prevent flame propagation. EMT is not permitted in Class I, Division 1.",
+    "necReference": "501.10",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "hazardous",
+      "wiring"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-096",
+    "certificationLevel": "Journeyman",
+    "topic": "Special Occupancies",
+    "question": "Per NEC 700.12(B)(2), storage batteries used as an emergency power source shall supply emergency loads for a minimum of:",
+    "optionA": "30 minutes",
+    "optionB": "60 minutes",
+    "optionC": "90 minutes",
+    "optionD": "2 hours",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 700.12(B)(2), storage batteries (unit equipment or central battery) shall be capable of supplying and maintaining the emergency system at full power for a minimum of 90 minutes. Exit lighting and other emergency lighting systems using battery backup must comply with this 90-minute minimum. Some local codes require 2 hours, but NEC minimum is 90 minutes.",
+    "necReference": "700.12",
+    "difficulty": "Medium",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Journeyman Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "emergency",
+      "battery"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-097",
+    "certificationLevel": "Master",
+    "topic": "Special Occupancies",
+    "question": "Per NEC 700.10(B), emergency system wiring shall be kept entirely independent of all other wiring EXCEPT:",
+    "optionA": "Where the emergency circuit is 15A or less",
+    "optionB": "Where run in the same raceway for space savings",
+    "optionC": "In transfer equipment and in exit luminaires or emergency lighting fixtures where the emergency circuit is part of the fixture",
+    "optionD": "When emergency wiring is installed first in the raceway",
+    "correctAnswer": "C",
+    "explanation": "Per NEC 700.10(B), emergency circuit wiring shall not occupy the same raceways, cables, boxes, or cabinets as non-emergency wiring \u2014 EXCEPT in transfer equipment, exit fixtures, emergency lighting fixtures, and junction boxes attached to such fixtures. This separation ensures that a fault in normal wiring cannot compromise the emergency system.",
+    "necReference": "700.10",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "emergency",
+      "separation"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-098",
+    "certificationLevel": "Master",
+    "topic": "Special Occupancies",
+    "question": "Per NEC 517.19(A), critical branch circuits in health care facilities shall be supplied from which type of source?",
+    "optionA": "A standard utility feed with surge protection",
+    "optionB": "An essential electrical system with a legally required standby source",
+    "optionC": "A UPS system only",
+    "optionD": "A redundant commercial utility feed",
+    "correctAnswer": "B",
+    "explanation": "Per NEC 517.19 and 517.30, health care facilities require an Essential Electrical System (EES) consisting of: (1) a normal source (utility), and (2) one or more alternate sources (typically generators). The EES provides power to life safety, critical, and equipment branches. Transfer to the alternate source must occur within 10 seconds for the critical branch. This code section ensures hospital power continuity during utility outages.",
+    "necReference": "517.19",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "healthcare",
+      "emergency"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-099",
+    "certificationLevel": "Master",
+    "topic": "Special Occupancies",
+    "question": "Per NEC 501.15(A)(1), conduit seals in Class I, Division 1 locations must be installed:",
+    "optionA": "At every conduit entry into an explosion-proof enclosure containing arcing equipment, within 18 inches",
+    "optionB": "Only at the service entrance",
+    "optionC": "At every junction box",
+    "optionD": "Every 10 feet in a Class I, Division 1 area",
+    "correctAnswer": "A",
+    "explanation": "Per NEC 501.15(A)(1), in Class I, Division 1 locations, a conduit seal fitting shall be installed within 18 inches of every enclosure for switches, circuit breakers, fuses, relays, resistors, or other arcing equipment. The seal is filled with an approved sealing compound to prevent flame propagation and to limit pressure piling. Seals also prevent gas migration through conduit systems from hazardous to non-hazardous areas.",
+    "necReference": "501.15",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "hazardous",
+      "conduit-seal"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  },
+  {
+    "id": "qb2-100",
+    "certificationLevel": "Master",
+    "topic": "Special Occupancies",
+    "question": "Per NEC Article 100, what is the difference between a 'hazardous (classified) location' and a 'wet location'?",
+    "optionA": "A hazardous location contains ignitable or explosive concentrations of gases, vapors, dusts, or fibers; a wet location is one subject to water saturation or running water",
+    "optionB": "They are the same \u2014 any wet location is classified hazardous",
+    "optionC": "A wet location requires GFCI; a hazardous location requires explosion-proof equipment \u2014 but a location cannot be both",
+    "optionD": "Wet locations are defined by OSHA; hazardous locations by NFPA",
+    "correctAnswer": "A",
+    "explanation": "Hazardous (classified) locations (Articles 500\u2013516) involve flammable gases, combustible dusts, or ignitable fibers that create explosion or fire risks \u2014 explosion-proof wiring methods required. Wet locations (NEC Article 100) are places subject to water saturation \u2014 weatherproof equipment and wet-location-rated wiring required. A location can be BOTH (e.g., a waterfront fuel dock \u2014 wet AND Class I Division 1), requiring compliance with both sets of rules.",
+    "necReference": "Article 100",
+    "difficulty": "Difficult",
+    "jurisdictionScope": "national",
+    "examProvider": "PSI",
+    "licenseType": "Master Electrician",
+    "codeCycle": "2026",
+    "sourceUrls": [
+      "https://www.nfpa.org/70"
+    ],
+    "sourceAccessedOn": "2026-04-23",
+    "examBlueprintTags": [
+      "special-occupancies",
+      "definitions",
+      "hazardous"
+    ],
+    "isCalculation": false,
+    "isCodeLookup": false,
+    "verification": {
+      "base_code_cycle": "2026",
+      "jurisdiction_scope": "national",
+      "last_verified_at": "2026-04-23T00:00:00Z",
+      "source_urls": [
+        "https://www.nfpa.org/70"
+      ],
+      "source_hashes": [],
+      "verification_confidence": 90,
+      "freshness_status": "fresh",
+      "publish_status": "published",
+      "staleness_reason": null,
+      "disclaimer": "National NEC baseline content. Verify adopted code cycle, local amendments, and employer safety rules before field use or state-specific exam prep."
+    }
+  }
+]

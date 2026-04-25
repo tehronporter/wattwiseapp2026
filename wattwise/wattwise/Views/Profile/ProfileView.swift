@@ -6,8 +6,6 @@ struct ProfileView: View {
     @Environment(AppViewModel.self) private var appVM
     @State private var showPaywall = false
     @State private var showEditExamSettings = false
-    @State private var bookmarks = BookmarkStore.shared
-    @State private var examModules: [WWModule] = []
 
     var body: some View {
         ScrollView {
@@ -30,20 +28,8 @@ struct ProfileView: View {
                     }
                 }
 
-                // Your Progress — study activity calendar
+                // Study Activity calendar
                 StudyActivityCard()
-
-                // Exam Prep — roadmap of modules for user's cert level
-                if let user = appVM.currentUser, !examModules.isEmpty {
-                    ExamRoadmapCard(user: user, modules: examModules)
-                }
-
-                // Bookmarks
-                if !bookmarks.bookmarks.isEmpty {
-                    BookmarksSection(bookmarks: bookmarks.bookmarks)
-                        .environment(services)
-                        .environment(appVM)
-                }
 
                 // Settings
                 SettingsSection(vm: vm)
@@ -62,7 +48,6 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.large)
         .task(id: appVM.currentUser?.id) {
             await refreshSubscriptionState()
-            loadExamModules()
         }
         .alert("Sign Out?", isPresented: $vm.showSignOutAlert) {
             Button("Sign Out", role: .destructive) {
@@ -117,12 +102,6 @@ struct ProfileView: View {
         if let state = try? await services.subscription.fetchState() {
             appVM.subscriptionState = state
         }
-    }
-
-    private func loadExamModules() {
-        guard let user = appVM.currentUser else { return }
-        let all = (try? WattWiseContentRuntimeAdapter.loadModules()) ?? []
-        examModules = all.filter { $0.examType == user.examType }
     }
 }
 

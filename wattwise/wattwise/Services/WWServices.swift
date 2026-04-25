@@ -1633,7 +1633,18 @@ final class MockQuizService: QuizServiceProtocol {
 
     private func resolveFocusTags(for type: QuizType, explicitTags: [String]) -> [String] {
         if explicitTags.isEmpty == false {
-            return explicitTags.map { $0.lowercased() }
+            // Emit both the lowercased display name ("electrical theory") AND the
+            // hyphenated slug form ("electrical-theory") so that the focus set
+            // matches question records regardless of which format they use.
+            // The history store keys are stored as slugs, so including the slug
+            // also ensures missedQuestionIDs look-ups work correctly for path-node quizzes.
+            return explicitTags.flatMap { tag -> [String] in
+                let lower = tag.lowercased()
+                let slug = lower
+                    .replacingOccurrences(of: " and ", with: "-")
+                    .replacingOccurrences(of: " ", with: "-")
+                return slug == lower ? [lower] : [lower, slug]
+            }
         }
         guard type == .weakAreaReview else {
             return Array(historyStore.suggestedWeakTopicKeys(limit: 2))
