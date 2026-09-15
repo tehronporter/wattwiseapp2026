@@ -1,5 +1,11 @@
+node_modules
+.next
+out
+.env*
+!.env.example
 .DS_Store
 **/.DS_Store
+npm-debug.log*
 wattwise/wattwise.xcodeproj/xcuserdata/
 wattwise/wattwise.xcodeproj/project.xcworkspace/xcuserdata/
 wattwise/DerivedData/
