@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { modules } from "@/lib/content";
+import { LabProgress } from "@/components/labs/progress";
 
 export const metadata = { title: "Learn" };
 
@@ -14,6 +15,7 @@ export default function LearnPage() {
   return (
     <div className="mx-auto max-w-[1180px] px-4 py-8 md:px-8 md:py-10 lg:px-10">
       <PageHeading eyebrow="Journeyman track" title="Your curriculum" description="A code-first path from core theory to confident exam decisions." aside={<div className="min-w-[180px]"><div className="flex justify-between text-xs"><span className="text-[var(--ink-soft)]">Overall progress</span><b>{complete}/{total}</b></div><Progress value={31} className="mt-2"/></div>} />
+      <LabProgress />
       <div className="mt-8 grid gap-4">
         {modules.map((module) => {
           const Icon = module.icon;
