@@ -31,6 +31,20 @@ export default function LabScene({ kind, wires, active, exploded, selected, onSe
     } else if (kind === "room") {
       box([0, -1, 0], [8, 0.1, 4], "#30465b"); box([0, 0.3, -1.8], [8, 2.6, 0.12], "#7990a4");
       for (let i = 0; i < 10; i++) { box([-3.6 + i * 0.8, -0.5, -1.65], [0.3, 0.4, 0.15], placements.includes(i) ? "#83e5b6" : "#3b5367", i); label(`${i * 2 + 1} ft`, [-3.6 + i * 0.8, -1.1, -1.3], 0.7); }
+    } else if (kind === "diagnostic") {
+      // A visual aid for the virtual-meter exercise, not a depiction of a live-testing procedure.
+      box([0, 0, -0.5], [5.6, 3.6, 0.2], "#34495f");
+      box([-1.7, 0.15, -0.2], [1.6, 2.1, 0.35], "#27384b");
+      box([1.7, 0.15, -0.2], [1.6, 2.1, 0.35], "#27384b");
+      const testPoints: Array<[string, Point, string]> = [
+        ["Source L–N", [-1.7, 0.8, 0.1], "#ffc36f"],
+        ["Load L–N", [1.7, 0.8, 0.1], "#eaf0f6"],
+        ["Load L–PE", [1.7, -0.65, 0.1], "#83e5b6"],
+      ];
+      testPoints.forEach(([name, point, color]) => { box(point, [0.22, 0.22, 0.18], color); label(name, [point[0], point[1] + 0.42, point[2]], 1.35); });
+      box([0, -1.55, 0], [1.6, 0.7, 0.25], "#f1b96b");
+      label("Virtual meter", [0, -1.2, 0], 1.3);
+      label("Select a labeled reading below", [0, 1.6, 0], 2.8);
     } else {
       box([-3.1, 0, -0.35], [1, 3, 0.4], "#34495f"); box([-0.5, 1, -0.25], [1.5, 0.8, 0.25], "#6c849a");
       const lamp = new T.Mesh(new T.SphereGeometry(0.85, 24, 24), new T.MeshStandardMaterial({ color: active ? "#f8d778" : "#637c90", emissive: active ? "#f8c13c" : "#000000", emissiveIntensity: 0.7 })); lamp.position.set(2.3, 0, -0.3); scene.add(lamp);

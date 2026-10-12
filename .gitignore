@@ -12,3 +12,5 @@ wattwise/DerivedData/
 *.xcuserstate
 *.xccheckout
 wattwise/.build/
+.vercel
+.env*.local

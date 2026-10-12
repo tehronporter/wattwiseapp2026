@@ -29,6 +29,27 @@ function uniqueById(rows: PracticeQuestion[]) {
   });
 }
 
+function selectAdaptiveQuestions(
+  candidates: PracticeQuestion[],
+  questionCount: number,
+  requestedTopics: string[],
+  recentQuestionIds: Set<string>,
+  mastery: Map<string, number>,
+) {
+  const score = (question: PracticeQuestion) => {
+    const topicBoost = requestedTopics.includes(question.topic_slug) ? 4 : 0;
+    const masteryBoost = (1 - (mastery.get(question.topic_slug) ?? 0.5)) * 2;
+    const freshnessBoost = recentQuestionIds.has(question.id) ? -5 : 1;
+    return topicBoost + masteryBoost + freshnessBoost + Math.random();
+  };
+
+  return candidates
+    .map((question) => ({ question, rank: score(question) }))
+    .sort((left, right) => right.rank - left.rank)
+    .map(({ question }) => question)
+    .slice(0, questionCount);
+}
+
 async function fetchQuestions(
   supabase: ReturnType<typeof createClient>,
   {
@@ -83,6 +104,7 @@ Deno.serve(async (req: Request) => {
     const body = await req.json();
     const quizType = typeof body.quiz_type === "string" ? body.quiz_type : null;
     const examType = typeof body.exam_type === "string" ? body.exam_type : null;
+    const source = typeof body.source === "string" ? body.source.slice(0, 80) : null;
     const topicTags = Array.isArray(body.topic_tags)
       ? body.topic_tags.filter((value: unknown): value is string => typeof value === "string")
       : [];
@@ -148,11 +170,27 @@ Deno.serve(async (req: Request) => {
       requireTopicMatch: false,
     });
 
-    const selectedQuestions = uniqueById([
+    const candidates = uniqueById([
       ...targeted,
       ...levelScoped,
       ...allActive,
-    ]).slice(0, questionCount);
+    ]);
+
+    const [{ data: recentAttempts }, { data: masteryRows }] = await Promise.all([
+      supabase
+        .from("question_attempts")
+        .select("question_id")
+        .eq("user_id", user.id)
+        .order("submitted_at", { ascending: false })
+        .limit(100),
+      supabase
+        .from("topic_mastery")
+        .select("topic_slug, score")
+        .eq("user_id", user.id),
+    ]);
+    const recentQuestionIds = new Set((recentAttempts ?? []).map((row) => row.question_id as string));
+    const mastery = new Map((masteryRows ?? []).map((row) => [row.topic_slug as string, Number(row.score)]));
+    const selectedQuestions = selectAdaptiveQuestions(candidates, questionCount, topicTags, recentQuestionIds, mastery);
 
     if (selectedQuestions.length === 0) {
       return json(
@@ -164,8 +202,11 @@ Deno.serve(async (req: Request) => {
     const { data: quizRow, error: quizError } = await supabase
       .from("quizzes")
       .insert({
+        user_id: user.id,
         quiz_type: quizType,
         question_count: selectedQuestions.length,
+        topic_tags: topicTags,
+        source,
       })
       .select("id")
       .single();
@@ -184,10 +225,20 @@ Deno.serve(async (req: Request) => {
 
     if (assignmentError) throw assignmentError;
 
+    const { data: attemptRow, error: attemptError } = await supabase
+      .from("quiz_attempts")
+      .insert({ user_id: user.id, quiz_id: quizRow.id })
+      .select("id")
+      .single();
+    if (attemptError || !attemptRow) throw attemptError;
+
     return json({
       success: true,
       data: {
         quiz_id: quizRow.id,
+        quiz_attempt_id: attemptRow.id,
+        topic_tags: topicTags,
+        source,
         questions: selectedQuestions.map((question) => ({
           id: question.id,
           question: question.question_text,

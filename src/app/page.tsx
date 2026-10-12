@@ -12,10 +12,11 @@ export default function LandingPage() {
           <a href="#method" className="hover:text-[var(--ink)]">How it works</a>
           <a href="#curriculum" className="hover:text-[var(--ink)]">Curriculum</a>
           <a href="#codebook" className="hover:text-[var(--ink)]">Codebook</a>
+          <Link href="/pricing" className="hover:text-[var(--ink)]">Pricing</Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" className="hidden sm:inline-flex"><Link href="/dashboard">Sign in</Link></Button>
-          <Button asChild size="sm"><Link href="/dashboard">Start studying <ArrowRight className="size-3.5" /></Link></Button>
+          <Button asChild variant="ghost" className="hidden sm:inline-flex"><Link href="/sign-in">Sign in</Link></Button>
+          <Button asChild size="sm"><Link href="/sign-up">Start studying <ArrowRight className="size-3.5" /></Link></Button>
         </div>
       </header>
 
@@ -51,7 +52,7 @@ export default function LandingPage() {
                 <div className="p-5 md:p-8">
                   <div className="flex items-start justify-between"><div><p className="text-[11px] font-semibold text-[var(--blue)]">TUESDAY · STUDY DAY 12</p><h2 className="mt-2 text-2xl font-bold tracking-[-.04em]">Good morning, Tehron.</h2><p className="mt-1 text-sm text-[var(--ink-soft)]">One focused session moves you closer.</p></div><div className="hidden rounded-xl border border-[var(--line)] bg-white px-3 py-2 text-right sm:block"><p className="text-[10px] text-[var(--ink-faint)]">EXAM IN</p><p className="text-sm font-bold">68 days</p></div></div>
                   <div className="mt-7 grid gap-4 lg:grid-cols-[1.4fr_.8fr]">
-                    <div className="rounded-[20px] bg-[var(--ink)] p-6 text-white"><p className="text-[10px] font-semibold tracking-[.12em] text-white/55">CONTINUE LEARNING</p><h3 className="mt-8 text-2xl font-semibold tracking-[-.04em]">Power, energy & Watt’s law</h3><p className="mt-2 text-xs leading-5 text-white/60">Electrical theory · Lesson 2 of 4</p><div className="mt-6 h-1 rounded-full bg-white/15"><div className="h-full w-[62%] rounded-full bg-white" /></div><div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold">Resume lesson <ChevronRight className="size-3" /></div></div>
+                    <div className="rounded-[20px] bg-[var(--ink)] p-6 text-white"><p className="text-[10px] font-semibold tracking-[.12em] text-[var(--on-dark-subtle)]">CONTINUE LEARNING</p><h3 className="mt-8 text-2xl font-semibold tracking-[-.04em]">Power, energy & Watt’s law</h3><p className="mt-2 text-xs leading-5 text-[var(--on-dark-muted)]">Electrical theory · Lesson 2 of 4</p><div className="mt-6 h-1 rounded-full bg-[var(--on-dark-surface)]"><div className="h-full w-[62%] rounded-full bg-white" /></div><div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold">Resume lesson <ChevronRight className="size-3" /></div></div>
                     <div className="rounded-[20px] border border-[var(--line)] bg-white p-5"><div className="flex items-center justify-between"><span className="grid size-9 place-items-center rounded-xl bg-[var(--blue-soft)] text-[var(--blue)]"><Sparkles className="size-4" /></span><span className="text-xs font-semibold text-[var(--blue)]">12 min</span></div><h3 className="mt-8 font-semibold">Today’s focus</h3><p className="mt-2 text-xs leading-5 text-[var(--ink-soft)]">Review grounding paths based on your last practice set.</p></div>
                   </div>
                   <div className="mt-4 grid grid-cols-3 gap-3">{[['72%','Course'],['8 days','Streak'],['84%','Accuracy']].map(([value,label]) => <div key={label} className="rounded-2xl border border-[var(--line)] bg-white p-4"><p className="text-lg font-bold tracking-[-.04em]">{value}</p><p className="mt-1 text-[10px] text-[var(--ink-faint)]">{label}</p></div>)}</div>
@@ -63,9 +64,9 @@ export default function LandingPage() {
 
         <section id="method" className="bg-[var(--ink)] px-5 py-24 text-white md:px-8 md:py-32">
           <div className="mx-auto max-w-7xl">
-            <div className="max-w-2xl"><p className="text-xs font-semibold uppercase tracking-[.16em] text-white/45">A study system, not a content dump</p><h2 className="mt-5 text-balance text-4xl font-bold leading-tight tracking-[-.055em] md:text-5xl">Everything points to the next right thing.</h2></div>
+            <div className="max-w-2xl"><p className="text-xs font-semibold uppercase tracking-[.16em] text-[var(--on-dark-subtle)]">A study system, not a content dump</p><h2 className="mt-5 text-balance text-4xl font-bold leading-tight tracking-[-.055em] md:text-5xl">Everything points to the next right thing.</h2></div>
             <div className="mt-16 grid gap-px overflow-hidden rounded-[24px] border border-white/10 bg-white/10 md:grid-cols-3">
-              {[{n:'01',icon:BookOpen,title:'Learn the concept',copy:'Short, structured lessons connect theory, code language, and the jobsite.'},{n:'02',icon:CircleCheck,title:'Prove you know it',copy:'Targeted questions adapt to weak topics without repeating what you’ve mastered.'},{n:'03',icon:Sparkles,title:'Understand the miss',copy:'Get a direct explanation with the governing code path—not a generic answer.'}].map((item) => <div key={item.n} className="bg-[var(--ink)] p-7 md:p-9"><div className="flex items-center justify-between"><item.icon className="size-5 text-[#8ba0ff]"/><span className="text-xs text-white/30">{item.n}</span></div><h3 className="mt-16 text-xl font-semibold">{item.title}</h3><p className="mt-3 text-sm leading-6 text-white/55">{item.copy}</p></div>)}
+              {[{n:'01',icon:BookOpen,title:'Learn the concept',copy:'Short, structured lessons connect theory, code language, and the jobsite.'},{n:'02',icon:CircleCheck,title:'Prove you know it',copy:'Targeted questions adapt to weak topics without repeating what you’ve mastered.'},{n:'03',icon:Sparkles,title:'Understand the miss',copy:'Get a direct explanation with the governing code path—not a generic answer.'}].map((item) => <div key={item.n} className="bg-[var(--ink)] p-7 md:p-9"><div className="flex items-center justify-between"><item.icon className="size-5 text-[#aebdff]"/><span className="text-xs text-[var(--on-dark-subtle)]">{item.n}</span></div><h3 className="mt-16 text-xl font-semibold">{item.title}</h3><p className="mt-3 text-sm leading-6 text-[var(--on-dark-muted)]">{item.copy}</p></div>)}
             </div>
           </div>
         </section>
@@ -85,7 +86,7 @@ export default function LandingPage() {
 
         <section className="border-t border-[var(--line)] px-5 py-24 text-center md:px-8"><p className="text-xs font-bold uppercase tracking-[.15em] text-[var(--blue)]">Your next study session is ready</p><h2 className="mx-auto mt-5 max-w-2xl text-balance text-4xl font-bold tracking-[-.055em] md:text-5xl">Start with a clear plan. Finish with real confidence.</h2><Button asChild size="lg" className="mt-8"><Link href="/dashboard">Start studying <ArrowRight className="size-4" /></Link></Button></section>
       </main>
-      <footer className="border-t border-[var(--line)] px-5 py-8 md:px-8"><div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row"><BrandMark/><p className="text-xs text-[var(--ink-faint)]">Educational preparation. Always verify adopted code and local amendments.</p></div></footer>
+      <footer className="border-t border-[var(--line)] px-5 py-8 md:px-8"><div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row"><BrandMark/><nav className="flex flex-wrap justify-center gap-4 text-xs text-[var(--ink-soft)]"><Link href="/pricing">Pricing</Link><Link href="/terms">Terms</Link><Link href="/privacy">Privacy</Link><Link href="/refund-policy">Refunds</Link><Link href="/support">Support</Link></nav><p className="text-xs text-[var(--ink-faint)]">Educational preparation. Verify adopted code and amendments.</p></div></footer>
     </div>
   );
 }

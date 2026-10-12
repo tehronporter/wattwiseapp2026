@@ -143,6 +143,7 @@ async function countTutorMessages(
     .from("tutor_messages")
     .select("*", { count: "exact", head: true })
     .eq("role", "user")
+    .gte("created_at", new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString())
     .in("session_id", sessions.map((session) => session.id));
 
   if (error) throw error;
@@ -579,7 +580,7 @@ Deno.serve(async (req: Request) => {
       (!subscription?.expires_at || new Date(subscription.expires_at).getTime() > Date.now())
     );
     const tutorMessagesUsed = await countTutorMessages(supabase, user.id);
-    const tutorMessagesLimit = hasPaidAccess ? -1 : 4;
+    const tutorMessagesLimit = hasPaidAccess ? 200 : 4;
 
     if (tutorMessagesLimit !== -1 && tutorMessagesUsed >= tutorMessagesLimit) {
       await logAIRequest(supabase, {

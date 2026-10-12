@@ -1,0 +1,108 @@
+{
+  "$schema": "https://wattwise.app/schemas/editorial-priority-queue/v1",
+  "version": 1,
+  "purpose": "First-pass SME review queue for high-consequence Journeyman lesson material. This queue is an editorial control; it does not certify code accuracy or state-exam alignment.",
+  "release_rule": "Every required artifact must be approved by a qualified reviewer before a lesson may be represented as SME-approved or state-exam aligned.",
+  "items": [
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-005",
+      "track": "Journeyman",
+      "title": "Continuous Loads",
+      "priority": 1,
+      "rationale": "Load calculations directly affect conductor and overcurrent-protection decisions.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-009",
+      "track": "Journeyman",
+      "title": "Grounding vs Bonding",
+      "priority": 2,
+      "rationale": "A foundational safety distinction where overly broad language can create hazardous misconceptions.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "illustrated_concept_check", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-011",
+      "track": "Journeyman",
+      "title": "Equipment Grounding Sizing",
+      "priority": 3,
+      "rationale": "Sizing work needs edition-specific source verification and a checked calculation path.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-013",
+      "track": "Journeyman",
+      "title": "Motor Conductors",
+      "priority": 4,
+      "rationale": "Motor rules are calculation-heavy and require precise table and exception references.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-014",
+      "track": "Journeyman",
+      "title": "Motor Protection",
+      "priority": 5,
+      "rationale": "Protection selection is safety-critical and needs a verified decision sequence.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-018",
+      "track": "Journeyman",
+      "title": "Dwelling Load Calculation",
+      "priority": 6,
+      "rationale": "A core exam calculation that needs a complete, checked worked example.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-019",
+      "track": "Journeyman",
+      "title": "Feeder Sizing",
+      "priority": 7,
+      "rationale": "Sizing decisions combine multiple rules and require citation-level review.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-020",
+      "track": "Journeyman",
+      "title": "Temperature Adjustment",
+      "priority": 8,
+      "rationale": "Adjustment and correction interactions are error-prone and edition-sensitive.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-025",
+      "track": "Journeyman",
+      "title": "Conduit Fill",
+      "priority": 9,
+      "rationale": "Requires a reproducible table-navigation and calculation workflow.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    },
+    {
+      "content_kind": "lesson",
+      "source_key": "jr-les-030",
+      "track": "Journeyman",
+      "title": "Voltage Drop Calculations",
+      "priority": 10,
+      "rationale": "A high-value calculation concept that needs transparent assumptions and answer checking.",
+      "review_status": "not_started",
+      "required_artifacts": ["citation_check", "worked_example", "guided_code_lookup", "vetted_practice_set", "exam_blueprint_mapping", "second_reviewer_signoff"]
+    }
+  ]
+}

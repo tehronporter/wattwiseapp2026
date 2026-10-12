@@ -1,10 +1,45 @@
-import { Bell, CalendarDays, ChevronRight, LogOut, Mail, MapPin, Shield, UserRound } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { CreditCard, Download, LogOut, Shield, Trash2 } from "lucide-react";
+import { signOut } from "@/app/actions/auth";
 import { PageHeading } from "@/components/page-heading";
+import { SettingsForm } from "@/components/settings-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { createClient } from "@/lib/supabase/server";
+import { getViewer } from "@/lib/viewer";
 
-export const metadata = { title: "Settings" };
-export default function SettingsPage() {
-  const rows=[{icon:UserRound,label:'License track',value:'Journeyman'},{icon:MapPin,label:'Jurisdiction',value:'California'},{icon:CalendarDays,label:'Exam date',value:'May 24, 2026'},{icon:Bell,label:'Study reminder',value:'Weekdays · 7:00 PM'}];
-  return <div className="mx-auto max-w-[900px] px-4 py-8 md:px-8 md:py-10 lg:px-10"><PageHeading eyebrow="Account" title="Settings" description="Keep your study plan aligned with your exam and schedule."/><div className="mt-8 grid gap-6 md:grid-cols-[220px_1fr]"><Card><CardContent className="text-center"><span className="mx-auto grid size-16 place-items-center rounded-full bg-[var(--ink)] text-lg font-semibold text-white">TJ</span><p className="mt-4 text-sm font-semibold">Tehron Jones</p><p className="mt-1 text-xs text-[var(--ink-soft)]">tehron@example.com</p><span className="mt-4 inline-flex rounded-full bg-[var(--blue-soft)] px-3 py-1 text-[10px] font-bold text-[var(--blue)]">FOUNDING MEMBER</span><Button variant="secondary" size="sm" className="mt-5 w-full"><Mail className="size-3.5"/>Edit account</Button></CardContent></Card><div className="space-y-5"><Card><CardContent className="p-2">{rows.map(row=><button key={row.label} className="flex w-full items-center gap-3 rounded-xl p-3 text-left hover:bg-[var(--surface)]"><span className="grid size-9 place-items-center rounded-xl bg-[var(--surface)] text-[var(--ink-soft)]"><row.icon className="size-4"/></span><div className="flex-1"><p className="text-xs font-semibold">{row.label}</p><p className="mt-0.5 text-[10px] text-[var(--ink-faint)]">{row.value}</p></div><ChevronRight className="size-3.5 text-[var(--ink-faint)]"/></button>)}</CardContent></Card><Card><CardContent className="flex items-center gap-4"><span className="grid size-10 place-items-center rounded-xl bg-[var(--blue-soft)] text-[var(--blue)]"><Shield className="size-4"/></span><div className="flex-1"><p className="text-xs font-semibold">Privacy & data</p><p className="mt-1 text-[10px] text-[var(--ink-faint)]">Manage saved progress and account data</p></div><ChevronRight className="size-4 text-[var(--ink-faint)]"/></CardContent></Card><button className="flex items-center gap-2 px-2 text-xs font-semibold text-[#a6462d]"><LogOut className="size-3.5"/>Sign out</button></div></div></div>;
+export const metadata: Metadata = { title: "Settings", description: "Manage your WattWise profile, exam plan, reminders, and data." };
+
+export default async function SettingsPage() {
+  const viewer = await getViewer();
+  if (!viewer) return null;
+  let reminderTime = "";
+  let plan = "Preview";
+  if (!viewer.isDemo) {
+    const supabase = await createClient();
+    const [{ data: preferences }, { data: subscription }] = await Promise.all([
+      supabase.from("study_preferences").select("preferred_reminder_time").eq("user_id", viewer.id).maybeSingle(),
+      supabase.from("subscriptions").select("tier, status, expires_at").eq("user_id", viewer.id).maybeSingle(),
+    ]);
+    reminderTime = preferences?.preferred_reminder_time?.slice(0, 5) ?? "";
+    const active = subscription?.status === "active";
+    if (active && subscription?.tier === "fast_track") plan = "Fast Track";
+    if (active && subscription?.tier === "full_prep") plan = "Full Prep";
+  }
+
+  return (
+    <div className="mx-auto max-w-[900px] px-4 py-8 md:px-8 md:py-10 lg:px-10">
+      <PageHeading eyebrow="Account" title="Settings" description="Keep your profile and study plan aligned with your real exam timeline." />
+      <div className="mt-8"><SettingsForm viewer={viewer} reminderTime={reminderTime} /></div>
+      <Card className="mt-6"><CardContent><div className="flex items-start gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[var(--blue-soft)] text-[var(--blue)]"><CreditCard className="size-4"/></span><div className="flex-1"><h2 className="text-sm font-semibold">Plan & access</h2><p className="mt-1 text-xs leading-5 text-[var(--ink-soft)]">Current plan: {plan}. Paid web plans are coming soon.</p></div><Button asChild size="sm" variant="secondary"><Link href="/pricing">View plans</Link></Button></div></CardContent></Card>
+      <Card className="mt-6">
+        <CardContent>
+          <div className="flex items-start gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[var(--surface)] text-[var(--ink-soft)]"><Shield className="size-4"/></span><div><h2 className="text-sm font-semibold">Privacy & data</h2><p className="mt-1 text-xs leading-5 text-[var(--ink-soft)]">Export your study data or permanently delete your account.</p></div></div>
+          <div className="mt-5 flex flex-wrap gap-3"><Button asChild variant="secondary" size="sm"><a href="/api/account/export"><Download className="size-3.5"/>Export data</a></Button><Button asChild variant="ghost" size="sm" className="text-[var(--error)]"><a href="/settings/delete-account"><Trash2 className="size-3.5"/>Delete account</a></Button></div>
+        </CardContent>
+      </Card>
+      <form action={signOut} className="mt-6"><Button type="submit" variant="ghost" className="text-[var(--error)]"><LogOut className="size-4"/>Sign out</Button></form>
+    </div>
+  );
 }
